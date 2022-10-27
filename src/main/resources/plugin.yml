@@ -1,0 +1,11 @@
+name: PrisonGame
+version: ${project.version}
+main: prisongame.prisongame.PrisonGame
+api-version: 1.19
+commands:
+  warden:
+    description: Warden-Based commands.
+    usage: /<command>
+  resign:
+    description: Resign from your current position/Rejoin from prisoner.
+    usage: /<command>
