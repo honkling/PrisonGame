@@ -34,6 +34,18 @@ public class CommandKit implements CommandExecutor {
                 nw.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.RED + "WARDEN" + ChatColor.GRAY + "] " + ChatColor.WHITE + nw.getName());
                 nw.setDisplayName(ChatColor.GRAY + "[" + ChatColor.RED + "WARDEN" + ChatColor.GRAY + "] " + ChatColor.WHITE + nw.getName());
 
+                if (nw.getName().equals("agmass")) {
+                    nw.setCustomName(ChatColor.GRAY + "[" + ChatColor.RED + "OWNER" + ChatColor.GRAY + "] " + nw.getDisplayName());
+                    nw.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.RED + "OWNER" + ChatColor.GRAY + "] " + nw.getDisplayName());
+                    nw.setDisplayName(ChatColor.GRAY + "[" + ChatColor.RED + "OWNER" + ChatColor.GRAY + "] " + nw.getDisplayName());
+                }
+
+                if (nw.getName().equals("ClownCaked") || nw.getName().equals("4950")) {
+                    nw.setCustomName(ChatColor.GRAY + "[" + ChatColor.YELLOW + "BUILDER" + ChatColor.GRAY + "] " + nw.getDisplayName());
+                    nw.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.YELLOW + "BUILDER" + ChatColor.GRAY + "] " + nw.getDisplayName());
+                    nw.setDisplayName(ChatColor.GRAY + "[" + ChatColor.YELLOW + "BUILDER" + ChatColor.GRAY + "] " + nw.getDisplayName());
+                }
+
 
                 nw.getInventory().setHelmet(new ItemStack(Material.CHAINMAIL_HELMET));
                 nw.getInventory().setChestplate(new ItemStack(Material.IRON_CHESTPLATE));
@@ -69,6 +81,18 @@ public class CommandKit implements CommandExecutor {
                         g.setCustomName(ChatColor.GRAY + "[" + ChatColor.BLUE + "GUARD" + ChatColor.GRAY + "] " + ChatColor.GRAY + g.getName());
                         g.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.BLUE + "GUARD" + ChatColor.GRAY + "] " + ChatColor.GRAY + g.getName());
                         g.setDisplayName(ChatColor.GRAY + "[" + ChatColor.BLUE + "GUARD" + ChatColor.GRAY + "] " + ChatColor.GRAY + g.getName());
+
+                        if (g.getName().equals("agmass")) {
+                            g.setCustomName(ChatColor.GRAY + "[" + ChatColor.RED + "OWNER" + ChatColor.GRAY + "] " + g.getDisplayName());
+                            g.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.RED + "OWNER" + ChatColor.GRAY + "] " + g.getDisplayName());
+                            g.setDisplayName(ChatColor.GRAY + "[" + ChatColor.RED + "OWNER" + ChatColor.GRAY + "] " + g.getDisplayName());
+                        }
+
+                        if (g.getName().equals("ClownCaked") || g.getName().equals("4950")) {
+                            g.setCustomName(ChatColor.GRAY + "[" + ChatColor.YELLOW + "BUILDER" + ChatColor.GRAY + "] " + g.getDisplayName());
+                            g.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.YELLOW + "BUILDER" + ChatColor.GRAY + "] " + g.getDisplayName());
+                            g.setDisplayName(ChatColor.GRAY + "[" + ChatColor.YELLOW + "BUILDER" + ChatColor.GRAY + "] " + g.getDisplayName());
+                        }
 
                         ItemStack orangechest = new ItemStack(Material.LEATHER_CHESTPLATE);
                         orangechest.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
