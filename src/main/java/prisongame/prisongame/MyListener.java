@@ -8,12 +8,16 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.entity.PotionSplashEvent;
+import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffectType;
 
 public class MyListener implements Listener {
@@ -73,10 +77,10 @@ public class MyListener implements Listener {
         if (PrisonGame.warden != null) {
             if (PrisonGame.warden.equals(event.getEntity())) {
                 PrisonGame.warden = null;
+                PrisonGame.type.put(event.getEntity(), 0);
+                MyListener.playerJoin(event.getEntity());
             }
         }
-        PrisonGame.type.put(event.getEntity(), 0);
-        MyListener.playerJoin(event.getEntity());
         if (PrisonGame.type.get(event.getEntity()) == 0) {
             event.setDeathMessage(ChatColor.GRAY + event.getDeathMessage());
         }
@@ -93,7 +97,32 @@ public class MyListener implements Listener {
     @EventHandler
     public void chatCleanup(AsyncPlayerChatEvent event) {
         event.setCancelled(true);
-        Bukkit.broadcastMessage(event.getPlayer().getPlayerListName() + ChatColor.GRAY + ": " + ChatColor.WHITE + event.getMessage());
+        if (PrisonGame.warden == event.getPlayer()) {
+            Bukkit.broadcastMessage("");
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                p.playSound(p, Sound.BLOCK_NOTE_BLOCK_BIT, 1, 1);
+            }
+            Bukkit.broadcastMessage(event.getPlayer().getPlayerListName() + ChatColor.RED + ": " + ChatColor.RED + event.getMessage());
+            Bukkit.broadcastMessage("");
+        }
+        if (PrisonGame.warden != event.getPlayer())
+            Bukkit.broadcastMessage(event.getPlayer().getPlayerListName() + ChatColor.GRAY + ": " + ChatColor.GRAY + event.getMessage());
+    }
+
+    @EventHandler
+    public void ee(PlayerInteractEvent event) {
+        if (event.getItem() != null) {
+            if (event.getItem().getType().equals(Material.SPLASH_POTION)) {
+                if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK) || event.getAction().equals(Action.RIGHT_CLICK_AIR)) {
+                    ItemStack pot = new ItemStack(Material.SPLASH_POTION);
+                    PotionMeta potionMeta = (PotionMeta) pot.getItemMeta();
+                    potionMeta.addCustomEffect(PotionEffectType.HEAL.createEffect(10, 0), true);
+                    pot.setItemMeta(potionMeta);
+
+                    event.getPlayer().getInventory().addItem(pot);
+                }
+            }
+        }
     }
 
     @EventHandler
@@ -108,7 +137,7 @@ public class MyListener implements Listener {
                     if (PrisonGame.money.get(event.getPlayer()) >= 30.0) {
                         PrisonGame.money.put(event.getPlayer(), PrisonGame.money.get(event.getPlayer()) - 30.0);
 
-                        ItemStack card = new ItemStack(Material.GOLDEN_APPLE);
+                        ItemStack card = new ItemStack(Material.PORKCHOP, 16);
                         ItemMeta cardm = card.getItemMeta();
                         cardm.setDisplayName(ChatColor.BLUE + "Gapple " + ChatColor.RED + "[CONTRABAND]");
                         card.setItemMeta(cardm);
@@ -345,7 +374,6 @@ public class MyListener implements Listener {
     public void onPlayerJoin(PlayerRespawnEvent event) {
         Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
             if (PrisonGame.type.get(event.getPlayer()) == -1) {
-                event.getPlayer().teleport(new Location(Bukkit.getWorld("world"), -3, -59, -129));
                 Player nw = event.getPlayer();
                 nw.getInventory().setHelmet(new ItemStack(Material.CHAINMAIL_HELMET));
                 nw.getInventory().setChestplate(new ItemStack(Material.IRON_CHESTPLATE));
@@ -366,8 +394,57 @@ public class MyListener implements Listener {
                 card.setItemMeta(cardm);
                 nw.getInventory().addItem(card);
             }
+            if (PrisonGame.type.get(event.getPlayer()) == 2) {
+                Player g = event.getPlayer();
+
+                ItemStack orangechest = new ItemStack(Material.LEATHER_CHESTPLATE);
+                orangechest.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+                LeatherArmorMeta chestmeta = (LeatherArmorMeta) orangechest.getItemMeta();
+                chestmeta.setColor(Color.PURPLE);
+                orangechest.setItemMeta(chestmeta);
+
+                ItemStack orangeleg = new ItemStack(Material.LEATHER_LEGGINGS);
+                orangechest.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+                LeatherArmorMeta orangelegItemMeta = (LeatherArmorMeta) orangeleg.getItemMeta();
+                orangelegItemMeta.setColor(Color.PURPLE);
+                orangeleg.setItemMeta(orangelegItemMeta);
+
+                ItemStack orangeboot = new ItemStack(Material.LEATHER_BOOTS);
+                orangechest.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+                LeatherArmorMeta orangebootItemMeta = (LeatherArmorMeta) orangeboot.getItemMeta();
+                orangebootItemMeta.setColor(Color.PURPLE);
+                orangeboot.setItemMeta(orangebootItemMeta);
+
+                g.getInventory().setHelmet(new ItemStack(Material.CHAINMAIL_HELMET));
+                g.getInventory().setChestplate(orangechest);
+                g.getInventory().setLeggings(orangeleg);
+                g.getInventory().setBoots(orangeboot);
+
+                ItemStack wardenSword = new ItemStack(Material.WOODEN_SWORD);
+                wardenSword.addEnchantment(Enchantment.DAMAGE_ALL, 1);
+                wardenSword.addEnchantment(Enchantment.DURABILITY, 1);
+
+                g.getInventory().addItem(wardenSword);
+
+                g.getInventory().addItem(new ItemStack(Material.CROSSBOW));
+                g.getInventory().addItem(new ItemStack(Material.ARROW, 16));
+                g.getInventory().addItem(new ItemStack(Material.COOKED_BEEF, 32));
+
+                ItemStack pot = new ItemStack(Material.SPLASH_POTION);
+                PotionMeta potionMeta = (PotionMeta) pot.getItemMeta();
+                potionMeta.addCustomEffect(PotionEffectType.HEAL.createEffect(10, 2), true);
+                pot.setItemMeta(potionMeta);
+
+                g.getInventory().addItem(pot);
+
+                ItemStack card = new ItemStack(Material.TRIPWIRE_HOOK);
+                ItemMeta cardm = card.getItemMeta();
+                cardm.setDisplayName(ChatColor.BLUE + "Keycard " + ChatColor.RED + "[CONTRABAND]");
+                card.setItemMeta(cardm);
+                g.getInventory().addItem(card);
+
+            }
             if (PrisonGame.type.get(event.getPlayer()) == 1) {
-                event.getPlayer().teleport(new Location(Bukkit.getWorld("world"), -3, -59, -129));
                 Player g = event.getPlayer();
 
                 ItemStack orangechest = new ItemStack(Material.LEATHER_CHESTPLATE);
@@ -401,6 +478,7 @@ public class MyListener implements Listener {
 
                 g.getInventory().addItem(new ItemStack(Material.CROSSBOW));
                 g.getInventory().addItem(new ItemStack(Material.ARROW, 16));
+                g.getInventory().addItem(new ItemStack(Material.COOKED_BEEF, 32));
 
                 ItemStack card = new ItemStack(Material.TRIPWIRE_HOOK);
                 ItemMeta cardm = card.getItemMeta();
@@ -414,6 +492,15 @@ public class MyListener implements Listener {
                 playerJoin(event.getPlayer());
                 event.getPlayer().sendTitle("", ChatColor.GOLD + "you died.");
             }
+            event.getPlayer().teleport(new Location(Bukkit.getWorld("world"), 44, -58, -141));
+            event.getPlayer().sendTitle("RESPAWNING", "Wait 15 seconds.");
+            event.getPlayer().addPotionEffect(PotionEffectType.INVISIBILITY.createEffect(15 * 20, 0));
+            event.getPlayer().addPotionEffect(PotionEffectType.DAMAGE_RESISTANCE.createEffect(15 * 20, 255));
+            event.getPlayer().addPotionEffect(PotionEffectType.WEAKNESS.createEffect(15 * 20, 255));
+            event.getPlayer().addPotionEffect(PotionEffectType.DARKNESS.createEffect(15 * 20, 0));
+            Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
+                event.getPlayer().teleport(new Location(Bukkit.getWorld("world"), 44, -58, -137));
+            }, 20 * 15);
         }, 20L);
     }
 }

@@ -9,6 +9,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.potion.PotionEffectType;
 
 public class CommandKit implements CommandExecutor {
 
@@ -59,6 +61,7 @@ public class CommandKit implements CommandExecutor {
                 nw.getInventory().addItem(wardenSword);
                 nw.getInventory().addItem(new ItemStack(Material.BOW));
                 nw.getInventory().addItem(new ItemStack(Material.ARROW, 64));
+                nw.getInventory().addItem(new ItemStack(Material.COOKED_BEEF, 64));
 
                 ItemStack card = new ItemStack(Material.TRIPWIRE_HOOK);
                 ItemMeta cardm = card.getItemMeta();
@@ -125,6 +128,7 @@ public class CommandKit implements CommandExecutor {
 
                         g.getInventory().addItem(new ItemStack(Material.CROSSBOW));
                         g.getInventory().addItem(new ItemStack(Material.ARROW, 16));
+                        g.getInventory().addItem(new ItemStack(Material.COOKED_BEEF, 32));
 
                         ItemStack card = new ItemStack(Material.TRIPWIRE_HOOK);
                         ItemMeta cardm = card.getItemMeta();
@@ -132,6 +136,82 @@ public class CommandKit implements CommandExecutor {
                         card.setItemMeta(cardm);
                         g.getInventory().addItem(card);
 
+
+
+                    } else {
+                        sender.sendMessage(ChatColor.BLUE + "We had troubles promoting this player.");
+                    }
+                }
+            }
+            if (args[0].equals("nurse")) {
+                if (Bukkit.getPlayer(args[1]) != null) {
+                    Player g = Bukkit.getPlayer(args[1]);
+                    if (g.isOnline() && g != sender && PrisonGame.type.get(g) == 0) {
+                        PrisonGame.type.put(g, 2);
+                        g.sendMessage(ChatColor.LIGHT_PURPLE + "You were promoted by " + ChatColor.DARK_GRAY + " Warden " + ChatColor.RED + sender.getName());
+                        Bukkit.broadcastMessage(ChatColor.LIGHT_PURPLE + g.getName() + " was promoted to a nurse!");
+
+                        g.setCustomName(ChatColor.GRAY + "[" + ChatColor.LIGHT_PURPLE + "NURSE" + ChatColor.GRAY + "] " + ChatColor.GRAY + g.getName());
+                        g.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.LIGHT_PURPLE + "NURSE" + ChatColor.GRAY + "] " + ChatColor.GRAY + g.getName());
+                        g.setDisplayName(ChatColor.GRAY + "[" + ChatColor.LIGHT_PURPLE + "NURSE" + ChatColor.GRAY + "] " + ChatColor.GRAY + g.getName());
+
+                        if (g.getName().equals("agmass")) {
+                            g.setCustomName(ChatColor.GRAY + "[" + ChatColor.RED + "OWNER" + ChatColor.GRAY + "] " + g.getDisplayName());
+                            g.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.RED + "OWNER" + ChatColor.GRAY + "] " + g.getDisplayName());
+                            g.setDisplayName(ChatColor.GRAY + "[" + ChatColor.RED + "OWNER" + ChatColor.GRAY + "] " + g.getDisplayName());
+                        }
+
+                        if (g.getName().equals("ClownCaked") || g.getName().equals("4950")) {
+                            g.setCustomName(ChatColor.GRAY + "[" + ChatColor.YELLOW + "BUILDER" + ChatColor.GRAY + "] " + g.getDisplayName());
+                            g.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.YELLOW + "BUILDER" + ChatColor.GRAY + "] " + g.getDisplayName());
+                            g.setDisplayName(ChatColor.GRAY + "[" + ChatColor.YELLOW + "BUILDER" + ChatColor.GRAY + "] " + g.getDisplayName());
+                        }
+
+                        ItemStack orangechest = new ItemStack(Material.LEATHER_CHESTPLATE);
+                        orangechest.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+                        LeatherArmorMeta chestmeta = (LeatherArmorMeta) orangechest.getItemMeta();
+                        chestmeta.setColor(Color.PURPLE);
+                        orangechest.setItemMeta(chestmeta);
+
+                        ItemStack orangeleg = new ItemStack(Material.LEATHER_LEGGINGS);
+                        orangechest.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+                        LeatherArmorMeta orangelegItemMeta = (LeatherArmorMeta) orangeleg.getItemMeta();
+                        orangelegItemMeta.setColor(Color.PURPLE);
+                        orangeleg.setItemMeta(orangelegItemMeta);
+
+                        ItemStack orangeboot = new ItemStack(Material.LEATHER_BOOTS);
+                        orangechest.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+                        LeatherArmorMeta orangebootItemMeta = (LeatherArmorMeta) orangeboot.getItemMeta();
+                        orangebootItemMeta.setColor(Color.PURPLE);
+                        orangeboot.setItemMeta(orangebootItemMeta);
+
+                        g.getInventory().setHelmet(new ItemStack(Material.CHAINMAIL_HELMET));
+                        g.getInventory().setChestplate(orangechest);
+                        g.getInventory().setLeggings(orangeleg);
+                        g.getInventory().setBoots(orangeboot);
+
+                        ItemStack wardenSword = new ItemStack(Material.WOODEN_SWORD);
+                        wardenSword.addEnchantment(Enchantment.DAMAGE_ALL, 1);
+                        wardenSword.addEnchantment(Enchantment.DURABILITY, 1);
+
+                        g.getInventory().addItem(wardenSword);
+
+                        g.getInventory().addItem(new ItemStack(Material.CROSSBOW));
+                        g.getInventory().addItem(new ItemStack(Material.ARROW, 16));
+                        g.getInventory().addItem(new ItemStack(Material.COOKED_BEEF, 32));
+
+                        ItemStack pot = new ItemStack(Material.SPLASH_POTION);
+                        PotionMeta potionMeta = (PotionMeta) pot.getItemMeta();
+                        potionMeta.addCustomEffect(PotionEffectType.HEAL.createEffect(10, 2), true);
+                        pot.setItemMeta(potionMeta);
+
+                        g.getInventory().addItem(pot);
+
+                        ItemStack card = new ItemStack(Material.TRIPWIRE_HOOK);
+                        ItemMeta cardm = card.getItemMeta();
+                        cardm.setDisplayName(ChatColor.BLUE + "Keycard " + ChatColor.RED + "[CONTRABAND]");
+                        card.setItemMeta(cardm);
+                        g.getInventory().addItem(card);
 
 
                     } else {
@@ -159,6 +239,7 @@ public class CommandKit implements CommandExecutor {
                     p.sendMessage(ChatColor.DARK_GRAY + "-=-=-=-=-=-=-=-");
                     p.sendMessage(ChatColor.BLUE + "/warden help" + ChatColor.DARK_GRAY + " - " + ChatColor.WHITE + "Shows you this menu.");
                     p.sendMessage(ChatColor.BLUE + "/warden guard [name]" + ChatColor.DARK_GRAY + " - " + ChatColor.WHITE + "Makes another player a guard.");
+                    p.sendMessage(ChatColor.BLUE + "/warden nurse [name]" + ChatColor.DARK_GRAY + " - " + ChatColor.WHITE + "Makes another player a nurse.");
                     p.sendMessage(ChatColor.BLUE + "/warden fire [guard name]" + ChatColor.DARK_GRAY + " - " + ChatColor.WHITE + "Fires a guard from their job");
                     p.sendMessage(ChatColor.BLUE + "/warden resign" + ChatColor.DARK_GRAY + " - " + ChatColor.WHITE + "Resigns you from your job.");
                     p.sendMessage(ChatColor.DARK_GRAY + "-=-=-=-=-=-=-=-");
