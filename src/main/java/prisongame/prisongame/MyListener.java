@@ -10,6 +10,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
@@ -71,7 +73,7 @@ public class MyListener implements Listener {
         p.getInventory().setLeggings(orangeleg);
         p.getInventory().setBoots(orangeboot);
         PrisonGame.type.put(p, 0);
-        PrisonGame.prisoner.addPlayer(p);
+        Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Prisoners").addPlayer(p);
         p.sendTitle("", ChatColor.GOLD + "welcome.");
     }
 
@@ -83,9 +85,10 @@ public class MyListener implements Listener {
 
     @EventHandler
     public void deathmsg(PlayerDeathEvent event) {
-        event.getDrops().removeIf(i -> i.getType() != Material.TRIPWIRE_HOOK);
+        event.getDrops().removeIf(i -> i.getType() == Material.TRIPWIRE_HOOK);
         if (PrisonGame.warden != null) {
             if (PrisonGame.warden.equals(event.getEntity())) {
+                event.getDrops().clear();
                 PrisonGame.warden = null;
                 PrisonGame.type.put(event.getEntity(), 0);
                 MyListener.playerJoin(event.getEntity());
@@ -103,6 +106,7 @@ public class MyListener implements Listener {
     public void onPlayerJoin(PlayerQuitEvent event) {
         event.setQuitMessage(ChatColor.GOLD + event.getPlayer().getName() + " ran off somewhere else... (QUIT)");
     }
+
 
     @EventHandler
     public void chatCleanup(AsyncPlayerChatEvent event) {
@@ -125,16 +129,16 @@ public class MyListener implements Listener {
             if (event.getCurrentItem().getItemMeta() != null) {
                 if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.LIGHT_PURPLE + "Rock")) {
                     event.setCancelled(true);
-                    if (event.getWhoClicked().getInventory().contains(new ItemStack(Material.STONE_BUTTON, 9))) {
-                        event.getWhoClicked().getInventory().remove(new ItemStack(Material.STONE_BUTTON, 9));
+                    if (event.getWhoClicked().getInventory().containsAtLeast(new ItemStack(Material.STONE_BUTTON), 9)) {
+                        event.getWhoClicked().getInventory().removeItem(new ItemStack(Material.STONE_BUTTON, 9));
                         event.getWhoClicked().getInventory().addItem(new ItemStack(Material.COBBLESTONE));
                     }
                 }
                 if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.LIGHT_PURPLE + "Fake Card")) {
                     event.setCancelled(true);
-                    if (event.getWhoClicked().getInventory().contains(new ItemStack(Material.PAPER, 3)) || event.getWhoClicked().getInventory().contains(new ItemStack(Material.STICK, 2))) {
-                        event.getWhoClicked().getInventory().remove(new ItemStack(Material.PAPER, 3));
-                        event.getWhoClicked().getInventory().remove(new ItemStack(Material.STICK, 2));
+                    if (event.getWhoClicked().getInventory().containsAtLeast(new ItemStack(Material.PAPER), 3) && event.getWhoClicked().getInventory().containsAtLeast(new ItemStack(Material.STICK), 2)) {
+                        event.getWhoClicked().getInventory().removeItem(new ItemStack(Material.PAPER, 3));
+                        event.getWhoClicked().getInventory().removeItem(new ItemStack(Material.STICK, 2));
                         ItemStack card = new ItemStack(Material.TRIPWIRE_HOOK);
                         ItemMeta cardm = card.getItemMeta();
                         cardm.setDisplayName(ChatColor.BLUE + "Keycard " + ChatColor.RED + "[CONTRABAND]");
@@ -173,6 +177,12 @@ public class MyListener implements Listener {
             }
             if (event.getClickedBlock().getType().equals(Material.BIRCH_WALL_SIGN)) {
                 org.bukkit.block.Sign sign = (org.bukkit.block.Sign) event.getClickedBlock().getState();
+                if (sign.getLine(2).equals("Scrap Metal")) {
+                    if (PrisonGame.money.get(event.getPlayer()) >= 150.0) {
+                        PrisonGame.money.put(event.getPlayer(), PrisonGame.money.get(event.getPlayer()) - 150.0);
+                        event.getPlayer().getInventory().addItem(new ItemStack(Material.RAW_IRON));
+                    }
+                }
                 if (sign.getLine(2).equals("Not Drugs")) {
                     if (PrisonGame.money.get(event.getPlayer()) >= 30.0) {
                         PrisonGame.money.put(event.getPlayer(), PrisonGame.money.get(event.getPlayer()) - 30.0);
@@ -216,7 +226,7 @@ public class MyListener implements Listener {
                     Inventory inv = Bukkit.createInventory(null, 9, "Crafting");
                     inv.addItem(PrisonGame.createGuiItem(Material.CRAFTING_TABLE, ChatColor.LIGHT_PURPLE + "Normal Crafting"));
                     inv.addItem(PrisonGame.createGuiItem(Material.COBBLESTONE, ChatColor.LIGHT_PURPLE + "Rock", "§aRecipe:", "§b9 Pebbles"));
-                    inv.addItem(PrisonGame.createGuiItem(Material.IRON_PICKAXE, ChatColor.LIGHT_PURPLE + "Pickaxe", "§aRecipe:", "§b3 Metal", "&b2 Sticks"));
+                    inv.addItem(PrisonGame.createGuiItem(Material.TRIPWIRE_HOOK, ChatColor.LIGHT_PURPLE + "Fake Card", "§aRecipe:", "§b3 Metal", "§b2 Sticks"));
                     event.getPlayer().openInventory(inv);
                 }, 1L);
             }
@@ -225,9 +235,9 @@ public class MyListener implements Listener {
                 if (PrisonGame.money.get(event.getPlayer()) >= 15.0) {
                     if (event.getPlayer().getInventory().contains(Material.COAL) && event.getPlayer().getInventory().contains(Material.RAW_IRON)) {
                         PrisonGame.money.put(event.getPlayer(), PrisonGame.money.get(event.getPlayer()) - 15.0);
-                        event.getPlayer().getInventory().remove(new ItemStack(Material.COAL, 1));
-                        event.getPlayer().getInventory().remove(new ItemStack(Material.RAW_IRON, 1));
-                        event.getPlayer().getInventory().addItem(PrisonGame.createGuiItem(Material.PAPER, ChatColor.RESET + "Metal"));
+                        event.getPlayer().getInventory().removeItem(new ItemStack(Material.COAL, 1));
+                        event.getPlayer().getInventory().removeItem(new ItemStack(Material.RAW_IRON, 1));
+                        event.getPlayer().getInventory().addItem(new ItemStack(Material.PAPER));
                     }
                 } else {
                     event.getPlayer().sendMessage(ChatColor.RED + "Not enough money!");
@@ -235,16 +245,13 @@ public class MyListener implements Listener {
             }
             if (event.getClickedBlock().getType().equals(Material.SPRUCE_WALL_SIGN)) {
                 org.bukkit.block.Sign sign = (org.bukkit.block.Sign) event.getClickedBlock().getState();
+                if (sign.getLine(1).equals("Hardcore")) {
+
+                }
                 if (sign.getLine(2).equals("Soup")) {
                     if (PrisonGame.money.get(event.getPlayer()) >= 2.0) {
                         PrisonGame.money.put(event.getPlayer(), PrisonGame.money.get(event.getPlayer()) - 2.0);
                         event.getPlayer().getInventory().addItem(new ItemStack(Material.BEETROOT_SOUP));
-                    }
-                }
-                if (sign.getLine(2).equals("Scrap Metal")) {
-                    if (PrisonGame.money.get(event.getPlayer()) >= 150.0) {
-                        PrisonGame.money.put(event.getPlayer(), PrisonGame.money.get(event.getPlayer()) - 150.0);
-                        event.getPlayer().getInventory().addItem(new ItemStack(Material.RAW_IRON));
                     }
                 }
                 if (sign.getLine(2).equals("Strong Chest")) {
@@ -263,6 +270,12 @@ public class MyListener implements Listener {
                     if (PrisonGame.money.get(event.getPlayer()) >= 50.0) {
                         PrisonGame.money.put(event.getPlayer(), PrisonGame.money.get(event.getPlayer()) - 50.0);
                         event.getPlayer().getInventory().addItem(new ItemStack(Material.STICK));
+                    }
+                }
+                if (sign.getLine(2).equals("Coal")) {
+                    if (PrisonGame.money.get(event.getPlayer()) >= 30.0) {
+                        PrisonGame.money.put(event.getPlayer(), PrisonGame.money.get(event.getPlayer()) - 30.0);
+                        event.getPlayer().getInventory().addItem(new ItemStack(Material.COAL));
                     }
                 }
                 if (sign.getLine(2).equals("Lumberjack")) {

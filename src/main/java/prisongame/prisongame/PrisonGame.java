@@ -24,11 +24,6 @@ public final class PrisonGame extends JavaPlugin {
     static HashMap<Player, Integer> type = new HashMap<>();
     static HashMap<Player, Double> money = new HashMap<>();
 
-    static Team crims = Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Criminals");
-    static Team guards = Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Guards");
-    static Team ward = Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Warden");
-    static Team prisoner = Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Prisoners");
-
     @Override
     public void onEnable() {
         // Plugin startup logic

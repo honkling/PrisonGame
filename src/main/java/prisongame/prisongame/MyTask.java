@@ -33,10 +33,10 @@ public class MyTask extends BukkitRunnable {
                         p.sendTitle("", ChatColor.RED + "GET TO THE YARD!", 0, 20 * 3, 0);
                         p.addPotionEffect(PotionEffectType.SPEED.createEffect(200, 0));
                         p.addPotionEffect(PotionEffectType.GLOWING.createEffect(20 * 30, 0));
-                        PrisonGame.crims.addPlayer(p);
+                        Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Criminals").addPlayer(p);
                     } else {
-                        if (PrisonGame.type.get(p) == 0 && Bukkit.getScoreboardManager().getMainScoreboard().getPlayerTeam(p) == PrisonGame.crims) {
-                            PrisonGame.prisoner.addPlayer(p);
+                        if (PrisonGame.type.get(p) == 0 && Bukkit.getScoreboardManager().getMainScoreboard().getPlayerTeam(p) == Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Criminals")) {
+                            Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Prisoners").addPlayer(p);
                         }
                         p.removePotionEffect(PotionEffectType.SPEED);
                         p.removePotionEffect(PotionEffectType.GLOWING);
@@ -71,10 +71,10 @@ public class MyTask extends BukkitRunnable {
                         p.sendTitle("", ChatColor.RED + "GET TO SLEEP!", 0, 20 * 3, 0);
                         p.addPotionEffect(PotionEffectType.SPEED.createEffect(200, 0));
                         p.addPotionEffect(PotionEffectType.GLOWING.createEffect(20 * 30, 0));
-                        PrisonGame.crims.addPlayer(p);
+                        Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Criminals").addPlayer(p);
                     } else {
-                        if (PrisonGame.type.get(p) == 0 && Bukkit.getScoreboardManager().getMainScoreboard().getPlayerTeam(p) == PrisonGame.crims) {
-                            PrisonGame.prisoner.addPlayer(p);
+                        if (PrisonGame.type.get(p) == 0 && Bukkit.getScoreboardManager().getMainScoreboard().getPlayerTeam(p) == Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Criminals")) {
+                            Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Prisoners").addPlayer(p);
                         }
                         p.removePotionEffect(PotionEffectType.SPEED);
                         p.removePotionEffect(PotionEffectType.GLOWING);
@@ -93,8 +93,8 @@ public class MyTask extends BukkitRunnable {
         }
         for (Player p :Bukkit.getOnlinePlayers()) {
             if (p.hasPotionEffect(PotionEffectType.GLOWING)) {
-                if (PrisonGame.type.get(p) == 0 && Bukkit.getScoreboardManager().getMainScoreboard().getPlayerTeam(p) == PrisonGame.prisoner) {
-                    PrisonGame.crims.addPlayer(p);
+                if (PrisonGame.type.get(p) == 0 && Bukkit.getScoreboardManager().getMainScoreboard().getPlayerTeam(p) == Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Prisoners")) {
+                    Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Criminals").addPlayer(p);
                 }
             }
             bossbar.addPlayer(p);

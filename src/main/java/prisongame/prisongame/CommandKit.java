@@ -29,7 +29,7 @@ public class CommandKit implements CommandExecutor {
                     p.sendTitle("", ChatColor.RED + nw.getName() + ChatColor.GREEN + " is the new warden!");
 
                 }
-                PrisonGame.ward.addPlayer(nw);
+                Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Warden").addPlayer(nw);
                 PrisonGame.type.put(nw, -1);
                 PrisonGame.warden = nw;
                 nw.teleport(new Location(Bukkit.getWorld("world"), -3, -59, -129));
@@ -84,7 +84,7 @@ public class CommandKit implements CommandExecutor {
                 if (Bukkit.getPlayer(args[1]) != null) {
                     Player g = Bukkit.getPlayer(args[1]);
                     if (g.isOnline() && g != sender && PrisonGame.type.get(g) == 0) {
-                        PrisonGame.guards.addPlayer(g);
+                        Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Guards").addPlayer(g);
                         PrisonGame.type.put(g, 1);
                         g.sendMessage(ChatColor.BLUE + "You were promoted by " + ChatColor.DARK_GRAY + " Warden " + ChatColor.RED + sender.getName());
                         Bukkit.broadcastMessage(ChatColor.BLUE + g.getName() + " was promoted to a guard!");
@@ -155,7 +155,7 @@ public class CommandKit implements CommandExecutor {
                 if (Bukkit.getPlayer(args[1]) != null) {
                     Player g = Bukkit.getPlayer(args[1]);
                     if (g.isOnline() && g != sender && PrisonGame.type.get(g) == 0) {
-                        PrisonGame.guards.addPlayer(g);
+                        Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Guards").addPlayer(g);
                         PrisonGame.type.put(g, 2);
                         g.sendMessage(ChatColor.LIGHT_PURPLE + "You were promoted by " + ChatColor.DARK_GRAY + " Warden " + ChatColor.RED + sender.getName());
                         Bukkit.broadcastMessage(ChatColor.LIGHT_PURPLE + g.getName() + " was promoted to a nurse!");
