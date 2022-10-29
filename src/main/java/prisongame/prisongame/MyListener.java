@@ -13,7 +13,9 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.*;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -21,10 +23,15 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffectType;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.List;
+
 public class MyListener implements Listener {
 
     public static void playerJoin(Player p) {
         p.getInventory().clear();
+        PrisonGame.escaped.put(p, false);
         p.teleport(new Location(Bukkit.getWorld("world"), 12, -60, -119));
         p.playSound(p, Sound.ENTITY_ZOMBIE_BREAK_WOODEN_DOOR, 1, 0.75f);
 
@@ -113,6 +120,36 @@ public class MyListener implements Listener {
     }
 
     @EventHandler
+    public void ee(InventoryClickEvent event) {
+        if (event.getCurrentItem() != null) {
+            if (event.getCurrentItem().getItemMeta() != null) {
+                if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.LIGHT_PURPLE + "Rock")) {
+                    event.setCancelled(true);
+                    if (event.getWhoClicked().getInventory().contains(new ItemStack(Material.STONE_BUTTON, 9))) {
+                        event.getWhoClicked().getInventory().remove(new ItemStack(Material.STONE_BUTTON, 9));
+                        event.getWhoClicked().getInventory().addItem(new ItemStack(Material.COBBLESTONE));
+                    }
+                }
+                if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.LIGHT_PURPLE + "Fake Card")) {
+                    event.setCancelled(true);
+                    if (event.getWhoClicked().getInventory().contains(new ItemStack(Material.PAPER, 3)) || event.getWhoClicked().getInventory().contains(new ItemStack(Material.STICK, 2))) {
+                        event.getWhoClicked().getInventory().remove(new ItemStack(Material.PAPER, 3));
+                        event.getWhoClicked().getInventory().remove(new ItemStack(Material.STICK, 2));
+                        ItemStack card = new ItemStack(Material.TRIPWIRE_HOOK);
+                        ItemMeta cardm = card.getItemMeta();
+                        cardm.setDisplayName(ChatColor.BLUE + "Keycard " + ChatColor.RED + "[CONTRABAND]");
+                        card.setItemMeta(cardm);
+                        event.getWhoClicked().getInventory().addItem(card);
+                    }
+                }
+                if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.LIGHT_PURPLE + "Normal Crafting")) {
+                    event.getWhoClicked().openWorkbench(null, true);
+                }
+            }
+        }
+    }
+
+    @EventHandler
     public void ee(PlayerInteractEvent event) {
         if (event.getItem() != null) {
             if (event.getItem().getType().equals(Material.SPLASH_POTION)) {
@@ -173,12 +210,41 @@ public class MyListener implements Listener {
                     }
                 }
             }
+            if (event.getClickedBlock().getType().equals(Material.CRAFTING_TABLE)) {
+                event.setCancelled(true);
+                Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
+                    Inventory inv = Bukkit.createInventory(null, 9, "Crafting");
+                    inv.addItem(PrisonGame.createGuiItem(Material.CRAFTING_TABLE, ChatColor.LIGHT_PURPLE + "Normal Crafting"));
+                    inv.addItem(PrisonGame.createGuiItem(Material.COBBLESTONE, ChatColor.LIGHT_PURPLE + "Rock", "§aRecipe:", "§b9 Pebbles"));
+                    inv.addItem(PrisonGame.createGuiItem(Material.IRON_PICKAXE, ChatColor.LIGHT_PURPLE + "Pickaxe", "§aRecipe:", "§b3 Metal", "&b2 Sticks"));
+                    event.getPlayer().openInventory(inv);
+                }, 1L);
+            }
+            if (event.getClickedBlock().getType().equals(Material.FURNACE)) {
+                event.setCancelled(true);
+                if (PrisonGame.money.get(event.getPlayer()) >= 15.0) {
+                    if (event.getPlayer().getInventory().contains(Material.COAL) && event.getPlayer().getInventory().contains(Material.RAW_IRON)) {
+                        PrisonGame.money.put(event.getPlayer(), PrisonGame.money.get(event.getPlayer()) - 15.0);
+                        event.getPlayer().getInventory().remove(new ItemStack(Material.COAL, 1));
+                        event.getPlayer().getInventory().remove(new ItemStack(Material.RAW_IRON, 1));
+                        event.getPlayer().getInventory().addItem(PrisonGame.createGuiItem(Material.PAPER, ChatColor.RESET + "Metal"));
+                    }
+                } else {
+                    event.getPlayer().sendMessage(ChatColor.RED + "Not enough money!");
+                }
+            }
             if (event.getClickedBlock().getType().equals(Material.SPRUCE_WALL_SIGN)) {
                 org.bukkit.block.Sign sign = (org.bukkit.block.Sign) event.getClickedBlock().getState();
                 if (sign.getLine(2).equals("Soup")) {
                     if (PrisonGame.money.get(event.getPlayer()) >= 2.0) {
                         PrisonGame.money.put(event.getPlayer(), PrisonGame.money.get(event.getPlayer()) - 2.0);
                         event.getPlayer().getInventory().addItem(new ItemStack(Material.BEETROOT_SOUP));
+                    }
+                }
+                if (sign.getLine(2).equals("Scrap Metal")) {
+                    if (PrisonGame.money.get(event.getPlayer()) >= 150.0) {
+                        PrisonGame.money.put(event.getPlayer(), PrisonGame.money.get(event.getPlayer()) - 150.0);
+                        event.getPlayer().getInventory().addItem(new ItemStack(Material.RAW_IRON));
                     }
                 }
                 if (sign.getLine(2).equals("Strong Chest")) {
@@ -231,8 +297,9 @@ public class MyListener implements Listener {
                     event.getPlayer().addPotionEffect(PotionEffectType.GLOWING.createEffect(20 * 3, 0));
                 }
                 if (sign.getLine(1).equals("Get Gear")) {
-                    if (PrisonGame.type.get(event.getPlayer()) == 0) {
+                    if (PrisonGame.type.get(event.getPlayer()) == 0 && !PrisonGame.escaped.get(event.getPlayer())) {
                         Player g = event.getPlayer();
+                        PrisonGame.escaped.put(event.getPlayer(), true);
                         Bukkit.broadcastMessage(ChatColor.RED + g.getName() + " escaped...");
                         event.getPlayer().addPotionEffect(PotionEffectType.GLOWING.createEffect(999999999, 0));
 
@@ -313,6 +380,12 @@ public class MyListener implements Listener {
                     event.getPlayer().sendTitle("", ChatColor.GRAY + "-= Black Market =-");
                 }
             }
+            if (event.getClickedBlock().getType().equals(Material.JUNGLE_DOOR)) {
+                if (PrisonGame.type.get(event.getPlayer()) != -1) {
+                    event.setCancelled(true);
+                    event.getPlayer().sendMessage(ChatColor.RED + "This door can only be opened by the warden!");
+                }
+            }
             if (event.getClickedBlock().getType().equals(Material.ACACIA_DOOR)) {
                 BlockState state = event.getClickedBlock().getState();
                 Door openable = (Door) state.getBlockData();
@@ -334,12 +407,15 @@ public class MyListener implements Listener {
                                 }
                             } else {
                                 event.setCancelled(true);
+                                event.getPlayer().sendMessage(ChatColor.RED + "You can't open this during lockdown!");
                             }
                         } else {
                             event.setCancelled(true);
+                            event.getPlayer().sendMessage(ChatColor.RED + "You can't open this during lockdown!");
                         }
                     } else {
                         event.setCancelled(true);
+                        event.getPlayer().sendMessage(ChatColor.RED + "You can't open this during lockdown!");
                     }
                 }
             }
@@ -512,6 +588,6 @@ public class MyListener implements Listener {
             Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
                 event.getPlayer().teleport(new Location(Bukkit.getWorld("world"), 44, -58, -137));
             }, 20 * 15);
-        }, 20L);
+        }, 1);
     }
 }

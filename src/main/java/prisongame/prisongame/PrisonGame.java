@@ -8,6 +8,7 @@ import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapelessRecipe;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.Team;
 
@@ -19,6 +20,7 @@ import java.util.regex.Pattern;
 public final class PrisonGame extends JavaPlugin {
 
     static Player warden = null;
+    static HashMap<Player, Boolean> escaped = new HashMap<>();
     static HashMap<Player, Integer> type = new HashMap<>();
     static HashMap<Player, Double> money = new HashMap<>();
 
@@ -82,6 +84,21 @@ public final class PrisonGame extends JavaPlugin {
 
 
         return true;
+    }
+
+    public static ItemStack createGuiItem(final Material material, final String name, final String... lore) {
+        final ItemStack item = new ItemStack(material, 1);
+        final ItemMeta meta = item.getItemMeta();
+
+        // Set the name of the item
+        meta.setDisplayName(name);
+
+        // Set the lore of the item
+        meta.setLore(Arrays.asList(lore));
+
+        item.setItemMeta(meta);
+
+        return item;
     }
 
 }
