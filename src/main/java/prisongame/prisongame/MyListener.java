@@ -5,6 +5,7 @@ import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
 import org.bukkit.block.data.type.Door;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -63,6 +64,7 @@ public class MyListener implements Listener {
         p.getInventory().setLeggings(orangeleg);
         p.getInventory().setBoots(orangeboot);
         PrisonGame.type.put(p, 0);
+        PrisonGame.prisoner.addPlayer(p);
         p.sendTitle("", ChatColor.GOLD + "welcome.");
     }
 
@@ -74,6 +76,7 @@ public class MyListener implements Listener {
 
     @EventHandler
     public void deathmsg(PlayerDeathEvent event) {
+        event.getDrops().removeIf(i -> i.getType() != Material.TRIPWIRE_HOOK);
         if (PrisonGame.warden != null) {
             if (PrisonGame.warden.equals(event.getEntity())) {
                 PrisonGame.warden = null;
@@ -276,6 +279,14 @@ public class MyListener implements Listener {
 
                         g.getInventory().addItem(new ItemStack(Material.GOLDEN_APPLE, 2));
 
+                    }
+                }
+            }
+            if (event.getItem() != null) {
+                if (!event.getPlayer().hasCooldown(Material.STRUCTURE_VOID)) {
+                    if (event.getItem().getType().equals(Material.STRUCTURE_VOID)) {
+                        event.getPlayer().setCooldown(Material.STRUCTURE_VOID, 20 * 600);
+                        Bukkit.getWorld("world").setTime(13000);
                     }
                 }
             }
