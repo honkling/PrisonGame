@@ -141,6 +141,8 @@ public class MyListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         event.setJoinMessage(ChatColor.GOLD + event.getPlayer().getName() + " was caught and sent to prison! (JOIN)");
         event.getPlayer().setGameMode(GameMode.ADVENTURE);
+        PrisonGame.st.put(event.getPlayer(), 0.0);
+        PrisonGame.sp.put(event.getPlayer(), 0.0);
         playerJoin(event.getPlayer());
     }
 
@@ -221,16 +223,48 @@ public class MyListener implements Listener {
     }
 
     @EventHandler
+    public void ee(PlayerMoveEvent event) {
+        if (PrisonGame.isInside(event.getPlayer(), new Location(Bukkit.getWorld("world"), 61, -54, -159), new Location(Bukkit.getWorld("world"), 76, -59, -169))) {
+            PrisonGame.sp.put(event.getPlayer(), PrisonGame.sp.getOrDefault(event.getPlayer(), 0.0) + 0.25);
+            event.getPlayer().sendTitle("", ChatColor.GREEN + PrisonGame.sp.get(event.getPlayer()).toString() + "/120", 0, 10, 10);
+            if (PrisonGame.sp.get(event.getPlayer()) >= 120) {
+                PrisonGame.sp.put(event.getPlayer(), 0.0);
+                if (event.getPlayer().hasPotionEffect(PotionEffectType.SPEED)) {
+                    event.getPlayer().addPotionEffect(PotionEffectType.SPEED.createEffect(event.getPlayer().getPotionEffect(PotionEffectType.SPEED).getDuration() + 20 * 15, 0));
+                } else {
+                    event.getPlayer().addPotionEffect(PotionEffectType.SPEED.createEffect(20 * 30, 0));
+                }
+            }
+        }
+    }
+    @EventHandler
     public void ee(PlayerInteractEvent event) {
+        if (event.getClickedBlock() != null) {
+            if (event.getClickedBlock().getType().equals(Material.CHAIN) && !PrisonGame.isInside(event.getPlayer(), new Location(Bukkit.getWorld("world"), 67, -54,  -194), new Location(Bukkit.getWorld("world"), 73, -59,  -161))) {
+                PrisonGame.st.put(event.getPlayer(), PrisonGame.st.getOrDefault(event.getPlayer(), 0.0) + 0.5);
+                event.getPlayer().sendTitle("", ChatColor.GREEN + PrisonGame.st.get(event.getPlayer()).toString() + "/120", 0, 10, 10);
+                if (PrisonGame.st.get(event.getPlayer()) >= 120) {
+                    if (event.getPlayer().hasPotionEffect(PotionEffectType.INCREASE_DAMAGE)) {
+                        PrisonGame.st.put(event.getPlayer(), 0.0);
+                        event.getPlayer().addPotionEffect(PotionEffectType.INCREASE_DAMAGE.createEffect(event.getPlayer().getPotionEffect(PotionEffectType.INCREASE_DAMAGE).getDuration() + 20 * 15, 0));
+                    } else {
+                        event.getPlayer().addPotionEffect(PotionEffectType.INCREASE_DAMAGE.createEffect(20 * 30, 0));
+                    }
+                }
+            }
+        }
         if (event.getItem() != null) {
-            if (event.getItem().getType().equals(Material.SPLASH_POTION)) {
-                if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK) || event.getAction().equals(Action.RIGHT_CLICK_AIR)) {
-                    ItemStack pot = new ItemStack(Material.SPLASH_POTION);
-                    PotionMeta potionMeta = (PotionMeta) pot.getItemMeta();
-                    potionMeta.addCustomEffect(PotionEffectType.HEAL.createEffect(10, 0), true);
-                    pot.setItemMeta(potionMeta);
+            if (!event.getItem().getType().equals(Material.SPLASH_POTION)) {
+                if (event.getPlayer().hasCooldown(Material.SPLASH_POTION)) {
+                    if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK) || event.getAction().equals(Action.RIGHT_CLICK_AIR)) {
+                        ItemStack pot = new ItemStack(Material.SPLASH_POTION);
+                        PotionMeta potionMeta = (PotionMeta) pot.getItemMeta();
+                        event.getPlayer().setCooldown(Material.SPLASH_POTION, 20);
+                        potionMeta.addCustomEffect(PotionEffectType.HEAL.createEffect(10, 0), true);
+                        pot.setItemMeta(potionMeta);
 
-                    event.getPlayer().getInventory().addItem(pot);
+                        event.getPlayer().getInventory().addItem(pot);
+                    }
                 }
             }
         }
@@ -245,14 +279,14 @@ public class MyListener implements Listener {
             if (event.getClickedBlock().getType().equals(Material.BIRCH_WALL_SIGN)) {
                 org.bukkit.block.Sign sign = (org.bukkit.block.Sign) event.getClickedBlock().getState();
                 if (sign.getLine(2).equals("Scrap Metal")) {
-                    if (PrisonGame.money.get(event.getPlayer()) >= 150.0) {
-                        PrisonGame.money.put(event.getPlayer(), PrisonGame.money.get(event.getPlayer()) - 150.0);
+                    if (event.getPlayer().getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0) >= 150.0) {
+                        event.getPlayer().getPersistentDataContainer().set(PrisonGame.mny, PersistentDataType.DOUBLE, event.getPlayer().getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0)  - 150);
                         event.getPlayer().getInventory().addItem(new ItemStack(Material.RAW_IRON));
                     }
                 }
                 if (sign.getLine(2).equals("Not Drugs")) {
-                    if (PrisonGame.money.get(event.getPlayer()) >= 30.0) {
-                        PrisonGame.money.put(event.getPlayer(), PrisonGame.money.get(event.getPlayer()) - 30.0);
+                    if (event.getPlayer().getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0) >= 30.0) {
+                        event.getPlayer().getPersistentDataContainer().set(PrisonGame.mny, PersistentDataType.DOUBLE ,event.getPlayer().getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0) - 30.0);
 
                         ItemStack card = new ItemStack(Material.PORKCHOP, 16);
                         ItemMeta cardm = card.getItemMeta();
@@ -263,8 +297,8 @@ public class MyListener implements Listener {
                     }
                 }
                 if (sign.getLine(2).equals("Chainmail Helmet")) {
-                    if (PrisonGame.money.get(event.getPlayer()) >= 300.0) {
-                        PrisonGame.money.put(event.getPlayer(), PrisonGame.money.get(event.getPlayer()) - 300.0);
+                    if (event.getPlayer().getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0) >= 300.0) {
+                        event.getPlayer().getPersistentDataContainer().set(PrisonGame.mny, PersistentDataType.DOUBLE ,event.getPlayer().getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0) - 300.0);
 
                         ItemStack card = new ItemStack(Material.CHAINMAIL_HELMET);
                         ItemMeta cardm = card.getItemMeta();
@@ -275,8 +309,8 @@ public class MyListener implements Listener {
                     }
                 }
                 if (sign.getLine(2).equals("Dagger")) {
-                    if (PrisonGame.money.get(event.getPlayer()) >= 1000.0) {
-                        PrisonGame.money.put(event.getPlayer(), PrisonGame.money.get(event.getPlayer()) - 1000.0);
+                    if (event.getPlayer().getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0) >= 1000.0) {
+                        event.getPlayer().getPersistentDataContainer().set(PrisonGame.mny, PersistentDataType.DOUBLE ,event.getPlayer().getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0) - 1000.0);
 
                         ItemStack card = new ItemStack(Material.IRON_SWORD);
                         ItemMeta cardm = card.getItemMeta();
@@ -299,9 +333,9 @@ public class MyListener implements Listener {
             }
             if (event.getClickedBlock().getType().equals(Material.FURNACE)) {
                 event.setCancelled(true);
-                if (PrisonGame.money.get(event.getPlayer()) >= 15.0) {
+                if (event.getPlayer().getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0) >= 15.0) {
                     if (event.getPlayer().getInventory().contains(Material.COAL) && event.getPlayer().getInventory().contains(Material.RAW_IRON)) {
-                        PrisonGame.money.put(event.getPlayer(), PrisonGame.money.get(event.getPlayer()) - 15.0);
+                        event.getPlayer().getPersistentDataContainer().set(PrisonGame.mny, PersistentDataType.DOUBLE ,event.getPlayer().getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0)- 15.0);
                         event.getPlayer().getInventory().removeItem(new ItemStack(Material.COAL, 1));
                         event.getPlayer().getInventory().removeItem(new ItemStack(Material.RAW_IRON, 1));
                         event.getPlayer().getInventory().addItem(new ItemStack(Material.PAPER));
@@ -313,32 +347,32 @@ public class MyListener implements Listener {
             if (event.getClickedBlock().getType().equals(Material.SPRUCE_WALL_SIGN)) {
                 org.bukkit.block.Sign sign = (org.bukkit.block.Sign) event.getClickedBlock().getState();
                 if (sign.getLine(2).equals("Soup")) {
-                    if (PrisonGame.money.get(event.getPlayer()) >= 2.0) {
-                        PrisonGame.money.put(event.getPlayer(), PrisonGame.money.get(event.getPlayer()) - 2.0);
+                    if (event.getPlayer().getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0) >= 2.0) {
+                        event.getPlayer().getPersistentDataContainer().set(PrisonGame.mny, PersistentDataType.DOUBLE ,event.getPlayer().getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0)- 2.0);
                         event.getPlayer().getInventory().addItem(new ItemStack(Material.BEETROOT_SOUP));
                     }
                 }
                 if (sign.getLine(2).equals("Strong Chest")) {
-                    if (PrisonGame.money.get(event.getPlayer()) >= 1000.0) {
-                        PrisonGame.money.put(event.getPlayer(), PrisonGame.money.get(event.getPlayer()) - 1000.0);
+                    if (event.getPlayer().getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0) >= 1000.0) {
+                        event.getPlayer().getPersistentDataContainer().set(PrisonGame.mny, PersistentDataType.DOUBLE ,event.getPlayer().getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0)- 1000.0);
                         event.getPlayer().getInventory().addItem(new ItemStack(Material.IRON_CHESTPLATE));
                     }
                 }
                 if (sign.getLine(2).equals("Arrows")) {
-                    if (PrisonGame.money.get(event.getPlayer()) >= 16.0) {
-                        PrisonGame.money.put(event.getPlayer(), PrisonGame.money.get(event.getPlayer()) - 16.0);
+                    if (event.getPlayer().getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0) >= 16.0) {
+                        event.getPlayer().getPersistentDataContainer().set(PrisonGame.mny, PersistentDataType.DOUBLE ,event.getPlayer().getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0)- 16.0);
                         event.getPlayer().getInventory().addItem(new ItemStack(Material.ARROW, 16));
                     }
                 }
                 if (sign.getLine(2).equals("Supreme Stick")) {
-                    if (PrisonGame.money.get(event.getPlayer()) >= 50.0) {
-                        PrisonGame.money.put(event.getPlayer(), PrisonGame.money.get(event.getPlayer()) - 50.0);
+                    if (event.getPlayer().getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0) >= 50.0) {
+                        event.getPlayer().getPersistentDataContainer().set(PrisonGame.mny, PersistentDataType.DOUBLE ,event.getPlayer().getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0)- 50.0);
                         event.getPlayer().getInventory().addItem(new ItemStack(Material.STICK));
                     }
                 }
                 if (sign.getLine(2).equals("Coal")) {
-                    if (PrisonGame.money.get(event.getPlayer()) >= 30.0) {
-                        PrisonGame.money.put(event.getPlayer(), PrisonGame.money.get(event.getPlayer()) - 30.0);
+                    if (event.getPlayer().getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0) >= 30.0) {
+                        event.getPlayer().getPersistentDataContainer().set(PrisonGame.mny, PersistentDataType.DOUBLE ,event.getPlayer().getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0)- 30.0);
                         event.getPlayer().getInventory().addItem(new ItemStack(Material.COAL));
                     }
                 }
@@ -437,7 +471,7 @@ public class MyListener implements Listener {
             if (event.getClickedBlock().getType().equals(Material.IRON_TRAPDOOR)) {
                 if (event.getItem() != null) {
                     if (!event.getPlayer().hasCooldown(Material.CARROT_ON_A_STICK)) {
-                        PrisonGame.money.put(event.getPlayer(), PrisonGame.money.get(event.getPlayer()) + 0.5 * MyTask.jobm);
+                        event.getPlayer().getPersistentDataContainer().set(PrisonGame.mny, PersistentDataType.DOUBLE ,event.getPlayer().getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0)+ 0.5 * MyTask.jobm);
                     }
                 }
             }
@@ -446,7 +480,7 @@ public class MyListener implements Listener {
                     if (event.getItem().getType().equals(Material.WOODEN_AXE)) {
                         if (!event.getPlayer().hasCooldown(Material.WOODEN_AXE)) {
                             event.getPlayer().setCooldown(Material.WOODEN_AXE, 10);
-                            PrisonGame.money.put(event.getPlayer(), PrisonGame.money.get(event.getPlayer()) + 2.0 * MyTask.jobm);
+                            event.getPlayer().getPersistentDataContainer().set(PrisonGame.mny, PersistentDataType.DOUBLE ,event.getPlayer().getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0)+ 2.0 * MyTask.jobm);
                         }
                     }
                 }
@@ -528,7 +562,7 @@ public class MyListener implements Listener {
             if (p.getKiller() != null) {
                 if (p.hasPotionEffect(PotionEffectType.GLOWING)) {
                     p.getKiller().sendMessage(ChatColor.GREEN + "You killed a criminal and got 100$!");
-                    PrisonGame.money.put(p.getKiller(), PrisonGame.money.get(p.getKiller()) + 100.0 * MyTask.jobm);
+                    p.getPersistentDataContainer().set(PrisonGame.mny, PersistentDataType.DOUBLE ,p.getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0) + 100.0 * MyTask.jobm);
                 }
             }
         }

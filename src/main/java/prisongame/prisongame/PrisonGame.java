@@ -21,12 +21,15 @@ import java.util.regex.Pattern;
 
 public final class PrisonGame extends JavaPlugin {
 
+    static HashMap<Player, Double> st = new HashMap<>();
+    static HashMap<Player, Double> sp = new HashMap<>();
     static Player warden = null;
     static HashMap<Player, Boolean> escaped = new HashMap<>();
     static HashMap<Player, Integer> type = new HashMap<>();
-    static HashMap<Player, Double> money = new HashMap<>();
     static NamespacedKey nightvis;
     static NamespacedKey whiff;
+
+    static NamespacedKey mny;
 
     static LivingEntity bertrude;
 
@@ -34,6 +37,7 @@ public final class PrisonGame extends JavaPlugin {
     public void onEnable() {
         // Plugin startup logic
         nightvis = new NamespacedKey(PrisonGame.getPlugin(PrisonGame.class), "night");
+        mny = new NamespacedKey(PrisonGame.getPlugin(PrisonGame.class), "money");
         whiff = new NamespacedKey(PrisonGame.getPlugin(PrisonGame.class), "whiff");
         bertrude = (LivingEntity) Bukkit.getWorld("world").spawnEntity(new Location(Bukkit.getWorld("world"), 70, -59, -137), EntityType.VILLAGER);
         bertrude.setAI(false);
@@ -62,6 +66,8 @@ public final class PrisonGame extends JavaPlugin {
 
         Bukkit.addRecipe(recipe);
         for (Player p : Bukkit.getOnlinePlayers()) {
+            PrisonGame.st.put(p, 0.0);
+            PrisonGame.sp.put(p, 0.0);
             if (!PrisonGame.type.containsKey(p)) {
                 PrisonGame.type.put(p, 0);
                 MyListener.playerJoin(p);
