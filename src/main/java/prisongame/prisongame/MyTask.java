@@ -16,21 +16,20 @@ public class MyTask extends BukkitRunnable {
 
     static Integer jobm = 1;
 
-    BossBar bossbar = Bukkit.createBossBar(
+    static BossBar bossbar = Bukkit.createBossBar(
             ChatColor.WHITE + "Morning",
             BarColor.WHITE,
             BarStyle.SOLID);;
 
     @Override
     public void run(){
-        Bukkit.getWorld("world").setTime(Bukkit.getWorld("world").getTime() + 1);
         if (Bukkit.getWorld("world").getTime() > 0 && Bukkit.getWorld("world").getTime() < 1000) {
             bossbar.setTitle("ROLL CALL");
             for (Player p : Bukkit.getOnlinePlayers()) {
                 if (PrisonGame.type.get(p) == 0 && !PrisonGame.escaped.get(p)) {
-                    if (!PrisonGame.isInside(p, new Location(Bukkit.getWorld("world"), 44, -60,  -104), new Location(Bukkit.getWorld("world"), 81, -32,  -138)))
+                    if (!PrisonGame.isInside(p, new Location(Bukkit.getWorld("world"), 44, -60,  -104), new Location(Bukkit.getWorld("world"), 81, -32,  -138)) && !new Location(p.getWorld(), p.getLocation().getX(), p.getLocation().getY() - 1, p.getLocation().getZ()).getBlock().getType().equals(Material.RED_SAND))
                     {
-                        p.sendTitle("", ChatColor.RED + "GET TO THE YARD!", 0, 20 * 3, 0);
+                        p.sendTitle("", ChatColor.RED + "GET ONTO THE YARD'S RED SAND!", 0, 20 * 3, 0);
                         p.addPotionEffect(PotionEffectType.SPEED.createEffect(200, 0));
                         p.addPotionEffect(PotionEffectType.GLOWING.createEffect(20 * 30, 0));
                         Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Criminals").addPlayer(p);
@@ -82,7 +81,7 @@ public class MyTask extends BukkitRunnable {
                     }
                 }
             }
-            Bukkit.getWorld("world").setTime(Bukkit.getWorld("world").getTime() + 1);
+            Bukkit.getWorld("world").setTime(Bukkit.getWorld("world").getTime() + 2);
             bossbar.setColor(BarColor.RED);
             bossbar.addFlag(BarFlag.DARKEN_SKY);
             bossbar.addFlag(BarFlag.CREATE_FOG);
@@ -92,6 +91,14 @@ public class MyTask extends BukkitRunnable {
             bossbar.removeFlag(BarFlag.CREATE_FOG);
         }
         for (Player p :Bukkit.getOnlinePlayers()) {
+            if (p.getGameMode().equals(GameMode.SPECTATOR) && p.hasPotionEffect(PotionEffectType.DARKNESS)) {
+                p.teleport(new Location(Bukkit.getWorld("world"), 44, -58, -141));
+            }
+            if (p.getName().equals("Jacco100") && !p.getPlayerListName().contains("REPORTER")) {
+                p.setCustomName(ChatColor.GRAY + "[" + ChatColor.GREEN + "REPORTER" + ChatColor.GRAY + "] " + p.getDisplayName());
+                p.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.GREEN + "REPORTER" + ChatColor.GRAY + "] " + p.getDisplayName());
+                p.setDisplayName(ChatColor.GRAY + "[" + ChatColor.GREEN + "REPORTER" + ChatColor.GRAY + "] " + p.getDisplayName());
+            }
             if (p.hasPotionEffect(PotionEffectType.GLOWING)) {
                 if (PrisonGame.type.get(p) == 0 && Bukkit.getScoreboardManager().getMainScoreboard().getPlayerTeam(p) == Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Prisoners")) {
                     Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Criminals").addPlayer(p);

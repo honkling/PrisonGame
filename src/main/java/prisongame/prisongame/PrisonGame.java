@@ -4,7 +4,9 @@ import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapelessRecipe;
@@ -23,12 +25,24 @@ public final class PrisonGame extends JavaPlugin {
     static HashMap<Player, Boolean> escaped = new HashMap<>();
     static HashMap<Player, Integer> type = new HashMap<>();
     static HashMap<Player, Double> money = new HashMap<>();
+    static NamespacedKey nightvis;
+    static NamespacedKey whiff;
+
+    static LivingEntity bertrude;
 
     @Override
     public void onEnable() {
         // Plugin startup logic
+        nightvis = new NamespacedKey(PrisonGame.getPlugin(PrisonGame.class), "night");
+        whiff = new NamespacedKey(PrisonGame.getPlugin(PrisonGame.class), "whiff");
+        bertrude = (LivingEntity) Bukkit.getWorld("world").spawnEntity(new Location(Bukkit.getWorld("world"), 70, -59, -137), EntityType.VILLAGER);
+        bertrude.setAI(false);
+        bertrude.setCustomName("bertrude (real settings)");
+        bertrude.setInvulnerable(true);
         this.getCommand("warden").setExecutor(new CommandKit());
         this.getCommand("resign").setExecutor(new TestCommand());
+        this.getCommand("tc").setExecutor(new TeamChat());
+        this.getCommand("disc").setExecutor(new Discordcmd());
         getServer().getPluginManager().registerEvents(new MyListener(), this);
         MyTask task = new MyTask();
         task.runTaskTimer(getPlugin(this.getClass()), 0, 1);
@@ -59,6 +73,8 @@ public final class PrisonGame extends JavaPlugin {
     @Override
     public void onDisable() {
         // Plugin shutdown logic
+        bertrude.remove();
+        MyTask.bossbar.removeAll();
     }
 
     public static boolean isInside(Player player, Location loc1, Location loc2)
@@ -110,6 +126,40 @@ class TestCommand implements CommandExecutor {
         }
         PrisonGame.type.put((Player) sender, 0);
         MyListener.playerJoin((Player) sender);
+        return true;
+    }
+}
+
+class Discordcmd implements CommandExecutor {
+
+    // This method is called, when somebody uses our command
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        sender.sendMessage(ChatColor.BLUE + "https://discord.gg/Y6TFEPUMB9");
+        return true;
+    }
+}
+
+class TeamChat implements CommandExecutor {
+
+    // This method is called, when somebody uses our command
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        String msg = String.join(" ", args);
+        if (PrisonGame.type.get((Player) sender) == 0) {
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                if (PrisonGame.type.get(p) == 0) {
+                    p.sendMessage(ChatColor.GRAY + "[" + ChatColor.GOLD + "PRISONER CHAT" + ChatColor.GRAY + "] " + ChatColor.WHITE + sender.getName() + ": " + msg);
+                }
+            }
+        }
+        if (PrisonGame.type.get((Player) sender) != 0) {
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                if (PrisonGame.type.get(p) != 0) {
+                    p.sendMessage(ChatColor.GRAY + "[" + ChatColor.BLUE + "GUARD CHAT" + ChatColor.GRAY + "] " + ChatColor.WHITE + sender.getName() + ": " + msg);
+                }
+            }
+        }
         return true;
     }
 }

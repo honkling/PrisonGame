@@ -5,7 +5,9 @@ import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
 import org.bukkit.block.data.type.Door;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -23,6 +25,7 @@ import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffectType;
 
 import java.lang.reflect.Array;
@@ -77,9 +80,67 @@ public class MyListener implements Listener {
         p.sendTitle("", ChatColor.GOLD + "welcome.");
     }
 
+
+    @EventHandler
+    public void bertrudeiosepic(InventoryClickEvent event) {
+        if (event.getCurrentItem() != null) {
+            if (event.getCurrentItem().getItemMeta() != null) {
+                if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.LIGHT_PURPLE + "epic bertude night vision")) {
+                    event.setCancelled(true);
+                    if (!event.getWhoClicked().getPersistentDataContainer().has(PrisonGame.nightvis, PersistentDataType.INTEGER)) {
+                        event.getWhoClicked().getPersistentDataContainer().set(PrisonGame.nightvis, PersistentDataType.INTEGER, 1);
+                        event.getWhoClicked().sendMessage("ok i changed that for u lol");
+                        Player p = (Player) event.getWhoClicked();
+                        p.playSound(p, Sound.BLOCK_NOTE_BLOCK_BASEDRUM, 1, 1);
+                    } else {
+                        event.getWhoClicked().getPersistentDataContainer().remove(PrisonGame.nightvis);
+                        event.getWhoClicked().sendMessage("ok i changed that for u lol");
+                        Player p = (Player) event.getWhoClicked();
+                        p.playSound(p, Sound.BLOCK_NOTE_BLOCK_BASEDRUM, 1, 1);
+                    }
+                }
+
+                if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.LIGHT_PURPLE + "-1 dollar")) {
+                    event.setCancelled(true);
+                    event.getWhoClicked().damage(999999);
+                    Bukkit.broadcastMessage(event.getWhoClicked().getName() + " was robbed by bertrude (L)");
+                }
+
+                if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.LIGHT_PURPLE + "no warden spaces")) {
+                    event.setCancelled(true);
+                    if (!event.getWhoClicked().getPersistentDataContainer().has(PrisonGame.whiff, PersistentDataType.INTEGER)) {
+                        event.getWhoClicked().getPersistentDataContainer().set(PrisonGame.whiff, PersistentDataType.INTEGER, 1);
+                        event.getWhoClicked().sendMessage("ok i changed that for u lol");
+                        Player p = (Player) event.getWhoClicked();
+                        p.playSound(p, Sound.BLOCK_NOTE_BLOCK_BASEDRUM, 1, 1);
+                    } else {
+                        event.getWhoClicked().getPersistentDataContainer().remove(PrisonGame.whiff);
+                        event.getWhoClicked().sendMessage("ok i changed that for u lol");
+                        Player p = (Player) event.getWhoClicked();
+                        p.playSound(p, Sound.BLOCK_NOTE_BLOCK_BASEDRUM, 1, 1);
+                    }
+                }
+
+            }
+        }
+    }
+
+    @EventHandler
+    public void onPlayerJoin(PlayerInteractAtEntityEvent event) {
+        if (event.getRightClicked().equals(PrisonGame.bertrude)) {
+            event.getPlayer().sendMessage("hello i am bertrude");
+            event.getPlayer().playSound(event.getPlayer(), Sound.BLOCK_NOTE_BLOCK_BASEDRUM, 1, 1);
+            Inventory inv = Bukkit.createInventory(null, 9, "bertrude");
+            inv.addItem(PrisonGame.createGuiItem(Material.POTION, ChatColor.LIGHT_PURPLE + "epic bertude night vision", ChatColor.GRAY + "gives you night vision i think"));
+            inv.addItem(PrisonGame.createGuiItem(Material.GRAY_STAINED_GLASS, ChatColor.LIGHT_PURPLE + "no warden spaces", ChatColor.GRAY + "disables/enables the spaces on the warden's messages"));
+            inv.addItem(PrisonGame.createGuiItem(Material.NETHERITE_SWORD, ChatColor.LIGHT_PURPLE + "-1 dollar", ChatColor.GRAY + "this is a robbery"));
+            event.getPlayer().openInventory(inv);
+        }
+    }
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         event.setJoinMessage(ChatColor.GOLD + event.getPlayer().getName() + " was caught and sent to prison! (JOIN)");
+        event.getPlayer().setGameMode(GameMode.ADVENTURE);
         playerJoin(event.getPlayer());
     }
 
@@ -112,12 +173,18 @@ public class MyListener implements Listener {
     public void chatCleanup(AsyncPlayerChatEvent event) {
         event.setCancelled(true);
         if (PrisonGame.warden == event.getPlayer()) {
-            Bukkit.broadcastMessage("");
             for (Player p : Bukkit.getOnlinePlayers()) {
-                p.playSound(p, Sound.BLOCK_NOTE_BLOCK_BIT, 1, 1);
+                if (!p.getPersistentDataContainer().has(PrisonGame.whiff, PersistentDataType.INTEGER)) {
+                    p.sendMessage("");
+                }
+                if (!p.getPersistentDataContainer().has(PrisonGame.whiff, PersistentDataType.INTEGER)) {
+                    p.playSound(p, Sound.BLOCK_NOTE_BLOCK_BIT, 1, 1);
+                }
+                p.sendMessage(event.getPlayer().getPlayerListName() + ChatColor.RED + ": " + ChatColor.RED + event.getMessage());
+                if (!p.getPersistentDataContainer().has(PrisonGame.whiff, PersistentDataType.INTEGER)) {
+                    p.sendMessage("");
+                }
             }
-            Bukkit.broadcastMessage(event.getPlayer().getPlayerListName() + ChatColor.RED + ": " + ChatColor.RED + event.getMessage());
-            Bukkit.broadcastMessage("");
         }
         if (PrisonGame.warden != event.getPlayer())
             Bukkit.broadcastMessage(event.getPlayer().getPlayerListName() + ChatColor.GRAY + ": " + ChatColor.GRAY + event.getMessage());
@@ -245,9 +312,6 @@ public class MyListener implements Listener {
             }
             if (event.getClickedBlock().getType().equals(Material.SPRUCE_WALL_SIGN)) {
                 org.bukkit.block.Sign sign = (org.bukkit.block.Sign) event.getClickedBlock().getState();
-                if (sign.getLine(1).equals("Hardcore")) {
-
-                }
                 if (sign.getLine(2).equals("Soup")) {
                     if (PrisonGame.money.get(event.getPlayer()) >= 2.0) {
                         PrisonGame.money.put(event.getPlayer(), PrisonGame.money.get(event.getPlayer()) - 2.0);
@@ -598,8 +662,19 @@ public class MyListener implements Listener {
             event.getPlayer().addPotionEffect(PotionEffectType.DAMAGE_RESISTANCE.createEffect(15 * 20, 255));
             event.getPlayer().addPotionEffect(PotionEffectType.WEAKNESS.createEffect(15 * 20, 255));
             event.getPlayer().addPotionEffect(PotionEffectType.DARKNESS.createEffect(15 * 20, 0));
+            LivingEntity bat = (LivingEntity) event.getPlayer().getWorld().spawnEntity(event.getPlayer().getLocation(), EntityType.BAT);
+            bat.setInvulnerable(true);
+            bat.setAI(false);
+            bat.setInvisible(true);
+            bat.setSilent(true);
+            event.getPlayer().setGameMode(GameMode.SPECTATOR);
+            event.getPlayer().setSpectatorTarget(bat);
             Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
-                event.getPlayer().teleport(new Location(Bukkit.getWorld("world"), 44, -58, -137));
+                bat.remove();
+                if (event.getPlayer().getGameMode() != GameMode.ADVENTURE) {
+                    event.getPlayer().setGameMode(GameMode.ADVENTURE);
+                    event.getPlayer().teleport(new Location(Bukkit.getWorld("world"), 44, -58, -137));
+                }
             }, 20 * 15);
         }, 1);
     }

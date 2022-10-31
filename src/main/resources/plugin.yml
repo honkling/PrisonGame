@@ -9,3 +9,11 @@ commands:
   resign:
     description: Resign from your current position/Rejoin from prisoner.
     usage: /<command>
+  tc:
+    aliases: teamchat
+    description: Resign from your current position/Rejoin from prisoner.
+    usage: /<command>
+  disc:
+    aliases: discord
+    description: Resign from your current position/Rejoin from prisoner.
+    usage: /<command>
