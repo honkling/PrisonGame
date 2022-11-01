@@ -4,6 +4,7 @@ import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
@@ -11,7 +12,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Team;
 
 import java.util.Arrays;
@@ -26,6 +30,9 @@ public final class PrisonGame extends JavaPlugin {
     static Player warden = null;
     static HashMap<Player, Boolean> escaped = new HashMap<>();
     static HashMap<Player, Integer> type = new HashMap<>();
+    static HashMap<Player, Integer> askType = new HashMap<>();
+    static Prison gaeae = new Prison("Fortress Of Gaeae", new Location(Bukkit.getWorld("world"), 61, -54, -159), new Location(Bukkit.getWorld("world"), 76, -59, -169), new Location(Bukkit.getWorld("world"), 44, -58, -141), new Location(Bukkit.getWorld("world"), 44, -58, -137), new Location(Bukkit.getWorld("world"), 41.5, -52, -120.5), new Location(Bukkit.getWorld("world"), 12, -60, -119), new Location(Bukkit.getWorld("world"), -26.5, -56.5, -115.5), new Location(Bukkit.getWorld("world"), -8.5, -57, -108.5), new Location(Bukkit.getWorld("world"), 33, -59, -132));
+    static Prison active = gaeae;
     static NamespacedKey nightvis;
     static NamespacedKey whiff;
 
@@ -47,6 +54,7 @@ public final class PrisonGame extends JavaPlugin {
         this.getCommand("resign").setExecutor(new TestCommand());
         this.getCommand("tc").setExecutor(new TeamChat());
         this.getCommand("disc").setExecutor(new Discordcmd());
+        this.getCommand("accept").setExecutor(new accpt());
         getServer().getPluginManager().registerEvents(new MyListener(), this);
         MyTask task = new MyTask();
         task.runTaskTimer(getPlugin(this.getClass()), 0, 1);
@@ -81,6 +89,135 @@ public final class PrisonGame extends JavaPlugin {
         // Plugin shutdown logic
         bertrude.remove();
         MyTask.bossbar.removeAll();
+    }
+
+    static void setNurse(Player g) {
+        Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Guards").addPlayer(g);
+        PrisonGame.type.put(g, 2);
+        Bukkit.broadcastMessage(ChatColor.LIGHT_PURPLE + g.getName() + " was promoted to a nurse!");
+
+        g.setCustomName(ChatColor.GRAY + "[" + ChatColor.LIGHT_PURPLE + "NURSE" + ChatColor.GRAY + "] " + ChatColor.GRAY + g.getName());
+        g.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.LIGHT_PURPLE + "NURSE" + ChatColor.GRAY + "] " + ChatColor.GRAY + g.getName());
+        g.setDisplayName(ChatColor.GRAY + "[" + ChatColor.LIGHT_PURPLE + "NURSE" + ChatColor.GRAY + "] " + ChatColor.GRAY + g.getName());
+
+        if (g.getName().equals("agmass")) {
+            g.setCustomName(ChatColor.GRAY + "[" + ChatColor.RED + "OWNER" + ChatColor.GRAY + "] " + g.getDisplayName());
+            g.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.RED + "OWNER" + ChatColor.GRAY + "] " + g.getDisplayName());
+            g.setDisplayName(ChatColor.GRAY + "[" + ChatColor.RED + "OWNER" + ChatColor.GRAY + "] " + g.getDisplayName());
+        }
+
+        if (g.getName().equals("ClownCaked") || g.getName().equals("4950")) {
+            g.setCustomName(ChatColor.GRAY + "[" + ChatColor.YELLOW + "BUILDER" + ChatColor.GRAY + "] " + g.getDisplayName());
+            g.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.YELLOW + "BUILDER" + ChatColor.GRAY + "] " + g.getDisplayName());
+            g.setDisplayName(ChatColor.GRAY + "[" + ChatColor.YELLOW + "BUILDER" + ChatColor.GRAY + "] " + g.getDisplayName());
+        }
+
+        ItemStack orangechest = new ItemStack(Material.LEATHER_CHESTPLATE);
+        orangechest.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+        LeatherArmorMeta chestmeta = (LeatherArmorMeta) orangechest.getItemMeta();
+        chestmeta.setColor(Color.PURPLE);
+        orangechest.setItemMeta(chestmeta);
+
+        ItemStack orangeleg = new ItemStack(Material.LEATHER_LEGGINGS);
+        orangechest.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+        LeatherArmorMeta orangelegItemMeta = (LeatherArmorMeta) orangeleg.getItemMeta();
+        orangelegItemMeta.setColor(Color.PURPLE);
+        orangeleg.setItemMeta(orangelegItemMeta);
+
+        ItemStack orangeboot = new ItemStack(Material.LEATHER_BOOTS);
+        orangechest.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+        LeatherArmorMeta orangebootItemMeta = (LeatherArmorMeta) orangeboot.getItemMeta();
+        orangebootItemMeta.setColor(Color.PURPLE);
+        orangeboot.setItemMeta(orangebootItemMeta);
+
+        g.getInventory().setHelmet(new ItemStack(Material.CHAINMAIL_HELMET));
+        g.getInventory().setChestplate(orangechest);
+        g.getInventory().setLeggings(orangeleg);
+        g.getInventory().setBoots(orangeboot);
+
+        ItemStack wardenSword = new ItemStack(Material.WOODEN_SWORD);
+        wardenSword.addEnchantment(Enchantment.DAMAGE_ALL, 1);
+        wardenSword.addEnchantment(Enchantment.DURABILITY, 1);
+
+        g.getInventory().addItem(wardenSword);
+
+        g.getInventory().addItem(new ItemStack(Material.CROSSBOW));
+        g.getInventory().addItem(new ItemStack(Material.ARROW, 16));
+        g.getInventory().addItem(new ItemStack(Material.COOKED_BEEF, 32));
+
+        ItemStack pot = new ItemStack(Material.SPLASH_POTION);
+        PotionMeta potionMeta = (PotionMeta) pot.getItemMeta();
+        potionMeta.addCustomEffect(PotionEffectType.HEAL.createEffect(10, 2), true);
+        pot.setItemMeta(potionMeta);
+
+        g.getInventory().addItem(pot);
+
+        ItemStack card = new ItemStack(Material.TRIPWIRE_HOOK);
+        ItemMeta cardm = card.getItemMeta();
+        cardm.setDisplayName(ChatColor.BLUE + "Keycard " + ChatColor.RED + "[CONTRABAND]");
+        card.setItemMeta(cardm);
+        g.getInventory().addItem(card);
+
+    }
+    static void setGuard(Player g) {
+        Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Guards").addPlayer(g);
+        PrisonGame.type.put(g, 1);
+        Bukkit.broadcastMessage(ChatColor.BLUE + g.getName() + " was promoted to a guard!");
+
+        g.setCustomName(ChatColor.GRAY + "[" + ChatColor.BLUE + "GUARD" + ChatColor.GRAY + "] " + ChatColor.GRAY + g.getName());
+        g.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.BLUE + "GUARD" + ChatColor.GRAY + "] " + ChatColor.GRAY + g.getName());
+        g.setDisplayName(ChatColor.GRAY + "[" + ChatColor.BLUE + "GUARD" + ChatColor.GRAY + "] " + ChatColor.GRAY + g.getName());
+
+        if (g.getName().equals("agmass")) {
+            g.setCustomName(ChatColor.GRAY + "[" + ChatColor.RED + "OWNER" + ChatColor.GRAY + "] " + g.getDisplayName());
+            g.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.RED + "OWNER" + ChatColor.GRAY + "] " + g.getDisplayName());
+            g.setDisplayName(ChatColor.GRAY + "[" + ChatColor.RED + "OWNER" + ChatColor.GRAY + "] " + g.getDisplayName());
+        }
+
+        if (g.getName().equals("ClownCaked") || g.getName().equals("4950")) {
+            g.setCustomName(ChatColor.GRAY + "[" + ChatColor.YELLOW + "BUILDER" + ChatColor.GRAY + "] " + g.getDisplayName());
+            g.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.YELLOW + "BUILDER" + ChatColor.GRAY + "] " + g.getDisplayName());
+            g.setDisplayName(ChatColor.GRAY + "[" + ChatColor.YELLOW + "BUILDER" + ChatColor.GRAY + "] " + g.getDisplayName());
+        }
+
+        ItemStack orangechest = new ItemStack(Material.LEATHER_CHESTPLATE);
+        orangechest.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+        LeatherArmorMeta chestmeta = (LeatherArmorMeta) orangechest.getItemMeta();
+        chestmeta.setColor(Color.fromRGB(126, 135, 245));
+        orangechest.setItemMeta(chestmeta);
+
+        ItemStack orangeleg = new ItemStack(Material.LEATHER_LEGGINGS);
+        orangechest.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+        LeatherArmorMeta orangelegItemMeta = (LeatherArmorMeta) orangeleg.getItemMeta();
+        orangelegItemMeta.setColor(Color.fromRGB(126, 135, 245));
+        orangeleg.setItemMeta(orangelegItemMeta);
+
+        ItemStack orangeboot = new ItemStack(Material.LEATHER_BOOTS);
+        orangechest.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+        LeatherArmorMeta orangebootItemMeta = (LeatherArmorMeta) orangeboot.getItemMeta();
+        orangebootItemMeta.setColor(Color.fromRGB(126, 135, 245));
+        orangeboot.setItemMeta(orangebootItemMeta);
+
+        g.getInventory().setHelmet(new ItemStack(Material.IRON_HELMET));
+        g.getInventory().setChestplate(orangechest);
+        g.getInventory().setLeggings(orangeleg);
+        g.getInventory().setBoots(orangeboot);
+
+        ItemStack wardenSword = new ItemStack(Material.STONE_SWORD);
+        wardenSword.addEnchantment(Enchantment.DAMAGE_ALL, 1);
+        wardenSword.addEnchantment(Enchantment.DURABILITY, 1);
+
+        g.getInventory().addItem(wardenSword);
+
+        g.getInventory().addItem(new ItemStack(Material.CROSSBOW));
+        g.getInventory().addItem(new ItemStack(Material.ARROW, 16));
+        g.getInventory().addItem(new ItemStack(Material.COOKED_BEEF, 32));
+
+        ItemStack card = new ItemStack(Material.TRIPWIRE_HOOK);
+        ItemMeta cardm = card.getItemMeta();
+        cardm.setDisplayName(ChatColor.BLUE + "Keycard " + ChatColor.RED + "[CONTRABAND]");
+        card.setItemMeta(cardm);
+        g.getInventory().addItem(card);
     }
 
     public static boolean isInside(Player player, Location loc1, Location loc2)
@@ -142,6 +279,33 @@ class Discordcmd implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         sender.sendMessage(ChatColor.BLUE + "https://discord.gg/Y6TFEPUMB9");
+        return true;
+    }
+}
+
+
+class hello implements CommandExecutor {
+
+    // This method is called, when somebody uses our command
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        sender.sendMessage(ChatColor.GRAY + "Hello! " + ChatColor.GOLD + "You're currently playing on " + ChatColor.BLUE + "PrisonButBad.minehut.gg" + ChatColor.RED + ", You're on the " + ChatColor.WHITE + PrisonGame.active.name + " map, " + ChatColor.DARK_GREEN + " with " + Bukkit.getOnlinePlayers().size() + "/" + Bukkit.getMaxPlayers() + " players online. " + ChatColor.GRAY + "(made by agmass)");
+        return true;
+    }
+}
+
+class accpt implements CommandExecutor {
+
+    // This method is called, when somebody uses our command
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        if (PrisonGame.askType.getOrDefault((Player) sender, 0) == 2) {
+            PrisonGame.setNurse((Player) sender);
+        }
+        if (PrisonGame.askType.getOrDefault((Player) sender, 0) == 1) {
+            PrisonGame.setGuard((Player) sender);
+        }
+        PrisonGame.askType.put((Player) sender, 0);
         return true;
     }
 }

@@ -37,7 +37,7 @@ public class MyListener implements Listener {
     public static void playerJoin(Player p) {
         p.getInventory().clear();
         PrisonGame.escaped.put(p, false);
-        p.teleport(new Location(Bukkit.getWorld("world"), 12, -60, -119));
+        p.teleport(PrisonGame.active.spwn);
         p.playSound(p, Sound.ENTITY_ZOMBIE_BREAK_WOODEN_DOOR, 1, 0.75f);
 
         p.setCustomName(ChatColor.GRAY + "[" + ChatColor.GOLD + "PRISONER" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY + p.getName());
@@ -224,7 +224,7 @@ public class MyListener implements Listener {
 
     @EventHandler
     public void ee(PlayerMoveEvent event) {
-        if (PrisonGame.isInside(event.getPlayer(), new Location(Bukkit.getWorld("world"), 61, -54, -159), new Location(Bukkit.getWorld("world"), 76, -59, -169))) {
+        if (PrisonGame.isInside(event.getPlayer(), PrisonGame.active.runpoint1, PrisonGame.active.runpoint2)) {
             PrisonGame.sp.put(event.getPlayer(), PrisonGame.sp.getOrDefault(event.getPlayer(), 0.0) + 0.25);
             event.getPlayer().sendTitle("", ChatColor.GREEN + PrisonGame.sp.get(event.getPlayer()).toString() + "/120", 0, 10, 10);
             if (PrisonGame.sp.get(event.getPlayer()) >= 120) {
@@ -237,7 +237,7 @@ public class MyListener implements Listener {
             }
         }
     }
-    @EventHandler
+    /*@EventHandler
     public void ee(PlayerInteractEvent event) {
         if (event.getClickedBlock() != null) {
             if (event.getClickedBlock().getType().equals(Material.CHAIN) && !PrisonGame.isInside(event.getPlayer(), new Location(Bukkit.getWorld("world"), 67, -54,  -194), new Location(Bukkit.getWorld("world"), 73, -59,  -161))) {
@@ -253,26 +253,17 @@ public class MyListener implements Listener {
                 }
             }
         }
-        if (event.getItem() != null) {
-            if (!event.getItem().getType().equals(Material.SPLASH_POTION)) {
-                if (event.getPlayer().hasCooldown(Material.SPLASH_POTION)) {
-                    if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK) || event.getAction().equals(Action.RIGHT_CLICK_AIR)) {
-                        ItemStack pot = new ItemStack(Material.SPLASH_POTION);
-                        PotionMeta potionMeta = (PotionMeta) pot.getItemMeta();
-                        event.getPlayer().setCooldown(Material.SPLASH_POTION, 20);
-                        potionMeta.addCustomEffect(PotionEffectType.HEAL.createEffect(10, 0), true);
-                        pot.setItemMeta(potionMeta);
-
-                        event.getPlayer().getInventory().addItem(pot);
-                    }
-                }
-            }
-        }
-    }
+    }*/
 
     @EventHandler
     public void chatCleanup(PlayerInteractEvent event) {
         if (event.getClickedBlock() != null) {
+            if (event.getClickedBlock().getType().equals(Material.ENDER_CHEST)) {
+                if (PrisonGame.type.get(event.getPlayer()) != 0) {
+                    event.getPlayer().sendMessage(ChatColor.RED + "You can't access this!");
+                    event.setCancelled(true);
+                }
+            }
             if (event.getClickedBlock().getType().equals(Material.COBBLESTONE) || event.getClickedBlock().getType().equals(Material.STONE) || event.getClickedBlock().getType().equals(Material.ANDESITE)) {
                 event.getPlayer().getInventory().addItem(new ItemStack(Material.STONE_BUTTON));
             }
@@ -404,7 +395,7 @@ public class MyListener implements Listener {
             if (event.getClickedBlock().getType().equals(Material.JUNGLE_WALL_SIGN)) {
                 org.bukkit.block.Sign sign = (org.bukkit.block.Sign) event.getClickedBlock().getState();
                 if (sign.getLine(1).equals("Leave Market")) {
-                    event.getPlayer().teleport(new Location(Bukkit.getWorld("world"), -8.5, -57, -108.5));
+                    event.getPlayer().teleport(PrisonGame.active.bmout);
                     event.getPlayer().addPotionEffect(PotionEffectType.GLOWING.createEffect(20 * 3, 0));
                 }
                 if (sign.getLine(1).equals("Get Gear")) {
@@ -487,7 +478,7 @@ public class MyListener implements Listener {
             }
             if (event.getClickedBlock().getType().equals(Material.CAULDRON)) {
                 if (PrisonGame.type.get(event.getPlayer()) != 1) {
-                    event.getPlayer().teleport(new Location(Bukkit.getWorld("world"), -26.5, -56.5, -115.5));
+                    event.getPlayer().teleport(PrisonGame.active.bm);
                     event.getPlayer().sendTitle("", ChatColor.GRAY + "-= Black Market =-");
                 }
             }
@@ -690,7 +681,7 @@ public class MyListener implements Listener {
                 playerJoin(event.getPlayer());
                 event.getPlayer().sendTitle("", ChatColor.GOLD + "you died.");
             }
-            event.getPlayer().teleport(new Location(Bukkit.getWorld("world"), 44, -58, -141));
+            event.getPlayer().teleport(PrisonGame.active.nursebed);
             event.getPlayer().sendTitle("RESPAWNING", "Wait 15 seconds.");
             event.getPlayer().addPotionEffect(PotionEffectType.INVISIBILITY.createEffect(15 * 20, 0));
             event.getPlayer().addPotionEffect(PotionEffectType.DAMAGE_RESISTANCE.createEffect(15 * 20, 255));
@@ -707,7 +698,7 @@ public class MyListener implements Listener {
                 bat.remove();
                 if (event.getPlayer().getGameMode() != GameMode.ADVENTURE) {
                     event.getPlayer().setGameMode(GameMode.ADVENTURE);
-                    event.getPlayer().teleport(new Location(Bukkit.getWorld("world"), 44, -58, -137));
+                    event.getPlayer().teleport(PrisonGame.active.nursebedOutTP);
                 }
             }, 20 * 15);
         }, 1);

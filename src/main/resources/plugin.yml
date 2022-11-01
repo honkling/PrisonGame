@@ -17,3 +17,6 @@ commands:
     aliases: discord
     description: Resign from your current position/Rejoin from prisoner.
     usage: /<command>
+  accept:
+    description: Accept a job.
+    usage: /<command>
