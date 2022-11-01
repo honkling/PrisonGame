@@ -27,6 +27,8 @@ public class MyTask extends BukkitRunnable {
     public void run(){
         if (Bukkit.getWorld("world").getTime() > 0 && Bukkit.getWorld("world").getTime() < 1000) {
             bossbar.setTitle("ROLL CALL");
+            PrisonGame.swapcool -= 1;
+            PrisonGame.bertrude.teleport(PrisonGame.active.bert);
             for (Player p : Bukkit.getOnlinePlayers()) {
                 if (PrisonGame.type.get(p) == 0 && !PrisonGame.escaped.get(p)) {
                     if (!new Location(p.getWorld(), p.getLocation().getX(), p.getLocation().getY() - 1, p.getLocation().getZ()).getBlock().getType().equals(Material.RED_SAND))
@@ -95,30 +97,30 @@ public class MyTask extends BukkitRunnable {
         for (Player p :Bukkit.getOnlinePlayers()) {
             if (p.getGameMode().equals(GameMode.SPECTATOR) && p.hasPotionEffect(PotionEffectType.DARKNESS)) {
                 p.teleport(PrisonGame.active.nursebed);
-                if (p.getName().equals("Jacco100") && !p.getPlayerListName().contains("REPORTER")) {
-                    p.setCustomName(ChatColor.GRAY + "[" + ChatColor.GREEN + "REPORTER" + ChatColor.GRAY + "] " + p.getDisplayName());
-                    p.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.GREEN + "REPORTER" + ChatColor.GRAY + "] " + p.getDisplayName());
-                    p.setDisplayName(ChatColor.GRAY + "[" + ChatColor.GREEN + "REPORTER" + ChatColor.GRAY + "] " + p.getDisplayName());
+            }
+            if (p.getName().equals("Jacco100") && !p.getPlayerListName().contains("REPORTER")) {
+                p.setCustomName(ChatColor.GRAY + "[" + ChatColor.GREEN + "REPORTER" + ChatColor.GRAY + "] " + p.getDisplayName());
+                p.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.GREEN + "REPORTER" + ChatColor.GRAY + "] " + p.getDisplayName());
+                p.setDisplayName(ChatColor.GRAY + "[" + ChatColor.GREEN + "REPORTER" + ChatColor.GRAY + "] " + p.getDisplayName());
+            }
+            /*if (p.hasPotionEffect(PotionEffectType.GLOWING)) {
+                if (PrisonGame.type.get(p) == 0 && Bukkit.getScoreboardManager().getMainScoreboard().getPlayerTeam(p) == Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Prisoners")) {
+                    Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Criminals").addPlayer(p);
                 }
-                if (p.hasPotionEffect(PotionEffectType.GLOWING)) {
-                    if (PrisonGame.type.get(p) == 0 && Bukkit.getScoreboardManager().getMainScoreboard().getPlayerTeam(p) == Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Prisoners")) {
-                        Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Criminals").addPlayer(p);
-                    }
-                }
-                bossbar.addPlayer(p);
-                if (p.getLocation().getBlock().getType().equals(Material.VOID_AIR)) {
-                    if (PrisonGame.type.get(p).equals(0)) {
-                        if (!p.hasPotionEffect(PotionEffectType.GLOWING)) {
-                            for (ItemStack i : p.getInventory()) {
-                                if (i != null) {
-                                    if (i.getItemMeta().getDisplayName().contains("[CONTRABAND]") || i.getType().equals(Material.STONE_SWORD) || i.getType().equals(Material.IRON_SWORD) || i.getType().equals(Material.IRON_HELMET) || i.getType().equals(Material.IRON_CHESTPLATE) || i.getType().equals(Material.IRON_LEGGINGS) || i.getType().equals(Material.IRON_BOOTS)) {
-                                        p.addPotionEffect(PotionEffectType.GLOWING.createEffect(1200, 0));
-                                        p.sendMessage(ChatColor.RED + "You were caught with contraband!");
-                                        for (Player g : Bukkit.getOnlinePlayers()) {
-                                            if (PrisonGame.type.get(g) != 0) {
-                                                g.playSound(g, Sound.ENTITY_SILVERFISH_DEATH, 1, 0.5f);
-                                                g.sendMessage(ChatColor.RED + p.getName() + ChatColor.DARK_RED + " was caught with contraband!");
-                                            }
+            }*/
+            bossbar.addPlayer(p);
+            if (p.getLocation().getBlock().getType().equals(Material.VOID_AIR)) {
+                if (PrisonGame.type.get(p).equals(0)) {
+                    if (!p.hasPotionEffect(PotionEffectType.GLOWING)) {
+                        for (ItemStack i : p.getInventory()) {
+                            if (i != null) {
+                                if (i.getItemMeta().getDisplayName().contains("[CONTRABAND]") || i.getType().equals(Material.STONE_SWORD) || i.getType().equals(Material.IRON_SWORD) || i.getType().equals(Material.IRON_HELMET) || i.getType().equals(Material.IRON_CHESTPLATE) || i.getType().equals(Material.IRON_LEGGINGS) || i.getType().equals(Material.IRON_BOOTS)) {
+                                    p.addPotionEffect(PotionEffectType.GLOWING.createEffect(1200, 0));
+                                    p.sendMessage(ChatColor.RED + "You were caught with contraband!");
+                                    for (Player g : Bukkit.getOnlinePlayers()) {
+                                        if (PrisonGame.type.get(g) != 0) {
+                                            g.playSound(g, Sound.ENTITY_SILVERFISH_DEATH, 1, 0.5f);
+                                            g.sendMessage(ChatColor.RED + p.getName() + ChatColor.DARK_RED + " was caught with contraband!");
                                         }
                                     }
                                 }

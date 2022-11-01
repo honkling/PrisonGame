@@ -20,3 +20,6 @@ commands:
   accept:
     description: Accept a job.
     usage: /<command>
+  hello:
+    description: Hi!
+    usage: /<command>

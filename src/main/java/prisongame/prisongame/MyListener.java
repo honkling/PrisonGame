@@ -196,6 +196,30 @@ public class MyListener implements Listener {
     public void ee(InventoryClickEvent event) {
         if (event.getCurrentItem() != null) {
             if (event.getCurrentItem().getItemMeta() != null) {
+                if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.GRAY + "Fortress Of Gaeae")) {
+                    PrisonGame.active = PrisonGame.hyper;
+                    PrisonGame.swapcool = (20 * 60) * 30;
+                    for (Player p : Bukkit.getOnlinePlayers()) {
+                        if (PrisonGame.type.get(p) != -1) {
+                            MyListener.playerJoin(p);
+                            p.sendTitle("New prison!", "HYPERTECH");
+                        } else {
+                            p.teleport(PrisonGame.active.wardenspawn);
+                        }
+                    }
+                }
+                if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.WHITE + "Hypertech")) {
+                    PrisonGame.active = PrisonGame.hyper;
+                    PrisonGame.swapcool = (20 * 60) * 30;
+                    for (Player p : Bukkit.getOnlinePlayers()) {
+                        if (PrisonGame.type.get(p) != -1) {
+                            MyListener.playerJoin(p);
+                            p.sendTitle("New prison!", "FORTRESS OF GAEAE");
+                        } else {
+                            p.teleport(PrisonGame.active.wardenspawn);
+                        }
+                    }
+                }
                 if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.LIGHT_PURPLE + "Rock")) {
                     event.setCancelled(true);
                     if (event.getWhoClicked().getInventory().containsAtLeast(new ItemStack(Material.STONE_BUTTON), 9)) {
@@ -224,7 +248,7 @@ public class MyListener implements Listener {
 
     @EventHandler
     public void ee(PlayerMoveEvent event) {
-        if (PrisonGame.isInside(event.getPlayer(), PrisonGame.active.runpoint1, PrisonGame.active.runpoint2)) {
+        if (PrisonGame.isInside(event.getPlayer(), PrisonGame.active.runpoint1, PrisonGame.active.runpoint2) && PrisonGame.active.runpoint1.getY() > event.getPlayer().getLocation().getY()) {
             PrisonGame.sp.put(event.getPlayer(), PrisonGame.sp.getOrDefault(event.getPlayer(), 0.0) + 0.25);
             event.getPlayer().sendTitle("", ChatColor.GREEN + PrisonGame.sp.get(event.getPlayer()).toString() + "/120", 0, 10, 10);
             if (PrisonGame.sp.get(event.getPlayer()) >= 120) {
@@ -269,6 +293,19 @@ public class MyListener implements Listener {
             }
             if (event.getClickedBlock().getType().equals(Material.BIRCH_WALL_SIGN)) {
                 org.bukkit.block.Sign sign = (org.bukkit.block.Sign) event.getClickedBlock().getState();
+                if (sign.getLine(1).equals("Switch Maps")) {
+                    if (event.getPlayer() == PrisonGame.warden) {
+                        if (PrisonGame.swapcool <= 0) {
+                            Inventory inv = Bukkit.createInventory(null, 9, "Map Switch");
+                            inv.addItem(PrisonGame.createGuiItem(Material.COBBLESTONE, ChatColor.GRAY + "Fortress Of Gaeae"));
+                            inv.addItem(PrisonGame.createGuiItem(Material.QUARTZ_BLOCK, ChatColor.WHITE + "Hypertech"));
+                            event.getPlayer().openInventory(inv);
+                        } else {
+                            event.getPlayer().sendMessage("That's on cooldown!");
+                        }
+
+                    }
+                }
                 if (sign.getLine(2).equals("Scrap Metal")) {
                     if (event.getPlayer().getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0) >= 150.0) {
                         event.getPlayer().getPersistentDataContainer().set(PrisonGame.mny, PersistentDataType.DOUBLE, event.getPlayer().getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0)  - 150);

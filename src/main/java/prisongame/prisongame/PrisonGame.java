@@ -31,9 +31,11 @@ public final class PrisonGame extends JavaPlugin {
     static HashMap<Player, Boolean> escaped = new HashMap<>();
     static HashMap<Player, Integer> type = new HashMap<>();
     static HashMap<Player, Integer> askType = new HashMap<>();
-    static Prison gaeae = new Prison("Fortress Of Gaeae", new Location(Bukkit.getWorld("world"), 61, -54, -159), new Location(Bukkit.getWorld("world"), 76, -59, -169), new Location(Bukkit.getWorld("world"), 44, -58, -141), new Location(Bukkit.getWorld("world"), 44, -58, -137), new Location(Bukkit.getWorld("world"), 41.5, -52, -120.5), new Location(Bukkit.getWorld("world"), 12, -60, -119), new Location(Bukkit.getWorld("world"), -26.5, -56.5, -115.5), new Location(Bukkit.getWorld("world"), -8.5, -57, -108.5), new Location(Bukkit.getWorld("world"), 33, -59, -132));
+    static Prison gaeae = new Prison("Fortress Of Gaeae", new Location(Bukkit.getWorld("world"), 61, -54, -159), new Location(Bukkit.getWorld("world"), 76, -59, -169), new Location(Bukkit.getWorld("world"), 44, -58, -141), new Location(Bukkit.getWorld("world"), 44, -58, -137), new Location(Bukkit.getWorld("world"), 41.5, -52, -120.5), new Location(Bukkit.getWorld("world"), 12, -60, -119), new Location(Bukkit.getWorld("world"), -26.5, -56.5, -115.5), new Location(Bukkit.getWorld("world"), -8.5, -57, -108.5), new Location(Bukkit.getWorld("world"), 33, -59, -132), new Location(Bukkit.getWorld("world"), 70, -59, -137));
+    static Prison hyper = new Prison("HyperTech", new Location(Bukkit.getWorld("world"), 18, -56, -988), new Location(Bukkit.getWorld("world"), 8, -59, -981), new Location(Bukkit.getWorld("world"), -29, -58, -988), new Location(Bukkit.getWorld("world"), -29, -58, -991), new Location(Bukkit.getWorld("world"), 12, -53, -970), new Location(Bukkit.getWorld("world"), -18, -59, -995), new Location(Bukkit.getWorld("world"), -26.5, -56.5, -115.5), new Location(Bukkit.getWorld("world"), 3.5, -59, -1006.5), new Location(Bukkit.getWorld("world"), 8, -59, -1004), new Location(Bukkit.getWorld("world"), -3, -59, -1007));
     static Prison active = gaeae;
     static NamespacedKey nightvis;
+    static Integer swapcool = 0;
     static NamespacedKey whiff;
 
     static NamespacedKey mny;
@@ -52,6 +54,7 @@ public final class PrisonGame extends JavaPlugin {
         bertrude.setInvulnerable(true);
         this.getCommand("warden").setExecutor(new CommandKit());
         this.getCommand("resign").setExecutor(new TestCommand());
+        this.getCommand("hello").setExecutor(new hello());
         this.getCommand("tc").setExecutor(new TeamChat());
         this.getCommand("disc").setExecutor(new Discordcmd());
         this.getCommand("accept").setExecutor(new accpt());
@@ -284,7 +287,7 @@ class Discordcmd implements CommandExecutor {
 }
 
 
-class hello implements CommandExecutor {
+    class hello implements CommandExecutor {
 
     // This method is called, when somebody uses our command
     @Override
