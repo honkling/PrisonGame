@@ -34,7 +34,7 @@ public class CommandKit implements CommandExecutor {
                     Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Warden").addPlayer(nw);
                     PrisonGame.type.put(nw, -1);
                     PrisonGame.warden = nw;
-                    nw.teleport(PrisonGame.active.wardenspawn);
+                    nw.teleport(PrisonGame.active.getWardenspawn());
                     nw.setCustomName(ChatColor.GRAY + "[" + ChatColor.RED + "WARDEN" + ChatColor.GRAY + "] " + ChatColor.WHITE + nw.getName());
                     nw.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.RED + "WARDEN" + ChatColor.GRAY + "] " + ChatColor.WHITE + nw.getName());
                     nw.setDisplayName(ChatColor.GRAY + "[" + ChatColor.RED + "WARDEN" + ChatColor.GRAY + "] " + ChatColor.WHITE + nw.getName());
@@ -117,7 +117,7 @@ public class CommandKit implements CommandExecutor {
                             Bukkit.broadcastMessage(ChatColor.GOLD + g.getName() + " was send to solitary!");
                             g.setGameMode(GameMode.ADVENTURE);
                             PrisonGame.escaped.put(g, true);
-                            g.teleport(PrisonGame.active.solit);
+                            g.teleport(PrisonGame.active.getSolit());
                             g.sendTitle("", "You're in solitary.", 10, 0, 10);
                         }
                     }

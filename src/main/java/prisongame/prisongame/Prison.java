@@ -35,4 +35,44 @@ public class Prison {
         Bukkit.getLogger().log(Level.INFO, "activated prison " + nm + " world: " + cls.getWorld());
     }
 
+    public Location getBm() {
+        return bm;
+    }
+
+    public Location getBmout() {
+        return bmout;
+    }
+
+    public Location getBert() {
+        return bert;
+    }
+
+    public Location getNursebed() {
+        return nursebed;
+    }
+
+    public Location getNursebedOutTP() {
+        return nursebedOutTP;
+    }
+
+    public Location getRunpoint1() {
+        return runpoint1;
+    }
+
+    public Location getRunpoint2() {
+        return runpoint2;
+    }
+
+    public Location getSolit() {
+        return solit;
+    }
+
+    public Location getSpwn() {
+        return spwn;
+    }
+
+    public Location getWardenspawn() {
+        return wardenspawn;
+
+    }
 }

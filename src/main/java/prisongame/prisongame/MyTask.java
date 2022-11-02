@@ -113,7 +113,7 @@ public class MyTask extends BukkitRunnable {
                 p.removePotionEffect(PotionEffectType.NIGHT_VISION);
             }
             if (p.getGameMode().equals(GameMode.SPECTATOR) && p.hasPotionEffect(PotionEffectType.DARKNESS)) {
-                p.teleport(PrisonGame.active.nursebed);
+                p.teleport(PrisonGame.active.getNursebed());
             }
             if (p.getName().equals("Jacco100") && !p.getPlayerListName().contains("REPORTER")) {
                 p.setCustomName(ChatColor.GRAY + "[" + ChatColor.GREEN + "REPORTER" + ChatColor.GRAY + "] " + p.getDisplayName());

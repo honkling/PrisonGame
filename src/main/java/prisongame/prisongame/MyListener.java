@@ -75,9 +75,7 @@ public class MyListener implements Listener {
         p.getInventory().setLeggings(orangeleg);
         p.getInventory().setBoots(orangeboot);
         PrisonGame.type.put(p, 0);
-
-        Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {p.teleport(PrisonGame.active.spwn);}, 1L);
-
+        Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {p.teleport(PrisonGame.active.getSpwn());}, 1L);
         Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Prisoners").addPlayer(p);
         p.sendTitle("", ChatColor.GOLD + "welcome.");
     }
@@ -202,28 +200,28 @@ public class MyListener implements Listener {
                 if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.GRAY + "Fortress Of Gaeae")) {
                     PrisonGame.active = PrisonGame.hyper;
                     PrisonGame.swapcool = (20 * 60) * 30;
-                    PrisonGame.bertrude.teleport(PrisonGame.active.bert);
+                    PrisonGame.bertrude.teleport(PrisonGame.active.getBert());
                     for (Player p : Bukkit.getOnlinePlayers()) {
                         if (PrisonGame.type.get(p) != -1) {
                             MyListener.playerJoin(p);
-                            p.sendTitle("New prison!", "HYPERTECH");
+                            p.sendTitle("New prison!", "FORTRESS OF GAEAE");
                         } else {
-                            p.teleport(PrisonGame.active.wardenspawn);
-                            p.sendTitle("New prison!", "HYPERTECH");
+                            p.teleport(PrisonGame.active.getWardenspawn());
+                            p.sendTitle("New prison!", "FORTRESS OF GAEAE");
                         }
                     }
                 }
                 if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.WHITE + "Hypertech")) {
                     PrisonGame.active = PrisonGame.hyper;
                     PrisonGame.swapcool = (20 * 60) * 30;
-                    PrisonGame.bertrude.teleport(PrisonGame.active.bert);
+                    PrisonGame.bertrude.teleport(PrisonGame.active.getBert());
                     for (Player p : Bukkit.getOnlinePlayers()) {
                         if (PrisonGame.type.get(p) != -1) {
                             MyListener.playerJoin(p);
-                            p.sendTitle("New prison!", "FORTRESS OF GAEAE");
+                            p.sendTitle("New prison!", "HYPERTECH");
                         } else {
-                            p.teleport(PrisonGame.active.wardenspawn);
-                            p.sendTitle("New prison!", "FORTRESS OF GAEAE");
+                            p.teleport(PrisonGame.active.getWardenspawn());
+                            p.sendTitle("New prison!", "HYPERTECH");
                         }
                     }
                 }
@@ -255,7 +253,7 @@ public class MyListener implements Listener {
 
     @EventHandler
     public void ee(PlayerMoveEvent event) {
-        if (PrisonGame.isInside(event.getPlayer(), PrisonGame.active.runpoint1, PrisonGame.active.runpoint2) && PrisonGame.active.runpoint1.getY() > event.getPlayer().getLocation().getY()) {
+        if (PrisonGame.isInside(event.getPlayer(), PrisonGame.active.getRunpoint1(), PrisonGame.active.getRunpoint2()) && PrisonGame.active.getRunpoint1().getY() > event.getPlayer().getLocation().getY()) {
             PrisonGame.sp.put(event.getPlayer(), PrisonGame.sp.getOrDefault(event.getPlayer(), 0.0) + 0.25);
             event.getPlayer().sendTitle("", ChatColor.GREEN + PrisonGame.sp.get(event.getPlayer()).toString() + "/120", 0, 10, 10);
             if (PrisonGame.sp.get(event.getPlayer()) >= 120) {
@@ -439,7 +437,7 @@ public class MyListener implements Listener {
             if (event.getClickedBlock().getType().equals(Material.JUNGLE_WALL_SIGN)) {
                 org.bukkit.block.Sign sign = (org.bukkit.block.Sign) event.getClickedBlock().getState();
                 if (sign.getLine(1).equals("Leave Market")) {
-                    event.getPlayer().teleport(PrisonGame.active.bmout);
+                    event.getPlayer().teleport(PrisonGame.active.getBmout());
                     event.getPlayer().addPotionEffect(PotionEffectType.GLOWING.createEffect(20 * 3, 0));
                 }
                 if (sign.getLine(1).equals("Get Gear")) {
@@ -522,7 +520,7 @@ public class MyListener implements Listener {
             }
             if (event.getClickedBlock().getType().equals(Material.CAULDRON)) {
                 if (PrisonGame.type.get(event.getPlayer()) != 1) {
-                    event.getPlayer().teleport(PrisonGame.active.bm);
+                    event.getPlayer().teleport(PrisonGame.active.getBm());
                     event.getPlayer().sendTitle("", ChatColor.GRAY + "-= Black Market =-");
                 }
             }
@@ -725,7 +723,7 @@ public class MyListener implements Listener {
                 playerJoin(event.getPlayer());
                 event.getPlayer().sendTitle("", ChatColor.GOLD + "you died.");
             }
-            event.getPlayer().teleport(PrisonGame.active.nursebed);
+            event.getPlayer().teleport(PrisonGame.active.getNursebed());
             event.getPlayer().sendTitle("RESPAWNING", "Wait 15 seconds.");
             event.getPlayer().addPotionEffect(PotionEffectType.INVISIBILITY.createEffect(15 * 20, 0));
             event.getPlayer().addPotionEffect(PotionEffectType.DAMAGE_RESISTANCE.createEffect(15 * 20, 255));
@@ -742,7 +740,7 @@ public class MyListener implements Listener {
                 bat.remove();
                 if (event.getPlayer().getGameMode() != GameMode.ADVENTURE) {
                     event.getPlayer().setGameMode(GameMode.ADVENTURE);
-                    event.getPlayer().teleport(PrisonGame.active.nursebedOutTP);
+                    event.getPlayer().teleport(PrisonGame.active.getNursebedOutTP());
                 }
             }, 20 * 15);
         }, 1);
