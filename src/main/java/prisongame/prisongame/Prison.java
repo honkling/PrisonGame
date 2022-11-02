@@ -1,7 +1,10 @@
 package prisongame.prisongame;
 
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+
+import java.util.logging.Level;
 
 public class Prison {
     public Location runpoint1;
@@ -29,7 +32,7 @@ public class Prison {
         spwn = cls;
         bm = bme;
         bmout = bmoute;
-        System.out.println("activated prison " + nm);
+        Bukkit.getLogger().log(Level.INFO, "activated prison " + nm);
     }
 
 }

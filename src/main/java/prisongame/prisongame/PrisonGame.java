@@ -5,10 +5,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Item;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -45,6 +42,11 @@ public final class PrisonGame extends JavaPlugin {
     @Override
     public void onEnable() {
         // Plugin startup logic
+        for (Entity e : Bukkit.getWorld("world").getEntities()) {
+            if (e.getType().equals(EntityType.VILLAGER)) {
+                e.remove();
+            }
+        }
         nightvis = new NamespacedKey(PrisonGame.getPlugin(PrisonGame.class), "night");
         mny = new NamespacedKey(PrisonGame.getPlugin(PrisonGame.class), "money");
         whiff = new NamespacedKey(PrisonGame.getPlugin(PrisonGame.class), "whiff");
@@ -336,4 +338,3 @@ class TeamChat implements CommandExecutor {
         return true;
     }
 }
-

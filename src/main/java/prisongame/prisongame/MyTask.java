@@ -28,8 +28,20 @@ public class MyTask extends BukkitRunnable {
         if (Bukkit.getWorld("world").getTime() > 0 && Bukkit.getWorld("world").getTime() < 1000) {
             bossbar.setTitle("ROLL CALL");
             PrisonGame.swapcool -= 1;
-            PrisonGame.bertrude.teleport(PrisonGame.active.bert);
             for (Player p : Bukkit.getOnlinePlayers()) {
+                if (!PrisonGame.type.containsKey(p)) {
+                    PrisonGame.type.put(p, 0);
+                    MyListener.playerJoin(p);
+                }
+                if (!PrisonGame.st.containsKey(p)) {
+                    PrisonGame.st.put(p, 0.0);
+                }
+                if (!PrisonGame.sp.containsKey(p)) {
+                    PrisonGame.sp.put(p, 0.0);
+                }
+                if (!PrisonGame.escaped.containsKey(p)) {
+                    PrisonGame.escaped.put(p, false);
+                }
                 if (PrisonGame.type.get(p) == 0 && !PrisonGame.escaped.get(p)) {
                     if (!new Location(p.getWorld(), p.getLocation().getX(), p.getLocation().getY() - 1, p.getLocation().getZ()).getBlock().getType().equals(Material.RED_SAND))
                     {
@@ -128,19 +140,6 @@ public class MyTask extends BukkitRunnable {
                         }
                     }
                 }
-            }
-            if (!PrisonGame.type.containsKey(p)) {
-                PrisonGame.type.put(p, 0);
-                MyListener.playerJoin(p);
-            }
-            if (!PrisonGame.st.containsKey(p)) {
-                PrisonGame.st.put(p, 0.0);
-            }
-            if (!PrisonGame.sp.containsKey(p)) {
-                PrisonGame.sp.put(p, 0.0);
-            }
-            if (!PrisonGame.escaped.containsKey(p)) {
-                PrisonGame.escaped.put(p, false);
             }
             if (PrisonGame.type.get(p) == 2) {
                 if (!p.getInventory().contains(Material.SPLASH_POTION)) {

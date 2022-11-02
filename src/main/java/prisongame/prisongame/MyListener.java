@@ -37,7 +37,6 @@ public class MyListener implements Listener {
     public static void playerJoin(Player p) {
         p.getInventory().clear();
         PrisonGame.escaped.put(p, false);
-        p.teleport(PrisonGame.active.spwn);
         p.playSound(p, Sound.ENTITY_ZOMBIE_BREAK_WOODEN_DOOR, 1, 0.75f);
 
         p.setCustomName(ChatColor.GRAY + "[" + ChatColor.GOLD + "PRISONER" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY + p.getName());
@@ -76,6 +75,7 @@ public class MyListener implements Listener {
         p.getInventory().setLeggings(orangeleg);
         p.getInventory().setBoots(orangeboot);
         PrisonGame.type.put(p, 0);
+        p.teleport(PrisonGame.active.spwn);
         Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Prisoners").addPlayer(p);
         p.sendTitle("", ChatColor.GOLD + "welcome.");
     }
@@ -182,14 +182,15 @@ public class MyListener implements Listener {
                 if (!p.getPersistentDataContainer().has(PrisonGame.whiff, PersistentDataType.INTEGER)) {
                     p.playSound(p, Sound.BLOCK_NOTE_BLOCK_BIT, 1, 1);
                 }
-                p.sendMessage(event.getPlayer().getPlayerListName() + ChatColor.RED + ": " + ChatColor.RED + event.getMessage());
+
+                p.sendMessage(event.getPlayer().getPlayerListName() + ChatColor.RED + ": " + ChatColor.RED + FilteredWords.filtermsg(event.getMessage()));
                 if (!p.getPersistentDataContainer().has(PrisonGame.whiff, PersistentDataType.INTEGER)) {
                     p.sendMessage("");
                 }
             }
         }
         if (PrisonGame.warden != event.getPlayer())
-            Bukkit.broadcastMessage(event.getPlayer().getPlayerListName() + ChatColor.GRAY + ": " + ChatColor.GRAY + event.getMessage());
+            Bukkit.broadcastMessage(event.getPlayer().getPlayerListName() + ChatColor.GRAY + ": " + ChatColor.GRAY + ChatColor.RED + FilteredWords.filtermsg(event.getMessage()));
     }
 
     @EventHandler
@@ -199,24 +200,28 @@ public class MyListener implements Listener {
                 if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.GRAY + "Fortress Of Gaeae")) {
                     PrisonGame.active = PrisonGame.hyper;
                     PrisonGame.swapcool = (20 * 60) * 30;
+                    PrisonGame.bertrude.teleport(PrisonGame.active.bert);
                     for (Player p : Bukkit.getOnlinePlayers()) {
                         if (PrisonGame.type.get(p) != -1) {
                             MyListener.playerJoin(p);
                             p.sendTitle("New prison!", "HYPERTECH");
                         } else {
                             p.teleport(PrisonGame.active.wardenspawn);
+                            p.sendTitle("New prison!", "HYPERTECH");
                         }
                     }
                 }
                 if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.WHITE + "Hypertech")) {
                     PrisonGame.active = PrisonGame.hyper;
                     PrisonGame.swapcool = (20 * 60) * 30;
+                    PrisonGame.bertrude.teleport(PrisonGame.active.bert);
                     for (Player p : Bukkit.getOnlinePlayers()) {
                         if (PrisonGame.type.get(p) != -1) {
                             MyListener.playerJoin(p);
                             p.sendTitle("New prison!", "FORTRESS OF GAEAE");
                         } else {
                             p.teleport(PrisonGame.active.wardenspawn);
+                            p.sendTitle("New prison!", "FORTRESS OF GAEAE");
                         }
                     }
                 }
