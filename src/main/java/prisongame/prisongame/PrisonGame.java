@@ -42,27 +42,15 @@ public final class PrisonGame extends JavaPlugin {
     @Override
     public void onEnable() {
         // Plugin startup logic
-        for (Entity e : Bukkit.getWorld("world").getEntities()) {
-            if (e.getType().equals(EntityType.VILLAGER)) {
-                e.remove();
-            }
-        }
         nightvis = new NamespacedKey(PrisonGame.getPlugin(PrisonGame.class), "night");
         mny = new NamespacedKey(PrisonGame.getPlugin(PrisonGame.class), "money");
         whiff = new NamespacedKey(PrisonGame.getPlugin(PrisonGame.class), "whiff");
-        bertrude = (LivingEntity) Bukkit.getWorld("world").spawnEntity(new Location(Bukkit.getWorld("world"), 70, -59, -137), EntityType.VILLAGER);
-        bertrude.setAI(false);
-        bertrude.setCustomName("bertrude (real settings)");
-        bertrude.setInvulnerable(true);
         this.getCommand("warden").setExecutor(new CommandKit());
         this.getCommand("resign").setExecutor(new TestCommand());
         this.getCommand("hello").setExecutor(new hello());
         this.getCommand("tc").setExecutor(new TeamChat());
         this.getCommand("disc").setExecutor(new Discordcmd());
         this.getCommand("accept").setExecutor(new accpt());
-        getServer().getPluginManager().registerEvents(new MyListener(), this);
-        MyTask task = new MyTask();
-        task.runTaskTimer(getPlugin(this.getClass()), 0, 1);
 
         NamespacedKey key = new NamespacedKey(this, "cobble");
 
@@ -86,6 +74,19 @@ public final class PrisonGame extends JavaPlugin {
                 MyListener.playerJoin(p);
             }
         }
+        for (Entity e : Bukkit.getWorld("world").getEntities()) {
+            if (e.getType().equals(EntityType.VILLAGER)) {
+                e.remove();
+            }
+
+        }
+        bertrude = (LivingEntity) Bukkit.getWorld("world").spawnEntity(new Location(Bukkit.getWorld("world"), 70, -59, -137), EntityType.VILLAGER);
+        bertrude.setAI(false);
+        bertrude.setCustomName("bertrude (real settings)");
+        bertrude.setInvulnerable(true);
+        MyTask task = new MyTask();
+        task.runTaskTimer(getPlugin(this.getClass()), 0, 1);
+        getServer().getPluginManager().registerEvents(new MyListener(), this);
 
     }
 

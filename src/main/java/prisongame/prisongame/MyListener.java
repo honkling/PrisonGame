@@ -75,7 +75,9 @@ public class MyListener implements Listener {
         p.getInventory().setLeggings(orangeleg);
         p.getInventory().setBoots(orangeboot);
         PrisonGame.type.put(p, 0);
-        p.teleport(PrisonGame.active.spwn);
+
+        Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {p.teleport(PrisonGame.active.spwn);}, 1L);
+
         Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Prisoners").addPlayer(p);
         p.sendTitle("", ChatColor.GOLD + "welcome.");
     }
@@ -190,7 +192,7 @@ public class MyListener implements Listener {
             }
         }
         if (PrisonGame.warden != event.getPlayer())
-            Bukkit.broadcastMessage(event.getPlayer().getPlayerListName() + ChatColor.GRAY + ": " + ChatColor.GRAY + ChatColor.RED + FilteredWords.filtermsg(event.getMessage()));
+            Bukkit.broadcastMessage(event.getPlayer().getPlayerListName() + ChatColor.GRAY + ": " + ChatColor.GRAY + ChatColor.GRAY + FilteredWords.filtermsg(event.getMessage()));
     }
 
     @EventHandler

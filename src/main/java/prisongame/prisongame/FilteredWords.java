@@ -4,11 +4,8 @@ public class FilteredWords {
     static String[] filter = {
             "nigger",
             "niger",
-            "nig",
             "nigga",
-            "niga",
             "faggot",
-            "fag",
             "fagot"
     };
 

@@ -107,6 +107,11 @@ public class MyTask extends BukkitRunnable {
             bossbar.removeFlag(BarFlag.CREATE_FOG);
         }
         for (Player p :Bukkit.getOnlinePlayers()) {
+            if (p.getPersistentDataContainer().has(PrisonGame.nightvis, PersistentDataType.INTEGER)) {
+                p.addPotionEffect(PotionEffectType.NIGHT_VISION.createEffect(99999, 255));
+            } else {
+                p.removePotionEffect(PotionEffectType.NIGHT_VISION);
+            }
             if (p.getGameMode().equals(GameMode.SPECTATOR) && p.hasPotionEffect(PotionEffectType.DARKNESS)) {
                 p.teleport(PrisonGame.active.nursebed);
             }

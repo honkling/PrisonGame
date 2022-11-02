@@ -32,7 +32,7 @@ public class Prison {
         spwn = cls;
         bm = bme;
         bmout = bmoute;
-        Bukkit.getLogger().log(Level.INFO, "activated prison " + nm);
+        Bukkit.getLogger().log(Level.INFO, "activated prison " + nm + " world: " + cls.getWorld());
     }
 
 }
