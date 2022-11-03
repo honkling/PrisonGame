@@ -25,9 +25,9 @@ public class MyTask extends BukkitRunnable {
 
     @Override
     public void run(){
+        PrisonGame.swapcool -= 1;
         if (Bukkit.getWorld("world").getTime() > 0 && Bukkit.getWorld("world").getTime() < 1000) {
             bossbar.setTitle("ROLL CALL");
-            PrisonGame.swapcool -= 1;
             for (Player p : Bukkit.getOnlinePlayers()) {
                 if (!PrisonGame.type.containsKey(p)) {
                     PrisonGame.type.put(p, 0);
