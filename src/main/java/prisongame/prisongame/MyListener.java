@@ -199,7 +199,7 @@ public class MyListener implements Listener {
             if (event.getCurrentItem().getItemMeta() != null) {
                 if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.GRAY + "Fortress Of Gaeae")) {
                     PrisonGame.active = PrisonGame.hyper;
-                    PrisonGame.swapcool = (20 * 60) * 30;
+                    PrisonGame.swapcool = (20 * 60) * 5;
                     PrisonGame.bertrude.teleport(PrisonGame.active.getBert());
                     for (Player p : Bukkit.getOnlinePlayers()) {
                         if (PrisonGame.type.get(p) != -1) {
@@ -254,7 +254,7 @@ public class MyListener implements Listener {
     @EventHandler
     public void ee(PlayerMoveEvent event) {
         if (PrisonGame.isInside(event.getPlayer(), PrisonGame.active.getRunpoint1(), PrisonGame.active.getRunpoint2()) && PrisonGame.active.getRunpoint1().getY() > event.getPlayer().getLocation().getY()) {
-            PrisonGame.sp.put(event.getPlayer(), PrisonGame.sp.getOrDefault(event.getPlayer(), 0.0) + 0.25);
+            PrisonGame.sp.put(event.getPlayer(), PrisonGame.sp.getOrDefault(event.getPlayer(), 0.0) + 0.5);
             event.getPlayer().sendTitle("", ChatColor.GREEN + PrisonGame.sp.get(event.getPlayer()).toString() + "/120", 0, 10, 10);
             if (PrisonGame.sp.get(event.getPlayer()) >= 120) {
                 PrisonGame.sp.put(event.getPlayer(), 0.0);
