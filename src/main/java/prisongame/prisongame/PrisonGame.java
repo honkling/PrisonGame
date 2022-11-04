@@ -69,21 +69,16 @@ public final class PrisonGame extends JavaPlugin {
 
         Bukkit.addRecipe(recipe);
         for (Player p : Bukkit.getOnlinePlayers()) {
-            PrisonGame.st.put(p, 0.0);
-            PrisonGame.sp.put(p, 0.0);
-            if (!PrisonGame.type.containsKey(p)) {
-                PrisonGame.type.put(p, 0);
-                MyListener.playerJoin(p);
-            }
-        }
-        for (Entity e : Bukkit.getWorld("world").getEntities()) {
-            if (e.getType().equals(EntityType.VILLAGER)) {
-                e.remove();
-            }
-
+            p.sendTitle(ChatColor.RED + "LOADING...", "this may take a bit.", 0, 80, 0);
+            p.addPotionEffect(PotionEffectType.DARKNESS.createEffect(80, 255));
         }
         Bukkit.getScheduler().runTaskLater(getPlugin(this.getClass()), () -> {
             // code
+            for (Entity e : Bukkit.getWorld("world").getEntities()) {
+                if (e.getType().equals(EntityType.VILLAGER)) {
+                    e.remove();
+                }
+            }
             gaeae = new Prison("Fortress Of Gaeae", new Location(Bukkit.getWorld("world"), 61, -54, -159), new Location(Bukkit.getWorld("world"), 76, -59, -169), new Location(Bukkit.getWorld("world"), 44, -58, -141), new Location(Bukkit.getWorld("world"), 44, -58, -137), new Location(Bukkit.getWorld("world"), 41.5, -52, -120.5), new Location(Bukkit.getWorld("world"), 12, -60, -119), new Location(Bukkit.getWorld("world"), -26.5, -56.5, -115.5), new Location(Bukkit.getWorld("world"), -8.5, -57, -108.5), new Location(Bukkit.getWorld("world"), 33, -59, -132), new Location(Bukkit.getWorld("world"), 70, -59, -137));
             hyper = new Prison("HyperTech", new Location(Bukkit.getWorld("world"), 18, -56, -988), new Location(Bukkit.getWorld("world"), 8, -59, -981), new Location(Bukkit.getWorld("world"), -29, -58, -988), new Location(Bukkit.getWorld("world"), -29, -58, -991), new Location(Bukkit.getWorld("world"), 12, -53, -970), new Location(Bukkit.getWorld("world"), -18, -59, -995), new Location(Bukkit.getWorld("world"), -26.5, -56.5, -115.5), new Location(Bukkit.getWorld("world"), 3.5, -59, -1006.5), new Location(Bukkit.getWorld("world"), 8, -59, -1004), new Location(Bukkit.getWorld("world"), -3, -59, -1007));
             active = gaeae;
@@ -91,10 +86,18 @@ public final class PrisonGame extends JavaPlugin {
             bertrude.setAI(false);
             bertrude.setCustomName("bertrude (real settings)");
             bertrude.setInvulnerable(true);
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                PrisonGame.st.put(p, 0.0);
+                PrisonGame.sp.put(p, 0.0);
+                if (!PrisonGame.type.containsKey(p)) {
+                    PrisonGame.type.put(p, 0);
+                    MyListener.playerJoin(p);
+                }
+            }
             MyTask task = new MyTask();
             task.runTaskTimer(getPlugin(this.getClass()), 0, 1);
             getServer().getPluginManager().registerEvents(new MyListener(), this);
-        }, 1);
+        }, 80);
 
     }
 

@@ -259,7 +259,7 @@ public class MyListener implements Listener {
             if (PrisonGame.sp.get(event.getPlayer()) >= 120) {
                 PrisonGame.sp.put(event.getPlayer(), 0.0);
                 if (event.getPlayer().hasPotionEffect(PotionEffectType.SPEED)) {
-                    event.getPlayer().addPotionEffect(PotionEffectType.SPEED.createEffect(event.getPlayer().getPotionEffect(PotionEffectType.SPEED).getDuration() + 20 * 15, 0));
+                    event.getPlayer().addPotionEffect(PotionEffectType.SPEED.createEffect(event.getPlayer().getPotionEffect(PotionEffectType.SPEED).getDuration() + 20 * 25, 0));
                 } else {
                     event.getPlayer().addPotionEffect(PotionEffectType.SPEED.createEffect(20 * 30, 0));
                 }
