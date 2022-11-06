@@ -75,7 +75,7 @@ public class MyListener implements Listener {
         p.getInventory().setLeggings(orangeleg);
         p.getInventory().setBoots(orangeboot);
         PrisonGame.type.put(p, 0);
-        Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {p.teleport(PrisonGame.active.getSpwn());}, 1L);
+        Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {p.teleport(PrisonGame.active.getSpwn());}, 5L);
         Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Prisoners").addPlayer(p);
         p.sendTitle("", ChatColor.GOLD + "welcome.");
     }
@@ -197,6 +197,20 @@ public class MyListener implements Listener {
     public void ee(InventoryClickEvent event) {
         if (event.getCurrentItem() != null) {
             if (event.getCurrentItem().getItemMeta() != null) {
+                if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.DARK_PURPLE + "The End?")) {
+                    PrisonGame.active = PrisonGame.endmap;
+                    PrisonGame.swapcool = (20 * 60) * 5;
+                    PrisonGame.bertrude.teleport(PrisonGame.active.getBert());
+                    for (Player p : Bukkit.getOnlinePlayers()) {
+                        if (PrisonGame.type.get(p) != -1) {
+                            MyListener.playerJoin(p);
+                            p.sendTitle("New prison!", "THE END?");
+                        } else {
+                            p.teleport(PrisonGame.active.getWardenspawn());
+                            p.sendTitle("New prison!", "THE END?");
+                        }
+                    }
+                }
                 if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.GRAY + "Fortress Of Gaeae")) {
                     PrisonGame.active = PrisonGame.gaeae;
                     for (Integer x = PrisonGame.gaeae.getCafedoor1().getBlockX(); x <= PrisonGame.gaeae.getCafedoor2().getBlockX(); x++) {
@@ -223,7 +237,7 @@ public class MyListener implements Listener {
                     for (Integer x = 1; x <= 3; x++) {
                         Bukkit.getWorld("world").getBlockAt(x, -58, -1009).setType(Material.MUD_BRICKS);
                     }
-                    PrisonGame.swapcool = (20 * 60) * 30;
+                    PrisonGame.swapcool = (20 * 60) * 5;
                     PrisonGame.bertrude.teleport(PrisonGame.active.getBert());
                     for (Player p : Bukkit.getOnlinePlayers()) {
                         if (PrisonGame.type.get(p) != -1) {
@@ -306,6 +320,12 @@ public class MyListener implements Listener {
             if (event.getClickedBlock().getType().equals(Material.COBBLESTONE) || event.getClickedBlock().getType().equals(Material.STONE) || event.getClickedBlock().getType().equals(Material.ANDESITE)) {
                 event.getPlayer().getInventory().addItem(new ItemStack(Material.STONE_BUTTON));
             }
+            if (event.getClickedBlock().getType().equals(Material.OAK_WALL_SIGN)) {
+                org.bukkit.block.Sign sign = (org.bukkit.block.Sign) event.getClickedBlock().getState();
+                if (sign.getLine(1).equals("+1 time tick")) {
+                        Bukkit.getWorld("world").setTime(Bukkit.getWorld("world").getTime() + 1);
+                }
+            }
             if (event.getClickedBlock().getType().equals(Material.BIRCH_WALL_SIGN)) {
                 org.bukkit.block.Sign sign = (org.bukkit.block.Sign) event.getClickedBlock().getState();
                 if (sign.getLine(1).equals("Switch Maps")) {
@@ -314,6 +334,7 @@ public class MyListener implements Listener {
                             Inventory inv = Bukkit.createInventory(null, 9, "Map Switch");
                             inv.addItem(PrisonGame.createGuiItem(Material.COBBLESTONE, ChatColor.GRAY + "Fortress Of Gaeae"));
                             inv.addItem(PrisonGame.createGuiItem(Material.QUARTZ_BLOCK, ChatColor.WHITE + "Hypertech"));
+                            inv.addItem(PrisonGame.createGuiItem(Material.END_CRYSTAL, ChatColor.DARK_PURPLE + "The End?"));
                             event.getPlayer().openInventory(inv);
                         } else {
                             event.getPlayer().sendMessage("That's on cooldown!");
@@ -321,6 +342,7 @@ public class MyListener implements Listener {
 
                     }
                 }
+
                 if (sign.getLine(2).equals("Scrap Metal")) {
                     if (event.getPlayer().getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0) >= 150.0) {
                         event.getPlayer().getPersistentDataContainer().set(PrisonGame.mny, PersistentDataType.DOUBLE, event.getPlayer().getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0)  - 150);

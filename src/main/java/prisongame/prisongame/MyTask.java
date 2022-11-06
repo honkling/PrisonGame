@@ -82,7 +82,7 @@ public class MyTask extends BukkitRunnable {
             bossbar.setTitle("LIGHTS OUT");
             for (Player p : Bukkit.getOnlinePlayers()) {
                 if (PrisonGame.type.get(p) == 0 && !PrisonGame.escaped.get(p)) {
-                    if (!p.isSleeping()) {
+                    if (!p.isSleeping() || !new Location(p.getWorld(), p.getLocation().getX(), p.getLocation().getY() - 1, p.getLocation().getZ()).getBlock().getType().equals(Material.JIGSAW)) {
                         p.sendTitle("", ChatColor.RED + "GET TO SLEEP!", 0, 20 * 3, 0);
                         p.addPotionEffect(PotionEffectType.SPEED.createEffect(200, 0));
                         p.addPotionEffect(PotionEffectType.GLOWING.createEffect(20 * 30, 0));
@@ -112,10 +112,17 @@ public class MyTask extends BukkitRunnable {
             } else {
                 p.removePotionEffect(PotionEffectType.NIGHT_VISION);
             }
-            if (p.getGameMode().equals(GameMode.SPECTATOR) && p.hasPotionEffect(PotionEffectType.DARKNESS)) {
+            if (p.getGameMode().equals(GameMode.SURVIVAL))
+                p.setGameMode(GameMode.ADVENTURE);
+            if (p.hasPotionEffect(PotionEffectType.WEAKNESS)) {
+                p.setGameMode(GameMode.SPECTATOR);
                 p.teleport(PrisonGame.active.getNursebed());
+            } else {
+                if (p.getGameMode().equals(GameMode.SPECTATOR)) {
+                    p.setGameMode(GameMode.ADVENTURE);
+                }
             }
-            if (p.getName().equals("Jacco100") && !p.getPlayerListName().contains("REPORTER")) {
+            if (p.getName().equals("Jacco100") && !p.getPlayerListName().contains("REPORTER") || p.getName().equals("teuli") && !p.getPlayerListName().contains("REPORTER")) {
                 p.setCustomName(ChatColor.GRAY + "[" + ChatColor.GREEN + "REPORTER" + ChatColor.GRAY + "] " + p.getDisplayName());
                 p.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.GREEN + "REPORTER" + ChatColor.GRAY + "] " + p.getDisplayName());
                 p.setDisplayName(ChatColor.GRAY + "[" + ChatColor.GREEN + "REPORTER" + ChatColor.GRAY + "] " + p.getDisplayName());

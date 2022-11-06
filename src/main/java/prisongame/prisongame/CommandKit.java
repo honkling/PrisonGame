@@ -136,9 +136,9 @@ public class CommandKit implements CommandExecutor {
                 String prefix = args[1].toUpperCase();
                 if (prefix.length() <= 16) {
                     Player g = (Player) sender;
-                    g.setCustomName(ChatColor.GRAY + "[" + ChatColor.RED + prefix + " WARDEN" + ChatColor.GRAY + "] " + ChatColor.WHITE + g.getName());
-                    g.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.RED + prefix + " WARDEN" + ChatColor.GRAY + "] " + ChatColor.WHITE + g.getName());
-                    g.setDisplayName(ChatColor.GRAY + "[" + ChatColor.RED + prefix + " WARDEN" + ChatColor.GRAY + "] " + ChatColor.WHITE + g.getName());
+                    g.setCustomName(ChatColor.GRAY + "[" + ChatColor.RED + ChatColor.translateAlternateColorCodes('&', prefix) + " WARDEN" + ChatColor.GRAY + "] " + ChatColor.WHITE + g.getName());
+                    g.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.RED + ChatColor.translateAlternateColorCodes('&', prefix) + " WARDEN" + ChatColor.GRAY + "] " + ChatColor.WHITE + g.getName());
+                    g.setDisplayName(ChatColor.GRAY + "[" + ChatColor.RED + ChatColor.translateAlternateColorCodes('&', prefix) + " WARDEN" + ChatColor.GRAY + "] " + ChatColor.WHITE + g.getName());
 
                     if (g.getName().equals("agmass")) {
                         g.setCustomName(ChatColor.GRAY + "[" + ChatColor.RED + "OWNER" + ChatColor.GRAY + "] " + g.getDisplayName());
