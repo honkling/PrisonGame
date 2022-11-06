@@ -76,6 +76,7 @@ public class MyListener implements Listener {
         p.getInventory().setBoots(orangeboot);
         PrisonGame.type.put(p, 0);
         Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {p.teleport(PrisonGame.active.getSpwn());}, 5L);
+        Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {p.teleport(PrisonGame.active.getSpwn());}, 8L);
         Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Prisoners").addPlayer(p);
         p.sendTitle("", ChatColor.GOLD + "welcome.");
     }
@@ -235,7 +236,7 @@ public class MyListener implements Listener {
                 if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.WHITE + "Hypertech")) {
                     PrisonGame.active = PrisonGame.hyper;
                     for (Integer x = 1; x <= 3; x++) {
-                        Bukkit.getWorld("world").getBlockAt(x, -58, -1009).setType(Material.MUD_BRICKS);
+                        Bukkit.getWorld("world").getBlockAt(x, -58, -1008).setType(Material.MUD_BRICKS);
                     }
                     PrisonGame.swapcool = (20 * 60) * 5;
                     PrisonGame.bertrude.teleport(PrisonGame.active.getBert());
@@ -469,10 +470,10 @@ public class MyListener implements Listener {
                                 }
                             }
                         }
-                        if (new Location(Bukkit.getWorld("world"), 3, -57, -1007).getBlock().getType().equals(Material.MUD_BRICKS)) {
+                        if (new Location(Bukkit.getWorld("world"), 3, -57, -1008).getBlock().getType().equals(Material.MUD_BRICKS)) {
                             if (PrisonGame.active.equals(PrisonGame.hyper)) {
                                 for (Integer x = 1; x <= 3; x++) {
-                                    Bukkit.getWorld("world").getBlockAt(x, -58, -1009).setType(Material.AIR);
+                                    Bukkit.getWorld("world").getBlockAt(x, -57, -1008).setType(Material.AIR);
                                 }
                             }
                         }
@@ -839,7 +840,9 @@ public class MyListener implements Listener {
                 bat.remove();
                 if (event.getPlayer().getGameMode() != GameMode.ADVENTURE) {
                     event.getPlayer().setGameMode(GameMode.ADVENTURE);
-                    event.getPlayer().teleport(PrisonGame.active.getNursebedOutTP());
+                    Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
+                        event.getPlayer().teleport(PrisonGame.active.getNursebedOutTP());
+                    }, 5);
                 }
             }, 20 * 15);
         }, 1);

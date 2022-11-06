@@ -82,18 +82,34 @@ public class MyTask extends BukkitRunnable {
             bossbar.setTitle("LIGHTS OUT");
             for (Player p : Bukkit.getOnlinePlayers()) {
                 if (PrisonGame.type.get(p) == 0 && !PrisonGame.escaped.get(p)) {
-                    if (!p.isSleeping() || !new Location(p.getWorld(), p.getLocation().getX(), p.getLocation().getY() - 1, p.getLocation().getZ()).getBlock().getType().equals(Material.JIGSAW)) {
-                        p.sendTitle("", ChatColor.RED + "GET TO SLEEP!", 0, 20 * 3, 0);
-                        p.addPotionEffect(PotionEffectType.SPEED.createEffect(200, 0));
-                        p.addPotionEffect(PotionEffectType.GLOWING.createEffect(20 * 30, 0));
-                        Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Criminals").addPlayer(p);
-                    } else {
-                        if (PrisonGame.type.get(p) == 0 && Bukkit.getScoreboardManager().getMainScoreboard().getPlayerTeam(p) == Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Criminals")) {
-                            Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Prisoners").addPlayer(p);
-                        }
-                        p.removePotionEffect(PotionEffectType.SPEED);
-                        p.removePotionEffect(PotionEffectType.GLOWING);
+                    if (p.getWorld().getName().equals("endprison")) {
+                        if (!new Location(p.getWorld(), p.getLocation().getX(), p.getLocation().getY() - 1, p.getLocation().getZ()).getBlock().getType().equals(Material.JIGSAW)) {
+                            p.sendTitle("", ChatColor.RED + "GET TO SLEEP!", 0, 20 * 3, 0);
+                            p.addPotionEffect(PotionEffectType.SPEED.createEffect(200, 0));
+                            p.addPotionEffect(PotionEffectType.GLOWING.createEffect(20 * 30, 0));
+                            Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Criminals").addPlayer(p);
+                        } else {
+                            if (PrisonGame.type.get(p) == 0 && Bukkit.getScoreboardManager().getMainScoreboard().getPlayerTeam(p) == Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Criminals")) {
+                                Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Prisoners").addPlayer(p);
+                            }
+                            p.removePotionEffect(PotionEffectType.SPEED);
+                            p.removePotionEffect(PotionEffectType.GLOWING);
 
+                        }
+                    } else {
+                        if (!p.isSleeping()) {
+                            p.sendTitle("", ChatColor.RED + "GET TO SLEEP!", 0, 20 * 3, 0);
+                            p.addPotionEffect(PotionEffectType.SPEED.createEffect(200, 0));
+                            p.addPotionEffect(PotionEffectType.GLOWING.createEffect(20 * 30, 0));
+                            Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Criminals").addPlayer(p);
+                        } else {
+                            if (PrisonGame.type.get(p) == 0 && Bukkit.getScoreboardManager().getMainScoreboard().getPlayerTeam(p) == Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Criminals")) {
+                                Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Prisoners").addPlayer(p);
+                            }
+                            p.removePotionEffect(PotionEffectType.SPEED);
+                            p.removePotionEffect(PotionEffectType.GLOWING);
+
+                        }
                     }
                 }
             }

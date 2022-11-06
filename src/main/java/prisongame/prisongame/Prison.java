@@ -40,7 +40,7 @@ public class Prison {
         cafedoor2 = cfd2;
         Bukkit.getLogger().log(Level.INFO, "activated prison " + nm + " world: " + cls.getWorld());
         for (Integer x = 1; x <= 3; x++) {
-            Bukkit.getWorld("world").getBlockAt(x, -58, -1009).setType(Material.MUD_BRICKS);
+            Bukkit.getWorld("world").getBlockAt(x, -58, -1008).setType(Material.MUD_BRICKS);
         }
         for (Integer x = this.getCafedoor1().getBlockX(); x <= this.getCafedoor2().getBlockX(); x++) {
             for (Integer y = this.getCafedoor1().getBlockY(); y <= this.getCafedoor2().getBlockY(); y++) {
