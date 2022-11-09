@@ -93,7 +93,7 @@ public final class PrisonGame extends JavaPlugin {
                 PrisonGame.sp.put(p, 0.0);
                 if (!PrisonGame.type.containsKey(p)) {
                     PrisonGame.type.put(p, 0);
-                    MyListener.playerJoin(p);
+                    MyListener.playerJoin(p, false);
                 }
             }
             MyTask task = new MyTask();
@@ -287,7 +287,7 @@ class TestCommand implements CommandExecutor {
             }
         }
         PrisonGame.type.put((Player) sender, 0);
-        MyListener.playerJoin((Player) sender);
+        MyListener.playerJoin((Player) sender, false);
         return true;
     }
 }

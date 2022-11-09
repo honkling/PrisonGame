@@ -23,7 +23,7 @@ public class CommandKit implements CommandExecutor {
                     Player nw = (Player) sender;
                     for (Player p : Bukkit.getOnlinePlayers()) {
                         if (PrisonGame.type.get(p) != 0) {
-                            MyListener.playerJoin(p);
+                            MyListener.playerJoin(p, false);
                         }
                         PrisonGame.type.put(p, 0);
                         PrisonGame.askType.put(p, 0);
@@ -105,7 +105,7 @@ public class CommandKit implements CommandExecutor {
                 }
             }
             if (args[0].equals("resign")) {
-                MyListener.playerJoin(PrisonGame.warden);
+                MyListener.playerJoin(PrisonGame.warden, false);
                 Bukkit.broadcastMessage(ChatColor.GREEN + "The warden has resigned!");
                 PrisonGame.warden = null;
             }
@@ -128,7 +128,7 @@ public class CommandKit implements CommandExecutor {
                     Player g = Bukkit.getPlayer(args[1]);
                     if (g.isOnline() && g != sender && PrisonGame.type.get(g) != 0) {
                         Bukkit.broadcastMessage(ChatColor.GOLD + g.getName() + " was fired.");
-                        MyListener.playerJoin(g);
+                        MyListener.playerJoin(g, false);
                     }
                 }
             }

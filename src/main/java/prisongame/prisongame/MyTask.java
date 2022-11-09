@@ -31,7 +31,7 @@ public class MyTask extends BukkitRunnable {
             for (Player p : Bukkit.getOnlinePlayers()) {
                 if (!PrisonGame.type.containsKey(p)) {
                     PrisonGame.type.put(p, 0);
-                    MyListener.playerJoin(p);
+                    MyListener.playerJoin(p, false);
                 }
                 if (!PrisonGame.st.containsKey(p)) {
                     PrisonGame.st.put(p, 0.0);

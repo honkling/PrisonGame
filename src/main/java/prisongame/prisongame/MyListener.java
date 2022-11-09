@@ -34,9 +34,11 @@ import java.util.List;
 
 public class MyListener implements Listener {
 
-    public static void playerJoin(Player p) {
-        p.getInventory().clear();
-        PrisonGame.escaped.put(p, false);
+    public static void playerJoin(Player p, Boolean dontresetshit) {
+        if (!dontresetshit)
+            p.getInventory().clear();
+        if (!dontresetshit)
+            PrisonGame.escaped.put(p, false);
         p.playSound(p, Sound.ENTITY_ZOMBIE_BREAK_WOODEN_DOOR, 1, 0.75f);
 
         p.setCustomName(ChatColor.GRAY + "[" + ChatColor.GOLD + "PRISONER" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY + p.getName());
@@ -56,29 +58,31 @@ public class MyListener implements Listener {
             p.setDisplayName(ChatColor.GRAY + "[" + ChatColor.YELLOW + "BUILDER" + ChatColor.GRAY + "] " + p.getDisplayName());
         }
 
-        ItemStack orangechest = new ItemStack(Material.LEATHER_CHESTPLATE);
-        LeatherArmorMeta chestmeta = (LeatherArmorMeta) orangechest.getItemMeta();
-        chestmeta.setColor(Color.ORANGE);
-        orangechest.setItemMeta(chestmeta);
+        if (!dontresetshit) {
+            ItemStack orangechest = new ItemStack(Material.LEATHER_CHESTPLATE);
+            LeatherArmorMeta chestmeta = (LeatherArmorMeta) orangechest.getItemMeta();
+            chestmeta.setColor(Color.ORANGE);
+            orangechest.setItemMeta(chestmeta);
 
-        ItemStack orangeleg = new ItemStack(Material.LEATHER_LEGGINGS);
-        LeatherArmorMeta orangelegItemMeta = (LeatherArmorMeta) orangeleg.getItemMeta();
-        orangelegItemMeta.setColor(Color.ORANGE);
-        orangeleg.setItemMeta(orangelegItemMeta);
+            ItemStack orangeleg = new ItemStack(Material.LEATHER_LEGGINGS);
+            LeatherArmorMeta orangelegItemMeta = (LeatherArmorMeta) orangeleg.getItemMeta();
+            orangelegItemMeta.setColor(Color.ORANGE);
+            orangeleg.setItemMeta(orangelegItemMeta);
 
-        ItemStack orangeboot = new ItemStack(Material.LEATHER_BOOTS);
-        LeatherArmorMeta orangebootItemMeta = (LeatherArmorMeta) orangeboot.getItemMeta();
-        orangebootItemMeta.setColor(Color.ORANGE);
-        orangeboot.setItemMeta(orangebootItemMeta);
+            ItemStack orangeboot = new ItemStack(Material.LEATHER_BOOTS);
+            LeatherArmorMeta orangebootItemMeta = (LeatherArmorMeta) orangeboot.getItemMeta();
+            orangebootItemMeta.setColor(Color.ORANGE);
+            orangeboot.setItemMeta(orangebootItemMeta);
 
-        p.getInventory().setChestplate(orangechest);
-        p.getInventory().setLeggings(orangeleg);
-        p.getInventory().setBoots(orangeboot);
-        PrisonGame.type.put(p, 0);
+            p.getInventory().setChestplate(orangechest);
+            p.getInventory().setLeggings(orangeleg);
+            p.getInventory().setBoots(orangeboot);
+        }
+        if (!dontresetshit)
+            PrisonGame.type.put(p, 0);
         Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {p.teleport(PrisonGame.active.getSpwn());}, 5L);
         Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {p.teleport(PrisonGame.active.getSpwn());}, 8L);
         Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Prisoners").addPlayer(p);
-        p.sendTitle("", ChatColor.GOLD + "welcome.");
     }
 
 
@@ -144,7 +148,7 @@ public class MyListener implements Listener {
         event.getPlayer().setGameMode(GameMode.ADVENTURE);
         PrisonGame.st.put(event.getPlayer(), 0.0);
         PrisonGame.sp.put(event.getPlayer(), 0.0);
-        playerJoin(event.getPlayer());
+        playerJoin(event.getPlayer(), false);
     }
 
     @EventHandler
@@ -155,7 +159,7 @@ public class MyListener implements Listener {
                 event.getDrops().clear();
                 PrisonGame.warden = null;
                 PrisonGame.type.put(event.getEntity(), 0);
-                MyListener.playerJoin(event.getEntity());
+                MyListener.playerJoin(event.getEntity(), false);
             }
         }
         if (PrisonGame.type.get(event.getEntity()) == 0) {
@@ -204,7 +208,7 @@ public class MyListener implements Listener {
                     PrisonGame.bertrude.teleport(PrisonGame.active.getBert());
                     for (Player p : Bukkit.getOnlinePlayers()) {
                         if (PrisonGame.type.get(p) != -1) {
-                            MyListener.playerJoin(p);
+                            MyListener.playerJoin(p, true);
                             p.sendTitle("New prison!", "THE END?");
                         } else {
                             p.teleport(PrisonGame.active.getWardenspawn());
@@ -225,7 +229,7 @@ public class MyListener implements Listener {
                     PrisonGame.bertrude.teleport(PrisonGame.active.getBert());
                     for (Player p : Bukkit.getOnlinePlayers()) {
                         if (PrisonGame.type.get(p) != -1) {
-                            MyListener.playerJoin(p);
+                            MyListener.playerJoin(p, true);
                             p.sendTitle("New prison!", "FORTRESS OF GAEAE");
                         } else {
                             p.teleport(PrisonGame.active.getWardenspawn());
@@ -242,7 +246,7 @@ public class MyListener implements Listener {
                     PrisonGame.bertrude.teleport(PrisonGame.active.getBert());
                     for (Player p : Bukkit.getOnlinePlayers()) {
                         if (PrisonGame.type.get(p) != -1) {
-                            MyListener.playerJoin(p);
+                            MyListener.playerJoin(p, true);
                             p.sendTitle("New prison!", "HYPERTECH");
                         } else {
                             p.teleport(PrisonGame.active.getWardenspawn());
@@ -472,9 +476,10 @@ public class MyListener implements Listener {
                         }
                         if (new Location(Bukkit.getWorld("world"), 3, -57, -1008).getBlock().getType().equals(Material.MUD_BRICKS)) {
                             if (PrisonGame.active.equals(PrisonGame.hyper)) {
-                                for (Integer x = 1; x <= 3; x++) {
-                                    Bukkit.getWorld("world").getBlockAt(x, -57, -1008).setType(Material.AIR);
-                                }
+                                Bukkit.getWorld("world").getBlockAt(1, -57, -1008).setType(Material.AIR);
+                                Bukkit.getWorld("world").getBlockAt(2, -57, -1008).setType(Material.AIR);
+                                Bukkit.getWorld("world").getBlockAt(3, -57, -1008).setType(Material.AIR);
+
                             }
                         }
                     }
@@ -820,7 +825,7 @@ public class MyListener implements Listener {
 
             }
             if (PrisonGame.type.get(event.getPlayer()) == 0) {
-                playerJoin(event.getPlayer());
+                playerJoin(event.getPlayer(), false);
                 event.getPlayer().sendTitle("", ChatColor.GOLD + "you died.");
             }
             event.getPlayer().teleport(PrisonGame.active.getNursebed());
