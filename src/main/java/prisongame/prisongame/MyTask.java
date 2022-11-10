@@ -17,6 +17,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class MyTask extends BukkitRunnable {
 
     static Integer jobm = 1;
+    static Boolean hasAlerted = true;
 
     static BossBar bossbar = Bukkit.createBossBar(
             ChatColor.WHITE + "Morning",
@@ -26,8 +27,9 @@ public class MyTask extends BukkitRunnable {
     @Override
     public void run(){
         PrisonGame.swapcool -= 1;
-        if (Bukkit.getWorld("world").getTime() > 0 && Bukkit.getWorld("world").getTime() < 1000) {
+        if (Bukkit.getWorld("world").getTime() > 0 && Bukkit.getWorld("world").getTime() < 2500) {
             bossbar.setTitle("ROLL CALL");
+            hasAlerted = false;
             for (Player p : Bukkit.getOnlinePlayers()) {
                 if (!PrisonGame.type.containsKey(p)) {
                     PrisonGame.type.put(p, 0);
@@ -45,22 +47,47 @@ public class MyTask extends BukkitRunnable {
                 if (PrisonGame.type.get(p) == 0 && !PrisonGame.escaped.get(p)) {
                     if (!new Location(p.getWorld(), p.getLocation().getX(), p.getLocation().getY() - 1, p.getLocation().getZ()).getBlock().getType().equals(Material.RED_SAND))
                     {
-                        p.sendTitle("", ChatColor.RED + "GET ONTO THE YARD'S RED SAND!", 0, 20 * 3, 0);
-                        p.addPotionEffect(PotionEffectType.SPEED.createEffect(200, 0));
+                        p.sendTitle("", ChatColor.RED + "GET ONTO THE YARD'S RED SAND OR YOU'LL BE KILLED!", 0, 5, 0);
+                        p.addPotionEffect(PotionEffectType.HUNGER.createEffect(200, 0));
                         p.addPotionEffect(PotionEffectType.GLOWING.createEffect(20 * 30, 0));
+                        p.setWalkSpeed(0.2f);
+                        p.removePotionEffect(PotionEffectType.JUMP);
                         Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Criminals").addPlayer(p);
                     } else {
                         if (PrisonGame.type.get(p) == 0 && Bukkit.getScoreboardManager().getMainScoreboard().getPlayerTeam(p) == Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Criminals")) {
                             Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Prisoners").addPlayer(p);
                         }
-                        p.removePotionEffect(PotionEffectType.SPEED);
+                        if (p.hasPotionEffect(PotionEffectType.GLOWING)) {
+                            p.sendMessage(ChatColor.GREEN + "You came to roll call!");
+                            p.playSound(p, Sound.BLOCK_NOTE_BLOCK_BIT, 1, 1);
+                        }
+                        p.setWalkSpeed(0);
+                        if (p.isOnGround())
+                            p.addPotionEffect(PotionEffectType.JUMP.createEffect(20, -25));
+                        p.addPotionEffect(PotionEffectType.WEAKNESS.createEffect(20, 255));
+                        p.removePotionEffect(PotionEffectType.HUNGER);
                         p.removePotionEffect(PotionEffectType.GLOWING);
 
                     }
                 }
             }
+        } else {
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                p.setWalkSpeed(0.2f);
+                p.removePotionEffect(PotionEffectType.JUMP);
+            }
         }
-        if (Bukkit.getWorld("world").getTime() > 1000 && Bukkit.getWorld("world").getTime() < 3000) {
+        if (Bukkit.getWorld("world").getTime() > 2500 && Bukkit.getWorld("world").getTime() < 3000) {
+            if (!hasAlerted) {
+                hasAlerted = true;
+                for (Player p : Bukkit.getOnlinePlayers()) {
+                    if (p.hasPotionEffect(PotionEffectType.GLOWING) && !PrisonGame.escaped.get(p)) {
+                        Bukkit.broadcastMessage(ChatColor.RED + p.getName() + ChatColor.GOLD + " didn't come to roll call! " + ChatColor.RED + "Kill them for 100 dollars!");
+                        p.sendTitle("", ChatColor.RED + "COME TO ROLL CALL NEXT TIME!", 0, 60, 0);
+                        p.playSound(p, Sound.ENTITY_SILVERFISH_AMBIENT, 1, 0.25f);
+                    }
+                }
+            }
             bossbar.setTitle("Breakfast (Hunger Regen)");
             for (Player p :Bukkit.getOnlinePlayers()) {
                 p.addPotionEffect(PotionEffectType.SATURATION.createEffect(120, 0));
@@ -84,29 +111,29 @@ public class MyTask extends BukkitRunnable {
                 if (PrisonGame.type.get(p) == 0 && !PrisonGame.escaped.get(p)) {
                     if (p.getWorld().getName().equals("endprison")) {
                         if (!new Location(p.getWorld(), p.getLocation().getX(), p.getLocation().getY() - 1, p.getLocation().getZ()).getBlock().getType().equals(Material.JIGSAW)) {
-                            p.sendTitle("", ChatColor.RED + "GET TO SLEEP!", 0, 20 * 3, 0);
-                            p.addPotionEffect(PotionEffectType.SPEED.createEffect(200, 0));
+                            p.sendTitle("", ChatColor.RED + "GET TO A CELL OR YOU'LL BE KILLED!", 0, 20 * 3, 0);
+                            p.addPotionEffect(PotionEffectType.HUNGER.createEffect(200, 0));
                             p.addPotionEffect(PotionEffectType.GLOWING.createEffect(20 * 30, 0));
                             Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Criminals").addPlayer(p);
                         } else {
                             if (PrisonGame.type.get(p) == 0 && Bukkit.getScoreboardManager().getMainScoreboard().getPlayerTeam(p) == Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Criminals")) {
                                 Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Prisoners").addPlayer(p);
                             }
-                            p.removePotionEffect(PotionEffectType.SPEED);
+                            p.removePotionEffect(PotionEffectType.HUNGER);
                             p.removePotionEffect(PotionEffectType.GLOWING);
 
                         }
                     } else {
                         if (!p.isSleeping()) {
-                            p.sendTitle("", ChatColor.RED + "GET TO SLEEP!", 0, 20 * 3, 0);
-                            p.addPotionEffect(PotionEffectType.SPEED.createEffect(200, 0));
+                            p.sendTitle("", ChatColor.RED + "GET TO SLEEP IN A BED OR YOU'LL BE KILLED!", 0, 20 * 3, 0);
+                            p.addPotionEffect(PotionEffectType.HUNGER.createEffect(200, 0));
                             p.addPotionEffect(PotionEffectType.GLOWING.createEffect(20 * 30, 0));
                             Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Criminals").addPlayer(p);
                         } else {
                             if (PrisonGame.type.get(p) == 0 && Bukkit.getScoreboardManager().getMainScoreboard().getPlayerTeam(p) == Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Criminals")) {
                                 Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Prisoners").addPlayer(p);
                             }
-                            p.removePotionEffect(PotionEffectType.SPEED);
+                            p.removePotionEffect(PotionEffectType.HUNGER);
                             p.removePotionEffect(PotionEffectType.GLOWING);
 
                         }
@@ -130,7 +157,7 @@ public class MyTask extends BukkitRunnable {
             }
             if (p.getGameMode().equals(GameMode.SURVIVAL))
                 p.setGameMode(GameMode.ADVENTURE);
-            if (p.hasPotionEffect(PotionEffectType.WEAKNESS)) {
+            if (p.hasPotionEffect(PotionEffectType.LUCK)) {
                 p.setGameMode(GameMode.SPECTATOR);
                 p.teleport(PrisonGame.active.getNursebed());
             } else {

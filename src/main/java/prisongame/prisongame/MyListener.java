@@ -832,6 +832,7 @@ public class MyListener implements Listener {
             event.getPlayer().sendTitle("RESPAWNING", "Wait 15 seconds.");
             event.getPlayer().addPotionEffect(PotionEffectType.INVISIBILITY.createEffect(15 * 20, 0));
             event.getPlayer().addPotionEffect(PotionEffectType.DAMAGE_RESISTANCE.createEffect(15 * 20, 255));
+            event.getPlayer().addPotionEffect(PotionEffectType.LUCK.createEffect(15 * 20, 255));
             event.getPlayer().addPotionEffect(PotionEffectType.WEAKNESS.createEffect(15 * 20, 255));
             event.getPlayer().addPotionEffect(PotionEffectType.DARKNESS.createEffect(15 * 20, 0));
             LivingEntity bat = (LivingEntity) event.getPlayer().getWorld().spawnEntity(event.getPlayer().getLocation(), EntityType.BAT);
