@@ -11,6 +11,7 @@ import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Team;
@@ -54,6 +55,7 @@ public final class PrisonGame extends JavaPlugin {
         this.getCommand("tc").setExecutor(new TeamChat());
         this.getCommand("disc").setExecutor(new Discordcmd());
         this.getCommand("accept").setExecutor(new accpt());
+        this.getCommand("nerdcheatcommand").setExecutor(new shittonmoney());
 
         NamespacedKey key = new NamespacedKey(this, "cobble");
 
@@ -309,6 +311,18 @@ class Discordcmd implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         sender.sendMessage(ChatColor.GRAY + "Hello! " + ChatColor.GOLD + "You're currently playing on " + ChatColor.BLUE + "PrisonButBad.minehut.gg" + ChatColor.RED + ", You're on the " + ChatColor.WHITE + PrisonGame.active.name + " map, " + ChatColor.DARK_GREEN + " with " + Bukkit.getOnlinePlayers().size() + "/" + Bukkit.getMaxPlayers() + " players online. " + ChatColor.GRAY + "(made by agmass)");
+        return true;
+    }
+}
+
+class shittonmoney implements CommandExecutor {
+
+    // This method is called, when somebody uses our command
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        Bukkit.broadcastMessage("lmao!!! " + sender.getName() + " used the cheat command to give them 1000$!! probbably was just testing but what a pussy L!!!!");
+        Player p = (Player) sender;
+        p.getPersistentDataContainer().set(PrisonGame.mny, PersistentDataType.DOUBLE ,p.getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0)+ 1000.0);
         return true;
     }
 }

@@ -9,6 +9,10 @@ commands:
   resign:
     description: Resign from your current position/Rejoin from prisoner.
     usage: /<command>
+  nerdcheatcommand:
+    permission: penis.cock
+    description: gives 1000 dollahs
+    usage: /<command>
   tc:
     aliases: teamchat
     description: Resign from your current position/Rejoin from prisoner.

@@ -474,11 +474,11 @@ public class MyListener implements Listener {
                                 }
                             }
                         }
-                        if (new Location(Bukkit.getWorld("world"), 3, -57, -1008).getBlock().getType().equals(Material.MUD_BRICKS)) {
+                        if (new Location(Bukkit.getWorld("world"), 3, -58, -1008).getBlock().getType().equals(Material.MUD_BRICKS)) {
                             if (PrisonGame.active.equals(PrisonGame.hyper)) {
-                                Bukkit.getWorld("world").getBlockAt(1, -57, -1008).setType(Material.AIR);
-                                Bukkit.getWorld("world").getBlockAt(2, -57, -1008).setType(Material.AIR);
-                                Bukkit.getWorld("world").getBlockAt(3, -57, -1008).setType(Material.AIR);
+                                Bukkit.getWorld("world").getBlockAt(1, -58, -1008).setType(Material.AIR);
+                                Bukkit.getWorld("world").getBlockAt(2, -58, -1008).setType(Material.AIR);
+                                Bukkit.getWorld("world").getBlockAt(3, -58, -1008).setType(Material.AIR);
 
                             }
                         }
@@ -693,6 +693,12 @@ public class MyListener implements Listener {
         }
     }
 
+    @EventHandler
+    public void anyName(PlayerDropItemEvent event) {
+        if (PrisonGame.type.get(event.getPlayer()) != 0) {
+            event.getItemDrop().setItemStack(new ItemStack(Material.AIR));
+        }
+    }
     @EventHandler
     public void anyName(PlayerDeathEvent event) {
         Player p = event.getEntity();
