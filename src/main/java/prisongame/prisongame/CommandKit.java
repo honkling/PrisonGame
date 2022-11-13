@@ -137,8 +137,8 @@ public class CommandKit implements CommandExecutor {
                             PrisonGame.escaped.put(g, true);
                             g.teleport(PrisonGame.active.getSolit());
                             g.sendTitle("", "You're in solitary.", 10, 0, 10);
-                            g.addPotionEffect(PotionEffectType.SLOW.createEffect(Integer.MAX_VALUE, 1))
-                            Player p = g;
+                            g.addPotionEffect(PotionEffectType.SLOW.createEffect(Integer.MAX_VALUE, 1));
+                            Player p = g
                             p.setCustomName(ChatColor.GRAY + "[" + ChatColor.GRAY + "SOLITARY" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY + p.getName());
                             p.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.GRAY + "SOLITARY" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY + p.getName());
                             p.setDisplayName(ChatColor.GRAY + "[" + ChatColor.GRAY + "SOLITARY" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY + p.getName());
