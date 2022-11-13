@@ -932,7 +932,24 @@ public class MyListener implements Listener {
             }
             if (PrisonGame.type.get(event.getPlayer()) == 0) {
                 playerJoin(event.getPlayer(), false);
+                Player p = event.getPlayer();
                 event.getPlayer().sendTitle("", ChatColor.GOLD + "you died.");
+                p.setCustomName(ChatColor.GRAY + "[" + ChatColor.GOLD + "PRISONER" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY + p.getName());
+                p.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.GOLD + "PRISONER" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY + p.getName());
+                p.setDisplayName(ChatColor.GRAY + "[" + ChatColor.GOLD + "PRISONER" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY + p.getName());
+
+
+                if (p.getName().equals("agmass")) {
+                    p.setCustomName(ChatColor.GRAY + "[" + ChatColor.RED + "OWNER" + ChatColor.GRAY + "] " + p.getDisplayName());
+                    p.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.RED + "OWNER" + ChatColor.GRAY + "] " + p.getDisplayName());
+                    p.setDisplayName(ChatColor.GRAY + "[" + ChatColor.RED + "OWNER" + ChatColor.GRAY + "] " + p.getDisplayName());
+                }
+
+                if (p.getName().equals("ClownCaked") || p.getName().equals("4950")) {
+                    p.setCustomName(ChatColor.GRAY + "[" + ChatColor.YELLOW + "BUILDER" + ChatColor.GRAY + "] " + p.getDisplayName());
+                    p.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.YELLOW + "BUILDER" + ChatColor.GRAY + "] " + p.getDisplayName());
+                    p.setDisplayName(ChatColor.GRAY + "[" + ChatColor.YELLOW + "BUILDER" + ChatColor.GRAY + "] " + p.getDisplayName());
+                }
             }
             event.getPlayer().teleport(PrisonGame.active.getNursebed());
             event.getPlayer().sendTitle("RESPAWNING", "Wait 15 seconds.");
@@ -955,6 +972,9 @@ public class MyListener implements Listener {
                     Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
                         event.getPlayer().teleport(PrisonGame.active.getNursebedOutTP());
                     }, 5);
+                    Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
+                        event.getPlayer().teleport(PrisonGame.active.getNursebedOutTP());
+                    }, 8);
                 }
             }, 20 * 15);
         }, 1);

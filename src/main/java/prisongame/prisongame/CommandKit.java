@@ -10,6 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffectType;
 
 public class CommandKit implements CommandExecutor {
@@ -132,9 +133,28 @@ public class CommandKit implements CommandExecutor {
                         if (g.getGameMode() == GameMode.SPECTATOR) {
                             Bukkit.broadcastMessage(ChatColor.GOLD + g.getName() + " was send to solitary!");
                             g.setGameMode(GameMode.ADVENTURE);
+                            g.removePotionEffect(PotionEffectType.WEAKNESS);
                             PrisonGame.escaped.put(g, true);
                             g.teleport(PrisonGame.active.getSolit());
                             g.sendTitle("", "You're in solitary.", 10, 0, 10);
+                            g.addPotionEffect(PotionEffectType.SLOW.createEffect(Integer.MAX_VALUE, 1))
+                            Player p = g;
+                            p.setCustomName(ChatColor.GRAY + "[" + ChatColor.GRAY + "SOLITARY" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY + p.getName());
+                            p.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.GRAY + "SOLITARY" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY + p.getName());
+                            p.setDisplayName(ChatColor.GRAY + "[" + ChatColor.GRAY + "SOLITARY" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY + p.getName());
+
+
+                            if (p.getName().equals("agmass")) {
+                                p.setCustomName(ChatColor.GRAY + "[" + ChatColor.RED + "OWNER" + ChatColor.GRAY + "] " + p.getDisplayName());
+                                p.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.RED + "OWNER" + ChatColor.GRAY + "] " + p.getDisplayName());
+                                p.setDisplayName(ChatColor.GRAY + "[" + ChatColor.RED + "OWNER" + ChatColor.GRAY + "] " + p.getDisplayName());
+                            }
+
+                            if (p.getName().equals("ClownCaked") || p.getName().equals("4950")) {
+                                p.setCustomName(ChatColor.GRAY + "[" + ChatColor.YELLOW + "BUILDER" + ChatColor.GRAY + "] " + p.getDisplayName());
+                                p.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.YELLOW + "BUILDER" + ChatColor.GRAY + "] " + p.getDisplayName());
+                                p.setDisplayName(ChatColor.GRAY + "[" + ChatColor.YELLOW + "BUILDER" + ChatColor.GRAY + "] " + p.getDisplayName());
+                            }
                         }
                     }
                 }
