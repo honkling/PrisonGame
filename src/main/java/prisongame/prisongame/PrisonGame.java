@@ -38,8 +38,11 @@ public final class PrisonGame extends JavaPlugin {
     static NamespacedKey whiff;
 
     static NamespacedKey mny;
+    static NamespacedKey muted;
 
     static LivingEntity bertrude;
+
+    static Boolean swat = false;
 
     @Override
     public void onEnable() {
@@ -49,6 +52,7 @@ public final class PrisonGame extends JavaPlugin {
         nightvis = new NamespacedKey(PrisonGame.getPlugin(PrisonGame.class), "night");
         mny = new NamespacedKey(PrisonGame.getPlugin(PrisonGame.class), "money");
         whiff = new NamespacedKey(PrisonGame.getPlugin(PrisonGame.class), "whiff");
+        muted = new NamespacedKey(PrisonGame.getPlugin(PrisonGame.class), "mutedd");
         this.getCommand("warden").setExecutor(new CommandKit());
         this.getCommand("resign").setExecutor(new TestCommand());
         this.getCommand("hello").setExecutor(new hello());
@@ -56,6 +60,11 @@ public final class PrisonGame extends JavaPlugin {
         this.getCommand("disc").setExecutor(new Discordcmd());
         this.getCommand("accept").setExecutor(new accpt());
         this.getCommand("nerdcheatcommand").setExecutor(new shittonmoney());
+        this.getCommand("rstmoney").setExecutor(new nomone());
+        this.getCommand("amute").setExecutor(new accmute());
+        this.getCommand("aunmute").setExecutor(new accunmute());
+        this.getCommand("pay").setExecutor(new gib());
+
 
         NamespacedKey key = new NamespacedKey(this, "cobble");
 
@@ -78,12 +87,12 @@ public final class PrisonGame extends JavaPlugin {
         Bukkit.getScheduler().runTaskLater(getPlugin(this.getClass()), () -> {
             // code
             for (Entity e : Bukkit.getWorld("world").getEntities()) {
-                if (e.getType().equals(EntityType.VILLAGER)) {
+                if (e.getType().equals(EntityType.VILLAGER) || e.getType().equals(EntityType.WOLF)) {
                     e.remove();
                 }
             }
             gaeae = new Prison("Fortress Of Gaeae", new Location(Bukkit.getWorld("world"), 61, -54, -159), new Location(Bukkit.getWorld("world"), 76, -59, -169), new Location(Bukkit.getWorld("world"), 44, -58, -141), new Location(Bukkit.getWorld("world"), 44, -58, -137), new Location(Bukkit.getWorld("world"), 41.5, -52, -120.5), new Location(Bukkit.getWorld("world"), 12, -60, -119), new Location(Bukkit.getWorld("world"), -26.5, -56.5, -115.5), new Location(Bukkit.getWorld("world"), -8.5, -57, -108.5), new Location(Bukkit.getWorld("world"), 33, -59, -132), new Location(Bukkit.getWorld("world"), 70, -59, -137), new Location(Bukkit.getWorld("world"), 87, -59, -129), new Location(Bukkit.getWorld("world"), 87, -56, -125));
-            hyper = new Prison("HyperTech", new Location(Bukkit.getWorld("world"), 18, -56, -988), new Location(Bukkit.getWorld("world"), 8, -59, -981), new Location(Bukkit.getWorld("world"), -29, -58, -988), new Location(Bukkit.getWorld("world"), -29, -58, -991), new Location(Bukkit.getWorld("world"), 12, -53, -970), new Location(Bukkit.getWorld("world"), -18, -59, -995), new Location(Bukkit.getWorld("world"), -26.5, -56.5, -115.5), new Location(Bukkit.getWorld("world"), 3.5, -59, -1006.5), new Location(Bukkit.getWorld("world"), 8, -59, -1004), new Location(Bukkit.getWorld("world"), -3, -59, -1008), new Location(Bukkit.getWorld("world"), 1, -58, -1008), new Location(Bukkit.getWorld("world"), 3, -58, -1008));
+            hyper = new Prison("HyperTech", new Location(Bukkit.getWorld("world"), 18, -56, -988), new Location(Bukkit.getWorld("world"), 8, -59, -981), new Location(Bukkit.getWorld("world"), -29, -58, -988), new Location(Bukkit.getWorld("world"), -29, -58, -991), new Location(Bukkit.getWorld("world"), 12, -53, -970), new Location(Bukkit.getWorld("world"), -18, -59, -995), new Location(Bukkit.getWorld("world"), -26.5, -56.5, -115.5), new Location(Bukkit.getWorld("world"), 3.5, -59, -1006.5), new Location(Bukkit.getWorld("world"), 13, -59, -1009), new Location(Bukkit.getWorld("world"), -3, -59, -1008), new Location(Bukkit.getWorld("world"), 1, -58, -1008), new Location(Bukkit.getWorld("world"), 3, -58, -1008));
             endmap = new Prison("The End?", new Location(Bukkit.getWorld("endprison"), 7, 133, 8), new Location(Bukkit.getWorld("endprison"), 19, 127, 20), new Location(Bukkit.getWorld("endprison"), -30, 170, -48), new Location(Bukkit.getWorld("endprison"), -32, 170, -47), new Location(Bukkit.getWorld("endprison"), -1, 150, 13), new Location(Bukkit.getWorld("endprison"), 0, 135, -41), new Location(Bukkit.getWorld("world"), -26.5, -56.5, -115.5), new Location(Bukkit.getWorld("endprison"), 0, 131, -6), new Location(Bukkit.getWorld("endprison"), 0, 125 ,0), new Location(Bukkit.getWorld("endprison"), -4, 131, 3), new Location(Bukkit.getWorld("endprison"), -100000, 256, -100000), new Location(Bukkit.getWorld("endprison"), -100000, 256, -100000));
             active = gaeae;
             bertrude = (LivingEntity) Bukkit.getWorld("world").spawnEntity(new Location(Bukkit.getWorld("world"), 70, -59, -137), EntityType.VILLAGER);
@@ -156,7 +165,7 @@ public final class PrisonGame extends JavaPlugin {
         g.getInventory().setLeggings(orangeleg);
         g.getInventory().setBoots(orangeboot);
 
-        ItemStack wardenSword = new ItemStack(Material.WOODEN_SWORD);
+        ItemStack wardenSword = new ItemStack(Material.STONE_SWORD);
         wardenSword.addEnchantment(Enchantment.DAMAGE_ALL, 1);
         wardenSword.addEnchantment(Enchantment.DURABILITY, 1);
 
@@ -180,6 +189,64 @@ public final class PrisonGame extends JavaPlugin {
         g.getInventory().addItem(card);
 
     }
+
+    static void setSwat(Player g) {
+        Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Guards").addPlayer(g);
+        PrisonGame.type.put(g, 3);
+        Bukkit.broadcastMessage(ChatColor.DARK_GRAY + g.getName() + " was promoted to a SWAT member!");
+
+        g.setCustomName(ChatColor.GRAY + "[" + ChatColor.DARK_GRAY + "SWAT" + ChatColor.GRAY + "] " + ChatColor.GRAY + g.getName());
+        g.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.DARK_GRAY + "SWAT" + ChatColor.GRAY + "] " + ChatColor.GRAY + g.getName());
+        g.setDisplayName(ChatColor.GRAY + "[" + ChatColor.DARK_GRAY + "SWAT" + ChatColor.GRAY + "] " + ChatColor.GRAY + g.getName());
+
+        if (g.getName().equals("agmass")) {
+            g.setCustomName(ChatColor.GRAY + "[" + ChatColor.RED + "OWNER" + ChatColor.GRAY + "] " + g.getDisplayName());
+            g.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.RED + "OWNER" + ChatColor.GRAY + "] " + g.getDisplayName());
+            g.setDisplayName(ChatColor.GRAY + "[" + ChatColor.RED + "OWNER" + ChatColor.GRAY + "] " + g.getDisplayName());
+        }
+
+        if (g.getName().equals("ClownCaked") || g.getName().equals("4950")) {
+            g.setCustomName(ChatColor.GRAY + "[" + ChatColor.YELLOW + "BUILDER" + ChatColor.GRAY + "] " + g.getDisplayName());
+            g.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.YELLOW + "BUILDER" + ChatColor.GRAY + "] " + g.getDisplayName());
+            g.setDisplayName(ChatColor.GRAY + "[" + ChatColor.YELLOW + "BUILDER" + ChatColor.GRAY + "] " + g.getDisplayName());
+        }
+
+        ItemStack orangechest = new ItemStack(Material.NETHERITE_CHESTPLATE);
+
+        ItemStack orangeleg = new ItemStack(Material.NETHERITE_LEGGINGS);
+        orangechest.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2);
+
+
+        ItemStack orangeboot = new ItemStack(Material.LEATHER_BOOTS);
+        orangechest.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+        LeatherArmorMeta orangelegItemMeta = (LeatherArmorMeta) orangeboot.getItemMeta();
+        orangelegItemMeta.setColor(Color.GRAY);
+        orangeboot.setItemMeta(orangelegItemMeta);
+
+        g.getInventory().setHelmet(new ItemStack(Material.NETHERITE_HELMET));
+        g.getInventory().setChestplate(orangechest);
+        g.getInventory().setLeggings(orangeleg);
+        g.getInventory().setBoots(orangeboot);
+
+        ItemStack wardenSword = new ItemStack(Material.DIAMOND_SWORD);
+        wardenSword.addEnchantment(Enchantment.DAMAGE_ALL, 1);
+        wardenSword.addEnchantment(Enchantment.DURABILITY, 1);
+
+        g.getInventory().addItem(wardenSword);
+
+        g.getInventory().addItem(new ItemStack(Material.BOW));
+        g.getInventory().setItemInOffHand(new ItemStack(Material.SHIELD));
+        g.getInventory().addItem(new ItemStack(Material.ARROW, 16));
+        g.getInventory().addItem(new ItemStack(Material.COOKED_BEEF, 32));
+
+        ItemStack card = new ItemStack(Material.TRIPWIRE_HOOK);
+        ItemMeta cardm = card.getItemMeta();
+        cardm.setDisplayName(ChatColor.BLUE + "Keycard " + ChatColor.RED + "[CONTRABAND]");
+        card.setItemMeta(cardm);
+        g.getInventory().addItem(card);
+
+    }
+
     static void setGuard(Player g) {
         Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Guards").addPlayer(g);
         PrisonGame.type.put(g, 1);
@@ -224,7 +291,7 @@ public final class PrisonGame extends JavaPlugin {
         g.getInventory().setLeggings(orangeleg);
         g.getInventory().setBoots(orangeboot);
 
-        ItemStack wardenSword = new ItemStack(Material.STONE_SWORD);
+        ItemStack wardenSword = new ItemStack(Material.IRON_SWORD);
         wardenSword.addEnchantment(Enchantment.DAMAGE_ALL, 1);
         wardenSword.addEnchantment(Enchantment.DURABILITY, 1);
 
@@ -294,6 +361,28 @@ class TestCommand implements CommandExecutor {
     }
 }
 
+class accmute implements CommandExecutor {
+
+    // This method is called, when somebody uses our command
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        Bukkit.getPlayer(args[0]).getPersistentDataContainer().set(PrisonGame.muted, PersistentDataType.INTEGER, 1);
+        Bukkit.broadcastMessage(ChatColor.GREEN + args[0] + " was muted!!!! lmao laugh at this user!!");
+        return true;
+    }
+}
+
+class accunmute implements CommandExecutor {
+
+    // This method is called, when somebody uses our command
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        Bukkit.getPlayer(args[0]).getPersistentDataContainer().remove(PrisonGame.muted);
+        return true;
+    }
+}
+
+
 class Discordcmd implements CommandExecutor {
 
     // This method is called, when somebody uses our command
@@ -327,6 +416,32 @@ class shittonmoney implements CommandExecutor {
     }
 }
 
+class nomone implements CommandExecutor {
+
+    // This method is called, when somebody uses our command
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        Bukkit.getPlayer(args[0]).getPersistentDataContainer().set(PrisonGame.mny, PersistentDataType.DOUBLE ,0.0);
+        return true;
+    }
+}
+
+class gib implements CommandExecutor {
+
+    // This method is called, when somebody uses our command
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        Player p = (Player) sender;
+        if (Double.valueOf(args[1]) > 0) {
+            if (p.getPersistentDataContainer().get(PrisonGame.mny, PersistentDataType.DOUBLE) >= Double.valueOf(args[1])) {
+                Bukkit.getPlayer(args[0]).getPersistentDataContainer().set(PrisonGame.mny, PersistentDataType.DOUBLE, Bukkit.getPlayer(args[0]).getPersistentDataContainer().get(PrisonGame.mny, PersistentDataType.DOUBLE) + Double.valueOf(args[1]));
+                p.getPersistentDataContainer().set(PrisonGame.mny, PersistentDataType.DOUBLE, p.getPersistentDataContainer().get(PrisonGame.mny, PersistentDataType.DOUBLE) - Double.valueOf(args[1]));
+            }
+        }
+        return true;
+    }
+}
+
 class accpt implements CommandExecutor {
 
     // This method is called, when somebody uses our command
@@ -338,6 +453,9 @@ class accpt implements CommandExecutor {
         if (PrisonGame.askType.getOrDefault((Player) sender, 0) == 1) {
             PrisonGame.setGuard((Player) sender);
         }
+        if (PrisonGame.askType.getOrDefault((Player) sender, 0) == 3) {
+            PrisonGame.setSwat((Player) sender);
+        }
         PrisonGame.askType.put((Player) sender, 0);
         return true;
     }
@@ -348,18 +466,20 @@ class TeamChat implements CommandExecutor {
     // This method is called, when somebody uses our command
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        String msg = String.join(" ", args);
-        if (PrisonGame.type.get((Player) sender) == 0) {
-            for (Player p : Bukkit.getOnlinePlayers()) {
-                if (PrisonGame.type.get(p) == 0) {
-                    p.sendMessage(ChatColor.GRAY + "[" + ChatColor.GOLD + "PRISONER CHAT" + ChatColor.GRAY + "] " + ChatColor.WHITE + sender.getName() + ": " + msg);
+        if (!Bukkit.getPlayer(sender.getName()).getPersistentDataContainer().has(PrisonGame.muted, PersistentDataType.INTEGER)) {
+            String msg = String.join(" ", args);
+            if (PrisonGame.type.get((Player) sender) == 0) {
+                for (Player p : Bukkit.getOnlinePlayers()) {
+                    if (PrisonGame.type.get(p) == 0) {
+                        p.sendMessage(ChatColor.GRAY + "[" + ChatColor.GOLD + "PRISONER CHAT" + ChatColor.GRAY + "] " + ChatColor.WHITE + sender.getName() + ": " + msg);
+                    }
                 }
             }
-        }
-        if (PrisonGame.type.get((Player) sender) != 0) {
-            for (Player p : Bukkit.getOnlinePlayers()) {
-                if (PrisonGame.type.get(p) != 0) {
-                    p.sendMessage(ChatColor.GRAY + "[" + ChatColor.BLUE + "GUARD CHAT" + ChatColor.GRAY + "] " + ChatColor.WHITE + sender.getName() + ": " + msg);
+            if (PrisonGame.type.get((Player) sender) != 0) {
+                for (Player p : Bukkit.getOnlinePlayers()) {
+                    if (PrisonGame.type.get(p) != 0) {
+                        p.sendMessage(ChatColor.GRAY + "[" + ChatColor.BLUE + "GUARD CHAT" + ChatColor.GRAY + "] " + ChatColor.WHITE + sender.getName() + ": " + msg);
+                    }
                 }
             }
         }

@@ -6,7 +6,9 @@ public class FilteredWords {
             "niger",
             "nigga",
             "faggot",
-            "fagot"
+            "fagot",
+            "retard",
+            "cunt"
     };
 
     static String filtermsg(String msg) {

@@ -34,6 +34,7 @@ public class CommandKit implements CommandExecutor {
                     Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Warden").addPlayer(nw);
                     PrisonGame.type.put(nw, -1);
                     PrisonGame.warden = nw;
+                    PrisonGame.swat = false;
                     nw.teleport(PrisonGame.active.getWardenspawn());
                     nw.setCustomName(ChatColor.GRAY + "[" + ChatColor.RED + "WARDEN" + ChatColor.GRAY + "] " + ChatColor.WHITE + nw.getName());
                     nw.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.RED + "WARDEN" + ChatColor.GRAY + "] " + ChatColor.WHITE + nw.getName());
@@ -57,7 +58,7 @@ public class CommandKit implements CommandExecutor {
                     nw.getInventory().setLeggings(new ItemStack(Material.IRON_LEGGINGS));
                     nw.getInventory().setBoots(new ItemStack(Material.IRON_BOOTS));
 
-                    ItemStack wardenSword = new ItemStack(Material.IRON_SWORD);
+                    ItemStack wardenSword = new ItemStack(Material.DIAMOND_SWORD);
                     wardenSword.addEnchantment(Enchantment.DAMAGE_ALL, 1);
                     wardenSword.addEnchantment(Enchantment.DURABILITY, 2);
 
@@ -91,6 +92,21 @@ public class CommandKit implements CommandExecutor {
                     } else {
                         sender.sendMessage(ChatColor.BLUE + "We had troubles promoting this player.");
                     }
+                }
+            }
+            if (args[0].equals("swat")) {
+                if (PrisonGame.swat) {
+                    if (Bukkit.getPlayer(args[1]) != null) {
+                        Player g = Bukkit.getPlayer(args[1]);
+                        if (g.isOnline() && g != sender && PrisonGame.type.get(g) == 0) {
+                            PrisonGame.askType.put(g, 3);
+                            g.sendMessage(ChatColor.DARK_GRAY + "The wardens wants you to be a SWAT guard! use '/accept'");
+                        } else {
+                            sender.sendMessage(ChatColor.BLUE + "We had troubles promoting this player. If they're a guard/nurse, demote them, then promote them  to swat again!");
+                        }
+                    }
+                } else {
+                    sender.sendMessage(ChatColor.RED + "You don't have the 'SWAT GUARDS' upgrade! Buy it from the guard shop!");
                 }
             }
             if (args[0].equals("nurse")) {
@@ -165,6 +181,7 @@ public class CommandKit implements CommandExecutor {
                     p.sendMessage(ChatColor.DARK_GRAY + "-=-=-=-=-=-=-=-");
                     p.sendMessage(ChatColor.BLUE + "/warden help" + ChatColor.DARK_GRAY + " - " + ChatColor.WHITE + "Shows you this menu.");
                     p.sendMessage(ChatColor.BLUE + "/warden guard [name]" + ChatColor.DARK_GRAY + " - " + ChatColor.WHITE + "Makes another player a guard.");
+                    p.sendMessage(ChatColor.BLUE + "/warden swat [name]" + ChatColor.DARK_GRAY + " - " + ChatColor.WHITE + "Makes another player a SWAT guard." + ChatColor.RED + " [REQUIRES 'SWAT GUARDS' UPGRADE!]");
                     p.sendMessage(ChatColor.BLUE + "/warden target [name]" + ChatColor.DARK_GRAY + " - " + ChatColor.WHITE + "Turns a player in a target.");
                     p.sendMessage(ChatColor.BLUE + "/warden nurse [name]" + ChatColor.DARK_GRAY + " - " + ChatColor.WHITE + "Makes another player a nurse.");
                     p.sendMessage(ChatColor.BLUE + "/warden prefix [prefix]" + ChatColor.DARK_GRAY + " - " + ChatColor.WHITE + "Adds a prefix to your name.");

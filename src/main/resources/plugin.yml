@@ -13,6 +13,21 @@ commands:
     permission: penis.cock
     description: gives 1000 dollahs
     usage: /<command>
+  rstmoney:
+    permission: penis.cock
+    description: gives 0 dollahs
+    usage: /<command> <player>
+  amute:
+    permission: penis.mute
+    description: mute de playah
+    usage: /<command> <player>
+  pay:
+    description: gib de monah
+    usage: /<command> <player> <money>
+  aunmute:
+    permission: penis.unmute
+    description: unmute de playah
+    usage: /<command> <player>
   tc:
     aliases: teamchat
     description: Resign from your current position/Rejoin from prisoner.
