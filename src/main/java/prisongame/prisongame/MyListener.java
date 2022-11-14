@@ -198,8 +198,13 @@ public class MyListener implements Listener {
                     }
                 }
             }
-            if (PrisonGame.warden != event.getPlayer())
-                Bukkit.broadcastMessage(event.getPlayer().getPlayerListName() + ChatColor.GRAY + ": " + ChatColor.GRAY + ChatColor.GRAY + FilteredWords.filtermsg(event.getMessage()));
+            if (!event.getPlayer().getDisplayName().contains("SOLITARY")) {
+                if (PrisonGame.warden != event.getPlayer())
+                    Bukkit.broadcastMessage(event.getPlayer().getPlayerListName() + ChatColor.GRAY + ": " + ChatColor.GRAY + ChatColor.GRAY + FilteredWords.filtermsg(event.getMessage()));
+            } else {
+                if (PrisonGame.warden != event.getPlayer())
+                    Bukkit.broadcastMessage(event.getPlayer().getPlayerListName() + ChatColor.GRAY + ": " + ChatColor.DARK_GRAY + "*silenced by solitary*");
+            }
         } else {
             event.getPlayer().sendMessage(ChatColor.RED + "you're muted lol");
         }

@@ -131,17 +131,20 @@ public class CommandKit implements CommandExecutor {
                     Player g = Bukkit.getPlayer(args[1]);
                     if (g.isOnline() && g != sender && PrisonGame.type.get(g) == 0) {
                         if (g.getGameMode() == GameMode.SPECTATOR) {
-                            Bukkit.broadcastMessage(ChatColor.GOLD + g.getName() + " was send to solitary!");
+                            Bukkit.broadcastMessage(ChatColor.GRAY + g.getName() + " was sent to solitary!");
                             g.setGameMode(GameMode.ADVENTURE);
-                            g.removePotionEffect(PotionEffectType.WEAKNESS);
+                            g.removePotionEffect(PotionEffectType.LUCK);
                             PrisonGame.escaped.put(g, true);
-                            g.teleport(PrisonGame.active.getSolit());
+                            Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
+                                        g.teleport(PrisonGame.active.getSolit());
+                                        }, 3);
                             g.sendTitle("", "You're in solitary.", 10, 0, 10);
                             g.addPotionEffect(PotionEffectType.SLOW.createEffect(Integer.MAX_VALUE, 1));
-                            Player p = g
-                            p.setCustomName(ChatColor.GRAY + "[" + ChatColor.GRAY + "SOLITARY" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY + p.getName());
-                            p.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.GRAY + "SOLITARY" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY + p.getName());
-                            p.setDisplayName(ChatColor.GRAY + "[" + ChatColor.GRAY + "SOLITARY" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY + p.getName());
+
+                            Player p = g;
+                            p.setCustomName(ChatColor.GRAY + "[" + ChatColor.BLACK + "SOLITARY" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY + p.getName());
+                            p.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.BLACK + "SOLITARY" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY + p.getName());
+                            p.setDisplayName(ChatColor.GRAY + "[" + ChatColor.BLACK + "SOLITARY" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY + p.getName());
 
 
                             if (p.getName().equals("agmass")) {
