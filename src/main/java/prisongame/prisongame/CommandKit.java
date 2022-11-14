@@ -140,7 +140,6 @@ public class CommandKit implements CommandExecutor {
                                         }, 3);
                             g.sendTitle("", "You're in solitary.", 10, 0, 10);
                             g.addPotionEffect(PotionEffectType.SLOW.createEffect(Integer.MAX_VALUE, 1));
-
                             Player p = g;
                             p.setCustomName(ChatColor.GRAY + "[" + ChatColor.BLACK + "SOLITARY" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY + p.getName());
                             p.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.BLACK + "SOLITARY" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY + p.getName());

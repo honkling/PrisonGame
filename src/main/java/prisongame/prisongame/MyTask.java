@@ -21,6 +21,9 @@ public class MyTask extends BukkitRunnable {
     static Integer jobm = 1;
     static Boolean hasAlerted = true;
 
+    static Integer timer1;
+    static Integer timer2;
+
     static BossBar bossbar = Bukkit.createBossBar(
             ChatColor.WHITE + "Morning",
             BarColor.WHITE,
@@ -30,6 +33,8 @@ public class MyTask extends BukkitRunnable {
     public void run(){
         PrisonGame.swapcool -= 1;
         if (Bukkit.getWorld("world").getTime() > 0 && Bukkit.getWorld("world").getTime() < 2500) {
+            timer1 = 0;
+            timer1 = 2500;
             bossbar.setTitle("ROLL CALL");
             hasAlerted = false;
             for (Player p : Bukkit.getOnlinePlayers()) {
@@ -98,24 +103,34 @@ public class MyTask extends BukkitRunnable {
             hasAlerted = true;
         }
         if (Bukkit.getWorld("world").getTime() > 2500 && Bukkit.getWorld("world").getTime() < 3000) {
+            timer1 = 2500;
+            timer1 = 3000;
             bossbar.setTitle("Breakfast (Hunger Regen)");
             for (Player p :Bukkit.getOnlinePlayers()) {
                 p.addPotionEffect(PotionEffectType.SATURATION.createEffect(120, 0));
             }
         }
         if (Bukkit.getWorld("world").getTime() > 3000 && Bukkit.getWorld("world").getTime() < 6000) {
+            timer1 = 3000;
+            timer1 = 6000;
             bossbar.setTitle("Free Time");
             jobm = 1;
         }
         if (Bukkit.getWorld("world").getTime() > 6000 && Bukkit.getWorld("world").getTime() < 10000) {
+            timer1 = 6000;
+            timer1 = 10000;
             bossbar.setTitle("Job Time");
             jobm = 2;
         }
         if (Bukkit.getWorld("world").getTime() > 10000 && Bukkit.getWorld("world").getTime() < 13000) {
+            timer1 = 10000;
+            timer1 = 13000;
             bossbar.setTitle("Cell Time");
             jobm = 1;
         }
         if (Bukkit.getWorld("world").getTime() > 13000 && Bukkit.getWorld("world").getTime() < 24000) {
+            timer1 = 13000;
+            timer1 = 24000;
             bossbar.setTitle("LIGHTS OUT");
             for (Player p : Bukkit.getOnlinePlayers()) {
                 if (PrisonGame.type.get(p) == 0 && !PrisonGame.escaped.get(p)) {
@@ -159,6 +174,14 @@ public class MyTask extends BukkitRunnable {
             bossbar.setColor(BarColor.WHITE);
             bossbar.removeFlag(BarFlag.DARKEN_SKY);
             bossbar.removeFlag(BarFlag.CREATE_FOG);
+        }
+        bossbar.setProgress((Bukkit.getWorld("world").getTime() - timer1) / (timer2 - timer1));
+        if (Bukkit.getWorld("world").getTime() == timer2) {
+            for (Player p :Bukkit.getOnlinePlayers()) {
+                p.playSound(p, Sound.BLOCK_BELL_USE, 1, 1);
+                Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> { p.playSound(p, Sound.BLOCK_BELL_USE, 1, 1);}, 4);
+                Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> { p.playSound(p, Sound.BLOCK_BELL_USE, 1, 1);}, 8);
+            }
         }
         for (Player p :Bukkit.getOnlinePlayers()) {
             if (p.getLocation().getY() < 118 && p.getWorld().getName().equals("endprison")) {
