@@ -42,13 +42,17 @@ public class Prison {
         for (Integer x = 1; x <= 3; x++) {
             Bukkit.getWorld("world").getBlockAt(x, -58, -1008).setType(Material.MUD_BRICKS);
         }
-        for (Integer x = this.getCafedoor1().getBlockX(); x <= this.getCafedoor2().getBlockX(); x++) {
-            for (Integer y = this.getCafedoor1().getBlockY(); y <= this.getCafedoor2().getBlockY(); y++) {
-                for (Integer z = this.getCafedoor1().getBlockZ(); z <= this.getCafedoor2().getBlockZ(); z++) {
+        for (Integer x = cfd1.getBlockX(); x <= cfd2.getBlockX(); x++) {
+            for (Integer y = cfd1.getBlockY(); y <= cfd2.getBlockY(); y++) {
+                for (Integer z = cfd1.getBlockZ(); z <= cfd2.getBlockZ(); z++) {
                     Bukkit.getWorld("world").getBlockAt(x, y, z).setType(Material.MUD_BRICKS);
                 }
             }
         }
+    }
+
+    public String getName() {
+        return name;
     }
 
     public Location getCafedoor1() {

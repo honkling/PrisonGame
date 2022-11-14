@@ -203,6 +203,7 @@ public class CommandKit implements CommandExecutor {
                     p.sendMessage(ChatColor.DARK_GRAY + "-=-=-=-=-=-=-=-");
                     p.sendMessage(ChatColor.BLUE + "/warden help" + ChatColor.DARK_GRAY + " - " + ChatColor.WHITE + "Shows you this menu.");
                     p.sendMessage(ChatColor.BLUE + "/warden guard [name]" + ChatColor.DARK_GRAY + " - " + ChatColor.WHITE + "Makes another player a guard.");
+                    p.sendMessage(ChatColor.BLUE + "/warden solitary [name]" + ChatColor.DARK_GRAY + " - " + ChatColor.WHITE + "Sends a player to solitary, later to torture them. " + ChatColor.RED + "[PLAYER MUST BE DEAD]");
                     p.sendMessage(ChatColor.BLUE + "/warden swat [name]" + ChatColor.DARK_GRAY + " - " + ChatColor.WHITE + "Makes another player a SWAT guard." + ChatColor.RED + " [REQUIRES 'SWAT GUARDS' UPGRADE!]");
                     p.sendMessage(ChatColor.BLUE + "/warden target [name]" + ChatColor.DARK_GRAY + " - " + ChatColor.WHITE + "Turns a player in a target.");
                     p.sendMessage(ChatColor.BLUE + "/warden nurse [name]" + ChatColor.DARK_GRAY + " - " + ChatColor.WHITE + "Makes another player a nurse.");

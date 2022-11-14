@@ -34,7 +34,7 @@ public class MyTask extends BukkitRunnable {
         PrisonGame.swapcool -= 1;
         if (Bukkit.getWorld("world").getTime() > 0 && Bukkit.getWorld("world").getTime() < 2500) {
             timer1 = 0;
-            timer1 = 2500;
+            timer2 = 2500;
             bossbar.setTitle("ROLL CALL");
             hasAlerted = false;
             for (Player p : Bukkit.getOnlinePlayers()) {
@@ -69,6 +69,7 @@ public class MyTask extends BukkitRunnable {
                             p.sendMessage(ChatColor.GREEN + "You came to roll call!");
                             p.playSound(p, Sound.BLOCK_NOTE_BLOCK_BIT, 1, 1);
                         }
+                        Bukkit.getWorld("world").setTime(Bukkit.getWorld("world").getTime() + 1);
                         p.addPotionEffect(PotionEffectType.SLOW.createEffect(10, 255));
                         if (p.isOnGround())
                             p.addPotionEffect(PotionEffectType.JUMP.createEffect(20, -25));
@@ -87,24 +88,24 @@ public class MyTask extends BukkitRunnable {
                 p.removePotionEffect(PotionEffectType.JUMP);
             }
         }
-        if (Bukkit.getWorld("world").getTime() == 2500 && !hasAlerted) {
-            for (Player p : Bukkit.getOnlinePlayers()) {
-                if (p.hasPotionEffect(PotionEffectType.GLOWING) && !PrisonGame.escaped.get(p)) {
-                    Bukkit.broadcastMessage(ChatColor.RED + p.getName() + ChatColor.GOLD + " didn't come to roll call! " + ChatColor.RED + "Kill them for 100 dollars!");
-                    p.sendTitle("", ChatColor.RED + "COME TO ROLL CALL NEXT TIME!", 0, 60, 0);
-                    p.playSound(p, Sound.ENTITY_SILVERFISH_AMBIENT, 1, 0.25f);
-                }
-                DecimalFormat numberFormat = new DecimalFormat("#.00");
-                p.sendMessage(ChatColor.GREEN + numberFormat.format(p.getPersistentDataContainer().get(PrisonGame.mny,  PersistentDataType.DOUBLE) * 0.1) + "$ was taxed towards the prison.");
-                p.getPersistentDataContainer().set(PrisonGame.mny, PersistentDataType.DOUBLE, p.getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0) * 0.9);
-                PrisonGame.warden.getPersistentDataContainer().set(PrisonGame.mny, PersistentDataType.DOUBLE, PrisonGame.warden.getPersistentDataContainer().get(PrisonGame.mny, PersistentDataType.DOUBLE) + p.getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0) * 0.1);
-            }
-            PrisonGame.warden.sendMessage(ChatColor.GREEN + "You were given your taxes!");
-            hasAlerted = true;
-        }
         if (Bukkit.getWorld("world").getTime() > 2500 && Bukkit.getWorld("world").getTime() < 3000) {
+            if (!hasAlerted) {
+                for (Player p : Bukkit.getOnlinePlayers()) {
+                    if (p.hasPotionEffect(PotionEffectType.GLOWING) && !PrisonGame.escaped.get(p)) {
+                        Bukkit.broadcastMessage(ChatColor.RED + p.getName() + ChatColor.GOLD + " didn't come to roll call! " + ChatColor.RED + "Kill them for 100 dollars!");
+                        p.sendTitle("", ChatColor.RED + "COME TO ROLL CALL NEXT TIME!", 0, 60, 0);
+                        p.playSound(p, Sound.ENTITY_SILVERFISH_AMBIENT, 1, 0.25f);
+                    }
+                    DecimalFormat numberFormat = new DecimalFormat("#.00");
+                    p.sendMessage(ChatColor.GREEN + numberFormat.format(p.getPersistentDataContainer().get(PrisonGame.mny,  PersistentDataType.DOUBLE) * 0.1) + "$ was taxed towards the prison.");
+                    p.getPersistentDataContainer().set(PrisonGame.mny, PersistentDataType.DOUBLE, p.getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0) * 0.9);
+                    PrisonGame.warden.getPersistentDataContainer().set(PrisonGame.mny, PersistentDataType.DOUBLE, PrisonGame.warden.getPersistentDataContainer().get(PrisonGame.mny, PersistentDataType.DOUBLE) + p.getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0) * 0.1);
+                }
+                PrisonGame.warden.sendMessage(ChatColor.GREEN + "You were given your taxes!");
+                hasAlerted = true;
+            }
             timer1 = 2500;
-            timer1 = 3000;
+            timer2 = 3000;
             bossbar.setTitle("Breakfast (Hunger Regen)");
             for (Player p :Bukkit.getOnlinePlayers()) {
                 p.addPotionEffect(PotionEffectType.SATURATION.createEffect(120, 0));
@@ -112,25 +113,28 @@ public class MyTask extends BukkitRunnable {
         }
         if (Bukkit.getWorld("world").getTime() > 3000 && Bukkit.getWorld("world").getTime() < 6000) {
             timer1 = 3000;
-            timer1 = 6000;
+            timer2 = 6000;
             bossbar.setTitle("Free Time");
             jobm = 1;
         }
         if (Bukkit.getWorld("world").getTime() > 6000 && Bukkit.getWorld("world").getTime() < 10000) {
             timer1 = 6000;
-            timer1 = 10000;
+            timer2 = 10000;
             bossbar.setTitle("Job Time");
             jobm = 2;
         }
         if (Bukkit.getWorld("world").getTime() > 10000 && Bukkit.getWorld("world").getTime() < 13000) {
             timer1 = 10000;
-            timer1 = 13000;
+            timer2 = 13000;
             bossbar.setTitle("Cell Time");
             jobm = 1;
         }
+        if (Bukkit.getWorld("world").getTime() > 23800 ) {
+            Bukkit.getWorld("world").setTime(Bukkit.getWorld("world").getTime() + 20);
+        }
         if (Bukkit.getWorld("world").getTime() > 13000 && Bukkit.getWorld("world").getTime() < 24000) {
             timer1 = 13000;
-            timer1 = 24000;
+            timer2 = 24000;
             bossbar.setTitle("LIGHTS OUT");
             for (Player p : Bukkit.getOnlinePlayers()) {
                 if (PrisonGame.type.get(p) == 0 && !PrisonGame.escaped.get(p)) {
@@ -142,6 +146,7 @@ public class MyTask extends BukkitRunnable {
                             p.addPotionEffect(PotionEffectType.GLOWING.createEffect(20 * 30, 0));
                             Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Criminals").addPlayer(p);
                         } else {
+                            Bukkit.getWorld("world").setTime(Bukkit.getWorld("world").getTime() + 2);
                             if (PrisonGame.type.get(p) == 0 && Bukkit.getScoreboardManager().getMainScoreboard().getPlayerTeam(p) == Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Criminals")) {
                                 Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Prisoners").addPlayer(p);
                             }
@@ -156,6 +161,7 @@ public class MyTask extends BukkitRunnable {
                             p.addPotionEffect(PotionEffectType.GLOWING.createEffect(20 * 30, 0));
                             Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Criminals").addPlayer(p);
                         } else {
+                            Bukkit.getWorld("world").setTime(Bukkit.getWorld("world").getTime() + 2);
                             if (PrisonGame.type.get(p) == 0 && Bukkit.getScoreboardManager().getMainScoreboard().getPlayerTeam(p) == Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Criminals")) {
                                 Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Prisoners").addPlayer(p);
                             }
@@ -175,7 +181,7 @@ public class MyTask extends BukkitRunnable {
             bossbar.removeFlag(BarFlag.DARKEN_SKY);
             bossbar.removeFlag(BarFlag.CREATE_FOG);
         }
-        bossbar.setProgress((Bukkit.getWorld("world").getTime() - timer1) / (timer2 - timer1));
+        bossbar.setProgress(((float) Bukkit.getWorld("world").getTime() - (float) timer1) / ((float) timer2 - (float) timer1));
         if (Bukkit.getWorld("world").getTime() == timer2) {
             for (Player p :Bukkit.getOnlinePlayers()) {
                 p.playSound(p, Sound.BLOCK_BELL_USE, 1, 1);
@@ -184,6 +190,9 @@ public class MyTask extends BukkitRunnable {
             }
         }
         for (Player p :Bukkit.getOnlinePlayers()) {
+            if (p.getLocation().getBlockY() == -60 && PrisonGame.active.getName().equals("Train")) {
+                p.damage(999);
+            }
             if (p.getLocation().getY() < 118 && p.getWorld().getName().equals("endprison")) {
                 p.damage(999);
             }
@@ -262,15 +271,15 @@ public class MyTask extends BukkitRunnable {
                     }
                     switch (PrisonGame.type.get(p)) {
                         case 0:
-                            p.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GREEN + numberFormat.format(p.getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0))+ "$" + ChatColor.GRAY + " || " + ChatColor.GOLD + "PRISONER" + ChatColor.GRAY + " || Current Warden: " + ChatColor.DARK_RED + PrisonGame.warden.getName()));
+                            p.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GREEN + numberFormat.format(p.getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0))+ "$" + ChatColor.GRAY + " || " + ChatColor.GOLD + "PRISONER" + ChatColor.GRAY + " || Current Warden: " + ChatColor.DARK_RED + PrisonGame.warden.getName() + ChatColor.RED + " (" + Math.round(PrisonGame.warden.getHealth()) + " HP)"));
                             break;
                         case 1:
-                            p.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GREEN + numberFormat.format(p.getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0)) + "$" + ChatColor.GRAY + " || " + ChatColor.BLUE  + "GUARD" + ChatColor.GRAY +  " (/resign to resign)" + ChatColor.GRAY + " || Current Warden: " + ChatColor.DARK_RED + PrisonGame.warden.getName()));
+                            p.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GREEN + numberFormat.format(p.getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0)) + "$" + ChatColor.GRAY + " || " + ChatColor.BLUE  + "GUARD" + ChatColor.GRAY +  " (/resign to resign)" + ChatColor.GRAY + " || Current Warden: " + ChatColor.DARK_RED + PrisonGame.warden.getName() + ChatColor.RED + " (" + Math.round(PrisonGame.warden.getHealth()) + " HP)"));
                             break;
                         case 3:
-                            p.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GREEN + numberFormat.format(p.getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0)) + "$" + ChatColor.GRAY + " || " + ChatColor.DARK_GRAY  + "SWAT" + ChatColor.GRAY +  " (/resign to resign)" + ChatColor.GRAY + " || Current Warden: " + ChatColor.DARK_RED + PrisonGame.warden.getName()));
+                            p.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GREEN + numberFormat.format(p.getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0)) + "$" + ChatColor.GRAY + " || " + ChatColor.DARK_GRAY  + "SWAT" + ChatColor.GRAY +  " (/resign to resign)" + ChatColor.GRAY + " || Current Warden: " + ChatColor.DARK_RED + PrisonGame.warden.getName() + ChatColor.RED + " (" + Math.round(PrisonGame.warden.getHealth()) + " HP)"));
                             break;
-                        case 2: p.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GREEN + numberFormat.format(p.getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0)) + "$" + ChatColor.GRAY + " || " + ChatColor.LIGHT_PURPLE  + "NURSE" + ChatColor.GRAY +  " (/resign to resign)" + ChatColor.GRAY + " || Current Warden: " + ChatColor.DARK_RED + PrisonGame.warden.getName()));
+                        case 2: p.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GREEN + numberFormat.format(p.getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0)) + "$" + ChatColor.GRAY + " || " + ChatColor.LIGHT_PURPLE  + "NURSE" + ChatColor.GRAY +  " (/resign to resign)" + ChatColor.GRAY + " || Current Warden: " + ChatColor.DARK_RED + PrisonGame.warden.getName() + ChatColor.RED + " (" + Math.round(PrisonGame.warden.getHealth()) + " HP)"));
                     }
                 } else {
                     p.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GREEN + numberFormat.format(p.getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0)) + "$" + ChatColor.GRAY + " || " + ChatColor.GRAY + "Current Warden: " + ChatColor.GREEN + "You! Use '/warden help' to see warden commands!"));
