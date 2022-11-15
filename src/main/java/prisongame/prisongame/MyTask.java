@@ -69,7 +69,6 @@ public class MyTask extends BukkitRunnable {
                             p.sendMessage(ChatColor.GREEN + "You came to roll call!");
                             p.playSound(p, Sound.BLOCK_NOTE_BLOCK_BIT, 1, 1);
                         }
-                        Bukkit.getWorld("world").setTime(Bukkit.getWorld("world").getTime() + 1);
                         p.addPotionEffect(PotionEffectType.SLOW.createEffect(10, 255));
                         if (p.isOnGround())
                             p.addPotionEffect(PotionEffectType.JUMP.createEffect(20, -25));
@@ -88,8 +87,9 @@ public class MyTask extends BukkitRunnable {
                 p.removePotionEffect(PotionEffectType.JUMP);
             }
         }
-        if (Bukkit.getWorld("world").getTime() > 2500 && Bukkit.getWorld("world").getTime() < 3000) {
+        if (Bukkit.getWorld("world").getTime() == 2500) {
             if (!hasAlerted) {
+                hasAlerted = true;
                 for (Player p : Bukkit.getOnlinePlayers()) {
                     if (p.hasPotionEffect(PotionEffectType.GLOWING) && !PrisonGame.escaped.get(p)) {
                         Bukkit.broadcastMessage(ChatColor.RED + p.getName() + ChatColor.GOLD + " didn't come to roll call! " + ChatColor.RED + "Kill them for 100 dollars!");
@@ -102,8 +102,9 @@ public class MyTask extends BukkitRunnable {
                     PrisonGame.warden.getPersistentDataContainer().set(PrisonGame.mny, PersistentDataType.DOUBLE, PrisonGame.warden.getPersistentDataContainer().get(PrisonGame.mny, PersistentDataType.DOUBLE) + p.getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0) * 0.1);
                 }
                 PrisonGame.warden.sendMessage(ChatColor.GREEN + "You were given your taxes!");
-                hasAlerted = true;
             }
+        }
+        if (Bukkit.getWorld("world").getTime() > 2500 && Bukkit.getWorld("world").getTime() < 3000) {
             timer1 = 2500;
             timer2 = 3000;
             bossbar.setTitle("Breakfast (Hunger Regen)");

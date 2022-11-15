@@ -353,13 +353,15 @@ class TestCommand implements CommandExecutor {
     // This method is called, when somebody uses our command
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (PrisonGame.warden != null) {
-            if (PrisonGame.warden.equals(sender)) {
-                PrisonGame.warden = null;
+        if (!((Player) sender).getDisplayName().contains("SOLITARY")) {
+            if (PrisonGame.warden != null) {
+                if (PrisonGame.warden.equals(sender)) {
+                    PrisonGame.warden = null;
+                }
             }
+            PrisonGame.type.put((Player) sender, 0);
+            MyListener.playerJoin((Player) sender, false);
         }
-        PrisonGame.type.put((Player) sender, 0);
-        MyListener.playerJoin((Player) sender, false);
         return true;
     }
 }
