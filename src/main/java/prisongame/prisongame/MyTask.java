@@ -53,11 +53,13 @@ public class MyTask extends BukkitRunnable {
                     PrisonGame.escaped.put(p, false);
                 }
                 if (PrisonGame.type.get(p) == 0 && !PrisonGame.escaped.get(p)) {
+                    Boolean allat = true;
                     if (!new Location(p.getWorld(), p.getLocation().getX(), p.getLocation().getY() - 1, p.getLocation().getZ()).getBlock().getType().equals(Material.RED_SAND))
                     {
                         p.sendTitle("", ChatColor.RED + "GET ONTO THE YARD'S RED SAND OR YOU'LL BE KILLED!", 0, 5, 0);
                         p.addPotionEffect(PotionEffectType.HUNGER.createEffect(200, 0));
                         p.setCollidable(true);
+                        allat = false;
                         p.addPotionEffect(PotionEffectType.GLOWING.createEffect(20 * 30, 0));
                         p.removePotionEffect(PotionEffectType.JUMP);
                         Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Criminals").addPlayer(p);
@@ -78,6 +80,10 @@ public class MyTask extends BukkitRunnable {
                         p.removePotionEffect(PotionEffectType.HUNGER);
                         p.removePotionEffect(PotionEffectType.GLOWING);
 
+                    }
+                    if (allat) {
+                        PrisonGame.warden.sendTitle("",  ChatColor.GREEN + "All prisoner at roll call! +0.05$!");
+                        PrisonGame.warden.getPersistentDataContainer().set(PrisonGame.mny, PersistentDataType.DOUBLE, PrisonGame.warden.getPersistentDataContainer().get(PrisonGame.mny, PersistentDataType.DOUBLE) + 0.05);
                     }
                 }
             }
@@ -185,6 +191,7 @@ public class MyTask extends BukkitRunnable {
         bossbar.setProgress(((float) Bukkit.getWorld("world").getTime() - (float) timer1) / ((float) timer2 - (float) timer1));
         if (Bukkit.getWorld("world").getTime() == timer2) {
             for (Player p :Bukkit.getOnlinePlayers()) {
+                p.sendTitle("", "", 20, 40, 20);
                 p.playSound(p, Sound.BLOCK_BELL_USE, 1, 1);
                 Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> { p.playSound(p, Sound.BLOCK_BELL_USE, 1, 1);}, 4);
                 Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> { p.playSound(p, Sound.BLOCK_BELL_USE, 1, 1);}, 8);

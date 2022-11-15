@@ -621,6 +621,7 @@ public class MyListener implements Listener {
                     }
                 }
                 if (sign.getLine(2).equals("Lumberjack")) {
+                    event.getPlayer().playSound(event.getPlayer(), Sound.BLOCK_NOTE_BLOCK_BASS, 1, 1);
                     ItemStack card = new ItemStack(Material.WOODEN_AXE);
                     ItemMeta cardm = card.getItemMeta();
                     cardm.setDisplayName(ChatColor.GOLD + "Lumber's Axe");
@@ -629,6 +630,7 @@ public class MyListener implements Listener {
                     event.getPlayer().sendMessage(ChatColor.GOLD + "Go cut down the spruce logs in the Lumberjack Station.");
                 }
                 if (sign.getLine(2).equals("Plumber")) {
+                    event.getPlayer().playSound(event.getPlayer(), Sound.BLOCK_NOTE_BLOCK_BASEDRUM, 1, 1);
                     ItemStack card = new ItemStack(Material.CARROT_ON_A_STICK);
                     ItemMeta cardm = card.getItemMeta();
                     cardm.setDisplayName(ChatColor.LIGHT_PURPLE + "Plumber");
@@ -637,6 +639,7 @@ public class MyListener implements Listener {
                     event.getPlayer().sendMessage(ChatColor.BLUE + "Click on iron trapdoors with the plumber.");
                 }
                 if (sign.getLine(2).equals("Bounty Hunter")) {
+                    event.getPlayer().playSound(event.getPlayer(), Sound.BLOCK_NOTE_BLOCK_BANJO, 1, 1);
                     ItemStack card = new ItemStack(Material.WOODEN_SWORD);
                     ItemMeta cardm = card.getItemMeta();
                     cardm.setDisplayName(ChatColor.RED + "Bounty Hunter's Knife");
@@ -649,11 +652,13 @@ public class MyListener implements Listener {
                 org.bukkit.block.Sign sign = (org.bukkit.block.Sign) event.getClickedBlock().getState();
                 if (sign.getLine(1).equals("Leave Market")) {
                     event.getPlayer().teleport(PrisonGame.active.getBmout());
+                    event.getPlayer().playSound(event.getPlayer(), Sound.ENTITY_ENDER_PEARL_THROW, 1, 1);
                     event.getPlayer().addPotionEffect(PotionEffectType.GLOWING.createEffect(20 * 3, 0));
                 }
                 if (sign.getLine(1).equals("Get Gear")) {
                     if (PrisonGame.type.get(event.getPlayer()) == 0 && !PrisonGame.escaped.get(event.getPlayer())) {
                         Player g = event.getPlayer();
+                        g.playSound(event.getPlayer(), Sound.EVENT_RAID_HORN, 1, 1);
                         PrisonGame.escaped.put(event.getPlayer(), true);
                         Bukkit.broadcastMessage(ChatColor.RED + g.getName() + " escaped...");
                         event.getPlayer().addPotionEffect(PotionEffectType.GLOWING.createEffect(999999999, 0));
@@ -708,6 +713,7 @@ public class MyListener implements Listener {
                 if (!event.getPlayer().hasCooldown(Material.STRUCTURE_VOID)) {
                     if (event.getItem().getType().equals(Material.STRUCTURE_VOID)) {
                         event.getPlayer().setCooldown(Material.STRUCTURE_VOID, 20 * 600);
+                        event.getPlayer().playSound(event.getPlayer(), Sound.ENTITY_ELDER_GUARDIAN_AMBIENT, 1, 1);
                         Bukkit.getWorld("world").setTime(13000);
                     }
                 }
@@ -715,6 +721,7 @@ public class MyListener implements Listener {
             if (event.getClickedBlock().getType().equals(Material.IRON_TRAPDOOR)) {
                 if (event.getItem() != null) {
                     if (!event.getPlayer().hasCooldown(Material.CARROT_ON_A_STICK)) {
+                        event.getPlayer().playSound(event.getPlayer(), Sound.BLOCK_NOTE_BLOCK_BELL, 0.75f, 1.75f);
                         event.getPlayer().getPersistentDataContainer().set(PrisonGame.mny, PersistentDataType.DOUBLE ,event.getPlayer().getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0)+ 0.5 * MyTask.jobm);
                     }
                 }
@@ -724,6 +731,7 @@ public class MyListener implements Listener {
                     if (event.getItem().getType().equals(Material.WOODEN_AXE)) {
                         if (!event.getPlayer().hasCooldown(Material.WOODEN_AXE)) {
                             event.getPlayer().setCooldown(Material.WOODEN_AXE, 10);
+                            event.getPlayer().playSound(event.getPlayer(), Sound.BLOCK_WOOD_BREAK, 1, 1);
                             event.getPlayer().getPersistentDataContainer().set(PrisonGame.mny, PersistentDataType.DOUBLE ,event.getPlayer().getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0)+ 2.0 * MyTask.jobm);
                         }
                     }
@@ -733,6 +741,7 @@ public class MyListener implements Listener {
                 if (PrisonGame.type.get(event.getPlayer()) != 1 && PrisonGame.type.get(event.getPlayer()) != 2 && PrisonGame.type.get(event.getPlayer()) != 3) {
                     event.getPlayer().teleport(PrisonGame.active.getBm());
                     event.getPlayer().sendTitle("", ChatColor.GRAY + "-= Black Market =-");
+                    event.getPlayer().playSound(event.getPlayer(), Sound.AMBIENT_CAVE, 1, 1);
                 }
             }
             if (event.getClickedBlock().getType().equals(Material.JUNGLE_DOOR)) {
@@ -783,11 +792,13 @@ public class MyListener implements Listener {
                         if (event.getItem().getItemMeta().getDisplayName().equals(ChatColor.BLUE + "Keycard " + ChatColor.RED + "[CONTRABAND]")) {
                             event.setCancelled(true);
                             if (!openable.isOpen()) {
+                                event.getPlayer().playSound(event.getPlayer(), Sound.BLOCK_IRON_DOOR_OPEN, 1, 1);
                                 openable.setOpen(true);
                                 state.setBlockData(openable);
                                 state.update();
                             } else {
                                 openable.setOpen(false);
+                                event.getPlayer().playSound(event.getPlayer(), Sound.BLOCK_IRON_DOOR_CLOSE, 1, 1);
                                 state.setBlockData(openable);
                                 state.update();
 
