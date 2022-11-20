@@ -1,6 +1,7 @@
 package prisongame.prisongame;
 
 import org.bukkit.*;
+import org.bukkit.block.Sign;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -16,8 +17,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Team;
 
+import java.io.Console;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -29,20 +32,33 @@ public final class PrisonGame extends JavaPlugin {
     static HashMap<Player, Boolean> escaped = new HashMap<>();
     static HashMap<Player, Integer> type = new HashMap<>();
     static HashMap<Player, Integer> askType = new HashMap<>();
+    static HashMap<Player, Integer> lastward = new HashMap<>();
+    static HashMap<Player, Integer> lastward2 = new HashMap<>();
+    static HashMap<Player, Integer> wardenban = new HashMap<>();
     static Prison gaeae;
     static Prison hyper;
     static Prison endmap;
     static Prison train;
+    static Prison gladiator;
+    static Prison island;
+    static Prison santa;
+    static Prison volcano;
     static Prison active = null;
     static NamespacedKey nightvis;
+    static NamespacedKey rank;
     static Integer swapcool = 0;
+    static Integer lockdowncool = 0;
     static NamespacedKey whiff;
+    static Boolean wardenenabled = false;
 
     static NamespacedKey mny;
     static NamespacedKey muted;
 
     static LivingEntity bertrude;
-
+    static LivingEntity guardsh;
+    static Villager bmsh1;
+    static Villager bmsh2;
+    static Villager shop;
     static Boolean swat = false;
 
     @Override
@@ -54,6 +70,7 @@ public final class PrisonGame extends JavaPlugin {
         mny = new NamespacedKey(PrisonGame.getPlugin(PrisonGame.class), "money");
         whiff = new NamespacedKey(PrisonGame.getPlugin(PrisonGame.class), "whiff");
         muted = new NamespacedKey(PrisonGame.getPlugin(PrisonGame.class), "mutedd");
+        Bukkit.broadcastMessage("RELOAD: Loaded NameSpacedKeys");
         this.getCommand("warden").setExecutor(new CommandKit());
         this.getCommand("resign").setExecutor(new TestCommand());
         this.getCommand("hello").setExecutor(new hello());
@@ -61,11 +78,38 @@ public final class PrisonGame extends JavaPlugin {
         this.getCommand("disc").setExecutor(new Discordcmd());
         this.getCommand("accept").setExecutor(new accpt());
         this.getCommand("nerdcheatcommand").setExecutor(new shittonmoney());
+        //this.getCommand("bragrightpackage").setExecutor(new bragright());
         this.getCommand("rstmoney").setExecutor(new nomone());
         this.getCommand("amute").setExecutor(new accmute());
         this.getCommand("aunmute").setExecutor(new accunmute());
         this.getCommand("pay").setExecutor(new gib());
+        this.getCommand("safereload").setExecutor(new sfreload());
 
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            p.sendMessage("RELOAD: Loaded Commands");
+            p.setGameMode(GameMode.ADVENTURE);
+            if (p.getDisplayName().contains("GUARD")) {
+                PrisonGame.type.put(p, 1);
+                p.sendMessage("RELOAD: Restored Guards");
+            }
+            if (p.getDisplayName().contains("NURSE")) {
+                PrisonGame.type.put(p, 2);
+                p.sendMessage("RELOAD: Restored Nurses");
+            }
+            if (p.getDisplayName().contains("SWAT")) {
+                PrisonGame.type.put(p, 3);
+                p.sendMessage("RELOAD: Restored SWATs");
+            }
+            if (p.getDisplayName().contains("CRIMINAL")) {
+                PrisonGame.escaped.put(p, true);
+                p.addPotionEffect(PotionEffectType.GLOWING.createEffect(99999, 255));
+                p.sendMessage("RELOAD: Restored Criminals");
+            }
+            if (p.getDisplayName().contains("PRISONER")) {
+                PrisonGame.type.put(p, 0);
+                p.sendMessage("RELOAD: Restored Prisoner");
+            }
+        }
 
         NamespacedKey key = new NamespacedKey(this, "cobble");
 
@@ -80,40 +124,118 @@ public final class PrisonGame extends JavaPlugin {
         recipe.addIngredient(Material.STONE_BUTTON);
         recipe.addIngredient(Material.STONE_BUTTON);
 
+        Bukkit.broadcastMessage("RELOAD: Loaded Recipes");
+        Bukkit.broadcastMessage("RELOAD: Safewaiting For Worlds");
+
         Bukkit.addRecipe(recipe);
-        for (Player p : Bukkit.getOnlinePlayers()) {
-            p.sendTitle(ChatColor.RED + "LOADING...", "this may take a bit.", 0, 80, 0);
-            p.addPotionEffect(PotionEffectType.DARKNESS.createEffect(80, 255));
-        }
         Bukkit.getScheduler().runTaskLater(getPlugin(this.getClass()), () -> {
             // code
+
             for (Entity e : Bukkit.getWorld("world").getEntities()) {
                 if (e.getType().equals(EntityType.VILLAGER) || e.getType().equals(EntityType.WOLF)) {
                     e.remove();
                 }
             }
-            gaeae = new Prison("Fortress Of Gaeae", new Location(Bukkit.getWorld("world"), 61, -54, -159), new Location(Bukkit.getWorld("world"), 76, -59, -169), new Location(Bukkit.getWorld("world"), 44, -58, -141), new Location(Bukkit.getWorld("world"), 44, -58, -137), new Location(Bukkit.getWorld("world"), 41.5, -52, -120.5), new Location(Bukkit.getWorld("world"), 12, -60, -119), new Location(Bukkit.getWorld("world"), -26.5, -56.5, -115.5), new Location(Bukkit.getWorld("world"), -8.5, -57, -108.5), new Location(Bukkit.getWorld("world"), 33, -59, -132), new Location(Bukkit.getWorld("world"), 70, -59, -137), new Location(Bukkit.getWorld("world"), 87, -59, -129), new Location(Bukkit.getWorld("world"), 87, -56, -125));
-            hyper = new Prison("HyperTech", new Location(Bukkit.getWorld("world"), 18, -56, -988), new Location(Bukkit.getWorld("world"), 8, -59, -981), new Location(Bukkit.getWorld("world"), -29, -58, -988), new Location(Bukkit.getWorld("world"), -29, -58, -991), new Location(Bukkit.getWorld("world"), 12, -53, -970), new Location(Bukkit.getWorld("world"), -18, -59, -995), new Location(Bukkit.getWorld("world"), -26.5, -56.5, -115.5), new Location(Bukkit.getWorld("world"), 3.5, -59, -1006.5), new Location(Bukkit.getWorld("world"), 13, -59, -1009), new Location(Bukkit.getWorld("world"), -3, -59, -1008), new Location(Bukkit.getWorld("world"), 1, -58, -1008), new Location(Bukkit.getWorld("world"), 3, -58, -1008));
-            endmap = new Prison("The End?", new Location(Bukkit.getWorld("endprison"), 7, 133, 8), new Location(Bukkit.getWorld("endprison"), 19, 127, 20), new Location(Bukkit.getWorld("endprison"), -30, 170, -48), new Location(Bukkit.getWorld("endprison"), -32, 170, -47), new Location(Bukkit.getWorld("endprison"), -1, 150, 13), new Location(Bukkit.getWorld("endprison"), 0, 135, -41), new Location(Bukkit.getWorld("world"), -26.5, -56.5, -115.5), new Location(Bukkit.getWorld("endprison"), 0, 131, -6), new Location(Bukkit.getWorld("endprison"), 0, 125 ,0), new Location(Bukkit.getWorld("endprison"), -4, 131, 3), new Location(Bukkit.getWorld("endprison"), -100000, 256, -100000), new Location(Bukkit.getWorld("endprison"), -100000, 256, -100000));
-            train = new Prison("Train", new Location(Bukkit.getWorld("world"), 0, 0, 0), new Location(Bukkit.getWorld("world"), 0, 0, 0), new Location(Bukkit.getWorld("world"), 82, -57, 951), new Location(Bukkit.getWorld("world"), 82, -57, 951), new Location(Bukkit.getWorld("world"), 73, -57, 975), new Location(Bukkit.getWorld("world"), 92, -58, 958), new Location(Bukkit.getWorld("world"), 65, -58, 981), new Location(Bukkit.getWorld("world"), 73, -58, 984), new Location(Bukkit.getWorld("world"), 92, -58, 945), new Location(Bukkit.getWorld("world"), 80, -55, -971), new Location(Bukkit.getWorld("world"), 79, -58, 964), new Location(Bukkit.getWorld("world"), 79, -57, 965));
-            active = train;
-            bertrude = (LivingEntity) Bukkit.getWorld("world").spawnEntity(new Location(Bukkit.getWorld("world"), 70, -59, -137), EntityType.VILLAGER);
-            bertrude.setAI(false);
-            bertrude.setGravity(false);
-            bertrude.setCustomName("bertrude (real settings)");
-            bertrude.setInvulnerable(true);
+            Bukkit.broadcastMessage("RELOAD: Removed Entities");
+            gaeae = new Prison("Gaeae Fort", new Location(Bukkit.getWorld("world"), 61, -54, -159), new Location(Bukkit.getWorld("world"), 76, -59, -169), new Location(Bukkit.getWorld("world"), 44, -58, -141), new Location(Bukkit.getWorld("world"), 44, -58, -137), new Location(Bukkit.getWorld("world"), 41.5, -52, -120.5), new Location(Bukkit.getWorld("world"), 12, -60, -119), new Location(Bukkit.getWorld("world"), -26.5, -56.5, -115.5), new Location(Bukkit.getWorld("world"), -8.5, -57, -108.5), new Location(Bukkit.getWorld("world"), 33, -59, -132), new Location(Bukkit.getWorld("world"), 70.5, -59, -137.5), new Location(Bukkit.getWorld("world"), 87, -59, -129), new Location(Bukkit.getWorld("world"), 87, -56, -125));
+            hyper = new Prison("HyperTech", new Location(Bukkit.getWorld("world"), 18, -56, -988), new Location(Bukkit.getWorld("world"), 8, -59, -981), new Location(Bukkit.getWorld("world"), -29, -58, -988, 0, 0), new Location(Bukkit.getWorld("world"), -29, -58, -991), new Location(Bukkit.getWorld("world"), 12, -53, -970), new Location(Bukkit.getWorld("world"), -18, -59, -995), new Location(Bukkit.getWorld("world"), -26.5, -56.5, -115.5), new Location(Bukkit.getWorld("world"), 3.5, -59, -1006.5), new Location(Bukkit.getWorld("world"), 13, -59, -1009), new Location(Bukkit.getWorld("world"), 0.5, -59, -996.5), new Location(Bukkit.getWorld("world"), 1, -58, -1008), new Location(Bukkit.getWorld("world"), 3, -58, -1008));
+            endmap = new Prison("The End?", new Location(Bukkit.getWorld("endprison"), 7, 133, 8), new Location(Bukkit.getWorld("endprison"), 19, 127, 20), new Location(Bukkit.getWorld("endprison"), -30, 170, -48), new Location(Bukkit.getWorld("endprison"), -32, 170, -47), new Location(Bukkit.getWorld("endprison"), -1, 150, 13), new Location(Bukkit.getWorld("endprison"), 0, 135, -41), new Location(Bukkit.getWorld("world"), -26.5, -56.5, -115.5), new Location(Bukkit.getWorld("endprison"), 0, 131, -6), new Location(Bukkit.getWorld("endprison"), 0, 125 ,0), new Location(Bukkit.getWorld("endprison"), 16.5, 129, 2.5), new Location(Bukkit.getWorld("endprison"), -100000, 256, -100000), new Location(Bukkit.getWorld("endprison"), -100000, 256, -100000));
+            train = new Prison("Train", new Location(Bukkit.getWorld("world"), 0, 0, 0), new Location(Bukkit.getWorld("world"), 0, 0, 0), new Location(Bukkit.getWorld("world"), 82, -57, 951), new Location(Bukkit.getWorld("world"), 82, -57, 951), new Location(Bukkit.getWorld("world"), 73, -57, 975), new Location(Bukkit.getWorld("world"), 92, -58, 958), new Location(Bukkit.getWorld("world"), 65, -58, 981), new Location(Bukkit.getWorld("world"), 73, -58, 984), new Location(Bukkit.getWorld("world"), 92, -58, 945), new Location(Bukkit.getWorld("world"), 80.5, -55, -971.5), new Location(Bukkit.getWorld("world"), 79, -58, 964), new Location(Bukkit.getWorld("world"), 79, -57, 965));
+            gladiator = new Prison("Gladiator", new Location(Bukkit.getWorld("world"), -2024, -55, 1919), new Location(Bukkit.getWorld("world"), -1999, -60, 1940), new Location(Bukkit.getWorld("world"), -2039, -59, 1933, 180, 0), new Location(Bukkit.getWorld("world"), -2040, -59, 1933, 180, 0), new Location(Bukkit.getWorld("world"), -2041, -47, 1957), new Location(Bukkit.getWorld("world"), -2037, -60, 1947), new Location(Bukkit.getWorld("world"), -2030, -60, 2015), new Location(Bukkit.getWorld("world"), -2022, -60, 1967), new Location(Bukkit.getWorld("world"), -1973, -60, 1984), new Location(Bukkit.getWorld("world"), -2022.5, -60, 1957.5), new Location(Bukkit.getWorld("world"), -2084, -60, 1973), new Location(Bukkit.getWorld("world"), -2080, -56, 1973));
+            island = new Prison("Island", new Location(Bukkit.getWorld("world"), 1976, -55, -2001), new Location(Bukkit.getWorld("world"), 1968, -60, -2009), new Location(Bukkit.getWorld("world"), 2003, -59, -1988, 90, 0), new Location(Bukkit.getWorld("world"), 2003, -59, -1988, 90, 0), new Location(Bukkit.getWorld("world"), 1988, -60, -1978), new Location(Bukkit.getWorld("world"), 1964, -60, -1981), new Location(Bukkit.getWorld("world"), 1990, -59, -1861), new Location(Bukkit.getWorld("world"), 1989, -60, -1990), new Location(Bukkit.getWorld("world"), 1979, -60, -1982), new Location(Bukkit.getWorld("world"), 1981.5, -60, -1989.5), new Location(Bukkit.getWorld("world"), 1958, -60, -1999), new Location(Bukkit.getWorld("world"), 1962, -57, -1999));
+            santa = new Prison("Santa's Workshop", nl("world", 1960D, -56D, 1990D, 0f, 0f), nl("world", 1973D, -60D, 1981D, 0f, 0f), nl("world", 1981D, -59D,  1993D, 0f, 0f), nl("world", 1981D, -59D, 1993D, 0f, 0f), nl("world", 1966D, -53D, 2003D, 0f, 0f), nl("world", 1961D, -60D, 1921D, 0f, 0f), nl("world", 1970D, -59D, 2041D, 0f, 0f), nl("world", 1957D, -60D, 1992D, 0f, 0f), nl("world", 1967D, -53D, 1999D, 0f, 0f), nl("world", 1957.5D, -60D, 2007.5D, 0f, 0f), nl("world", 1989D, -60D, 2008D, 0f, 0f), nl("world", 1989D, -57D, 2013D, 0f, 0f));
+            volcano = new Prison("Volcano", nl("world", -2016D, -56D, -1933D, 0f, 0f), nl("world", -2025D, -60D, -1925D, 0f, 0f), nl("world", -2029D, -59D,  -2001D, 0f, 0f), nl("world", -2029D, -59D,  -2001D, 0f, 0f), nl("world", -2026D, -55D, -1956D, -90f, 0f), nl("world", -2004D, -60D, -1981D, 0f, 0f), nl("world", -1931D, -57D, -1976D, 0f, 0f), nl("world", -2019D, -60D, -1990D, 0f, 0f), nl("world", -2032D, -60D, -1966D, 0f, 0f), nl("world", -2011.5D, -60D, -1965.5D, 0f, 0f), nl("world", -2041D, -60D, -1974D, 0f, 0f), nl("world", -2041D, -57D, -1979D, 0f, 0f));
+            active = island;
+            Bukkit.broadcastMessage("RELOAD: Loaded Maps");
+            MyListener.reloadBert();
+            Bukkit.broadcastMessage("RELOAD: loaded bertrude lmao");
+
+            if (Data.loadData("save.data") != null) {
+                Data data = new Data(Data.loadData("save.data"));
+
+                if (data.isreload) {
+                    if (data.ward != null) {
+                        if (data.ward.isOnline()) {
+                            Bukkit.broadcastMessage("RELOAD: Restoring warden");
+                            PrisonGame.warden = data.ward;
+                            PrisonGame.type.put(PrisonGame.warden, -1);
+                        } else {
+                            PrisonGame.warden = null;
+                            Bukkit.broadcastMessage("RELOAD: Warden not online - Removing warden");
+                        }
+                    }
+                    if (data.hasSwat) {
+                        Bukkit.getWorld("world").getBlockAt(new Location(Bukkit.getWorld("world"), -17, -60, -17)).setType(Material.RED_CONCRETE);
+                        PrisonGame.swat = true;
+                        Bukkit.broadcastMessage("RELOAD: Restored SWAT");
+                    }
+                    switch (data.map) {
+                        case "Gaeae Fort":
+                            active = gaeae;
+                            break;
+                        case "HyperTech":
+                            active = hyper;
+                            break;
+                        case "The End?":
+                            active = endmap;
+                            break;
+                        case "Train":
+                            active = train;
+                            break;
+                        case "Gladiator":
+                            active = gladiator;
+                            break;
+                        case "Island":
+                            active = island;
+                            break;
+                        case "Santa's Workshop":
+                            active = santa;
+                            break;
+                        case "Volcano":
+                            active = volcano;
+                            break;
+                    }
+                    Bukkit.broadcastMessage("RELOAD: Restored Map");
+                    for (Player p : Bukkit.getOnlinePlayers()) {
+                        if (data.playerLocationHashMap != null) {
+                            if (data.playerLocationHashMap.containsKey(p)) {
+                                p.teleport(data.playerLocationHashMap.get(p));
+                            } else {
+                                Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
+                                    p.teleport(PrisonGame.active.getSpwn());
+                                }, 5L);
+                                Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
+                                    p.teleport(PrisonGame.active.getSpwn());
+                                }, 8L);
+                            }
+                        }
+                    }
+                    Bukkit.broadcastMessage("RELOAD: Loaded SafeReload Save");
+                    new Data(PrisonGame.warden, PrisonGame.active.getName(), false, PrisonGame.swat, new HashMap<Player, Location>()).saveData("save.data");
+                    Bukkit.broadcastMessage("RELOAD: Reset SafeReload Save");
+                }
+            }
+
+            wardenenabled = true;
             for (Player p : Bukkit.getOnlinePlayers()) {
+                p.removePotionEffect(PotionEffectType.DARKNESS);
+                p.removePotionEffect(PotionEffectType.WEAKNESS);
+                p.sendTitle(ChatColor.GREEN + "Loaded!", "thanks for your patience!", 0, 40, 0);
                 PrisonGame.st.put(p, 0.0);
                 PrisonGame.sp.put(p, 0.0);
                 if (!PrisonGame.type.containsKey(p)) {
                     PrisonGame.type.put(p, 0);
-                    MyListener.playerJoin(p, false);
+                    MyListener.playerJoin(p, true);
+                }
+
+                if (PrisonGame.warden != null) {
+                    PrisonGame.warden.teleport(active.wardenspawn);
                 }
             }
             MyTask task = new MyTask();
             task.runTaskTimer(getPlugin(this.getClass()), 0, 1);
             getServer().getPluginManager().registerEvents(new MyListener(), this);
-        }, 80);
+        }, 120);
 
     }
 
@@ -124,6 +246,9 @@ public final class PrisonGame extends JavaPlugin {
         MyTask.bossbar.removeAll();
     }
 
+    static Location nl(String world, Double X, Double Y, Double Z, Float yaw, Float pitch) {
+        return new Location(Bukkit.getWorld(world), X, Y, Z, yaw, pitch);
+    }
     static void setNurse(Player g) {
         Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Guards").addPlayer(g);
         PrisonGame.type.put(g, 2);
@@ -232,8 +357,6 @@ public final class PrisonGame extends JavaPlugin {
         g.getInventory().setBoots(orangeboot);
 
         ItemStack wardenSword = new ItemStack(Material.DIAMOND_SWORD);
-        wardenSword.addEnchantment(Enchantment.DAMAGE_ALL, 1);
-        wardenSword.addEnchantment(Enchantment.DURABILITY, 1);
 
         g.getInventory().addItem(wardenSword);
 
@@ -387,6 +510,18 @@ class accunmute implements CommandExecutor {
     }
 }
 
+class bragright implements CommandExecutor {
+
+    // This method is called, when somebody uses our command
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        if (!(sender instanceof Player)) {
+            Bukkit.getPlayer(args[0]).getPersistentDataContainer().set(PrisonGame.rank, PersistentDataType.INTEGER, 1);
+        }
+        return true;
+    }
+}
+
 
 class Discordcmd implements CommandExecutor {
 
@@ -462,6 +597,32 @@ class accpt implements CommandExecutor {
             PrisonGame.setSwat((Player) sender);
         }
         PrisonGame.askType.put((Player) sender, 0);
+        return true;
+    }
+}
+
+class sfreload implements CommandExecutor {
+
+    // This method is called, when somebody uses our command
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        HashMap<Player, Location> plhash = new HashMap<>();
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            plhash.put(p, p.getLocation());
+        }
+        new Data(PrisonGame.warden, PrisonGame.active.getName(), true, PrisonGame.swat, plhash).saveData("save.data");
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            p.sendTitle(ChatColor.RED + "LOADING...", "this may take a bit.", 0, Integer.MAX_VALUE, 0);
+            p.sendMessage(ChatColor.RED +  "THE SERVER IS RELOADING!");
+            p.sendMessage(ChatColor.GREEN +  "DO NOT SPAM /WARDEN -" + ChatColor.ITALIC + "YOU WILL BE WARNED!");
+            p.sendMessage(ChatColor.GRAY + "the server will make an attempt to save your items and roles, however this may not work.");
+            p.setGameMode(GameMode.ADVENTURE);
+            p.addPotionEffect(PotionEffectType.DARKNESS.createEffect(Integer.MAX_VALUE, 255));
+            p.addPotionEffect(PotionEffectType.WEAKNESS.createEffect(Integer.MAX_VALUE, 255));
+            p.teleport(new Location(Bukkit.getWorld("world"), -2062, -50, 1945));
+        }
+        Bukkit.getServer().getLogger().log(Level.INFO, "Data Saved");
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "rl confirm");
         return true;
     }
 }

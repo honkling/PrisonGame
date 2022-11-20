@@ -22,8 +22,10 @@ public class Prison {
     public String name;
     public Location cafedoor1;
     public Location cafedoor2;
-
-
+    public Location shop;
+    public Location bmshop;
+    public Location bmshop2;
+    public Location guardShop;
     public Prison(String nm, Location rp1, Location rp2, Location nb, Location nbot, Location ws, Location cls, Location bme, Location bmoute, Location sol, Location br, Location cfd1, Location cfd2) {
         name = nm;
         runpoint1 = rp1;
@@ -38,7 +40,7 @@ public class Prison {
         bmout = bmoute;
         cafedoor1 = cfd1;
         cafedoor2 = cfd2;
-        Bukkit.getLogger().log(Level.INFO, "activated prison " + nm + " world: " + cls.getWorld());
+        Bukkit.broadcastMessage("activated prison " + nm + " world: " + cls.getWorld().getName());
         for (Integer x = 1; x <= 3; x++) {
             Bukkit.getWorld("world").getBlockAt(x, -58, -1008).setType(Material.MUD_BRICKS);
         }

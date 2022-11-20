@@ -8,12 +8,13 @@ public class FilteredWords {
             "faggot",
             "fagot",
             "retard",
-            "cunt"
+            "cunt",
+            "ThisIsBlockedByTheChatFilter"
     };
 
     static String filtermsg(String msg) {
         for (String i : filter) {
-            msg = msg.replace(i, "I LOVE AMONG USS!!!!!!!!!");
+            msg = msg.replaceAll(i, "I LOVE AMONG USS!!!!!!!!!");
         }
         return msg;
     }

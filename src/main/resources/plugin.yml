@@ -9,6 +9,10 @@ commands:
   resign:
     description: Resign from your current position/Rejoin from prisoner.
     usage: /<command>
+  safereload:
+    permission: litteraly.do.not.give.this.lmao
+    description: Reloads the game
+    usage: /<command>
   nerdcheatcommand:
     permission: penis.cock
     description: gives 1000 dollahs
@@ -32,6 +36,9 @@ commands:
     aliases: teamchat
     description: Resign from your current position/Rejoin from prisoner.
     usage: /<command>
+  bragrightpackage:
+    permission: litteraly.do.not.give.this.lmao
+    usage: /<command> <player>
   disc:
     aliases: discord
     description: Resign from your current position/Rejoin from prisoner.
