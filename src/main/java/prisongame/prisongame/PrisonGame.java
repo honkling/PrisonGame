@@ -35,6 +35,9 @@ public final class PrisonGame extends JavaPlugin {
     static HashMap<Player, Integer> lastward = new HashMap<>();
     static HashMap<Player, Integer> lastward2 = new HashMap<>();
     static HashMap<Player, Integer> wardenban = new HashMap<>();
+    static HashMap<Player, String> word = new HashMap<>();
+    static HashMap<Player, Integer> timebet = new HashMap<>();
+    static Boolean givepig = false;
     static Prison gaeae;
     static Prison hyper;
     static Prison endmap;
@@ -52,6 +55,7 @@ public final class PrisonGame extends JavaPlugin {
     static Boolean wardenenabled = false;
 
     static NamespacedKey mny;
+    static HashMap<Player, Integer> respect = new HashMap<>();
     static NamespacedKey muted;
 
     static LivingEntity bertrude;
@@ -157,7 +161,7 @@ public final class PrisonGame extends JavaPlugin {
                     if (data.ward != null) {
                         if (data.ward.isOnline()) {
                             Bukkit.broadcastMessage("RELOAD: Restoring warden");
-                            PrisonGame.warden = data.ward;
+                            PrisonGame.warden = (Player) data.ward;
                             PrisonGame.type.put(PrisonGame.warden, -1);
                         } else {
                             PrisonGame.warden = null;
@@ -494,8 +498,16 @@ class accmute implements CommandExecutor {
     // This method is called, when somebody uses our command
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        Bukkit.getPlayer(args[0]).getPersistentDataContainer().set(PrisonGame.muted, PersistentDataType.INTEGER, 1);
-        Bukkit.broadcastMessage(ChatColor.GREEN + args[0] + " was muted!!!! lmao laugh at this user!!");
+        if (args[0] == null) {
+            sender.sendMessage("you didnt add a player idiot fucking stupid!!!");
+            return true;
+        }
+        if (args[1] == null) {
+            sender.sendMessage("add a time (in seconds) too!!! smh dumbasss!! idiot!!!!!!!");
+            return true;
+        }
+        Bukkit.getPlayer(args[0]).getPersistentDataContainer().set(PrisonGame.muted, PersistentDataType.INTEGER, Integer.valueOf(args[1]) * 20);
+        Bukkit.broadcastMessage(ChatColor.GREEN + args[0] + " was muted for" + Integer.valueOf(args[1]) * 20 + " seconds!!!! lmao laugh at this user!!");
         return true;
     }
 }
@@ -589,12 +601,19 @@ class accpt implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (PrisonGame.askType.getOrDefault((Player) sender, 0) == 2) {
             PrisonGame.setNurse((Player) sender);
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + sender.getName() + " only prison:guard");
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + PrisonGame.warden.getName() + " only prison:support");
         }
         if (PrisonGame.askType.getOrDefault((Player) sender, 0) == 1) {
             PrisonGame.setGuard((Player) sender);
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + sender.getName() + " only prison:guard");
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + PrisonGame.warden.getName() + " only prison:support");
         }
         if (PrisonGame.askType.getOrDefault((Player) sender, 0) == 3) {
             PrisonGame.setSwat((Player) sender);
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + sender.getName() + " only prison:guard");
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + PrisonGame.warden.getName() + " only prison:support");
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + sender.getName() + " only prison:swat");
         }
         PrisonGame.askType.put((Player) sender, 0);
         return true;
@@ -612,6 +631,7 @@ class sfreload implements CommandExecutor {
         }
         new Data(PrisonGame.warden, PrisonGame.active.getName(), true, PrisonGame.swat, plhash).saveData("save.data");
         for (Player p : Bukkit.getOnlinePlayers()) {
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + p.getName() + " only prison:reload");
             p.sendTitle(ChatColor.RED + "LOADING...", "this may take a bit.", 0, Integer.MAX_VALUE, 0);
             p.sendMessage(ChatColor.RED +  "THE SERVER IS RELOADING!");
             p.sendMessage(ChatColor.GREEN +  "DO NOT SPAM /WARDEN -" + ChatColor.ITALIC + "YOU WILL BE WARNED!");

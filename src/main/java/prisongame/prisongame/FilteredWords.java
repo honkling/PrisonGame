@@ -1,5 +1,7 @@
 package prisongame.prisongame;
 
+import com.sun.tools.javac.util.StringUtils;
+
 public class FilteredWords {
     static String[] filter = {
             "nigger",
@@ -7,15 +9,17 @@ public class FilteredWords {
             "nigga",
             "faggot",
             "fagot",
-            "retard",
-            "cunt",
-            "ThisIsBlockedByTheChatFilter"
+            "retard"
     };
 
     static String filtermsg(String msg) {
         for (String i : filter) {
-            msg = msg.replaceAll(i, "I LOVE AMONG USS!!!!!!!!!");
+            if (msg.toLowerCase().contains(i)) {
+                msg = "I FUCKING LOVE AMONG US!!! YESS!!! AMONGER!! SUSS!!! SUSSY!!! SUSSY BAKA!! SUSS!! WALTUH!! KINDA SUS WALTUH!!";
+            }
         }
         return msg;
     }
+
+
 }
