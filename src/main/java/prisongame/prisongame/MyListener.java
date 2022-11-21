@@ -297,6 +297,26 @@ public class MyListener implements Listener {
         event.getDrops().removeIf(i -> i.getType() == Material.WOODEN_AXE);
         event.getDrops().removeIf(i -> i.getType() == Material.WOODEN_SWORD);
         event.getDrops().removeIf(i -> i.getType() == Material.CARROT_ON_A_STICK);
+        if (PrisonGame.type.get(event.getEntity()) == 3) {
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + event.getEntity().getName() + " only prison:invincible");
+        }
+        if (PrisonGame.type.get(event.getEntity().getKiller()) != 0) {
+            PrisonGame.worryachieve.put(event.getEntity().getKiller(), 0);
+        }
+        if (PrisonGame.type.get(event.getEntity()) == 0) {
+            if (PrisonGame.type.get(event.getEntity().getKiller()) != 0) {
+                if (event.getEntity().getKiller() != null) {
+                    if (event.getEntity().getKiller().getItemInUse() != null) {
+                        if (event.getEntity().getKiller().getItemInUse().getType().equals(Material.WOODEN_AXE)) {
+                            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + event.getEntity().getKiller().getName() + " only prison:killstaff");
+                            PrisonGame.axekills.put(event.getEntity().getKiller(), PrisonGame.axekills.get(event.getEntity().getKiller()) + 1);
+                        } else {
+                            PrisonGame.axekills.put(event.getEntity().getKiller(), 0);
+                        }
+                    }
+                }
+            }
+        }
         if (PrisonGame.warden != null) {
             if (PrisonGame.warden.equals(event.getEntity())) {
                 if (event.getEntity().getKiller() != null) {
@@ -790,6 +810,8 @@ public class MyListener implements Listener {
                 if (PrisonGame.type.get(event.getPlayer()) != 0) {
                     event.getPlayer().sendMessage(ChatColor.RED + "You can't access this!");
                     event.setCancelled(true);
+                } else {
+                    PrisonGame.worryachieve.put(event.getPlayer(), -1);
                 }
             }
             if (event.getClickedBlock().getType().equals(Material.COBBLESTONE) || event.getClickedBlock().getType().equals(Material.STONE) || event.getClickedBlock().getType().equals(Material.ANDESITE)) {

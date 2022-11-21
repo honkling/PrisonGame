@@ -25,6 +25,7 @@ public class CommandKit implements CommandExecutor {
                     if (((Player) sender).getGameMode() != GameMode.SPECTATOR) {
                         Player nw = (Player) sender;
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + sender.getName() + " only prison:mprison");
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + sender.getName() + " only prison:guard");
                         for (Player p : Bukkit.getOnlinePlayers()) {
                             if (PrisonGame.type.get(p) != 0) {
                                 MyListener.playerJoin(p, false);

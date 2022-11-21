@@ -35,6 +35,36 @@ public class MyTask extends BukkitRunnable {
             if (p.isSleeping()) {
                 p.setNoDamageTicks(10);
             }
+            if (!PrisonGame.wealthcycle.containsKey(p)) {
+                PrisonGame.wealthcycle.put(p, 0.0);
+            }
+            if (!PrisonGame.wardentime.containsKey(p)) {
+                PrisonGame.wardentime.put(p, 0);
+            }
+            if (!PrisonGame.worryachieve.containsKey(p)) {
+                PrisonGame.worryachieve.put(p, -1);
+            }
+            if (!PrisonGame.axekills.containsKey(p)) {
+                PrisonGame.axekills.put(p, 0);
+            }
+            if (PrisonGame.worryachieve.get(p) >= 0) {
+                PrisonGame.worryachieve.put(p, PrisonGame.worryachieve.get(p) + 1);
+                if (PrisonGame.worryachieve.get(p) / 20 / 60 >= 15) {
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + p.getName() + " only prison:whatuworried");
+                    PrisonGame.worryachieve.put(p, -1);
+                }
+            }
+            if (PrisonGame.warden == p) {
+                PrisonGame.wardentime.put(p, PrisonGame.wardentime.get(p) + 1);
+                if (PrisonGame.wardentime.get(p) / 20 / 60 >= 120) {
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + p.getName() + " only prison:dictatorship");
+                    PrisonGame.wardentime.put(p, Integer.MIN_VALUE);
+                }
+            }
+            if (!PrisonGame.saidcycle.containsKey(p)) {
+                PrisonGame.saidcycle.put(p, 0);
+            }
+            if (Bukkit.getWorld("world").getTime() == 0) {}
             if (!PrisonGame.type.containsKey(p)) {
                 PrisonGame.type.put(p, 0);
                 MyListener.playerJoin(p, false);
