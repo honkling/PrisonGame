@@ -2,6 +2,7 @@ package prisongame.prisongame;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
@@ -21,7 +22,7 @@ import java.util.zip.GZIPOutputStream;
 public class Data implements Serializable {
     private static transient final long serialVersionUID = -1681012206529286330L;
 
-    public final Player ward;
+    public final OfflinePlayer ward;
     public final String map;
     public final Boolean isreload;
     public final Boolean hasSwat;
@@ -29,7 +30,7 @@ public class Data implements Serializable {
 
 
     // Can be used for saving
-    public Data(Player ward, String map, Boolean isreload, Boolean hasSwat, HashMap<Player, Location> playerLocationHashMap) {
+    public Data(OfflinePlayer ward, String map, Boolean isreload, Boolean hasSwat, HashMap<Player, Location> playerLocationHashMap) {
         this.ward = ward;
         this.map = map;
         this.isreload = isreload;

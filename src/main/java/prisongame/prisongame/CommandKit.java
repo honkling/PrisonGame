@@ -24,6 +24,7 @@ public class CommandKit implements CommandExecutor {
                 if (PrisonGame.warden == null && sender instanceof Player) {
                     if (((Player) sender).getGameMode() != GameMode.SPECTATOR) {
                         Player nw = (Player) sender;
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + sender.getName() + " only prison:mprison");
                         for (Player p : Bukkit.getOnlinePlayers()) {
                             if (PrisonGame.type.get(p) != 0) {
                                 MyListener.playerJoin(p, false);
@@ -32,7 +33,6 @@ public class CommandKit implements CommandExecutor {
                             PrisonGame.askType.put(p, 0);
                             p.playSound(p, Sound.BLOCK_END_PORTAL_SPAWN, 1, 1);
                             p.sendTitle("", ChatColor.RED + nw.getName() + ChatColor.GREEN + " is the new warden!");
-
                         }
                         Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Warden").addPlayer(nw);
                         PrisonGame.type.put(nw, -1);
@@ -138,6 +138,7 @@ public class CommandKit implements CommandExecutor {
                                     g.setGameMode(GameMode.ADVENTURE);
                                     g.removePotionEffect(PotionEffectType.LUCK);
                                     PrisonGame.escaped.put(g, true);
+                                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + g.getName() + " only prison:solit");
                                     Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
                                         g.teleport(PrisonGame.active.getSolit());
                                     }, 3);
@@ -171,6 +172,7 @@ public class CommandKit implements CommandExecutor {
                     if (Bukkit.getPlayer(args[1]) != null) {
                         Player g = Bukkit.getPlayer(args[1]);
                         if (g.isOnline() && g != sender && PrisonGame.type.get(g) != 0) {
+                            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + sender.getName() + " only prison:strike");
                             Bukkit.broadcastMessage(ChatColor.GOLD + g.getName() + " was fired.");
                             MyListener.playerJoin(g, false);
                         }
