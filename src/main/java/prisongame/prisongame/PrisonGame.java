@@ -55,6 +55,7 @@ public final class PrisonGame extends JavaPlugin {
     static NamespacedKey nightvis;
     static NamespacedKey rank;
     static Integer swapcool = 0;
+    static Integer wardenCooldown = 20;
     static Integer lockdowncool = 0;
     static NamespacedKey whiff;
     static Boolean wardenenabled = false;

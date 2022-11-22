@@ -300,27 +300,23 @@ public class MyListener implements Listener {
         if (PrisonGame.type.get(event.getEntity()) == 3) {
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + event.getEntity().getName() + " only prison:invincible");
         }
+        if (PrisonGame.type.get(event.getEntity()) != 0) {
+            if (event.getEntity().getKiller() != null) {
+                if (event.getEntity().getKiller().getInventory().getItemInMainHand().getType().equals(Material.WOODEN_AXE)) {
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + event.getEntity().getKiller().getName() + " only prison:killstaff");
+                    PrisonGame.axekills.put(event.getEntity().getKiller(), PrisonGame.axekills.get(event.getEntity().getKiller()) + 1);
+                    PrisonGame.worryachieve.put(event.getEntity().getKiller(), 0);
+                    if (PrisonGame.axekills.get(event.getEntity().getKiller()) == 5) {
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + event.getEntity().getKiller().getName() + " only prison:oneman");
+                    }
+                }
+            }
+        }
         if (PrisonGame.type.get(event.getEntity()) == 0) {
             if (event.getEntity().getKiller() != null) {
-            if (PrisonGame.type.get(event.getEntity().getKiller()) != 0) {
-                    if (PrisonGame.type.get(event.getEntity().getKiller()) != 0) {
-                        PrisonGame.worryachieve.put(event.getEntity().getKiller(), 0);
-                    }
-                    if (event.getEntity().getKiller().getItemInUse() != null) {
-                        if (PrisonGame.type.get(event.getEntity().getKiller()) == -1) {
-                            if (event.getEntity().getKiller().getItemInUse().getType().equals(Material.AIR)) {
-                                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + event.getEntity().getKiller().getName() + " only prison:yoink");
-                            }
-                        }
-                        if (event.getEntity().getKiller().getItemInUse().getType().equals(Material.WOODEN_AXE)) {
-                            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + event.getEntity().getKiller().getName() + " only prison:killstaff");
-                            PrisonGame.axekills.put(event.getEntity().getKiller(), PrisonGame.axekills.get(event.getEntity().getKiller()) + 1);
-                            if (PrisonGame.axekills.get(event.getEntity().getKiller()) == 5) {
-                                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + event.getEntity().getKiller().getName() + " only prison:oneman");
-                            }
-                        } else {
-                            PrisonGame.axekills.put(event.getEntity().getKiller(), 0);
-                        }
+                if (PrisonGame.type.get(event.getEntity().getKiller()) == -1) {
+                    if (event.getEntity().getKiller().getInventory().getItemInMainHand().getType().equals(Material.AIR)) {
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + event.getEntity().getKiller().getName() + " only prison:yoink");
                     }
                 }
             }
@@ -334,6 +330,7 @@ public class MyListener implements Listener {
                     }
                     Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + event.getEntity().getKiller().getName() + " only prison:killwarden");
                 }
+                PrisonGame.wardenCooldown = 40;
                 event.getDrops().clear();
                 PrisonGame.warden = null;
                 PrisonGame.type.put(event.getEntity(), 0);
@@ -710,6 +707,19 @@ public class MyListener implements Listener {
                         event.getWhoClicked().getInventory().addItem(new ItemStack(Material.COBBLESTONE));
                     }
                 }
+                if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.WHITE + "Paper")) {
+                    event.setCancelled(true);
+                    if (event.getWhoClicked().getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0) >= 15.0) {
+                        if (event.getWhoClicked().getInventory().contains(Material.COAL) && event.getWhoClicked().getInventory().contains(Material.RAW_IRON)) {
+                            event.getWhoClicked().getPersistentDataContainer().set(PrisonGame.mny, PersistentDataType.DOUBLE ,event.getWhoClicked().getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0)- 15.0);
+                            event.getWhoClicked().getInventory().removeItem(new ItemStack(Material.COAL, 1));
+                            event.getWhoClicked().getInventory().removeItem(new ItemStack(Material.RAW_IRON, 1));
+                            event.getWhoClicked().getInventory().addItem(new ItemStack(Material.PAPER));
+                        }
+                    } else {
+                        event.getWhoClicked().sendMessage(ChatColor.RED + "Not enough money!");
+                    }
+                }
                 if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.LIGHT_PURPLE + "Fake Card")) {
                     event.setCancelled(true);
                     if (event.getWhoClicked().getInventory().containsAtLeast(new ItemStack(Material.PAPER), 3) && event.getWhoClicked().getInventory().containsAtLeast(new ItemStack(Material.STICK), 2)) {
@@ -935,22 +945,14 @@ public class MyListener implements Listener {
                     Inventory inv = Bukkit.createInventory(null, 9, "Crafting");
                     inv.addItem(PrisonGame.createGuiItem(Material.CRAFTING_TABLE, ChatColor.LIGHT_PURPLE + "Normal Crafting"));
                     inv.addItem(PrisonGame.createGuiItem(Material.COBBLESTONE, ChatColor.LIGHT_PURPLE + "Rock", "§aRecipe:", "§b9 Pebbles"));
+                    inv.addItem(PrisonGame.createGuiItem(Material.PAPER, ChatColor.WHITE + "Paper", "§aRecipe:", "§b1 Coal", "§b1 Scrap Metal", "§a15$"));
                     inv.addItem(PrisonGame.createGuiItem(Material.TRIPWIRE_HOOK, ChatColor.LIGHT_PURPLE + "Fake Card", "§aRecipe:", "§b3 Paper", "§b2 Sticks"));
                     event.getPlayer().openInventory(inv);
                 }, 1L);
             }
             if (event.getClickedBlock().getType().equals(Material.FURNACE)) {
                 event.setCancelled(true);
-                if (event.getPlayer().getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0) >= 15.0) {
-                    if (event.getPlayer().getInventory().contains(Material.COAL) && event.getPlayer().getInventory().contains(Material.RAW_IRON)) {
-                        event.getPlayer().getPersistentDataContainer().set(PrisonGame.mny, PersistentDataType.DOUBLE ,event.getPlayer().getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0)- 15.0);
-                        event.getPlayer().getInventory().removeItem(new ItemStack(Material.COAL, 1));
-                        event.getPlayer().getInventory().removeItem(new ItemStack(Material.RAW_IRON, 1));
-                        event.getPlayer().getInventory().addItem(new ItemStack(Material.PAPER));
-                    }
-                } else {
-                    event.getPlayer().sendMessage(ChatColor.RED + "Not enough money!");
-                }
+                event.getPlayer().sendMessage(ChatColor.RED + "You probbably think this used to do something, But maybe it's been migrated to a crafting table (hint hint).");
             }
 
             if (event.getClickedBlock().getType().equals(Material.SPRUCE_WALL_SIGN)) {
@@ -1471,6 +1473,7 @@ public class MyListener implements Listener {
     }
     @EventHandler
     public void onPlayerJoin(PlayerRespawnEvent event) {
+        PrisonGame.worryachieve.put(event.getPlayer(), -1);
         Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
             if (PrisonGame.type.get(event.getPlayer()) == -1) {
                 Player nw = event.getPlayer();

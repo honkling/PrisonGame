@@ -21,7 +21,7 @@ public class CommandKit implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (PrisonGame.wardenenabled) {
             if (args.length == 0) {
-                if (PrisonGame.warden == null && sender instanceof Player) {
+                if (PrisonGame.warden == null && sender instanceof Player && PrisonGame.wardenCooldown <= 0) {
                     if (((Player) sender).getGameMode() != GameMode.SPECTATOR) {
                         Player nw = (Player) sender;
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + sender.getName() + " only prison:mprison");
@@ -34,6 +34,7 @@ public class CommandKit implements CommandExecutor {
                             PrisonGame.askType.put(p, 0);
                             p.playSound(p, Sound.BLOCK_END_PORTAL_SPAWN, 1, 1);
                             p.sendTitle("", ChatColor.RED + nw.getName() + ChatColor.GREEN + " is the new warden!");
+                            PrisonGame.wardenCooldown = 20 * 6;
                         }
                         Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Warden").addPlayer(nw);
                         PrisonGame.type.put(nw, -1);
@@ -119,9 +120,11 @@ public class CommandKit implements CommandExecutor {
                     }
                 }
                 if (args[0].equals("resign")) {
-                    MyListener.playerJoin(PrisonGame.warden, false);
-                    Bukkit.broadcastMessage(ChatColor.GREEN + "The warden has resigned!");
-                    PrisonGame.warden = null;
+                    if (PrisonGame.wardenCooldown <= 0) {
+                        MyListener.playerJoin(PrisonGame.warden, false);
+                        Bukkit.broadcastMessage(ChatColor.GREEN + "The warden has resigned!");
+                        PrisonGame.warden = null;
+                    }
                 }
                 if (args[0].equals("solitary")) {
                     if (Bukkit.getPlayer(args[1]) != null) {

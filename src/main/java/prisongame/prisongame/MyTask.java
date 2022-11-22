@@ -15,6 +15,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.text.DecimalFormat;
+import java.util.logging.Level;
 
 public class MyTask extends BukkitRunnable {
 
@@ -120,19 +121,17 @@ public class MyTask extends BukkitRunnable {
                     p.teleport(PrisonGame.active.getBmout());
                 }
             }
-        }
-        PrisonGame.swapcool -= 1;
-        PrisonGame.lockdowncool -= 1;
-        if (Bukkit.getWorld("world").getTime() == 0) {
-            for (Player p : Bukkit.getOnlinePlayers()) {
-                if (p.getPersistentDataContainer().get(PrisonGame.mny, PersistentDataType.DOUBLE) - PrisonGame.wealthcycle.get(p) >= 3000) {
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + p.getName() + " only prison:wealthy");
+            if (PrisonGame.type.get(p) != 0) {
+                if (Bukkit.getMaxPlayers() == Bukkit.getOnlinePlayers().size()) {
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + p.getName() + " only prison:toomuch");
                 }
-                PrisonGame.wealthcycle.put(p, p.getPersistentDataContainer().get(PrisonGame.mny, PersistentDataType.DOUBLE));
             }
         }
+        PrisonGame.swapcool -= 1;
+        PrisonGame.wardenCooldown = PrisonGame.wardenCooldown - 1;
         if (Bukkit.getWorld("world").getTime() > 0 && Bukkit.getWorld("world").getTime() < 2500) {
             timer1 = 0;
+
             timer2 = 2500;
             bossbar.setTitle("ROLL CALL");
             hasAlerted = false;
@@ -181,8 +180,21 @@ public class MyTask extends BukkitRunnable {
         }
         if (Bukkit.getWorld("world").getTime() == 2500) {
             if (!hasAlerted) {
+                for (Player p : Bukkit.getOnlinePlayers()) {
+                    if (p.getPersistentDataContainer().has(PrisonGame.mny, PersistentDataType.DOUBLE)) {
+                        try {
+                            if (p.getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0) - PrisonGame.wealthcycle.get(p) >= 3000) {
+                                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + p.getName() + " only prison:wealthy");
+                            }
+                            PrisonGame.wealthcycle.put(p, p.getPersistentDataContainer().get(PrisonGame.mny, PersistentDataType.DOUBLE));
+                        } catch(NullPointerException ignored) {
+                            Bukkit.getLogger().log(Level.INFO, p.getName() + " seems to not have a money container?");
+                        }
+                    }
+                }
                 hasAlerted = true;
                 Double taxcount = 0.0;
+                DecimalFormat numberFormat = new DecimalFormat("#.00");
                 for (Player p : Bukkit.getOnlinePlayers()) {
                     if (p.hasPotionEffect(PotionEffectType.GLOWING) && !PrisonGame.escaped.get(p)) {
                         Bukkit.broadcastMessage(ChatColor.RED + p.getName() + ChatColor.GOLD + " didn't come to roll call! " + ChatColor.RED + "Kill them for 100 dollars!");
@@ -193,13 +205,14 @@ public class MyTask extends BukkitRunnable {
                         PrisonGame.respect.put(p, 0);
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + p.getName() + " only prison:respect");
                     }
-                    DecimalFormat numberFormat = new DecimalFormat("#.00");
-                    p.sendMessage(ChatColor.GREEN + numberFormat.format(p.getPersistentDataContainer().get(PrisonGame.mny,  PersistentDataType.DOUBLE) * 0.05) + "$ was taxed towards the prison.");
-                    taxcount += p.getPersistentDataContainer().get(PrisonGame.mny,  PersistentDataType.DOUBLE) * 0.1;
-                    p.getPersistentDataContainer().set(PrisonGame.mny, PersistentDataType.DOUBLE, p.getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0) * 0.95);
-                    PrisonGame.warden.getPersistentDataContainer().set(PrisonGame.mny, PersistentDataType.DOUBLE, PrisonGame.warden.getPersistentDataContainer().get(PrisonGame.mny, PersistentDataType.DOUBLE) + p.getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0) * 0.1);
+                    if (PrisonGame.type.get(p) != 0) {
+                        p.sendMessage(ChatColor.GREEN + numberFormat.format(p.getPersistentDataContainer().get(PrisonGame.mny, PersistentDataType.DOUBLE) * 0.05) + "$ was taxed towards the prison.");
+                        taxcount += p.getPersistentDataContainer().get(PrisonGame.mny, PersistentDataType.DOUBLE) * 0.1;
+                        p.getPersistentDataContainer().set(PrisonGame.mny, PersistentDataType.DOUBLE, p.getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0) * 0.95);
+                        PrisonGame.warden.getPersistentDataContainer().set(PrisonGame.mny, PersistentDataType.DOUBLE, PrisonGame.warden.getPersistentDataContainer().get(PrisonGame.mny, PersistentDataType.DOUBLE) + p.getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0) * 0.1);
+                    }
                 }
-                PrisonGame.warden.sendMessage(ChatColor.GREEN + "You were given" + taxcount + "$ in taxes!");
+                PrisonGame.warden.sendMessage(ChatColor.GREEN + "You were given " + numberFormat.format(taxcount) + "$ in taxes!");
                 if (taxcount >= 4000.0) {
                     Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + PrisonGame.warden.getName() + " only prison:taxes");
                 }
