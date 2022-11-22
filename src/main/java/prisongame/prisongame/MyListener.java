@@ -300,16 +300,24 @@ public class MyListener implements Listener {
         if (PrisonGame.type.get(event.getEntity()) == 3) {
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + event.getEntity().getName() + " only prison:invincible");
         }
-        if (PrisonGame.type.get(event.getEntity().getKiller()) != 0) {
-            PrisonGame.worryachieve.put(event.getEntity().getKiller(), 0);
-        }
         if (PrisonGame.type.get(event.getEntity()) == 0) {
+            if (event.getEntity().getKiller() != null) {
             if (PrisonGame.type.get(event.getEntity().getKiller()) != 0) {
-                if (event.getEntity().getKiller() != null) {
+                    if (PrisonGame.type.get(event.getEntity().getKiller()) != 0) {
+                        PrisonGame.worryachieve.put(event.getEntity().getKiller(), 0);
+                    }
                     if (event.getEntity().getKiller().getItemInUse() != null) {
+                        if (PrisonGame.type.get(event.getEntity().getKiller()) == -1) {
+                            if (event.getEntity().getKiller().getItemInUse().getType().equals(Material.AIR)) {
+                                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + event.getEntity().getKiller().getName() + " only prison:yoink");
+                            }
+                        }
                         if (event.getEntity().getKiller().getItemInUse().getType().equals(Material.WOODEN_AXE)) {
                             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + event.getEntity().getKiller().getName() + " only prison:killstaff");
                             PrisonGame.axekills.put(event.getEntity().getKiller(), PrisonGame.axekills.get(event.getEntity().getKiller()) + 1);
+                            if (PrisonGame.axekills.get(event.getEntity().getKiller()) == 5) {
+                                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + event.getEntity().getKiller().getName() + " only prison:oneman");
+                            }
                         } else {
                             PrisonGame.axekills.put(event.getEntity().getKiller(), 0);
                         }

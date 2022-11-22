@@ -36,7 +36,7 @@ public class MyTask extends BukkitRunnable {
                 p.setNoDamageTicks(10);
             }
             if (!PrisonGame.wealthcycle.containsKey(p)) {
-                PrisonGame.wealthcycle.put(p, 0.0);
+                PrisonGame.wealthcycle.put(p, p.getPersistentDataContainer().get(PrisonGame.mny, PersistentDataType.DOUBLE));
             }
             if (!PrisonGame.wardentime.containsKey(p)) {
                 PrisonGame.wardentime.put(p, 0);
@@ -123,6 +123,14 @@ public class MyTask extends BukkitRunnable {
         }
         PrisonGame.swapcool -= 1;
         PrisonGame.lockdowncool -= 1;
+        if (Bukkit.getWorld("world").getTime() == 0) {
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                if (p.getPersistentDataContainer().get(PrisonGame.mny, PersistentDataType.DOUBLE) - PrisonGame.wealthcycle.get(p) >= 3000) {
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + p.getName() + " only prison:wealthy");
+                }
+                PrisonGame.wealthcycle.put(p, p.getPersistentDataContainer().get(PrisonGame.mny, PersistentDataType.DOUBLE));
+            }
+        }
         if (Bukkit.getWorld("world").getTime() > 0 && Bukkit.getWorld("world").getTime() < 2500) {
             timer1 = 0;
             timer2 = 2500;
@@ -162,7 +170,7 @@ public class MyTask extends BukkitRunnable {
                 }
             }
             if (allat && PrisonGame.warden != null) {
-                PrisonGame.warden.sendTitle("",  ChatColor.GREEN + "All prisoner at roll call! +0.05$!", 0, 5, 0);
+                PrisonGame.warden.sendTitle("",  ChatColor.GREEN + "All prisoners at roll call! +0.05$!", 0, 5, 0);
                 PrisonGame.warden.getPersistentDataContainer().set(PrisonGame.mny, PersistentDataType.DOUBLE, PrisonGame.warden.getPersistentDataContainer().get(PrisonGame.mny, PersistentDataType.DOUBLE) + 0.05);
             }
         } else {

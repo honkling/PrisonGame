@@ -545,6 +545,7 @@ class Discordcmd implements CommandExecutor {
     // This method is called, when somebody uses our command
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + sender.getName() + " only prison:discord");
         sender.sendMessage(ChatColor.BLUE + "https://discord.gg/Y6TFEPUMB9");
         return true;
     }
