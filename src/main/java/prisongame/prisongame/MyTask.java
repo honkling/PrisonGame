@@ -111,6 +111,12 @@ public class MyTask extends BukkitRunnable {
                 }
 
             }
+            if (p.getPersistentDataContainer().has(PrisonGame.coarsemined, PersistentDataType.DOUBLE)) {
+                if (p.getPersistentDataContainer().getOrDefault(PrisonGame.coarsemined, PersistentDataType.DOUBLE, 0.0) >= 500) {
+                    p.getPersistentDataContainer().set(PrisonGame.coarsemined, PersistentDataType.DOUBLE, Double.MIN_VALUE);
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + PrisonGame.warden.getName() + " only prison:golddigger");
+                }
+            }
             p.getInventory().remove(Material.NETHERITE_SWORD);
             if (PrisonGame.type.get(p) != 0 && PrisonGame.type.get(p) != -1) {
                 if (p.hasPotionEffect(PotionEffectType.UNLUCK)) {
@@ -321,6 +327,10 @@ public class MyTask extends BukkitRunnable {
             if (p.getLocation().getBlockY() == -61 && PrisonGame.active.getName().equals("Island") && p.getLocation().getBlock().getType().equals(Material.WATER)) {
                 p.damage(4);
             }
+            if (p.getLocation().getBlockY() == -61 && PrisonGame.active.getName().equals("Boat") && p.getLocation().getBlock().getType().equals(Material.WATER)) {
+                p.damage(1);
+                p.teleport(new Location(p.getWorld(), p.getLocation().getX(), p.getLocation().getY() - 1, p.getLocation().getZ()));
+            }
             if (p.getLocation().getY() < 118 && p.getWorld().getName().equals("endprison")) {
                 p.damage(999);
             }
@@ -350,12 +360,12 @@ public class MyTask extends BukkitRunnable {
                 p.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.GREEN + "REPORTER" + ChatColor.GRAY + "] " + p.getDisplayName());
                 p.setDisplayName(ChatColor.GRAY + "[" + ChatColor.GREEN + "REPORTER" + ChatColor.GRAY + "] " + p.getDisplayName());
             }
-            if (p.getName().equals("Evanbeer") && !p.getPlayerListName().contains("BUILDER")) {
+            if (p.getName().equals("noahbt787") && !p.getPlayerListName().contains("BUILDER") || p.getName().equals("Evanbeer") && !p.getPlayerListName().contains("BUILDER")) {
                 p.setCustomName(ChatColor.GRAY + "[" + ChatColor.YELLOW + "BUILDER" + ChatColor.GRAY + "] " + p.getDisplayName());
                 p.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.YELLOW + "BUILDER" + ChatColor.GRAY + "] " + p.getDisplayName());
                 p.setDisplayName(ChatColor.GRAY + "[" + ChatColor.YELLOW + "BUILDER" + ChatColor.GRAY + "] " + p.getDisplayName());
             }
-            if (p.getName().equals("noahbt787") && !p.getPlayerListName().contains("BUILD HELP") || p.getName().equals("ATee_") && !p.getPlayerListName().contains("BUILD HELP") || p.getName().equals("Kyrris") && !p.getPlayerListName().contains("BUILD HELP") || p.getName().equals("adam214") && !p.getPlayerListName().contains("BUILD HELP") || p.getName().equals("JuleczkaOwO") && !p.getPlayerListName().contains("BUILD HELP") || p.getName().equals("RennArpent") && !p.getPlayerListName().contains("BUILD HELP") || p.getName().equals("Kingdarksword") && !p.getPlayerListName().contains("BUILD HELP") || p.getName().equals("Susanne_h") && !p.getPlayerListName().contains("BUILD HELP") || p.getName().equals("Sanan1010") && !p.getPlayerListName().contains("BUILD HELP")) {
+            if (p.getName().equals("ATee_") && !p.getPlayerListName().contains("BUILD HELP") || p.getName().equals("Kyrris") && !p.getPlayerListName().contains("BUILD HELP") || p.getName().equals("adam214") && !p.getPlayerListName().contains("BUILD HELP") || p.getName().equals("JuleczkaOwO") && !p.getPlayerListName().contains("BUILD HELP") || p.getName().equals("RennArpent") && !p.getPlayerListName().contains("BUILD HELP") || p.getName().equals("Kingdarksword") && !p.getPlayerListName().contains("BUILD HELP") || p.getName().equals("Susanne_h") && !p.getPlayerListName().contains("BUILD HELP") || p.getName().equals("Sanan1010") && !p.getPlayerListName().contains("BUILD HELP")) {
                 p.setCustomName(ChatColor.GRAY + "[" + ChatColor.YELLOW + "BUILD HELP" + ChatColor.GRAY + "] " + p.getDisplayName());
                 p.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.YELLOW + "BUILD HELP" + ChatColor.GRAY + "] " + p.getDisplayName());
                 p.setDisplayName(ChatColor.GRAY + "[" + ChatColor.YELLOW + "BUILD HELP" + ChatColor.GRAY + "] " + p.getDisplayName());

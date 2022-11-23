@@ -679,6 +679,31 @@ public class MyListener implements Listener {
                         }
                     }
                 }
+                if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.BLUE + "Boat")) {
+                    for (Player p : Bukkit.getOnlinePlayers()) {
+                        p.teleport(new Location(Bukkit.getWorld("world"), -2062, -50, 1945));
+                    }
+                    PrisonGame.active = PrisonGame.boat;
+                    for (Integer x = PrisonGame.boat.getCafedoor1().getBlockX(); x <= PrisonGame.boat.getCafedoor2().getBlockX(); x++) {
+                        for (Integer y = PrisonGame.boat.getCafedoor1().getBlockY(); y <= PrisonGame.boat.getCafedoor2().getBlockY(); y++) {
+                            for (Integer z = PrisonGame.boat.getCafedoor1().getBlockZ(); z <= PrisonGame.boat.getCafedoor2().getBlockZ(); z++) {
+                                Bukkit.getWorld("world").getBlockAt(x, y, z).setType(Material.MUD_BRICKS);
+                            }
+                        }
+                    }
+                    PrisonGame.swapcool = (20 * 60) * 5;
+                    reloadBert();
+                    for (Player p : Bukkit.getOnlinePlayers()) {
+                        if (PrisonGame.type.get(p) != -1) {
+                            MyListener.playerJoin(p, true);
+                            p.sendTitle("New prison!", "BOAT");
+                        } else {
+                            p.teleport(PrisonGame.active.getWardenspawn());
+                            Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {p.teleport(PrisonGame.active.getWardenspawn());}, 5);
+                            p.sendTitle("New prison!", "BOAT");
+                        }
+                    }
+                }
                 if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.WHITE + "Hypertech")) {
                     for (Player p : Bukkit.getOnlinePlayers()) {
                         p.teleport(new Location(Bukkit.getWorld("world"), -2062, -50, 1945));
@@ -794,6 +819,7 @@ public class MyListener implements Listener {
                     if (event.getItem().getType().equals(Material.WOODEN_SHOVEL)) {
                         if (!event.getPlayer().hasCooldown(Material.WOODEN_SHOVEL)) {
                             event.getPlayer().getPersistentDataContainer().set(PrisonGame.mny, PersistentDataType.DOUBLE, event.getPlayer().getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0) + 8.0 * MyTask.jobm);
+                            event.getPlayer().getPersistentDataContainer().set(PrisonGame.coarsemined, PersistentDataType.DOUBLE, event.getPlayer().getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0) + 1);
                             event.getClickedBlock().setType(Material.BEDROCK);
                             event.getPlayer().setCooldown(Material.WOODEN_SHOVEL, 10);
                             Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
@@ -876,6 +902,7 @@ public class MyListener implements Listener {
                             inv.addItem(PrisonGame.createGuiItem(Material.SAND, ChatColor.GOLD + "Island"));
                             inv.addItem(PrisonGame.createGuiItem(Material.SNOW_BLOCK, ChatColor.BOLD + "Santa's Workshop"));
                             inv.addItem(PrisonGame.createGuiItem(Material.LAVA_BUCKET, ChatColor.RED + "Volcano"));
+                            inv.addItem(PrisonGame.createGuiItem(Material.QUARTZ, ChatColor.BLUE + "Boat"));
                             event.getPlayer().openInventory(inv);
                         } else {
                             event.getPlayer().sendMessage(ChatColor.RED + "That's on cooldown!" + ChatColor.YELLOW + PrisonGame.swapcool / 20 + " seconds left.");
