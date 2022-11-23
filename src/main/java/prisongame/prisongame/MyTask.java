@@ -96,6 +96,9 @@ public class MyTask extends BukkitRunnable {
             if (!PrisonGame.escaped.containsKey(p)) {
                 PrisonGame.escaped.put(p, false);
             }
+            if (!PrisonGame.killior.containsKey(p)) {
+                PrisonGame.killior.put(p, null);
+            }
             if (!PrisonGame.respect.containsKey(p)) {
                 PrisonGame.respect.put(p, 0);
             }
@@ -117,6 +120,9 @@ public class MyTask extends BukkitRunnable {
                     Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + PrisonGame.warden.getName() + " only prison:golddigger");
                 }
             }
+            if (PrisonGame.isInside(p, PrisonGame.nl("world", -50D, -53D, -109D, 0f, 0f), PrisonGame.nl("world", -48D, -59D, -107D, 0f, 0f))) {
+                p.teleport(PrisonGame.nl("world", 70D, -59D, -69D, 180f, 0f));
+            }
             p.getInventory().remove(Material.NETHERITE_SWORD);
             if (PrisonGame.type.get(p) != 0 && PrisonGame.type.get(p) != -1) {
                 if (p.hasPotionEffect(PotionEffectType.UNLUCK)) {
@@ -134,7 +140,8 @@ public class MyTask extends BukkitRunnable {
             }
         }
         PrisonGame.swapcool -= 1;
-        PrisonGame.wardenCooldown = PrisonGame.wardenCooldown - 1;
+        PrisonGame.lockdowncool -= 1;
+        PrisonGame.wardenCooldown -= 1;
         if (Bukkit.getWorld("world").getTime() > 0 && Bukkit.getWorld("world").getTime() < 2500) {
             timer1 = 0;
 
@@ -327,9 +334,9 @@ public class MyTask extends BukkitRunnable {
             if (p.getLocation().getBlockY() == -61 && PrisonGame.active.getName().equals("Island") && p.getLocation().getBlock().getType().equals(Material.WATER)) {
                 p.damage(4);
             }
-            if (p.getLocation().getBlockY() == -61 && PrisonGame.active.getName().equals("Boat") && p.getLocation().getBlock().getType().equals(Material.WATER)) {
-                p.damage(1);
-                p.teleport(new Location(p.getWorld(), p.getLocation().getX(), p.getLocation().getY() - 1, p.getLocation().getZ()));
+            if (p.getLocation().getBlockY() <= -53 && PrisonGame.active.getName().equals("Boat") && p.getLocation().getBlock().getType().equals(Material.WATER)) {
+                p.damage(3);
+                p.teleport(new Location(p.getWorld(), p.getLocation().getX(), p.getLocation().getY() - 0.1, p.getLocation().getZ()));
             }
             if (p.getLocation().getY() < 118 && p.getWorld().getName().equals("endprison")) {
                 p.damage(999);
@@ -344,7 +351,15 @@ public class MyTask extends BukkitRunnable {
                 p.setGameMode(GameMode.ADVENTURE);
             if (p.hasPotionEffect(PotionEffectType.LUCK)) {
                 p.setGameMode(GameMode.SPECTATOR);
-                p.teleport(PrisonGame.active.getNursebed());
+                if (PrisonGame.killior.get(p) == null) {
+                    p.teleport(PrisonGame.active.getNursebed());
+                } else {
+                    if (PrisonGame.killior.get(p).isOnline() && !PrisonGame.killior.get(p).getGameMode().equals(GameMode.SPECTATOR)) {
+                        p.setSpectatorTarget(PrisonGame.killior.get(p));
+                    } else {
+                        p.teleport(PrisonGame.active.getNursebed());
+                    }
+                }
             } else {
                 if (p.getGameMode().equals(GameMode.SPECTATOR)) {
                     p.setGameMode(GameMode.ADVENTURE);

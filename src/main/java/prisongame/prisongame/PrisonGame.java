@@ -64,6 +64,7 @@ public final class PrisonGame extends JavaPlugin {
 
     static NamespacedKey mny;
     static HashMap<Player, Integer> respect = new HashMap<>();
+    static HashMap<Player, Player> killior = new HashMap<>();
     static NamespacedKey muted;
 
     static LivingEntity bertrude;

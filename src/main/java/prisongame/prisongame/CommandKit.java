@@ -123,6 +123,7 @@ public class CommandKit implements CommandExecutor {
                     if (PrisonGame.wardenCooldown <= 0) {
                         MyListener.playerJoin(PrisonGame.warden, false);
                         Bukkit.broadcastMessage(ChatColor.GREEN + "The warden has resigned!");
+                        PrisonGame.wardenCooldown = 60;
                         PrisonGame.warden = null;
                     }
                 }

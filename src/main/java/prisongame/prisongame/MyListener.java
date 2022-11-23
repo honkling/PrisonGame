@@ -293,6 +293,9 @@ public class MyListener implements Listener {
 
     @EventHandler
     public void deathmsg(PlayerDeathEvent event) {
+        if (event.getEntity().getKiller() != null) {
+            PrisonGame.killior.put(event.getEntity(), event.getEntity().getKiller());
+        }
         event.getDrops().removeIf(i -> i.getType() == Material.TRIPWIRE_HOOK);
         event.getDrops().removeIf(i -> i.getType() == Material.WOODEN_AXE);
         event.getDrops().removeIf(i -> i.getType() == Material.WOODEN_SWORD);
@@ -420,9 +423,14 @@ public class MyListener implements Listener {
 
     @EventHandler
     public void ee(BlockBreakEvent event) {
+
         if (event.getPlayer().getGameMode().equals(GameMode.SURVIVAL)) {
             event.getPlayer().sendMessage("Wow! You managed to break a block in survival mode! This means the server is completely fucking broken, or it's reloading. Please tell agmass. Please.");
             event.setCancelled(true);
+        } else if (event.getPlayer().getGameMode().equals(GameMode.ADVENTURE)) {
+            event.setCancelled(true);
+            event.getBlock().setType(Material.AIR);
+            Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {event.getBlock().setType(Material.IRON_BARS);}, 20 * 30);
         }
     }
 
@@ -757,6 +765,15 @@ public class MyListener implements Listener {
                         event.getWhoClicked().getInventory().addItem(card);
                     }
                 }
+                if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.GRAY + "WireCutters")) {
+                    event.setCancelled(true);
+                    if (event.getWhoClicked().getInventory().containsAtLeast(new ItemStack(Material.COBBLESTONE), 1) &&  event.getWhoClicked().getInventory().containsAtLeast(new ItemStack(Material.RAW_IRON), 4) && event.getWhoClicked().getInventory().containsAtLeast(new ItemStack(Material.STICK), 2)) {
+                        event.getWhoClicked().getInventory().removeItem(new ItemStack(Material.RAW_IRON, 4));
+                        event.getWhoClicked().getInventory().removeItem(new ItemStack(Material.STICK, 2));
+                        event.getWhoClicked().getInventory().removeItem(new ItemStack(Material.COBBLESTONE, 1));
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "give " + event.getWhoClicked().getName() + " iron_pickaxe{Damage:245,display:{Name:'[{\"text\":\"WireCutters\",\"italic\":false,\"color\":\"gray\"},{\"text\":\" \"},{\"text\":\"[CONTRABAND]\",\"color\":\"red\"}]'},Enchantments:[{id:efficiency,lvl:5}],HideFlags:1,CanDestroy:[iron_bars]} 1");
+                    }
+                }
                 if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.LIGHT_PURPLE + "Normal Crafting")) {
                     event.getWhoClicked().openWorkbench(null, true);
                 }
@@ -974,6 +991,7 @@ public class MyListener implements Listener {
                     inv.addItem(PrisonGame.createGuiItem(Material.COBBLESTONE, ChatColor.LIGHT_PURPLE + "Rock", "§aRecipe:", "§b9 Pebbles"));
                     inv.addItem(PrisonGame.createGuiItem(Material.PAPER, ChatColor.WHITE + "Paper", "§aRecipe:", "§b1 Coal", "§b1 Scrap Metal", "§a15$"));
                     inv.addItem(PrisonGame.createGuiItem(Material.TRIPWIRE_HOOK, ChatColor.LIGHT_PURPLE + "Fake Card", "§aRecipe:", "§b3 Paper", "§b2 Sticks"));
+                    inv.addItem(PrisonGame.createGuiItem(Material.SHEARS, ChatColor.GRAY + "WireCutters", "§aRecipe:", "§b4 Scrap Metal", "§b2 Sticks", "§b1 Rock"));
                     event.getPlayer().openInventory(inv);
                 }, 1L);
             }
@@ -1218,6 +1236,13 @@ public class MyListener implements Listener {
                                 for (Integer x = PrisonGame.active.cafedoor1.getBlockX(); x <= PrisonGame.active.cafedoor2.getBlockX(); x++) {
                                     for (Integer y = PrisonGame.active.cafedoor1.getBlockY(); y <= PrisonGame.active.cafedoor2.getBlockY(); y++) {
                                         for (Integer z = PrisonGame.active.cafedoor1.getBlockZ(); z <= PrisonGame.active.cafedoor2.getBlockZ(); z++) {
+                                            event.getPlayer().getWorld().getBlockAt(x, y, z).setType(Material.AIR);
+                                        }
+                                    }
+                                }
+                                for (Integer x = PrisonGame.active.cafedoor2.getBlockX(); x <= PrisonGame.active.cafedoor1.getBlockX(); x++) {
+                                    for (Integer y = PrisonGame.active.cafedoor2.getBlockY(); y <= PrisonGame.active.cafedoor1.getBlockY(); y++) {
+                                        for (Integer z = PrisonGame.active.cafedoor2.getBlockZ(); z <= PrisonGame.active.cafedoor1.getBlockZ(); z++) {
                                             event.getPlayer().getWorld().getBlockAt(x, y, z).setType(Material.AIR);
                                         }
                                     }
@@ -1671,8 +1696,8 @@ public class MyListener implements Listener {
                     p.setDisplayName(ChatColor.GRAY + "[" + ChatColor.YELLOW + "BUILDER" + ChatColor.GRAY + "] " + p.getDisplayName());
                 }
             }
-            event.getPlayer().teleport(PrisonGame.active.getNursebed());
             event.getPlayer().sendTitle("RESPAWNING", "Wait 15 seconds.");
+            event.getPlayer().teleport(PrisonGame.active.getNursebed());
             event.getPlayer().addPotionEffect(PotionEffectType.LUCK.createEffect(15 * 20, 255));
             event.getPlayer().addPotionEffect(PotionEffectType.BLINDNESS.createEffect(15 * 20, 0));
             LivingEntity bat = (LivingEntity) event.getPlayer().getWorld().spawnEntity(event.getPlayer().getLocation(), EntityType.BAT);
@@ -1682,18 +1707,34 @@ public class MyListener implements Listener {
             bat.setSilent(true);
             bat.addPotionEffect(PotionEffectType.INVISIBILITY.createEffect(99999999, 10));
             event.getPlayer().setGameMode(GameMode.SPECTATOR);
-            event.getPlayer().setSpectatorTarget(bat);
+            if (PrisonGame.killior.get(event.getPlayer()) == null) {
+                event.getPlayer().setSpectatorTarget(bat);
+            } else {
+                if (PrisonGame.killior.get(event.getPlayer()).isOnline()) {
+                    event.getPlayer().teleport(PrisonGame.killior.get(event.getPlayer()));
+                    Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {event.getPlayer().setSpectatorTarget(PrisonGame.killior.get(event.getPlayer()));}, 3);
+                } else {
+                    event.getPlayer().setSpectatorTarget(bat);
+                }
+            }
             Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
-                bat.remove();
-                event.getPlayer().setNoDamageTicks(20 * 5);
-                if (event.getPlayer().getGameMode() != GameMode.ADVENTURE) {
-                    event.getPlayer().setGameMode(GameMode.ADVENTURE);
-                    Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
+                if (!event.getPlayer().getDisplayName().contains("SOLITARY")) {
+                    event.getPlayer().setGameMode(GameMode.SPECTATOR);
+                    PrisonGame.killior.put(event.getPlayer(), null);
+                    event.getPlayer().setSpectatorTarget(null);
+                    event.getPlayer().teleport(PrisonGame.active.getNursebedOutTP());
+                    bat.remove();
+                    event.getPlayer().setNoDamageTicks(20 * 5);
+                    if (event.getPlayer().getGameMode() != GameMode.ADVENTURE) {
+                        event.getPlayer().setGameMode(GameMode.ADVENTURE);
                         event.getPlayer().teleport(PrisonGame.active.getNursebedOutTP());
-                    }, 7);
-                    Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
-                        event.getPlayer().teleport(PrisonGame.active.getNursebedOutTP());
-                    }, 10);
+                        Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
+                            event.getPlayer().teleport(PrisonGame.active.getNursebedOutTP());
+                        }, 7);
+                        Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
+                            event.getPlayer().teleport(PrisonGame.active.getNursebedOutTP());
+                        }, 10);
+                    }
                 }
             }, 20 * 15);
         }, 1);
