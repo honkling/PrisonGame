@@ -355,6 +355,10 @@ public class MyListener implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerQuitEvent event) {
+        if (event.getPlayer() == PrisonGame.warden) {
+            Bukkit.broadcastMessage(ChatColor.GREEN + "The warden has left the game!");
+            PrisonGame.wardenCooldown = 40;
+        }
         event.setQuitMessage(ChatColor.GOLD + event.getPlayer().getName() + " ran off somewhere else... (QUIT)");
     }
 
@@ -397,7 +401,7 @@ public class MyListener implements Listener {
                         if (event.getMessage().toLowerCase().equals("piggopet reference")) {
                             PrisonGame.givepig = true;
                         }
-                    if (!PrisonGame.word.get(event.getPlayer()).equals(event.getMessage())) {
+                    if (!PrisonGame.word.getOrDefault(event.getPlayer(), "").equals(event.getMessage())) {
                         Bukkit.broadcastMessage(event.getPlayer().getPlayerListName() + ChatColor.GRAY + ": " + ChatColor.GRAY + ChatColor.GRAY + FilteredWords.filtermsg(event.getMessage()));
                         PrisonGame.word.put(event.getPlayer(), event.getMessage());
                     } else {
@@ -445,7 +449,8 @@ public class MyListener implements Listener {
     @EventHandler
     public void ee(PlayerInteractEvent event) {
         if (event.getPlayer().getGameMode().equals(GameMode.SURVIVAL)) {
-            event.getPlayer().sendMessage("Wow! You managed to interact with a block in survival mode! This means the server is completely fucking broken, or it's reloading. Please tell agmass. Please.");
+            if (PrisonGame.active.getName().equals("The End?"))
+                event.getPlayer().sendMessage("Wow! You managed to interact with a block in survival mode! This means the server is completely fucking broken, or it's reloading. Please tell agmass. Please.");
             event.setCancelled(true);
         }
     }
@@ -542,13 +547,6 @@ public class MyListener implements Listener {
                         p.teleport(new Location(Bukkit.getWorld("world"), -2062, -50, 1945));
                     }
                     PrisonGame.active = PrisonGame.gaeae;
-                    for (Integer x = PrisonGame.gaeae.getCafedoor1().getBlockX(); x <= PrisonGame.gaeae.getCafedoor2().getBlockX(); x++) {
-                        for (Integer y = PrisonGame.gaeae.getCafedoor1().getBlockY(); y <= PrisonGame.gaeae.getCafedoor2().getBlockY(); y++) {
-                            for (Integer z = PrisonGame.gaeae.getCafedoor1().getBlockZ(); z <= PrisonGame.gaeae.getCafedoor2().getBlockZ(); z++) {
-                                Bukkit.getWorld("world").getBlockAt(x, y, z).setType(Material.MUD_BRICKS);
-                            }
-                        }
-                    }
                     PrisonGame.swapcool = (20 * 60) * 5;
                     reloadBert();
                     for (Player p : Bukkit.getOnlinePlayers()) {
@@ -567,13 +565,6 @@ public class MyListener implements Listener {
                         p.teleport(new Location(Bukkit.getWorld("world"), -2062, -50, 1945));
                     }
                     PrisonGame.active = PrisonGame.volcano;
-                    for (Integer x = PrisonGame.volcano.getCafedoor1().getBlockX(); x <= PrisonGame.volcano.getCafedoor2().getBlockX(); x++) {
-                        for (Integer y = PrisonGame.volcano.getCafedoor1().getBlockY(); y <= PrisonGame.volcano.getCafedoor2().getBlockY(); y++) {
-                            for (Integer z = PrisonGame.volcano.getCafedoor1().getBlockZ(); z <= PrisonGame.volcano.getCafedoor2().getBlockZ(); z++) {
-                                Bukkit.getWorld("world").getBlockAt(x, y, z).setType(Material.MUD_BRICKS);
-                            }
-                        }
-                    }
                     PrisonGame.swapcool = (20 * 60) * 5;
                     reloadBert();
                     for (Player p : Bukkit.getOnlinePlayers()) {
@@ -592,13 +583,6 @@ public class MyListener implements Listener {
                         p.teleport(new Location(Bukkit.getWorld("world"), -2062, -50, 1945));
                     }
                     PrisonGame.active = PrisonGame.island;
-                    for (Integer x = PrisonGame.island.getCafedoor1().getBlockX(); x <= PrisonGame.island.getCafedoor2().getBlockX(); x++) {
-                        for (Integer y = PrisonGame.island.getCafedoor1().getBlockY(); y <= PrisonGame.island.getCafedoor2().getBlockY(); y++) {
-                            for (Integer z = PrisonGame.island.getCafedoor1().getBlockZ(); z <= PrisonGame.island.getCafedoor2().getBlockZ(); z++) {
-                                Bukkit.getWorld("world").getBlockAt(x, y, z).setType(Material.MUD_BRICKS);
-                            }
-                        }
-                    }
                     PrisonGame.swapcool = (20 * 60) * 5;
                     reloadBert();
                     for (Player p : Bukkit.getOnlinePlayers()) {
@@ -617,13 +601,6 @@ public class MyListener implements Listener {
                         p.teleport(new Location(Bukkit.getWorld("world"), -2062, -50, 1945));
                     }
                     PrisonGame.active = PrisonGame.santa;
-                    for (Integer x = PrisonGame.santa.getCafedoor1().getBlockX(); x <= PrisonGame.santa.getCafedoor2().getBlockX(); x++) {
-                        for (Integer y = PrisonGame.santa.getCafedoor1().getBlockY(); y <= PrisonGame.santa.getCafedoor2().getBlockY(); y++) {
-                            for (Integer z = PrisonGame.santa.getCafedoor1().getBlockZ(); z <= PrisonGame.santa.getCafedoor2().getBlockZ(); z++) {
-                                Bukkit.getWorld("world").getBlockAt(x, y, z).setType(Material.MUD_BRICKS);
-                            }
-                        }
-                    }
                     PrisonGame.swapcool = (20 * 60) * 5;
                     reloadBert();
                     for (Player p : Bukkit.getOnlinePlayers()) {
@@ -642,13 +619,6 @@ public class MyListener implements Listener {
                         p.teleport(new Location(Bukkit.getWorld("world"), -2062, -50, 1945));
                     }
                     PrisonGame.active = PrisonGame.gladiator;
-                    for (Integer x = PrisonGame.gladiator.getCafedoor1().getBlockX(); x <= PrisonGame.gladiator.getCafedoor2().getBlockX(); x++) {
-                        for (Integer y = PrisonGame.gladiator.getCafedoor1().getBlockY(); y <= PrisonGame.gladiator.getCafedoor2().getBlockY(); y++) {
-                            for (Integer z = PrisonGame.gladiator.getCafedoor1().getBlockZ(); z <= PrisonGame.gladiator.getCafedoor2().getBlockZ(); z++) {
-                                Bukkit.getWorld("world").getBlockAt(x, y, z).setType(Material.MUD_BRICKS);
-                            }
-                        }
-                    }
                     PrisonGame.swapcool = (20 * 60) * 5;
                     reloadBert();
                     for (Player p : Bukkit.getOnlinePlayers()) {
@@ -667,13 +637,6 @@ public class MyListener implements Listener {
                         p.teleport(new Location(Bukkit.getWorld("world"), -2062, -50, 1945));
                     }
                     PrisonGame.active = PrisonGame.train;
-                    for (Integer x = PrisonGame.train.getCafedoor1().getBlockX(); x <= PrisonGame.train.getCafedoor2().getBlockX(); x++) {
-                        for (Integer y = PrisonGame.train.getCafedoor1().getBlockY(); y <= PrisonGame.train.getCafedoor2().getBlockY(); y++) {
-                            for (Integer z = PrisonGame.train.getCafedoor1().getBlockZ(); z <= PrisonGame.train.getCafedoor2().getBlockZ(); z++) {
-                                Bukkit.getWorld("world").getBlockAt(x, y, z).setType(Material.MUD_BRICKS);
-                            }
-                        }
-                    }
                     PrisonGame.swapcool = (20 * 60) * 5;
                     reloadBert();
                     for (Player p : Bukkit.getOnlinePlayers()) {
@@ -692,13 +655,6 @@ public class MyListener implements Listener {
                         p.teleport(new Location(Bukkit.getWorld("world"), -2062, -50, 1945));
                     }
                     PrisonGame.active = PrisonGame.boat;
-                    for (Integer x = PrisonGame.boat.getCafedoor1().getBlockX(); x <= PrisonGame.boat.getCafedoor2().getBlockX(); x++) {
-                        for (Integer y = PrisonGame.boat.getCafedoor1().getBlockY(); y <= PrisonGame.boat.getCafedoor2().getBlockY(); y++) {
-                            for (Integer z = PrisonGame.boat.getCafedoor1().getBlockZ(); z <= PrisonGame.boat.getCafedoor2().getBlockZ(); z++) {
-                                Bukkit.getWorld("world").getBlockAt(x, y, z).setType(Material.MUD_BRICKS);
-                            }
-                        }
-                    }
                     PrisonGame.swapcool = (20 * 60) * 5;
                     reloadBert();
                     for (Player p : Bukkit.getOnlinePlayers()) {
@@ -717,9 +673,6 @@ public class MyListener implements Listener {
                         p.teleport(new Location(Bukkit.getWorld("world"), -2062, -50, 1945));
                     }
                     PrisonGame.active = PrisonGame.hyper;
-                    for (Integer x = 1; x <= 3; x++) {
-                        Bukkit.getWorld("world").getBlockAt(x, -58, -1008).setType(Material.MUD_BRICKS);
-                    }
                     PrisonGame.swapcool = (20 * 60) * 5;
                     reloadBert();
                     for (Player p : Bukkit.getOnlinePlayers()) {
@@ -816,6 +769,13 @@ public class MyListener implements Listener {
 
     @EventHandler
     public void chatCleanup(EntityDamageByEntityEvent event) {
+        if (event.getDamager() instanceof Player) {
+            Player p = (Player) event.getDamager();
+            if (p.hasPotionEffect(PotionEffectType.DAMAGE_RESISTANCE)) {
+                p.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
+                p.setNoDamageTicks(0);
+            }
+        }
         if (Bukkit.getWorld("world").getTime() > 0 && Bukkit.getWorld("world").getTime() < 2500) {
             if (event.getEntity() instanceof Player) {
                 Player p = (Player) event.getEntity();
@@ -1275,18 +1235,21 @@ public class MyListener implements Listener {
                     if (event.getPlayer().getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0) >= 16.0) {
                         event.getPlayer().getPersistentDataContainer().set(PrisonGame.mny, PersistentDataType.DOUBLE ,event.getPlayer().getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0)- 16.0);
                         event.getPlayer().getInventory().addItem(new ItemStack(Material.ARROW, 16));
+                        event.getPlayer().playSound(event.getPlayer(), Sound.BLOCK_WOOD_PLACE, 1, 1);
                     }
                 }
                 if (sign.getLine(2).equals("Supreme Stick")) {
                     if (event.getPlayer().getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0) >= 50.0) {
                         event.getPlayer().getPersistentDataContainer().set(PrisonGame.mny, PersistentDataType.DOUBLE ,event.getPlayer().getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0)- 50.0);
                         event.getPlayer().getInventory().addItem(new ItemStack(Material.STICK));
+                        event.getPlayer().playSound(event.getPlayer(), Sound.BLOCK_WOOD_PLACE, 1, 1);
                     }
                 }
                 if (sign.getLine(2).equals("Coal")) {
                     if (event.getPlayer().getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0) >= 30.0) {
                         event.getPlayer().getPersistentDataContainer().set(PrisonGame.mny, PersistentDataType.DOUBLE ,event.getPlayer().getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0)- 30.0);
                         event.getPlayer().getInventory().addItem(new ItemStack(Material.COAL));
+                        event.getPlayer().playSound(event.getPlayer(), Sound.BLOCK_WOOD_PLACE, 1, 1);
                     }
                 }
                 if (sign.getLine(2).equals("Lumberjack")) {
@@ -1329,7 +1292,7 @@ public class MyListener implements Listener {
                     }
                 }
                 if (sign.getLine(2).equals("Bounty Hunter")) {
-                    if (!event.getPlayer().getInventory().contains(Material.CARROT_ON_A_STICK)) {
+                    if (!event.getPlayer().getInventory().contains(Material.WOODEN_SWORD)) {
                         event.getPlayer().playSound(event.getPlayer(), Sound.BLOCK_NOTE_BLOCK_BANJO, 1, 1);
                         ItemStack card = new ItemStack(Material.WOODEN_SWORD);
                         ItemMeta cardm = card.getItemMeta();
@@ -1358,7 +1321,7 @@ public class MyListener implements Listener {
                     if (PrisonGame.type.get(event.getPlayer()) == 0 && !PrisonGame.escaped.get(event.getPlayer())) {
                         Player g = event.getPlayer();
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + event.getPlayer().getName() + " only prison:escape");
-                        g.playSound(event.getPlayer(), Sound.EVENT_RAID_HORN, 1, 1);
+                        g.playSound(g, Sound.ITEM_GOAT_HORN_SOUND_1, 1, 1);
                         PrisonGame.escaped.put(event.getPlayer(), true);
                         Bukkit.broadcastMessage(ChatColor.RED + g.getName() + " escaped...");
                         event.getPlayer().addPotionEffect(PotionEffectType.GLOWING.createEffect(999999999, 0));
@@ -1433,11 +1396,15 @@ public class MyListener implements Listener {
                     event.getPlayer().sendTitle("", ChatColor.GRAY + "-= Black Market =-");
                     event.getPlayer().playSound(event.getPlayer(), Sound.AMBIENT_UNDERWATER_ENTER, 1, 0.75f);
                     event.getPlayer().addPotionEffect(PotionEffectType.UNLUCK.createEffect(999999, 2));
+                } else {
+                    event.getPlayer().playSound(event.getPlayer(), Sound.ENTITY_VILLAGER_NO, 1, 1);
+                    event.getPlayer().sendMessage(ChatColor.RED + "You wouldn't want to get yourself dirty in there!");
                 }
             }
             if (event.getClickedBlock().getType().equals(Material.JUNGLE_DOOR)) {
                 if (PrisonGame.type.get(event.getPlayer()) != -1) {
                     event.setCancelled(true);
+                    event.getPlayer().playSound(event.getPlayer(), Sound.ENTITY_VILLAGER_NO, 1, 1);
                     event.getPlayer().sendMessage(ChatColor.RED + "This door can only be opened by the warden!");
                 }
             }
@@ -1463,14 +1430,17 @@ public class MyListener implements Listener {
                             } else {
                                 event.setCancelled(true);
                                 event.getPlayer().sendMessage(ChatColor.RED + "You can't open this during lockdown!");
+                                event.getPlayer().playSound(event.getPlayer(), Sound.ENTITY_VILLAGER_NO, 1, 1);
                             }
                         } else {
                             event.setCancelled(true);
                             event.getPlayer().sendMessage(ChatColor.RED + "You can't open this during lockdown!");
+                            event.getPlayer().playSound(event.getPlayer(), Sound.ENTITY_VILLAGER_NO, 1, 1);
                         }
                     } else {
                         event.setCancelled(true);
                         event.getPlayer().sendMessage(ChatColor.RED + "You can't open this during lockdown!");
+                        event.getPlayer().playSound(event.getPlayer(), Sound.ENTITY_VILLAGER_NO, 1, 1);
                     }
                 }
             }
@@ -1505,6 +1475,7 @@ public class MyListener implements Listener {
     public void anyName(PlayerDropItemEvent event) {
         if (PrisonGame.type.get(event.getPlayer()) != 0) {
             if (!event.getItemDrop().getItemStack().getType().equals(Material.TRIPWIRE_HOOK)) {
+                event.getPlayer().playSound(event.getPlayer(), Sound.ENTITY_VILLAGER_NO, 1, 1);
                 event.getItemDrop().setItemStack(new ItemStack(Material.AIR));
             } else {
                 event.setCancelled(true);
@@ -1516,6 +1487,7 @@ public class MyListener implements Listener {
         Player p = event.getEntity();
         if(p.isDead()) {
             if (p.getKiller() != null) {
+                p.getKiller().playSound(p.getKiller(), Sound.BLOCK_NOTE_BLOCK_BASS, 1, 2);
                 if (p.hasPotionEffect(PotionEffectType.GLOWING)) {
                     p.getKiller().sendMessage(ChatColor.GREEN + "You killed a criminal and got 100$!");
                     p.getKiller().getPersistentDataContainer().set(PrisonGame.mny, PersistentDataType.DOUBLE ,p.getKiller().getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0) + 100.0);
@@ -1525,6 +1497,7 @@ public class MyListener implements Listener {
     }
     @EventHandler
     public void onPlayerJoin(PlayerRespawnEvent event) {
+        event.getPlayer().playSound(event.getPlayer(), Sound.MUSIC_DISC_CHIRP, 1, 2);
         PrisonGame.worryachieve.put(event.getPlayer(), -1);
         Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
             if (PrisonGame.type.get(event.getPlayer()) == -1) {
@@ -1718,22 +1691,27 @@ public class MyListener implements Listener {
                 }
             }
             Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
+                event.getPlayer().stopSound(Sound.MUSIC_DISC_CHIRP);
                 if (!event.getPlayer().getDisplayName().contains("SOLITARY")) {
                     event.getPlayer().setGameMode(GameMode.SPECTATOR);
                     PrisonGame.killior.put(event.getPlayer(), null);
                     event.getPlayer().setSpectatorTarget(null);
                     event.getPlayer().teleport(PrisonGame.active.getNursebedOutTP());
                     bat.remove();
-                    event.getPlayer().setNoDamageTicks(20 * 5);
                     if (event.getPlayer().getGameMode() != GameMode.ADVENTURE) {
                         event.getPlayer().setGameMode(GameMode.ADVENTURE);
-                        event.getPlayer().teleport(PrisonGame.active.getNursebedOutTP());
-                        Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
+                        event.getPlayer().setNoDamageTicks(20 * 30);
+                        event.getPlayer().addPotionEffect(PotionEffectType.DAMAGE_RESISTANCE.createEffect(20 * 30, 0));
+                        if (event.getPlayer().getGameMode() != GameMode.ADVENTURE) {
+                            event.getPlayer().setGameMode(GameMode.ADVENTURE);
                             event.getPlayer().teleport(PrisonGame.active.getNursebedOutTP());
-                        }, 7);
-                        Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
-                            event.getPlayer().teleport(PrisonGame.active.getNursebedOutTP());
-                        }, 10);
+                            Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
+                                event.getPlayer().teleport(PrisonGame.active.getNursebedOutTP());
+                            }, 7);
+                            Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
+                                event.getPlayer().teleport(PrisonGame.active.getNursebedOutTP());
+                            }, 10);
+                        }
                     }
                 }
             }, 20 * 15);

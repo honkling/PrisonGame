@@ -207,7 +207,7 @@ public class MyTask extends BukkitRunnable {
                 }
                 hasAlerted = true;
                 Double taxcount = 0.0;
-                DecimalFormat numberFormat = new DecimalFormat("#.00");
+                DecimalFormat numberFormat = new DecimalFormat("#0.0");
                 for (Player p : Bukkit.getOnlinePlayers()) {
                     if (p.hasPotionEffect(PotionEffectType.GLOWING) && !PrisonGame.escaped.get(p)) {
                         Bukkit.broadcastMessage(ChatColor.RED + p.getName() + ChatColor.GOLD + " didn't come to roll call! " + ChatColor.RED + "Kill them for 100 dollars!");
@@ -424,10 +424,14 @@ public class MyTask extends BukkitRunnable {
                 }
             }
         }
-        DecimalFormat numberFormat = new DecimalFormat("#.00");
+        DecimalFormat numberFormat = new DecimalFormat("#0.0");
         if (PrisonGame.warden == null) {
+            String wardentime = ChatColor.RED + " None! Use '/warden' to become the prison warden!";
+            if (PrisonGame.wardenCooldown > 0) {
+                wardentime = ChatColor.RED + " None! Warden command is on cooldown! " + net.md_5.bungee.api.ChatColor.GRAY + "[" + Math.round((float) PrisonGame.wardenCooldown / 20f) + "]";
+            }
             for (Player p :Bukkit.getOnlinePlayers()) {
-                p.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GREEN + numberFormat.format(p.getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0)) + "$" + ChatColor.GRAY + " || "  + ChatColor.GRAY + "Current Warden: " + ChatColor.RED + " None! Use '/warden' to become the prison warden!"));
+                p.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GREEN + numberFormat.format(p.getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0)) + "$" + ChatColor.GRAY + " || "  + ChatColor.GRAY + "Current Warden: " + wardentime));
             }
         } else {
             if (!PrisonGame.warden.isOnline()) {

@@ -41,7 +41,7 @@ public class Prison {
         cafedoor1 = cfd1;
         cafedoor2 = cfd2;
         Bukkit.broadcastMessage("activated prison " + nm + " world: " + cls.getWorld().getName());
-        for (Integer x = 1; x <= 3; x++) {
+        /*for (Integer x = 1; x <= 3; x++) {
             Bukkit.getWorld("world").getBlockAt(x, -58, -1008).setType(Material.MUD_BRICKS);
         }
         for (Integer x = cfd1.getBlockX(); x <= cfd2.getBlockX(); x++) {
@@ -50,7 +50,7 @@ public class Prison {
                     Bukkit.getWorld("world").getBlockAt(x, y, z).setType(Material.MUD_BRICKS);
                 }
             }
-        }
+        }*/
     }
 
     public String getName() {
