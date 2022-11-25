@@ -1092,7 +1092,7 @@ public class MyListener implements Listener {
 
                         ItemStack pot = new ItemStack(Material.SPLASH_POTION);
                         PotionMeta potionMeta = (PotionMeta) pot.getItemMeta();
-                        potionMeta.addCustomEffect(PotionEffectType.HEAL.createEffect(10, 2), true);
+                        potionMeta.addCustomEffect(PotionEffectType.HEAL.createEffect(10, 0), true);
                         pot.setItemMeta(potionMeta);
 
                         g.getInventory().addItem(pot);
@@ -1606,7 +1606,7 @@ public class MyListener implements Listener {
 
                 ItemStack pot = new ItemStack(Material.SPLASH_POTION);
                 PotionMeta potionMeta = (PotionMeta) pot.getItemMeta();
-                potionMeta.addCustomEffect(PotionEffectType.HEAL.createEffect(10, 2), true);
+                potionMeta.addCustomEffect(PotionEffectType.HEAL.createEffect(10, 0), true);
                 pot.setItemMeta(potionMeta);
 
                 g.getInventory().addItem(pot);

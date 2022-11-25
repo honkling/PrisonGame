@@ -212,7 +212,7 @@ public class MyTask extends BukkitRunnable {
                         PrisonGame.respect.put(p, 0);
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + p.getName() + " only prison:respect");
                     }
-                    if (PrisonGame.type.get(p) != 0) {
+                    if (PrisonGame.type.get(p) == 0) {
                         p.sendMessage(ChatColor.GREEN + numberFormat.format(p.getPersistentDataContainer().get(PrisonGame.mny, PersistentDataType.DOUBLE) * 0.05) + "$ was taxed towards the prison.");
                         taxcount += p.getPersistentDataContainer().get(PrisonGame.mny, PersistentDataType.DOUBLE) * 0.1;
                         p.getPersistentDataContainer().set(PrisonGame.mny, PersistentDataType.DOUBLE, p.getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0) * 0.95);
