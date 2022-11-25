@@ -13,6 +13,10 @@ commands:
     permission: litteraly.do.not.give.this.lmao
     description: Reloads the game
     usage: /<command>
+  builder:
+    permission: penis.mute
+    description: build menu
+    usage: /<command>
   nerdcheatcommand:
     permission: penis.cock
     description: gives 1000 dollahs

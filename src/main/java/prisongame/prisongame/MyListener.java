@@ -150,6 +150,18 @@ public class MyListener implements Listener {
     public void bertrudeiosepic(InventoryClickEvent event) {
         if (event.getCurrentItem() != null) {
             if (event.getCurrentItem().getItemMeta() != null) {
+                if (event.getCurrentItem().getItemMeta().getDisplayName().contains(ChatColor.YELLOW + "Get Coords [CUSTOM]")) {
+                    event.setCancelled(true);
+                    event.getWhoClicked().sendMessage("nl(\"" + event.getWhoClicked().getWorld().getName() + "\", " + event.getWhoClicked().getLocation().getX() + "D," + event.getWhoClicked().getLocation().getY() + "D," + event.getWhoClicked().getLocation().getZ() + "D," + event.getWhoClicked().getLocation().getYaw() + "f," + event.getWhoClicked().getLocation().getPitch() + "f)");
+                }
+                if (event.getCurrentItem().getItemMeta().getDisplayName().contains("[CMD]")) {
+                    if (event.getWhoClicked().hasPermission("minecraft.command.gamemode")) {
+                        if (event.getCurrentItem().getItemMeta().getLore() != null) {
+                            event.setCancelled(true);
+                            Bukkit.dispatchCommand(event.getWhoClicked(), event.getCurrentItem().getItemMeta().getLore().get(0));
+                        }
+                    }
+                }
                 if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.LIGHT_PURPLE + "epic bertude night vision")) {
                     event.setCancelled(true);
                     if (!event.getWhoClicked().getPersistentDataContainer().has(PrisonGame.nightvis, PersistentDataType.INTEGER)) {
@@ -796,7 +808,6 @@ public class MyListener implements Listener {
                     if (event.getItem().getType().equals(Material.WOODEN_SHOVEL)) {
                         if (!event.getPlayer().hasCooldown(Material.WOODEN_SHOVEL)) {
                             event.getPlayer().getPersistentDataContainer().set(PrisonGame.mny, PersistentDataType.DOUBLE, event.getPlayer().getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0) + 8.0 * MyTask.jobm);
-                            event.getPlayer().getPersistentDataContainer().set(PrisonGame.coarsemined, PersistentDataType.DOUBLE, event.getPlayer().getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0) + 1);
                             event.getClickedBlock().setType(Material.BEDROCK);
                             event.getPlayer().setCooldown(Material.WOODEN_SHOVEL, 10);
                             Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
@@ -806,6 +817,9 @@ public class MyListener implements Listener {
 
                     }
                 }
+            }
+            if (event.getClickedBlock().getType().equals(Material.GRINDSTONE)) {
+                event.setCancelled(true);
             }
             if (event.getClickedBlock().getType().equals(Material.TRAPPED_CHEST)) {
                 event.getPlayer().getInventory().addItem(new ItemStack(Material.COD));

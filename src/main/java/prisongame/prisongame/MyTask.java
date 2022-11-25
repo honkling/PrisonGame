@@ -114,12 +114,6 @@ public class MyTask extends BukkitRunnable {
                 }
 
             }
-            if (p.getPersistentDataContainer().has(PrisonGame.coarsemined, PersistentDataType.DOUBLE)) {
-                if (p.getPersistentDataContainer().getOrDefault(PrisonGame.coarsemined, PersistentDataType.DOUBLE, 0.0) >= 500) {
-                    p.getPersistentDataContainer().set(PrisonGame.coarsemined, PersistentDataType.DOUBLE, Double.MIN_VALUE);
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + PrisonGame.warden.getName() + " only prison:golddigger");
-                }
-            }
             if (PrisonGame.isInside(p, PrisonGame.nl("world", -50D, -53D, -109D, 0f, 0f), PrisonGame.nl("world", -48D, -59D, -107D, 0f, 0f))) {
                 p.teleport(PrisonGame.nl("world", 70D, -59D, -69D, 180f, 0f));
             }
