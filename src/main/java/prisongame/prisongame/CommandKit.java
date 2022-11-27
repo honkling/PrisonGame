@@ -67,6 +67,11 @@ public class CommandKit implements CommandExecutor {
                         wardenSword.addEnchantment(Enchantment.DAMAGE_ALL, 1);
                         wardenSword.addEnchantment(Enchantment.DURABILITY, 2);
 
+                        if (nw.getPersistentDataContainer().has(PrisonGame.reinforcement, PersistentDataType.INTEGER)) {
+                            nw.getInventory().addItem(new ItemStack(Material.DIAMOND_AXE));
+                            nw.getInventory().setHelmet(new ItemStack(Material.IRON_HELMET));
+                        }
+
                         nw.getInventory().addItem(wardenSword);
                         nw.getInventory().addItem(new ItemStack(Material.BOW));
                         nw.getInventory().addItem(new ItemStack(Material.ARROW, 64));
@@ -77,6 +82,17 @@ public class CommandKit implements CommandExecutor {
                         cardm.setDisplayName(ChatColor.BLUE + "Keycard " + ChatColor.RED + "[CONTRABAND]");
                         card.setItemMeta(cardm);
                         nw.getInventory().addItem(card);
+
+                        if (nw.getPersistentDataContainer().has(PrisonGame.protspawn, PersistentDataType.INTEGER)) {
+                                if (nw.getInventory().getHelmet() != null)
+                                    nw.getInventory().getHelmet().addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+                                if (nw.getInventory().getChestplate() != null)
+                                    nw.getInventory().getChestplate().addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+                                if (nw.getInventory().getLeggings() != null)
+                                    nw.getInventory().getLeggings().addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+                                if (nw.getInventory().getBoots() != null)
+                                    nw.getInventory().getBoots().addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+                        }
                     }
                 } else {
                     sender.sendMessage(ChatColor.RED + "Someone else is already the warden!");
@@ -137,36 +153,41 @@ public class CommandKit implements CommandExecutor {
                             }
                         }
                         if (solitcount < 3) {
-                            if (g.isOnline() && g != sender && PrisonGame.type.get(g) == 0) {
-                                if (g.getGameMode() == GameMode.SPECTATOR) {
-                                    Bukkit.broadcastMessage(ChatColor.GRAY + g.getName() + " was sent to solitary!");
-                                    g.setGameMode(GameMode.ADVENTURE);
-                                    g.removePotionEffect(PotionEffectType.LUCK);
-                                    PrisonGame.escaped.put(g, true);
-                                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + g.getName() + " only prison:solit");
-                                    Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
-                                        g.teleport(PrisonGame.active.getSolit());
-                                    }, 3);
-                                    g.sendTitle("", "You're in solitary.", 10, 0, 10);
-                                    g.addPotionEffect(PotionEffectType.SLOW.createEffect(Integer.MAX_VALUE, 1));
-                                    Player p = g;
-                                    p.setCustomName(ChatColor.GRAY + "[" + ChatColor.BLACK + "SOLITARY" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY + p.getName());
-                                    p.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.BLACK + "SOLITARY" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY + p.getName());
-                                    p.setDisplayName(ChatColor.GRAY + "[" + ChatColor.BLACK + "SOLITARY" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY + p.getName());
+                            if (PrisonGame.solitcooldown <= 0) {
+                                if (g.isOnline() && g != sender && PrisonGame.type.get(g) == 0) {
+                                    if (g.getGameMode() == GameMode.SPECTATOR) {
+                                        PrisonGame.solitcooldown = (20 * 60) * 2;
+                                        Bukkit.broadcastMessage(ChatColor.GRAY + g.getName() + " was sent to solitary!");
+                                        g.setGameMode(GameMode.ADVENTURE);
+                                        g.removePotionEffect(PotionEffectType.LUCK);
+                                        PrisonGame.escaped.put(g, true);
+                                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + g.getName() + " only prison:solit");
+                                        Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
+                                            g.teleport(PrisonGame.active.getSolit());
+                                        }, 3);
+                                        g.sendTitle("", "You're in solitary.", 10, 0, 10);
+                                        g.addPotionEffect(PotionEffectType.SLOW.createEffect(Integer.MAX_VALUE, 1));
+                                        Player p = g;
+                                        p.setCustomName(ChatColor.GRAY + "[" + ChatColor.BLACK + "SOLITARY" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY + p.getName());
+                                        p.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.BLACK + "SOLITARY" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY + p.getName());
+                                        p.setDisplayName(ChatColor.GRAY + "[" + ChatColor.BLACK + "SOLITARY" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY + p.getName());
 
 
-                                    if (p.getName().equals("agmass")) {
-                                        p.setCustomName(ChatColor.GRAY + "[" + ChatColor.RED + "OWNER" + ChatColor.GRAY + "] " + p.getDisplayName());
-                                        p.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.RED + "OWNER" + ChatColor.GRAY + "] " + p.getDisplayName());
-                                        p.setDisplayName(ChatColor.GRAY + "[" + ChatColor.RED + "OWNER" + ChatColor.GRAY + "] " + p.getDisplayName());
-                                    }
+                                        if (p.getName().equals("agmass")) {
+                                            p.setCustomName(ChatColor.GRAY + "[" + ChatColor.RED + "OWNER" + ChatColor.GRAY + "] " + p.getDisplayName());
+                                            p.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.RED + "OWNER" + ChatColor.GRAY + "] " + p.getDisplayName());
+                                            p.setDisplayName(ChatColor.GRAY + "[" + ChatColor.RED + "OWNER" + ChatColor.GRAY + "] " + p.getDisplayName());
+                                        }
 
-                                    if (p.getName().equals("ClownCaked") || p.getName().equals("4950")) {
-                                        p.setCustomName(ChatColor.GRAY + "[" + ChatColor.YELLOW + "BUILDER" + ChatColor.GRAY + "] " + p.getDisplayName());
-                                        p.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.YELLOW + "BUILDER" + ChatColor.GRAY + "] " + p.getDisplayName());
-                                        p.setDisplayName(ChatColor.GRAY + "[" + ChatColor.YELLOW + "BUILDER" + ChatColor.GRAY + "] " + p.getDisplayName());
+                                        if (p.getName().equals("ClownCaked") || p.getName().equals("4950")) {
+                                            p.setCustomName(ChatColor.GRAY + "[" + ChatColor.YELLOW + "BUILDER" + ChatColor.GRAY + "] " + p.getDisplayName());
+                                            p.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.YELLOW + "BUILDER" + ChatColor.GRAY + "] " + p.getDisplayName());
+                                            p.setDisplayName(ChatColor.GRAY + "[" + ChatColor.YELLOW + "BUILDER" + ChatColor.GRAY + "] " + p.getDisplayName());
+                                        }
                                     }
                                 }
+                            } else {
+                                    sender.sendMessage(ChatColor.RED + "Solitary is on cooldown!");
                             }
                         } else {
                             sender.sendMessage(ChatColor.RED + "Solitary can't hold more than 3 people!");

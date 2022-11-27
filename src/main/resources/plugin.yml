@@ -13,6 +13,15 @@ commands:
     permission: litteraly.do.not.give.this.lmao
     description: Reloads the game
     usage: /<command>
+  hard:
+    description: Enables HARD mode.
+    usage: /<command>
+  normal:
+    description: Disables HARD mode.
+    usage: /<command>
+  rstascen:
+    description: Removes all your ascension perks.
+    usage: /<command>
   builder:
     permission: penis.mute
     description: build menu
@@ -34,6 +43,10 @@ commands:
     usage: /<command> <player> <money>
   aunmute:
     permission: penis.unmute
+    description: unmute de playah
+    usage: /<command> <player>
+  setmoney:
+    permission: penis.set
     description: unmute de playah
     usage: /<command> <player>
   tc:
