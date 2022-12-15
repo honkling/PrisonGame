@@ -19,7 +19,7 @@ public class CommandKit implements CommandExecutor {
     // This method is called, when somebody uses our command
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (PrisonGame.wardenenabled) {
+        if (PrisonGame.wardenenabled && !PrisonGame.hardmode.get(sender)) {
             if (args.length == 0) {
                 if (PrisonGame.warden == null && sender instanceof Player && PrisonGame.wardenCooldown <= 0) {
                     if (((Player) sender).getGameMode() != GameMode.SPECTATOR) {
@@ -27,11 +27,13 @@ public class CommandKit implements CommandExecutor {
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + sender.getName() + " only prison:mprison");
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + sender.getName() + " only prison:guard");
                         for (Player p : Bukkit.getOnlinePlayers()) {
-                            if (PrisonGame.type.get(p) != 0) {
-                                MyListener.playerJoin(p, false);
+                            if (!p.getPersistentDataContainer().has(PrisonGame.hg, PersistentDataType.INTEGER)) {
+                                if (PrisonGame.type.get(p) != 0) {
+                                    MyListener.playerJoin(p, false);
+                                }
+                                PrisonGame.type.put(p, 0);
+                                PrisonGame.askType.put(p, 0);
                             }
-                            PrisonGame.type.put(p, 0);
-                            PrisonGame.askType.put(p, 0);
                             p.playSound(p, Sound.BLOCK_END_PORTAL_SPAWN, 1, 1);
                             p.sendTitle("", ChatColor.RED + nw.getName() + ChatColor.GREEN + " is the new warden!");
                             PrisonGame.wardenCooldown = 20 * 6;
@@ -45,26 +47,20 @@ public class CommandKit implements CommandExecutor {
                         nw.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.RED + "WARDEN" + ChatColor.GRAY + "] " + ChatColor.WHITE + nw.getName());
                         nw.setDisplayName(ChatColor.GRAY + "[" + ChatColor.RED + "WARDEN" + ChatColor.GRAY + "] " + ChatColor.WHITE + nw.getName());
 
-                        if (nw.getName().equals("agmass")) {
-                            nw.setCustomName(ChatColor.GRAY + "[" + ChatColor.RED + "OWNER" + ChatColor.GRAY + "] " + nw.getDisplayName());
-                            nw.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.RED + "OWNER" + ChatColor.GRAY + "] " + nw.getDisplayName());
-                            nw.setDisplayName(ChatColor.GRAY + "[" + ChatColor.RED + "OWNER" + ChatColor.GRAY + "] " + nw.getDisplayName());
-                        }
-
-                        if (nw.getName().equals("ClownCaked") || nw.getName().equals("4950")) {
-                            nw.setCustomName(ChatColor.GRAY + "[" + ChatColor.YELLOW + "BUILDER" + ChatColor.GRAY + "] " + nw.getDisplayName());
-                            nw.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.YELLOW + "BUILDER" + ChatColor.GRAY + "] " + nw.getDisplayName());
-                            nw.setDisplayName(ChatColor.GRAY + "[" + ChatColor.YELLOW + "BUILDER" + ChatColor.GRAY + "] " + nw.getDisplayName());
-                        }
-
+                        ItemStack card2 = new ItemStack(Material.IRON_SHOVEL);
+                        ItemMeta cardm2 = card2.getItemMeta();
+                        cardm2.setDisplayName(ChatColor.BLUE + "Handcuffs " + ChatColor.RED + "[CONTRABAND]");
+                        cardm2.addEnchant(Enchantment.KNOCKBACK, 1, true);
+                        card2.setItemMeta(cardm2);
+                        nw.getInventory().addItem(card2);
 
                         nw.getInventory().setHelmet(new ItemStack(Material.CHAINMAIL_HELMET));
                         nw.getInventory().setChestplate(new ItemStack(Material.IRON_CHESTPLATE));
                         nw.getInventory().setLeggings(new ItemStack(Material.IRON_LEGGINGS));
-                        nw.getInventory().setBoots(new ItemStack(Material.IRON_BOOTS));
+                        nw.getInventory().setBoots(new ItemStack(Material.NETHERITE_BOOTS));
 
                         ItemStack wardenSword = new ItemStack(Material.DIAMOND_SWORD);
-                        wardenSword.addEnchantment(Enchantment.DAMAGE_ALL, 1);
+                        wardenSword.addEnchantment(Enchantment.DAMAGE_ALL, 2);
                         wardenSword.addEnchantment(Enchantment.DURABILITY, 2);
 
                         if (nw.getPersistentDataContainer().has(PrisonGame.reinforcement, PersistentDataType.INTEGER)) {
@@ -113,7 +109,7 @@ public class CommandKit implements CommandExecutor {
                     if (PrisonGame.swat) {
                         if (Bukkit.getPlayer(args[1]) != null) {
                             Player g = Bukkit.getPlayer(args[1]);
-                            if (g.isOnline() && g != sender && PrisonGame.type.get(g) == 0) {
+                            if (g.isOnline() && g != sender) {
                                 PrisonGame.askType.put(g, 3);
                                 g.sendMessage(ChatColor.DARK_GRAY + "The wardens wants you to be a SWAT guard! use '/accept'");
                             } else {
@@ -127,7 +123,7 @@ public class CommandKit implements CommandExecutor {
                 if (args[0].equals("nurse")) {
                     if (Bukkit.getPlayer(args[1]) != null) {
                         Player g = Bukkit.getPlayer(args[1]);
-                        if (g.isOnline() && g != sender && PrisonGame.type.get(g) == 0) {
+                        if (g.isOnline() && g != sender) {
                             PrisonGame.askType.put(g, 2);
                             g.sendMessage(ChatColor.LIGHT_PURPLE + "The wardens wants you to be a nurse! use '/accept'");
                         } else {
@@ -161,29 +157,18 @@ public class CommandKit implements CommandExecutor {
                                         g.setGameMode(GameMode.ADVENTURE);
                                         g.removePotionEffect(PotionEffectType.LUCK);
                                         PrisonGame.escaped.put(g, true);
+                                        PrisonGame.solittime.put(g, 20 * 120);
                                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + g.getName() + " only prison:solit");
                                         Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
                                             g.teleport(PrisonGame.active.getSolit());
                                         }, 3);
                                         g.sendTitle("", "You're in solitary.", 10, 0, 10);
-                                        g.addPotionEffect(PotionEffectType.SLOW.createEffect(Integer.MAX_VALUE, 1));
+                                        g.addPotionEffect(PotionEffectType.WATER_BREATHING.createEffect(Integer.MAX_VALUE, 1));
                                         Player p = g;
                                         p.setCustomName(ChatColor.GRAY + "[" + ChatColor.BLACK + "SOLITARY" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY + p.getName());
                                         p.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.BLACK + "SOLITARY" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY + p.getName());
                                         p.setDisplayName(ChatColor.GRAY + "[" + ChatColor.BLACK + "SOLITARY" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY + p.getName());
 
-
-                                        if (p.getName().equals("agmass")) {
-                                            p.setCustomName(ChatColor.GRAY + "[" + ChatColor.RED + "OWNER" + ChatColor.GRAY + "] " + p.getDisplayName());
-                                            p.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.RED + "OWNER" + ChatColor.GRAY + "] " + p.getDisplayName());
-                                            p.setDisplayName(ChatColor.GRAY + "[" + ChatColor.RED + "OWNER" + ChatColor.GRAY + "] " + p.getDisplayName());
-                                        }
-
-                                        if (p.getName().equals("ClownCaked") || p.getName().equals("4950")) {
-                                            p.setCustomName(ChatColor.GRAY + "[" + ChatColor.YELLOW + "BUILDER" + ChatColor.GRAY + "] " + p.getDisplayName());
-                                            p.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.YELLOW + "BUILDER" + ChatColor.GRAY + "] " + p.getDisplayName());
-                                            p.setDisplayName(ChatColor.GRAY + "[" + ChatColor.YELLOW + "BUILDER" + ChatColor.GRAY + "] " + p.getDisplayName());
-                                        }
                                     }
                                 }
                             } else {
@@ -216,17 +201,6 @@ public class CommandKit implements CommandExecutor {
                         g.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.RED + ChatColor.translateAlternateColorCodes('&', prefix) + " WARDEN" + ChatColor.GRAY + "] " + ChatColor.WHITE + g.getName());
                         g.setDisplayName(ChatColor.GRAY + "[" + ChatColor.RED + ChatColor.translateAlternateColorCodes('&', prefix) + " WARDEN" + ChatColor.GRAY + "] " + ChatColor.WHITE + g.getName());
 
-                        if (g.getName().equals("agmass")) {
-                            g.setCustomName(ChatColor.GRAY + "[" + ChatColor.RED + "OWNER" + ChatColor.GRAY + "] " + g.getDisplayName());
-                            g.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.RED + "OWNER" + ChatColor.GRAY + "] " + g.getDisplayName());
-                            g.setDisplayName(ChatColor.GRAY + "[" + ChatColor.RED + "OWNER" + ChatColor.GRAY + "] " + g.getDisplayName());
-                        }
-
-                        if (g.getName().equals("ClownCaked") || g.getName().equals("4950")) {
-                            g.setCustomName(ChatColor.GRAY + "[" + ChatColor.YELLOW + "BUILDER" + ChatColor.GRAY + "] " + g.getDisplayName());
-                            g.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.YELLOW + "BUILDER" + ChatColor.GRAY + "] " + g.getDisplayName());
-                            g.setDisplayName(ChatColor.GRAY + "[" + ChatColor.YELLOW + "BUILDER" + ChatColor.GRAY + "] " + g.getDisplayName());
-                        }
                     } else {
                         sender.sendMessage("That's too long!");
                     }

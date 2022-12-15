@@ -1,5 +1,8 @@
 package prisongame.prisongame;
 
+import me.libraryaddict.disguise.DisguiseAPI;
+import me.libraryaddict.disguise.LibsDisguises;
+import me.libraryaddict.disguise.disguisetypes.PlayerDisguise;
 import org.bukkit.*;
 import org.bukkit.block.Sign;
 import org.bukkit.command.Command;
@@ -17,10 +20,13 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Team;
+import org.bukkit.util.Vector;
+import oshi.jna.platform.mac.SystemB;
 
 import java.io.Console;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -38,6 +44,7 @@ public final class PrisonGame extends JavaPlugin {
     static HashMap<Player, Integer> wardenban = new HashMap<>();
     static HashMap<Player, String> word = new HashMap<>();
     static HashMap<Player, Integer> saidcycle = new HashMap<>();
+    static HashMap<Player, String> prisonnumber = new HashMap<>();
     static HashMap<Player, Double> wealthcycle = new HashMap<>();
     static HashMap<Player, Integer> wardentime = new HashMap<>();
     static HashMap<Player, Integer> worryachieve = new HashMap<>();
@@ -59,13 +66,16 @@ public final class PrisonGame extends JavaPlugin {
     static NamespacedKey nightvis;
     static NamespacedKey rank;
     static NamespacedKey coarsemined;
+    static NamespacedKey hg;
     static NamespacedKey ascendcoins;
     static NamespacedKey doubincome;
     static NamespacedKey taxevasion;
+    static NamespacedKey rankprefix;
     static NamespacedKey semicloak;
     static NamespacedKey reinforcement;
     static NamespacedKey bckupmny;
     static NamespacedKey protspawn;
+    static NamespacedKey tab;
     static NamespacedKey randomz;
     static Integer swapcool = 0;
     static Integer wardenCooldown = 20;
@@ -75,10 +85,28 @@ public final class PrisonGame extends JavaPlugin {
 
     static NamespacedKey mny;
     static HashMap<Player, Integer> respect = new HashMap<>();
+    static HashMap<Player, Integer> solittime = new HashMap<>();
+    static HashMap<Material, Double> moneyore = new HashMap<>();
+    static HashMap<Player, Player> handcuff = new HashMap<>();
+    static HashMap<Player, Integer> trustlevel = new HashMap<>();
+    static HashMap<Player, Integer> prisonerlevel = new HashMap<>();
+    static NamespacedKey trust;
     static HashMap<Player, Boolean> hardmode = new HashMap<>();
     static HashMap<Player, Player> killior = new HashMap<>();
     static NamespacedKey muted;
 
+    static Material[] oretypes = {
+            Material.DEEPSLATE_COPPER_ORE,
+            Material.DEEPSLATE_COPPER_ORE,
+            Material.DEEPSLATE_COPPER_ORE,
+            Material.DEEPSLATE_COPPER_ORE,
+            Material.DEEPSLATE_GOLD_ORE,
+            Material.DEEPSLATE_GOLD_ORE,
+            Material.DEEPSLATE_GOLD_ORE,
+            Material.DEEPSLATE_LAPIS_ORE,
+            Material.DEEPSLATE_LAPIS_ORE,
+            Material.DEEPSLATE_EMERALD_ORE
+    };
     static LivingEntity bertrude;
     static LivingEntity guardsh;
     static Villager bmsh1;
@@ -86,6 +114,62 @@ public final class PrisonGame extends JavaPlugin {
     static Villager shop;
     static Boolean swat = false;
 
+    public static void tptoBed(Player p) {
+        p.teleport(PrisonGame.active.getNursebedOutTP());
+    }
+    public static Location move(Location loc, Vector offset) {
+        // Convert rotation to radians
+        float ryaw = -loc.getYaw() / 180f * (float) Math.PI;
+        float rpitch = loc.getPitch() / 180f * (float) Math.PI;
+
+        //Conversions found by (a lot of) testing
+        double x = loc.getX();
+        double y = loc.getY();
+        double z = loc.getZ();
+        z -= offset.getX() * Math.sin(ryaw);
+        z += offset.getY() * Math.cos(ryaw) * Math.sin(rpitch);
+        z += offset.getZ() * Math.cos(ryaw) * Math.cos(rpitch);
+        x += offset.getX() * Math.cos(ryaw);
+        x += offset.getY() * Math.sin(rpitch) * Math.sin(ryaw);
+        x += offset.getZ() * Math.sin(ryaw) * Math.cos(rpitch);
+        y += offset.getY() * Math.cos(rpitch);
+        y -= offset.getZ() * Math.sin(rpitch);
+        return new Location(loc.getWorld(), x, y, z, loc.getYaw(), 32);
+    }
+    public static Location lookAt(Location loc, Location lookat) {
+        //Clone the loc to prevent applied changes to the input loc
+        loc = loc.clone();
+
+        // Values of change in distance (make it relative)
+        double dx = lookat.getX() - loc.getX();
+        double dy = lookat.getY() - loc.getY();
+        double dz = lookat.getZ() - loc.getZ();
+
+        // Set yaw
+        if (dx != 0) {
+            // Set yaw start value based on dx
+            if (dx < 0) {
+                loc.setYaw((float) (1.5 * Math.PI));
+            } else {
+                loc.setYaw((float) (0.5 * Math.PI));
+            }
+            loc.setYaw((float) loc.getYaw() - (float) Math.atan(dz / dx));
+        } else if (dz < 0) {
+            loc.setYaw((float) Math.PI);
+        }
+
+        // Get the distance from dx/dz
+        double dxz = Math.sqrt(Math.pow(dx, 2) + Math.pow(dz, 2));
+
+        // Set pitch
+        loc.setPitch((float) -Math.atan(dy / dxz));
+
+        // Set values, convert to degrees (invert the yaw since Bukkit uses a different yaw dimension format)
+        loc.setYaw(-loc.getYaw() * 180f / (float) Math.PI);
+        loc.setPitch(loc.getPitch() * 180f / (float) Math.PI);
+
+        return loc;
+    }
     @Override
     public void onEnable() {
         // Plugin startup logic
@@ -98,6 +182,8 @@ public final class PrisonGame extends JavaPlugin {
         coarsemined = new NamespacedKey(PrisonGame.getPlugin(PrisonGame.class), "coarsemined");
         ascendcoins = new NamespacedKey(PrisonGame.getPlugin(PrisonGame.class), "ascendcoins");
         bckupmny = new NamespacedKey(PrisonGame.getPlugin(PrisonGame.class), "bckupmny");
+        hg = new NamespacedKey(PrisonGame.getPlugin(PrisonGame.class), "headguard");
+        tab = new NamespacedKey(PrisonGame.getPlugin(PrisonGame.class), "oldtab");
 
         doubincome = new NamespacedKey(PrisonGame.getPlugin(PrisonGame.class), "doubleinc");
         taxevasion = new NamespacedKey(PrisonGame.getPlugin(PrisonGame.class), "taxev");
@@ -106,10 +192,19 @@ public final class PrisonGame extends JavaPlugin {
         protspawn = new NamespacedKey(PrisonGame.getPlugin(PrisonGame.class), "prots");
         randomz = new NamespacedKey(PrisonGame.getPlugin(PrisonGame.class), "rand");
 
+        rankprefix = new NamespacedKey(PrisonGame.getPlugin(PrisonGame.class), "rankprefix");
+
+        trust = new NamespacedKey(PrisonGame.getPlugin(PrisonGame.class), "trust");
+
+        moneyore.put(Material.DEEPSLATE_COPPER_ORE, 7.5);
+        moneyore.put(Material.DEEPSLATE_EMERALD_ORE, 45.0);
+        moneyore.put(Material.DEEPSLATE_GOLD_ORE, 25.0);
+        moneyore.put(Material.DEEPSLATE_LAPIS_ORE, 15.0);
+        moneyore.put(Material.DEEPSLATE_REDSTONE_ORE, 10.0);
+
         Bukkit.broadcastMessage("RELOAD: Loaded NameSpacedKeys");
         this.getCommand("warden").setExecutor(new CommandKit());
         this.getCommand("resign").setExecutor(new TestCommand());
-        this.getCommand("hello").setExecutor(new hello());
         this.getCommand("tc").setExecutor(new TeamChat());
         this.getCommand("disc").setExecutor(new Discordcmd());
         this.getCommand("accept").setExecutor(new accpt());
@@ -125,6 +220,8 @@ public final class PrisonGame extends JavaPlugin {
         this.getCommand("hard").setExecutor(new hard());
         this.getCommand("normal").setExecutor(new normal());
         this.getCommand("setmoney").setExecutor(new stmoney());
+        this.getCommand("pbsettings").setExecutor(new settings());
+        this.getCommand("giverank").setExecutor(new giverank());
 
         for (Player p : Bukkit.getOnlinePlayers()) {
             p.sendMessage("RELOAD: Loaded Commands");
@@ -152,6 +249,7 @@ public final class PrisonGame extends JavaPlugin {
             }
         }
 
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "whitelist on");
         NamespacedKey key = new NamespacedKey(this, "cobble");
 
         ShapelessRecipe recipe = new ShapelessRecipe(key, new ItemStack(Material.COBBLESTONE));
@@ -171,6 +269,7 @@ public final class PrisonGame extends JavaPlugin {
         Bukkit.addRecipe(recipe);
         Bukkit.getScheduler().runTaskLater(getPlugin(this.getClass()), () -> {
             // code
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "minecraft:kick @a Reload");
 
             for (Entity e : Bukkit.getWorld("world").getEntities()) {
                 if (e.getType().equals(EntityType.VILLAGER) || e.getType().equals(EntityType.WOLF)) {
@@ -263,6 +362,7 @@ public final class PrisonGame extends JavaPlugin {
             for (Player p : Bukkit.getOnlinePlayers()) {
                 p.removePotionEffect(PotionEffectType.DARKNESS);
                 p.removePotionEffect(PotionEffectType.WEAKNESS);
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "whitelist off");
                 p.sendTitle(ChatColor.GREEN + "Loaded!", "thanks for your patience!", 0, 40, 0);
                 PrisonGame.st.put(p, 0.0);
                 PrisonGame.sp.put(p, 0.0);
@@ -278,7 +378,7 @@ public final class PrisonGame extends JavaPlugin {
             MyTask task = new MyTask();
             task.runTaskTimer(getPlugin(this.getClass()), 0, 1);
             getServer().getPluginManager().registerEvents(new MyListener(), this);
-        }, 120);
+        }, 80);
 
     }
 
@@ -300,18 +400,6 @@ public final class PrisonGame extends JavaPlugin {
         g.setCustomName(ChatColor.GRAY + "[" + ChatColor.LIGHT_PURPLE + "NURSE" + ChatColor.GRAY + "] " + ChatColor.GRAY + g.getName());
         g.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.LIGHT_PURPLE + "NURSE" + ChatColor.GRAY + "] " + ChatColor.GRAY + g.getName());
         g.setDisplayName(ChatColor.GRAY + "[" + ChatColor.LIGHT_PURPLE + "NURSE" + ChatColor.GRAY + "] " + ChatColor.GRAY + g.getName());
-
-        if (g.getName().equals("agmass")) {
-            g.setCustomName(ChatColor.GRAY + "[" + ChatColor.RED + "OWNER" + ChatColor.GRAY + "] " + g.getDisplayName());
-            g.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.RED + "OWNER" + ChatColor.GRAY + "] " + g.getDisplayName());
-            g.setDisplayName(ChatColor.GRAY + "[" + ChatColor.RED + "OWNER" + ChatColor.GRAY + "] " + g.getDisplayName());
-        }
-
-        if (g.getName().equals("ClownCaked") || g.getName().equals("4950")) {
-            g.setCustomName(ChatColor.GRAY + "[" + ChatColor.YELLOW + "BUILDER" + ChatColor.GRAY + "] " + g.getDisplayName());
-            g.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.YELLOW + "BUILDER" + ChatColor.GRAY + "] " + g.getDisplayName());
-            g.setDisplayName(ChatColor.GRAY + "[" + ChatColor.YELLOW + "BUILDER" + ChatColor.GRAY + "] " + g.getDisplayName());
-        }
 
         ItemStack orangechest = new ItemStack(Material.LEATHER_CHESTPLATE);
         orangechest.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
@@ -335,6 +423,9 @@ public final class PrisonGame extends JavaPlugin {
         g.getInventory().setChestplate(orangechest);
         g.getInventory().setLeggings(orangeleg);
         g.getInventory().setBoots(orangeboot);
+        if (g.getPersistentDataContainer().has(PrisonGame.hg, PersistentDataType.INTEGER)) {
+            g.getInventory().setBoots(new ItemStack(Material.NETHERITE_BOOTS));
+        }
 
         ItemStack wardenSword = new ItemStack(Material.STONE_SWORD);
         wardenSword.addEnchantment(Enchantment.DAMAGE_ALL, 1);
@@ -359,8 +450,26 @@ public final class PrisonGame extends JavaPlugin {
         card.setItemMeta(cardm);
         g.getInventory().addItem(card);
 
-    }
+        ItemStack card2 = new ItemStack(Material.IRON_SHOVEL);
+        ItemMeta cardm2 = card2.getItemMeta();
+        cardm2.setDisplayName(ChatColor.BLUE + "Handcuffs " + ChatColor.RED + "[CONTRABAND]");
+        cardm2.addEnchant(Enchantment.KNOCKBACK, 1, true);
+        card2.setItemMeta(cardm2);
+        g.getInventory().addItem(card2);
 
+        if (hardmode.get(g)) {
+            String prisonerNumber = "" + new Random().nextInt(100, 999);
+            PrisonGame.prisonnumber.put(g, prisonerNumber);
+            PlayerDisguise playerDisguise = new PlayerDisguise("Hubertus1703" );
+            playerDisguise.setName("NURSE " + prisonerNumber);
+            playerDisguise.setKeepDisguiseOnPlayerDeath(true);
+            DisguiseAPI.disguiseToAll(g, playerDisguise);
+            g.setCustomName(ChatColor.GRAY + "[" + ChatColor.LIGHT_PURPLE + "NURSE " + ChatColor.GRAY + "] " + ChatColor.GRAY + "NURSE" + prisonerNumber);
+            g.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.RED + "HARD MODE" + ChatColor.GRAY + "] " + ChatColor.GRAY + g.getName());
+            g.setDisplayName(ChatColor.GRAY + "[" + ChatColor.LIGHT_PURPLE + "NURSE " + ChatColor.GRAY + "] " + ChatColor.GRAY + "NURSE" + prisonerNumber);
+        }
+
+    }
     static void setSwat(Player g) {
         Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Guards").addPlayer(g);
         PrisonGame.type.put(g, 3);
@@ -369,18 +478,6 @@ public final class PrisonGame extends JavaPlugin {
         g.setCustomName(ChatColor.GRAY + "[" + ChatColor.DARK_GRAY + "SWAT" + ChatColor.GRAY + "] " + ChatColor.GRAY + g.getName());
         g.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.DARK_GRAY + "SWAT" + ChatColor.GRAY + "] " + ChatColor.GRAY + g.getName());
         g.setDisplayName(ChatColor.GRAY + "[" + ChatColor.DARK_GRAY + "SWAT" + ChatColor.GRAY + "] " + ChatColor.GRAY + g.getName());
-
-        if (g.getName().equals("agmass")) {
-            g.setCustomName(ChatColor.GRAY + "[" + ChatColor.RED + "OWNER" + ChatColor.GRAY + "] " + g.getDisplayName());
-            g.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.RED + "OWNER" + ChatColor.GRAY + "] " + g.getDisplayName());
-            g.setDisplayName(ChatColor.GRAY + "[" + ChatColor.RED + "OWNER" + ChatColor.GRAY + "] " + g.getDisplayName());
-        }
-
-        if (g.getName().equals("ClownCaked") || g.getName().equals("4950")) {
-            g.setCustomName(ChatColor.GRAY + "[" + ChatColor.YELLOW + "BUILDER" + ChatColor.GRAY + "] " + g.getDisplayName());
-            g.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.YELLOW + "BUILDER" + ChatColor.GRAY + "] " + g.getDisplayName());
-            g.setDisplayName(ChatColor.GRAY + "[" + ChatColor.YELLOW + "BUILDER" + ChatColor.GRAY + "] " + g.getDisplayName());
-        }
 
         ItemStack orangechest = new ItemStack(Material.NETHERITE_CHESTPLATE);
 
@@ -399,6 +496,10 @@ public final class PrisonGame extends JavaPlugin {
         g.getInventory().setLeggings(orangeleg);
         g.getInventory().setBoots(orangeboot);
 
+        if (g.getPersistentDataContainer().has(PrisonGame.hg, PersistentDataType.INTEGER)) {
+            g.getInventory().setBoots(new ItemStack(Material.NETHERITE_BOOTS));
+        }
+
         ItemStack wardenSword = new ItemStack(Material.DIAMOND_SWORD);
 
         g.getInventory().addItem(wardenSword);
@@ -408,11 +509,30 @@ public final class PrisonGame extends JavaPlugin {
         g.getInventory().addItem(new ItemStack(Material.ARROW, 16));
         g.getInventory().addItem(new ItemStack(Material.COOKED_BEEF, 32));
 
+        ItemStack card2 = new ItemStack(Material.IRON_SHOVEL);
+        ItemMeta cardm2 = card2.getItemMeta();
+        cardm2.setDisplayName(ChatColor.BLUE + "Handcuffs " + ChatColor.RED + "[CONTRABAND]");
+        cardm2.addEnchant(Enchantment.KNOCKBACK, 1, true);
+        card2.setItemMeta(cardm2);
+        g.getInventory().addItem(card2);
+
         ItemStack card = new ItemStack(Material.TRIPWIRE_HOOK);
         ItemMeta cardm = card.getItemMeta();
         cardm.setDisplayName(ChatColor.BLUE + "Keycard " + ChatColor.RED + "[CONTRABAND]");
         card.setItemMeta(cardm);
         g.getInventory().addItem(card);
+
+        if (hardmode.get(g)) {
+            String prisonerNumber = "" + new Random().nextInt(100, 999);
+            PrisonGame.prisonnumber.put(g, prisonerNumber);
+            PlayerDisguise playerDisguise = new PlayerDisguise("Hubertus1703");
+            playerDisguise.setName("SWAT " + prisonerNumber);
+            playerDisguise.setKeepDisguiseOnPlayerDeath(true);
+            DisguiseAPI.disguiseToAll(g, playerDisguise);
+            g.setCustomName(ChatColor.GRAY + "[" + ChatColor.DARK_GRAY + "SWAT" + ChatColor.GRAY + "] " + ChatColor.GRAY + "SWAT " + prisonerNumber);
+            g.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.RED + "HARD MODE" + ChatColor.GRAY + "] " + ChatColor.GRAY + g.getName());
+            g.setDisplayName(ChatColor.GRAY + "[" + ChatColor.DARK_GRAY + "SWAT" + ChatColor.GRAY + "] " + ChatColor.GRAY + "SWAT " + prisonerNumber);
+        }
 
     }
 
@@ -425,17 +545,6 @@ public final class PrisonGame extends JavaPlugin {
         g.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.BLUE + "GUARD" + ChatColor.GRAY + "] " + ChatColor.GRAY + g.getName());
         g.setDisplayName(ChatColor.GRAY + "[" + ChatColor.BLUE + "GUARD" + ChatColor.GRAY + "] " + ChatColor.GRAY + g.getName());
 
-        if (g.getName().equals("agmass")) {
-            g.setCustomName(ChatColor.GRAY + "[" + ChatColor.RED + "OWNER" + ChatColor.GRAY + "] " + g.getDisplayName());
-            g.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.RED + "OWNER" + ChatColor.GRAY + "] " + g.getDisplayName());
-            g.setDisplayName(ChatColor.GRAY + "[" + ChatColor.RED + "OWNER" + ChatColor.GRAY + "] " + g.getDisplayName());
-        }
-
-        if (g.getName().equals("ClownCaked") || g.getName().equals("4950")) {
-            g.setCustomName(ChatColor.GRAY + "[" + ChatColor.YELLOW + "BUILDER" + ChatColor.GRAY + "] " + g.getDisplayName());
-            g.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.YELLOW + "BUILDER" + ChatColor.GRAY + "] " + g.getDisplayName());
-            g.setDisplayName(ChatColor.GRAY + "[" + ChatColor.YELLOW + "BUILDER" + ChatColor.GRAY + "] " + g.getDisplayName());
-        }
 
         ItemStack orangechest = new ItemStack(Material.LEATHER_CHESTPLATE);
         orangechest.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
@@ -460,6 +569,10 @@ public final class PrisonGame extends JavaPlugin {
         g.getInventory().setLeggings(orangeleg);
         g.getInventory().setBoots(orangeboot);
 
+        if (g.getPersistentDataContainer().has(PrisonGame.hg, PersistentDataType.INTEGER)) {
+            g.getInventory().setBoots(new ItemStack(Material.NETHERITE_BOOTS));
+        }
+
         ItemStack wardenSword = new ItemStack(Material.IRON_SWORD);
         wardenSword.addEnchantment(Enchantment.DAMAGE_ALL, 1);
         wardenSword.addEnchantment(Enchantment.DURABILITY, 1);
@@ -470,11 +583,30 @@ public final class PrisonGame extends JavaPlugin {
         g.getInventory().addItem(new ItemStack(Material.ARROW, 16));
         g.getInventory().addItem(new ItemStack(Material.COOKED_BEEF, 32));
 
+        ItemStack card2 = new ItemStack(Material.IRON_SHOVEL);
+        ItemMeta cardm2 = card2.getItemMeta();
+        cardm2.setDisplayName(ChatColor.BLUE + "Handcuffs " + ChatColor.RED + "[CONTRABAND]");
+        cardm2.addEnchant(Enchantment.KNOCKBACK, 1, true);
+        card2.setItemMeta(cardm2);
+        g.getInventory().addItem(card2);
+
         ItemStack card = new ItemStack(Material.TRIPWIRE_HOOK);
         ItemMeta cardm = card.getItemMeta();
         cardm.setDisplayName(ChatColor.BLUE + "Keycard " + ChatColor.RED + "[CONTRABAND]");
         card.setItemMeta(cardm);
         g.getInventory().addItem(card);
+
+        if (hardmode.get(g)) {
+            String prisonerNumber = "" + new Random().nextInt(100, 999);
+            PrisonGame.prisonnumber.put(g, prisonerNumber);
+            PlayerDisguise playerDisguise = new PlayerDisguise("Hubertus1703");
+            playerDisguise.setName("GUARD " + prisonerNumber);
+            playerDisguise.setKeepDisguiseOnPlayerDeath(true);
+            DisguiseAPI.disguiseToAll(g, playerDisguise);
+            g.setCustomName(ChatColor.GRAY + "[" + ChatColor.BLUE + "GUARD" + ChatColor.GRAY + "] " + ChatColor.GRAY + "GUARD " + prisonerNumber);
+            g.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.RED + "HARD MODE" + ChatColor.GRAY + "] " + ChatColor.GRAY + g.getName());
+            g.setDisplayName(ChatColor.GRAY + "[" + ChatColor.BLUE + "GUARD" + ChatColor.GRAY + "] " + ChatColor.GRAY + "GUARD " + prisonerNumber);
+        }
     }
 
     public static boolean isInside(Player player, Location loc1, Location loc2)
@@ -619,12 +751,37 @@ class stmoney implements CommandExecutor {
     }
 }
 
+class sttrust implements CommandExecutor {
+
+    // This method is called, when somebody uses our command
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        Player p = Bukkit.getPlayer(args[0]);
+        p.getPersistentDataContainer().set(PrisonGame.trust, PersistentDataType.DOUBLE ,Double.valueOf(args[1]));
+        return true;
+    }
+}
+
+
 class nomone implements CommandExecutor {
 
     // This method is called, when somebody uses our command
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         Bukkit.getPlayer(args[0]).getPersistentDataContainer().set(PrisonGame.mny, PersistentDataType.DOUBLE ,0.0);
+        return true;
+    }
+}
+
+class giverank implements CommandExecutor {
+
+    // This method is called, when somebody uses our command
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        Bukkit.getPlayer(args[0]).getPersistentDataContainer().set(PrisonGame.rankprefix, PersistentDataType.STRING ,args[1]);
+        if (args[1] == "null") {
+            Bukkit.getPlayer(args[0]).getPersistentDataContainer().remove(PrisonGame.rankprefix);
+        }
         return true;
     }
 }
@@ -670,18 +827,32 @@ class hard implements CommandExecutor {
     // This method is called, when somebody uses our command
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (sender instanceof Player) {
-            Player p = (Player) sender;
-            p.getPersistentDataContainer().set(PrisonGame.bckupmny, PersistentDataType.DOUBLE, p.getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0));
-            p.getPersistentDataContainer().set(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0);
-            if (PrisonGame.warden != null) {
-                if (PrisonGame.warden.equals(sender)) {
-                    PrisonGame.warden = null;
+        if (sender instanceof Player || !PrisonGame.hardmode.get((Player) sender)) {
+            if (!((Player) sender).getDisplayName().contains("SOLITARY")) {
+                Player p = (Player) sender;
+                p.setViewDistance(2);
+                p.getPersistentDataContainer().set(PrisonGame.bckupmny, PersistentDataType.DOUBLE, p.getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0));
+                p.getPersistentDataContainer().set(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0);
+                if (PrisonGame.warden != null) {
+                    if (PrisonGame.warden.equals(sender)) {
+                        PrisonGame.warden = null;
+                    }
                 }
+                PrisonGame.type.put((Player) sender, 0);
+                PrisonGame.hardmode.put(p, true);
+                MyListener.playerJoin(p, false);
+                String prisonerNumber = "" + new Random().nextInt(100, 999);
+                PrisonGame.prisonnumber.put(p, prisonerNumber);
+                PlayerDisguise playerDisguise = new PlayerDisguise("pdlCAMERA");
+                playerDisguise.setName("Prisoner " + prisonerNumber);
+                playerDisguise.setKeepDisguiseOnPlayerDeath(true);
+                DisguiseAPI.disguiseToAll(p, playerDisguise);
+                p.setCustomName(ChatColor.GRAY + "[" + ChatColor.GOLD + "PRISONER" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY  + "Prisoner " + prisonerNumber);
+                p.setDisplayName(ChatColor.GRAY + "[" + ChatColor.GOLD + "PRISONER" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY  + "Prisoner " + prisonerNumber);
+
             }
-            PrisonGame.type.put((Player) sender, 0);
-            PrisonGame.hardmode.put(p, true);
-            MyListener.playerJoin(p, false);
+        }  else {
+            sender.sendMessage(ChatColor.RED + "Really? Did you deadass try to run hard when already in hard mode? Come on. You're better than this. (I had to add this since people were losing money by doing hard... come on...)");
         }
         return true;
     }
@@ -692,18 +863,23 @@ class normal implements CommandExecutor {
     // This method is called, when somebody uses our command
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (sender instanceof Player) {
-            Player p = (Player) sender;
-            p.getPersistentDataContainer().set(PrisonGame.mny, PersistentDataType.DOUBLE, p.getPersistentDataContainer().getOrDefault(PrisonGame.bckupmny, PersistentDataType.DOUBLE, 0.0));
-            p.getPersistentDataContainer().set(PrisonGame.bckupmny, PersistentDataType.DOUBLE, 0.0);
-            if (PrisonGame.warden != null) {
-                if (PrisonGame.warden.equals(sender)) {
-                    PrisonGame.warden = null;
+        if (sender instanceof Player || PrisonGame.hardmode.get((Player) sender)) {
+            if (!((Player) sender).getDisplayName().contains("SOLITARY")) {
+                Player p = (Player) sender;
+                p.getPersistentDataContainer().set(PrisonGame.mny, PersistentDataType.DOUBLE, p.getPersistentDataContainer().getOrDefault(PrisonGame.bckupmny, PersistentDataType.DOUBLE, 0.0));
+                p.getPersistentDataContainer().set(PrisonGame.bckupmny, PersistentDataType.DOUBLE, 0.0);
+                if (PrisonGame.warden != null) {
+                    if (PrisonGame.warden.equals(sender)) {
+                        PrisonGame.warden = null;
+                    }
                 }
+                PrisonGame.type.put((Player) sender, 0);
+                DisguiseAPI.undisguiseToAll(p);
+                PrisonGame.hardmode.put(p, false);
+                MyListener.playerJoin(p, false);
             }
-            PrisonGame.type.put((Player) sender, 0);
-            PrisonGame.hardmode.put(p, false);
-            MyListener.playerJoin(p, false);
+        } else {
+            sender.sendMessage(ChatColor.RED + "Really? Did you deadass try to run normal when already in normal mode? Come on. You're better than this. (I had to add this since people were losing money by doing normal... come on...)");
         }
         return true;
     }
@@ -714,62 +890,69 @@ class accpt implements CommandExecutor {
     // This method is called, when somebody uses our command
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (PrisonGame.askType.getOrDefault((Player) sender, 0) == 2) {
-            PrisonGame.setNurse((Player) sender);
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + sender.getName() + " only prison:guard");
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + PrisonGame.warden.getName() + " only prison:support");
-            Player nw = (Player) sender;
-            if (nw.getPersistentDataContainer().has(PrisonGame.protspawn, PersistentDataType.INTEGER)) {
-                if (nw.getInventory().getHelmet() != null)
-                    nw.getInventory().getHelmet().addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
-                if (nw.getInventory().getChestplate() != null)
-                    nw.getInventory().getChestplate().addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
-                if (nw.getInventory().getLeggings() != null)
-                    nw.getInventory().getLeggings().addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
-                if (nw.getInventory().getBoots() != null)
-                    nw.getInventory().getBoots().addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+            if (PrisonGame.askType.getOrDefault((Player) sender, 0) == 2) {
+                PrisonGame.setNurse((Player) sender);
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + sender.getName() + " only prison:guard");
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + PrisonGame.warden.getName() + " only prison:support");
+                Player nw = (Player) sender;
+                if (nw.getPersistentDataContainer().has(PrisonGame.protspawn, PersistentDataType.INTEGER)) {
+                    if (nw.getInventory().getHelmet() != null)
+                        nw.getInventory().getHelmet().addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+                    if (nw.getInventory().getChestplate() != null)
+                        nw.getInventory().getChestplate().addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+                    if (nw.getInventory().getLeggings() != null)
+                        nw.getInventory().getLeggings().addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+                    if (nw.getInventory().getBoots() != null)
+                        nw.getInventory().getBoots().addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+                }
             }
-        }
-        if (PrisonGame.askType.getOrDefault((Player) sender, 0) == 1) {
-            PrisonGame.setGuard((Player) sender);
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + sender.getName() + " only prison:guard");
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + PrisonGame.warden.getName() + " only prison:support");
-            Player nw = (Player) sender;
-            if (nw.getPersistentDataContainer().has(PrisonGame.protspawn, PersistentDataType.INTEGER)) {
-                if (nw.getInventory().getHelmet() != null)
-                    nw.getInventory().getHelmet().addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
-                if (nw.getInventory().getChestplate() != null)
-                    nw.getInventory().getChestplate().addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
-                if (nw.getInventory().getLeggings() != null)
-                    nw.getInventory().getLeggings().addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
-                if (nw.getInventory().getBoots() != null)
-                    nw.getInventory().getBoots().addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+            if (PrisonGame.askType.getOrDefault((Player) sender, 0) == 1) {
+                PrisonGame.setGuard((Player) sender);
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + sender.getName() + " only prison:guard");
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + PrisonGame.warden.getName() + " only prison:support");
+                Player nw = (Player) sender;
+                if (nw.getPersistentDataContainer().has(PrisonGame.protspawn, PersistentDataType.INTEGER)) {
+                    if (nw.getInventory().getHelmet() != null)
+                        nw.getInventory().getHelmet().addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+                    if (nw.getInventory().getChestplate() != null)
+                        nw.getInventory().getChestplate().addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+                    if (nw.getInventory().getLeggings() != null)
+                        nw.getInventory().getLeggings().addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+                    if (nw.getInventory().getBoots() != null)
+                        nw.getInventory().getBoots().addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+                }
             }
-        }
-        if (PrisonGame.askType.getOrDefault((Player) sender, 0) == 3) {
-            PrisonGame.setSwat((Player) sender);
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + sender.getName() + " only prison:guard");
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + PrisonGame.warden.getName() + " only prison:support");
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + sender.getName() + " only prison:swat");
-            Player nw = (Player) sender;
-            if (nw.getPersistentDataContainer().has(PrisonGame.protspawn, PersistentDataType.INTEGER)) {
-                if (nw.getInventory().getHelmet() != null)
-                    nw.getInventory().getHelmet().addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
-                if (nw.getInventory().getChestplate() != null)
-                    nw.getInventory().getChestplate().addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
-                if (nw.getInventory().getLeggings() != null)
-                    nw.getInventory().getLeggings().addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
-                if (nw.getInventory().getBoots() != null)
-                    nw.getInventory().getBoots().addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+            if (PrisonGame.askType.getOrDefault((Player) sender, 0) == 3) {
+                PrisonGame.setSwat((Player) sender);
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + sender.getName() + " only prison:guard");
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + PrisonGame.warden.getName() + " only prison:support");
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + sender.getName() + " only prison:swat");
+                Player nw = (Player) sender;
+                if (nw.getPersistentDataContainer().has(PrisonGame.protspawn, PersistentDataType.INTEGER)) {
+                    if (nw.getInventory().getHelmet() != null)
+                        nw.getInventory().getHelmet().addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+                    if (nw.getInventory().getChestplate() != null)
+                        nw.getInventory().getChestplate().addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+                    if (nw.getInventory().getLeggings() != null)
+                        nw.getInventory().getLeggings().addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+                    if (nw.getInventory().getBoots() != null)
+                        nw.getInventory().getBoots().addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+                }
             }
-        }
-        PrisonGame.askType.put((Player) sender, 0);
+            PrisonGame.askType.put((Player) sender, 0);
 
+            return true;
+        }
+}
+
+class tgciv implements CommandExecutor {
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         return true;
     }
 }
-
 class sfreload implements CommandExecutor {
+
 
     // This method is called, when somebody uses our command
     @Override
@@ -822,6 +1005,25 @@ class TeamChat implements CommandExecutor {
     }
 }
 
+class settings implements CommandExecutor {
+
+    // This method is called, when somebody uses our command
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        sender.sendMessage("hello i am bertrude");
+        if (sender instanceof Player) {
+            Player p = (Player) sender;
+            p.playSound(p, Sound.BLOCK_NOTE_BLOCK_BASEDRUM, 1, 1);
+            Inventory inv = Bukkit.createInventory(null, 9, "bertrude");
+            inv.addItem(PrisonGame.createGuiItem(Material.PLAYER_HEAD, ChatColor.BLUE + "old tab", ChatColor.GRAY + "sets tab to the default minecraft one, if you're boring."));
+            inv.addItem(PrisonGame.createGuiItem(Material.POTION, ChatColor.LIGHT_PURPLE + "epic bertude night vision", ChatColor.GRAY + "gives you night vision i think"));
+            inv.addItem(PrisonGame.createGuiItem(Material.GRAY_STAINED_GLASS, ChatColor.LIGHT_PURPLE + "no warden spaces", ChatColor.GRAY + "disables/enables the spaces on the warden's messages"));
+            inv.addItem(PrisonGame.createGuiItem(Material.NETHERITE_SWORD, ChatColor.LIGHT_PURPLE + "-1 dollar", ChatColor.GRAY + "this is a robbery"));
+            p.openInventory(inv);
+        }
+        return true;
+    }
+}
 class BuilderCMD implements CommandExecutor {
 
     // This method is called, when somebody uses our command
@@ -849,3 +1051,4 @@ class BuilderCMD implements CommandExecutor {
         return true;
     }
 }
+

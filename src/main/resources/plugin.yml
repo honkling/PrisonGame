@@ -1,5 +1,7 @@
 name: PrisonGame
 version: ${project.version}
+depend:
+  - LibsDisguises
 main: prisongame.prisongame.PrisonGame
 api-version: 1.19
 commands:
@@ -13,9 +15,17 @@ commands:
     permission: litteraly.do.not.give.this.lmao
     description: Reloads the game
     usage: /<command>
+  giverank:
+    permission: pbb.rankgive
+    description: gives a rank prefix
+    usage: /<command> <prefix-includecolourcodes>
+  pbsettings:
+    description: setting
+    usage: /<command>
   hard:
     description: Enables HARD mode.
     usage: /<command>
+
   normal:
     description: Disables HARD mode.
     usage: /<command>
@@ -27,26 +37,26 @@ commands:
     description: build menu
     usage: /<command>
   nerdcheatcommand:
-    permission: penis.cock
+    permission: pbb.cheats
     description: gives 1000 dollahs
     usage: /<command>
   rstmoney:
-    permission: penis.cock
+    permission: pbb.cheats
     description: gives 0 dollahs
     usage: /<command> <player>
   amute:
-    permission: penis.mute
+    permission: pbb.mute
     description: mute de playah
     usage: /<command> <player>
   pay:
     description: gib de monah
     usage: /<command> <player> <money>
   aunmute:
-    permission: penis.unmute
+    permission: pbb.unmute
     description: unmute de playah
     usage: /<command> <player>
   setmoney:
-    permission: penis.set
+    permission: pbb.set
     description: unmute de playah
     usage: /<command> <player>
   tc:
