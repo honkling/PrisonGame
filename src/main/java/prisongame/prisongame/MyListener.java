@@ -534,9 +534,6 @@ public class MyListener implements Listener {
                     Bukkit.getLogger().log(Level.INFO, event.getPlayer().getDisplayName() + ChatColor.RED + ": " + FilteredWords.filtermsg(event.getMessage()));
                     for (Player p : Bukkit.getOnlinePlayers()) {
                         if (!p.getPersistentDataContainer().has(PrisonGame.whiff, PersistentDataType.INTEGER)) {
-                            p.sendMessage("");
-                        }
-                        if (!p.getPersistentDataContainer().has(PrisonGame.whiff, PersistentDataType.INTEGER)) {
                             p.playSound(p, Sound.BLOCK_NOTE_BLOCK_BIT, 1, 1);
                         }
 
@@ -545,15 +542,17 @@ public class MyListener implements Listener {
                         //    p.sendMessage(event.getPlayer().getPlayerListName() + ChatColor.RED + ": " + ChatColor.RED + FilteredWords.filtermsg(event.getMessage()));
                         //else {
 
-                        event.setMessage(ChatColor.translateAlternateColorCodes('&', FilteredWords.filtermsg(event.getMessage())));
-                        event.setFormat(event.getPlayer().getDisplayName() + ChatColor.RED + ": " + ChatColor.RED + event.getMessage() + " ");
-                        //}
-                        if (!p.getPersistentDataContainer().has(PrisonGame.whiff, PersistentDataType.INTEGER)) {
-                            p.sendMessage("");
+                        try {
+                            event.setFormat(event.getPlayer().getDisplayName() + ChatColor.RED + ": " + ChatColor.RED + ChatColor.translateAlternateColorCodes('&', FilteredWords.filtermsg(event.getMessage())) + " ");
+                        } catch (Exception e)  {
+                            event.setCancelled(true);
+                            event.getPlayer().sendMessage("hey idk why but typing the letter % COMPLETELY fucks up the chat so lol");
                         }
+                        //}
                     }
                 } else {
                     event.getPlayer().sendMessage(ChatColor.RED + "Do not spam!");
+                    event.setCancelled(true);
                 }
             } else {
                 if (!event.getPlayer().getDisplayName().contains("SOLITARY")) {
@@ -565,14 +564,20 @@ public class MyListener implements Listener {
                             PrisonGame.givepig = true;
                         }
                     if (!PrisonGame.word.getOrDefault(event.getPlayer(), "").equals(event.getMessage())) {
-                        event.setMessage(FilteredWords.filtermsg(event.getMessage()));
-                        event.setFormat(event.getPlayer().getDisplayName() + ChatColor.GRAY + ": " + ChatColor.GRAY + ChatColor.GRAY + event.getMessage());
+                        try {
+                            event.setFormat(event.getPlayer().getDisplayName() + ChatColor.GRAY + ": " + ChatColor.GRAY + ChatColor.GRAY + FilteredWords.filtermsg(event.getMessage()));
+                        } catch (Exception e) {
+                            event.setCancelled(true);
+                            event.getPlayer().sendMessage("hey idk why but typing the letter % COMPLETELY fucks up the chat so lol");
+                        }
                         PrisonGame.word.put(event.getPlayer(), event.getMessage());
                     } else {
                         event.getPlayer().sendMessage(ChatColor.RED + "Do not spam!");
+                        event.setCancelled(true);
                     }
                 } else {
                     if (PrisonGame.warden != event.getPlayer()) {
+                        event.setCancelled(true);
                         if (!event.getPlayer().hasCooldown(Material.OBSIDIAN)) {
                             event.getPlayer().setCooldown(Material.OBSIDIAN, 20 * 5);
                             Bukkit.broadcastMessage(event.getPlayer().getDisplayName() + ChatColor.GRAY + ": " + ChatColor.DARK_GRAY + "*silenced by solitary*");
@@ -784,6 +789,27 @@ public class MyListener implements Listener {
                                     }, 5);
                                     if (!p.getDisplayName().contains("ASCENDING"))
                                         p.sendTitle("New prison!", "VOLCANO");
+                                }
+                            }
+                        }
+                        if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.GRAY + "Skeld")) {
+                            for (Player p : Bukkit.getOnlinePlayers()) {
+                                p.teleport(new Location(Bukkit.getWorld("world"), -2062, -50, 1945));
+                            }
+                            PrisonGame.active = PrisonGame.amongus;
+                            PrisonGame.swapcool = (20 * 60) * 5;
+                            reloadBert();
+                            for (Player p : Bukkit.getOnlinePlayers()) {
+                                if (PrisonGame.type.get(p) != -1) {
+                                    MyListener.playerJoin(p, true);
+                                    p.sendTitle("New prison!", "SKELD");
+                                } else {
+                                    p.teleport(PrisonGame.active.getWardenspawn());
+                                    Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
+                                        p.teleport(PrisonGame.active.getWardenspawn());
+                                    }, 5);
+                                    if (!p.getDisplayName().contains("ASCENDING"))
+                                        p.sendTitle("New prison!", "SKELD");
                                 }
                             }
                         }
@@ -1230,7 +1256,7 @@ public class MyListener implements Listener {
                     event.getPlayer().openInventory(inv);
                 }
                 if (sign.getLine(1).equals("Switch Maps")) {
-                    if (event.getPlayer() == PrisonGame.warden) {
+                    if (event.getPlayer() == PrisonGame.warden && event.getPlayer().getPassengers().size() == 0) {
                         if (PrisonGame.swapcool <= 0) {
                             Inventory inv = Bukkit.createInventory(null, 9 * 2, "Map Switch");
                             inv.addItem(PrisonGame.createGuiItem(Material.COBBLESTONE, ChatColor.GRAY + "Fortress Of Gaeae"));
@@ -1242,6 +1268,7 @@ public class MyListener implements Listener {
                             inv.addItem(PrisonGame.createGuiItem(Material.SAND, ChatColor.GOLD + "Island"));
                             inv.addItem(PrisonGame.createGuiItem(Material.SNOW_BLOCK, ChatColor.BOLD + "Santa's Workshop"));
                             inv.addItem(PrisonGame.createGuiItem(Material.LAVA_BUCKET, ChatColor.RED + "Volcano"));
+                            inv.addItem(PrisonGame.createGuiItem(Material.GRAY_CONCRETE, ChatColor.GRAY + "Skeld"));
                             //inv.addItem(PrisonGame.createGuiItem(Material.QUARTZ, ChatColor.BLUE + "Boat"));
                             //inv.addItem(PrisonGame.createGuiItem(Material.NETHERRACK, ChatColor.RED + "Nether"));
                             event.getPlayer().openInventory(inv);
@@ -1326,13 +1353,6 @@ public class MyListener implements Listener {
 
             if (event.getClickedBlock().getType().equals(Material.SPRUCE_WALL_SIGN)) {
                 org.bukkit.block.Sign sign = (org.bukkit.block.Sign) event.getClickedBlock().getState();
-                if (sign.getLine(1).equals("Head Guard")) {
-                    if (event.getPlayer().getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0) >= 2500.0) {
-                        event.getPlayer().getPersistentDataContainer().set(PrisonGame.mny, PersistentDataType.DOUBLE, event.getPlayer().getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0) - 2500.0);
-                        event.getPlayer().getPersistentDataContainer().set(PrisonGame.hg, PersistentDataType.INTEGER, 1);
-                        Bukkit.broadcastMessage(ChatColor.AQUA + "" + event.getPlayer().getName() + " is now a head guard!");
-                    }
-                }
                 if (sign.getLine(1).equals("TP To Prison")) {
                     if (!MyTask.bossbar.getTitle().equals("LIGHTS OUT")) {
                         event.getPlayer().setCooldown(Material.IRON_DOOR, 20);
@@ -1435,7 +1455,6 @@ public class MyListener implements Listener {
                         g.getInventory().addItem(wardenSword);
 
                         g.getInventory().addItem(new ItemStack(Material.BOW));
-                        g.getInventory().setItemInOffHand(new ItemStack(Material.SHIELD));
                         g.getInventory().addItem(new ItemStack(Material.ARROW, 16));
                         g.getInventory().addItem(new ItemStack(Material.COOKED_BEEF, 32));
 
@@ -1924,6 +1943,15 @@ public class MyListener implements Listener {
     }
 
     @EventHandler
+    public void anyName(PlayerItemConsumeEvent event) {
+        if (event.getPlayer().hasCooldown(event.getItem().getType()))
+            event.setCancelled(true);
+        if (event.getItem().getType().equals(Material.GOLDEN_APPLE)) {
+            event.getPlayer().setCooldown(Material.GOLDEN_APPLE, 20 * 60);
+        }
+    }
+
+    @EventHandler
     public void anyName(PlayerDropItemEvent event) {
         if (PrisonGame.type.get(event.getPlayer()) != 0) {
             if (!event.getItemDrop().getItemStack().getType().equals(Material.TRIPWIRE_HOOK)) {
@@ -2006,7 +2034,6 @@ public class MyListener implements Listener {
                 g.getInventory().addItem(wardenSword);
 
                 g.getInventory().addItem(new ItemStack(Material.BOW));
-                g.getInventory().setItemInOffHand(new ItemStack(Material.SHIELD));
                 g.getInventory().addItem(new ItemStack(Material.ARROW, 16));
                 g.getInventory().addItem(new ItemStack(Material.COOKED_BEEF, 32));
 

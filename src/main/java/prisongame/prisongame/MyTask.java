@@ -69,6 +69,8 @@ public class MyTask extends BukkitRunnable {
             if (!PrisonGame.prisonerlevel.containsKey(p)) {
                 PrisonGame.prisonerlevel.put(p, 0);
             }
+            if (p.getPersistentDataContainer().has(PrisonGame.hg))
+                p.getPersistentDataContainer().remove(PrisonGame.hg);
             PrisonGame.handcuff.put(p, null);
             if (PrisonGame.worryachieve.get(p) >= 0) {
                 PrisonGame.worryachieve.put(p, PrisonGame.worryachieve.get(p) + 1);
@@ -157,6 +159,7 @@ public class MyTask extends BukkitRunnable {
             }
             if (p.getGameMode().equals(GameMode.ADVENTURE)) {
                 p.getInventory().remove(Material.NETHERITE_SWORD);
+                p.getInventory().remove(Material.SUGAR);
                 if (PrisonGame.hardmode.get(p)) {
                     p.getInventory().remove(Material.GOLDEN_APPLE);
                     p.getInventory().remove(Material.NETHERITE_HELMET);
@@ -170,11 +173,6 @@ public class MyTask extends BukkitRunnable {
                     p.damage(6);
                     p.removePotionEffect(PotionEffectType.UNLUCK);
                     p.teleport(PrisonGame.active.getBmout());
-                }
-            }
-            if (PrisonGame.type.get(p) != 0) {
-                if (Bukkit.getMaxPlayers() == Bukkit.getOnlinePlayers().size()) {
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + p.getName() + " only prison:toomuch");
                 }
             }
         }
@@ -764,10 +762,10 @@ public class MyTask extends BukkitRunnable {
                     p.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.GREEN + "REPORTER" + ChatColor.GRAY + "] " + p.getDisplayName());
                     p.setDisplayName(ChatColor.GRAY + "[" + ChatColor.GREEN + "REPORTER" + ChatColor.GRAY + "] " + p.getDisplayName());
                 }
-                if (p.getName().equals("agmass") && !p.getPlayerListName().contains("PBB-CREATOR")) {
-                    p.setCustomName(ChatColor.GRAY + "[" + ChatColor.DARK_RED + "PBB-CREATOR" + ChatColor.GRAY + "] " + p.getDisplayName());
-                    p.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.DARK_RED + "PBB-CREATOR" + ChatColor.GRAY + "] " + p.getDisplayName());
-                    p.setDisplayName(ChatColor.GRAY + "[" + ChatColor.DARK_RED + "PBB-CREATOR" + ChatColor.GRAY + "] " + p.getDisplayName());
+                if (p.getName().equals("agmass") && !p.getPlayerListName().contains("OWNER")) {
+                    p.setCustomName(ChatColor.GRAY + "[" + ChatColor.DARK_RED + "OWNER" + ChatColor.GRAY + "] " + p.getDisplayName());
+                    p.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.DARK_RED + "OWNER" + ChatColor.GRAY + "] " + p.getDisplayName());
+                    p.setDisplayName(ChatColor.GRAY + "[" + ChatColor.DARK_RED + "OWNER" + ChatColor.GRAY + "] " + p.getDisplayName());
                 }
                 if (p.getName().equals("4950") && !p.getPlayerListName().contains("BUILDER") || p.getName().equals("ClownCaked") && !p.getPlayerListName().contains("BUILDER") || p.getName().equals("Sanan1010") && !p.getPlayerListName().contains("BUILDER") || p.getName().equals("noahbt787") && !p.getPlayerListName().contains("BUILDER") || p.getName().equals("Evanbeer") && !p.getPlayerListName().contains("BUILDER")) {
                     p.setCustomName(ChatColor.GRAY + "[" + ChatColor.YELLOW + "BUILDER" + ChatColor.GRAY + "] " + p.getDisplayName());
@@ -783,15 +781,6 @@ public class MyTask extends BukkitRunnable {
                     p.setCustomName(ChatColor.GRAY + "[" + ChatColor.YELLOW + "BUILD HELP" + ChatColor.GRAY + "] " + p.getDisplayName());
                     p.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.YELLOW + "BUILD HELP" + ChatColor.GRAY + "] " + p.getDisplayName());
                     p.setDisplayName(ChatColor.GRAY + "[" + ChatColor.YELLOW + "BUILD HELP" + ChatColor.GRAY + "] " + p.getDisplayName());
-                }
-                if (p.getPersistentDataContainer().has(PrisonGame.rankprefix)) {
-                    if (p.getPersistentDataContainer().get(PrisonGame.rankprefix, PersistentDataType.STRING) != null) {
-                        if (!p.getDisplayName().contains(ChatColor.translateAlternateColorCodes('&', p.getPersistentDataContainer().get(PrisonGame.rankprefix, PersistentDataType.STRING)))) {
-                            p.setCustomName(ChatColor.GRAY + "[" + ChatColor.translateAlternateColorCodes('&', p.getPersistentDataContainer().get(PrisonGame.rankprefix, PersistentDataType.STRING)) + ChatColor.GRAY + "] " + p.getDisplayName());
-                            p.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.translateAlternateColorCodes('&', p.getPersistentDataContainer().get(PrisonGame.rankprefix, PersistentDataType.STRING)) + ChatColor.GRAY + "] " + p.getDisplayName());
-                            p.setDisplayName(ChatColor.GRAY + "[" + ChatColor.translateAlternateColorCodes('&', p.getPersistentDataContainer().get(PrisonGame.rankprefix, PersistentDataType.STRING)) + ChatColor.GRAY + "] " + p.getDisplayName());
-                        }
-                    }
                 }
             } else {
                 p.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.RED + "HARD MODE" + ChatColor.GRAY + "] " + ChatColor.GRAY + p.getName());

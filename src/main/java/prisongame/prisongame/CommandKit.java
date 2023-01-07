@@ -27,13 +27,11 @@ public class CommandKit implements CommandExecutor {
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + sender.getName() + " only prison:mprison");
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + sender.getName() + " only prison:guard");
                         for (Player p : Bukkit.getOnlinePlayers()) {
-                            if (!p.getPersistentDataContainer().has(PrisonGame.hg, PersistentDataType.INTEGER)) {
                                 if (PrisonGame.type.get(p) != 0) {
                                     MyListener.playerJoin(p, false);
                                 }
                                 PrisonGame.type.put(p, 0);
                                 PrisonGame.askType.put(p, 0);
-                            }
                             p.playSound(p, Sound.BLOCK_END_PORTAL_SPAWN, 1, 1);
                             p.sendTitle("", ChatColor.RED + nw.getName() + ChatColor.GREEN + " is the new warden!");
                             PrisonGame.wardenCooldown = 20 * 6;

@@ -61,6 +61,7 @@ public final class PrisonGame extends JavaPlugin {
     static Prison volcano;
     static Prison boat;
     static Prison nether;
+    static Prison amongus;
     static Integer solitcooldown = 0;
     static Prison active = null;
     static NamespacedKey nightvis;
@@ -208,6 +209,7 @@ public final class PrisonGame extends JavaPlugin {
         this.getCommand("tc").setExecutor(new TeamChat());
         this.getCommand("disc").setExecutor(new Discordcmd());
         this.getCommand("accept").setExecutor(new accpt());
+        this.getCommand("hello").setExecutor(new hello());
         this.getCommand("nerdcheatcommand").setExecutor(new shittonmoney());
         //this.getCommand("bragrightpackage").setExecutor(new bragright());
         this.getCommand("rstmoney").setExecutor(new nomone());
@@ -287,6 +289,21 @@ public final class PrisonGame extends JavaPlugin {
             volcano = new Prison("Volcano", nl("world", -2016D, -56D, -1933D, 0f, 0f), nl("world", -2025D, -60D, -1925D, 0f, 0f), nl("world", -2029D, -59D,  -2001D, 0f, 0f), nl("world", -2029D, -59D,  -2001D, 0f, 0f), nl("world", -2026D, -55D, -1956D, -90f, 0f), nl("world", -2004D, -60D, -1981D, 0f, 0f), nl("world", -1931D, -57D, -1976D, 0f, 0f), nl("world", -2019D, -60D, -1990D, 0f, 0f), nl("world", -2032D, -60D, -1966D, 0f, 0f), nl("world", -2011.5D, -60D, -1965.5D, 0f, 0f), nl("world", -2041D, -60D, -1974D, 0f, 0f), nl("world", -2041D, -57D, -1979D, 0f, 0f));
             boat = new Prison("Boat", nl("world", -1000D, -47D, 24D, 0f, 0f), nl("world", -996D, -50D, 22D, 0f, 0f), nl("world", -998D, -48D, 17D, 0f, 0f), nl("world", -998D, -48D, 17D, 0f, 0f), nl("world", -994D, -44D, 27D, -90f, 0f), nl("world", -993D, -54D, 7D, 0f, 0f), nl("world", -961D, -59D, 64D, 0f, 0f), nl("world",  -999.5D, -49D, 7D, 0f, 0f), nl("world", -988D, -57D, 18D, 0f, 0f), nl("world", -987D, -49D, 19D, 0f, 0f), nl("world", -992D, -48D, 27D, 0f, 0f), nl("world", -991D, -49D, 27D, 0f, 0f));
             nether = new Prison("Nether", nl("world", -1000D, -47D, 24D, 0f, 0f), nl("world", -996D, -50D, 22D, 0f, 0f), nl("world",  1009D, -38D, 990D, 0f, 0f), nl("world", 1009D, -38D, 990D, 0f, 0f), nl("world", 1007D, -34D, 994D, -90f, 0f), nl("world", 948D, -39D, 946D, 0f, 0f), nl("world",  937D, -59D, 1030D, 0f, 0f), nl("world",  981D, -35D, 976D, 0f, 0f), nl("world", 1003D, -38D, 1003D, 0f, 0f), nl("world", 956.3, -38D, -168.8, 0f, 0f), nl("world", -992D, -48D, 27D, 0f, 0f), nl("world", -991D, -49D, 27D, 0f, 0f));
+            amongus = new Prison(
+                    "Skeld",
+                    nl("world", 0D, 0D, 0D, 0F, 0f),
+                    nl("world", 0D, 0D, 0D, 0F, 0f),
+                    nl("world", 1484D, -33D, 1475D, 0F, 0f),
+                    nl("world", 1484D, -33D, 1475D, 0F, 0f),
+                    nl("world", 1477D, -34D, 1433D, 0F, 0f),
+                    nl("world", 1500D, -40D, 1494D, 0F, 0f),
+                    nl("world", 1445D, -34D, 1497D, 0F, 0f),
+                    nl("world", 1488D, -34D, 1507D, 0F, 0f),
+                    nl("world", 1472D, -33D, 1470D, 0F, 0f),
+                    nl("world", 1483D, -34D, 1502D, 0F, 0f),
+                    nl("world", 0D, 0D, 0D, 0F, 0f),
+                    nl("world", 0D, 0D, 0D, 0F, 0f)
+            );
             active = gaeae;
             Bukkit.broadcastMessage("RELOAD: Loaded Maps");
             MyListener.reloadBert();
@@ -378,7 +395,7 @@ public final class PrisonGame extends JavaPlugin {
             MyTask task = new MyTask();
             task.runTaskTimer(getPlugin(this.getClass()), 0, 1);
             getServer().getPluginManager().registerEvents(new MyListener(), this);
-        }, 80);
+        }, 50);
 
     }
 
@@ -505,7 +522,6 @@ public final class PrisonGame extends JavaPlugin {
         g.getInventory().addItem(wardenSword);
 
         g.getInventory().addItem(new ItemStack(Material.BOW));
-        g.getInventory().setItemInOffHand(new ItemStack(Material.SHIELD));
         g.getInventory().addItem(new ItemStack(Material.ARROW, 16));
         g.getInventory().addItem(new ItemStack(Material.COOKED_BEEF, 32));
 
@@ -651,14 +667,19 @@ class TestCommand implements CommandExecutor {
     // This method is called, when somebody uses our command
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!((Player) sender).getDisplayName().contains("SOLITARY")) {
-            if (PrisonGame.warden != null) {
-                if (PrisonGame.warden.equals(sender)) {
-                    PrisonGame.warden = null;
+        if (!((Player) sender).hasCooldown(Material.IRON_DOOR)) {
+            if (!((Player) sender).getDisplayName().contains("SOLITARY")) {
+                if (PrisonGame.warden != null) {
+                    if (PrisonGame.warden.equals(sender)) {
+                        PrisonGame.wardenCooldown = 20 * 3;
+                        PrisonGame.warden = null;
+                    }
                 }
+                PrisonGame.type.put((Player) sender, 0);
+                MyListener.playerJoin((Player) sender, false);
             }
-            PrisonGame.type.put((Player) sender, 0);
-            MyListener.playerJoin((Player) sender, false);
+        } else {
+            sender.sendMessage(ChatColor.RED + "You're in combat!");
         }
         return true;
     }
@@ -711,8 +732,7 @@ class Discordcmd implements CommandExecutor {
     // This method is called, when somebody uses our command
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + sender.getName() + " only prison:discord");
-        sender.sendMessage(ChatColor.BLUE + "https://discord.gg/Y6TFEPUMB9");
+        sender.sendMessage(ChatColor.BLUE + "https://discord.gg/GrcHKkFQsv");
         return true;
     }
 }
@@ -723,7 +743,7 @@ class Discordcmd implements CommandExecutor {
     // This method is called, when somebody uses our command
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        sender.sendMessage(ChatColor.GRAY + "Hello! " + ChatColor.GOLD + "You're currently playing on " + ChatColor.BLUE + "PrisonButBad.minehut.gg" + ChatColor.RED + ", You're on the " + ChatColor.WHITE + PrisonGame.active.name + " map, " + ChatColor.DARK_GREEN + " with " + Bukkit.getOnlinePlayers().size() + "/" + Bukkit.getMaxPlayers() + " players online. " + ChatColor.GRAY + "(made by agmass)");
+        sender.sendMessage(ChatColor.GRAY + "Hello! " + ChatColor.GOLD + "You're currently playing on " + ChatColor.BLUE + "PrisonButBad.minehut.gg" + ChatColor.RED + ", You're on the " + ChatColor.WHITE + PrisonGame.active.name + " map, " + ChatColor.DARK_GREEN + " with " + Bukkit.getOnlinePlayers().size() + "/" + Bukkit.getMaxPlayers() + " players online. " + ChatColor.GRAY + "(PrisonButBad made by agmass)");
         return true;
     }
 }
@@ -778,9 +798,10 @@ class giverank implements CommandExecutor {
     // This method is called, when somebody uses our command
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        Bukkit.getPlayer(args[0]).getPersistentDataContainer().set(PrisonGame.rankprefix, PersistentDataType.STRING ,args[1]);
-        if (args[1] == "null") {
+        if (args.length == 1) {
             Bukkit.getPlayer(args[0]).getPersistentDataContainer().remove(PrisonGame.rankprefix);
+        } else {
+            Bukkit.getPlayer(args[0]).getPersistentDataContainer().set(PrisonGame.rankprefix, PersistentDataType.STRING, args[1]);
         }
         return true;
     }
@@ -827,8 +848,8 @@ class hard implements CommandExecutor {
     // This method is called, when somebody uses our command
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (sender instanceof Player || !PrisonGame.hardmode.get((Player) sender)) {
-            if (!((Player) sender).getDisplayName().contains("SOLITARY")) {
+        if (sender instanceof Player || PrisonGame.hardmode.get((Player) sender)) {
+            if (!((Player) sender).getDisplayName().contains("SOLITARY") || !((Player) sender).hasCooldown(Material.IRON_DOOR)) {
                 Player p = (Player) sender;
                 p.setViewDistance(2);
                 p.getPersistentDataContainer().set(PrisonGame.bckupmny, PersistentDataType.DOUBLE, p.getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0));
@@ -863,8 +884,8 @@ class normal implements CommandExecutor {
     // This method is called, when somebody uses our command
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (sender instanceof Player || PrisonGame.hardmode.get((Player) sender)) {
-            if (!((Player) sender).getDisplayName().contains("SOLITARY")) {
+        if (sender instanceof Player || !PrisonGame.hardmode.get((Player) sender)) {
+            if (!((Player) sender).getDisplayName().contains("SOLITARY") || !((Player) sender).hasCooldown(Material.IRON_DOOR)) {
                 Player p = (Player) sender;
                 p.getPersistentDataContainer().set(PrisonGame.mny, PersistentDataType.DOUBLE, p.getPersistentDataContainer().getOrDefault(PrisonGame.bckupmny, PersistentDataType.DOUBLE, 0.0));
                 p.getPersistentDataContainer().set(PrisonGame.bckupmny, PersistentDataType.DOUBLE, 0.0);
