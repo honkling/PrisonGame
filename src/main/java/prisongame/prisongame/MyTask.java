@@ -705,12 +705,16 @@ public class MyTask extends BukkitRunnable {
 
             if (!PrisonGame.escaped.get(p) && PrisonGame.type.get(p) == 0) {
                 p.setWalkSpeed(0.15f);
+                p.addPotionEffect(PotionEffectType.SLOW_DIGGING.createEffect(20 * 3, 1));
+                p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(4);
             }
             if (PrisonGame.escaped.get(p)) {
                 p.setWalkSpeed(0.2f);
+                p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(4.4);
             }
             if (PrisonGame.type.get(p) != 0) {
                 p.setWalkSpeed(0.2f);
+                p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(4.4);
             }
 
             if (PrisonGame.prisonerlevel.getOrDefault(p, 0) == 1) {
@@ -797,9 +801,6 @@ public class MyTask extends BukkitRunnable {
                 }
             }*/
             bossbar.addPlayer(p);
-            if (p.getAttribute(Attribute.GENERIC_ATTACK_SPEED) != null && PrisonGame.prisonerlevel.getOrDefault(p, 0) != 1) {
-                p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(4.2);
-            }
             if (p.getInventory().getItemInMainHand().getType().equals(Material.COOKED_CHICKEN)) {
                 p.kickPlayer("");
                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "ban " + p.getName() + " 5m Abuse of Illegals [AUTO]");

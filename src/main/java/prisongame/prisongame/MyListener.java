@@ -431,14 +431,17 @@ public class MyListener implements Listener {
         }
     }
     @EventHandler
-    public void deathmsg(PlayerDeathEvent event) {
-        if (MyTask.bossbar.getTitle().equals("LIGHTS OUT") && PrisonGame.type.get(event.getPlayer()) == 0) {
-            event.setCancelled(true);
-            Location sleeploc = event.getPlayer().getLocation();
-            MyListener.playerJoin(event.getPlayer(), false);
-            event.getPlayer().teleport(sleeploc);
-            event.getPlayer().sleep(sleeploc, true);
+    public void deathmsg(InventoryClickEvent event) {
+        if (!PrisonGame.escaped.get(event.getWhoClicked()) && PrisonGame.type.get(event.getWhoClicked()) == 0) {
+            if (event.getSlotType().equals(InventoryType.SlotType.ARMOR)) {
+                event.setCancelled(true);
+                event.getWhoClicked().closeInventory();
+                event.getWhoClicked().sendMessage(ChatColor.RED + "You can't take armor off till you've escaped!");
+            }
         }
+    }
+    @EventHandler
+    public void deathmsg(PlayerDeathEvent event) {
         if (event.getEntity().getKiller() != null) {
             if (!event.getEntity().getKiller().equals(event.getEntity())) {
                 event.getEntity().getKiller().getInventory().getItemInMainHand();
@@ -650,7 +653,7 @@ public class MyListener implements Listener {
                 event.getBlock().setType(Material.DEEPSLATE);
                 event.getPlayer().playSound(event.getPlayer(), Sound.BLOCK_NOTE_BLOCK_BASEDRUM, 1, 1);
                 event.getPlayer().getPersistentDataContainer().set(PrisonGame.mny, PersistentDataType.DOUBLE, event.getPlayer().getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0) + 30.0 * MyTask.jobm);
-                event.getPlayer().setCooldown(Material.STONE_PICKAXE, 5);
+                event.getPlayer().setCooldown(Material.IRON_PICKAXE, 5);
                 Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
                     event.getBlock().setType(PrisonGame.oretypes[new Random().nextInt(0, PrisonGame.oretypes.length - 1)]);
                 }, 20 * 2);
@@ -1727,9 +1730,9 @@ public class MyListener implements Listener {
                     }
                 }
                 if (sign.getLine(2).equals("Mining")) {
-                    if (!event.getPlayer().getInventory().contains(Material.STONE_PICKAXE)) {
+                    if (!event.getPlayer().getInventory().contains(Material.IRON_PICKAXE)) {
                         event.getPlayer().playSound(event.getPlayer(), Sound.BLOCK_NOTE_BLOCK_CHIME, 1, 1);
-                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "give " + event.getPlayer().getName() + " stone_pickaxe{Damage:36,display:{Name:'[{\"text\":\"Prisoner\\'s Pickaxe\",\"italic\":false}]'},CanDestroy:[deepslate_copper_ore,deepslate_emerald_ore,deepslate_gold_ore,deepslate_lapis_ore,deepslate_redstone_ore]} 1");
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "give " + event.getPlayer().getName() + " iron_pickaxe{Damage:36,display:{Name:'[{\"text\":\"Prisoner\\'s Pickaxe\",\"italic\":false}]'},CanDestroy:[deepslate_copper_ore,deepslate_emerald_ore,deepslate_gold_ore,deepslate_lapis_ore,deepslate_redstone_ore]} 1");
                         event.getPlayer().sendMessage(ChatColor.GRAY + "Mine Ores with the pickaxe.");
                     } else {
                         event.getPlayer().sendMessage(ChatColor.RED + "You already have a pickaxe!");

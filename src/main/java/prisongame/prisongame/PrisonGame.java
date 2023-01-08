@@ -848,7 +848,7 @@ class hard implements CommandExecutor {
     // This method is called, when somebody uses our command
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (sender instanceof Player && PrisonGame.hardmode.get((Player) sender)) {
+        if (sender instanceof Player && !PrisonGame.hardmode.get((Player) sender)) {
             if (!((Player) sender).getDisplayName().contains("SOLITARY") && !((Player) sender).hasCooldown(Material.IRON_DOOR)) {
                 Player p = (Player) sender;
                 p.setViewDistance(2);
@@ -884,7 +884,7 @@ class normal implements CommandExecutor {
     // This method is called, when somebody uses our command
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (sender instanceof Player && !PrisonGame.hardmode.get((Player) sender)) {
+        if (sender instanceof Player && PrisonGame.hardmode.get((Player) sender)) {
             if (!((Player) sender).getDisplayName().contains("SOLITARY") && !((Player) sender).hasCooldown(Material.IRON_DOOR)) {
                 Player p = (Player) sender;
                 p.getPersistentDataContainer().set(PrisonGame.mny, PersistentDataType.DOUBLE, p.getPersistentDataContainer().getOrDefault(PrisonGame.bckupmny, PersistentDataType.DOUBLE, 0.0));
