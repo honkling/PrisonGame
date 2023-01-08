@@ -4,6 +4,7 @@ import com.comphenix.protocol.PacketType;
 import com.sun.tools.sjavac.Log;
 import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.disguisetypes.PlayerDisguise;
+import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.*;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
@@ -588,6 +589,14 @@ public class MyListener implements Listener {
             }
     }
 
+    @EventHandler
+    public void ee(PlayerAdvancementDoneEvent event) {
+        if (!event.getAdvancement().getRoot().getKey().toString().equals("prison:root")) {
+            event.message(null);
+        } else {
+            event.message(event.message().color(TextColor.color(0, 200, 0)));
+        }
+    }
 
     @EventHandler
     public void ee(PlayerTeleportEvent event) {
