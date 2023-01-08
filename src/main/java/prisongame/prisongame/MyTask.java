@@ -120,7 +120,8 @@ public class MyTask extends BukkitRunnable {
             }
             PrisonGame.solittime.put(p, PrisonGame.solittime.get(p) - 1);
             if (PrisonGame.solittime.get(p) <= 0 && p.getDisplayName().contains("SOLITARY")) {
-                p.damage(999);
+                PrisonGame.tptoBed(p);
+                MyListener.playerJoin(p, false);
                 p.sendMessage( "You were released from solitary.");
             }
             if (!PrisonGame.word.containsKey(p)) {
@@ -255,7 +256,7 @@ public class MyTask extends BukkitRunnable {
                 p.removePotionEffect(PotionEffectType.JUMP);
             }
         }
-        if (Bukkit.getWorld("world").getTime() == 2500) {
+        if (Bukkit.getWorld("world").getTime() == 2000) {
             if (!hasAlerted) {
                 for (Player p : Bukkit.getOnlinePlayers()) {
                     if (p.getPersistentDataContainer().has(PrisonGame.mny, PersistentDataType.DOUBLE)) {
@@ -294,16 +295,6 @@ public class MyTask extends BukkitRunnable {
                         PrisonGame.respect.put(p, 0);
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + p.getName() + " only prison:respect");
                     }
-                    if (PrisonGame.type.get(p) == 0 && !PrisonGame.escaped.get(p) && !p.getPersistentDataContainer().has(PrisonGame.taxevasion, PersistentDataType.INTEGER)) {
-                        p.sendMessage(ChatColor.GREEN + numberFormat.format(p.getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0) * 0.05) + "$ was taxed towards the prison.");
-                        taxcount += p.getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0) * 0.1;
-                        p.getPersistentDataContainer().set(PrisonGame.mny, PersistentDataType.DOUBLE, p.getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0) * 0.95);
-                        PrisonGame.warden.getPersistentDataContainer().set(PrisonGame.mny, PersistentDataType.DOUBLE, PrisonGame.warden.getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0) + p.getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0) * 0.1);
-                    }
-                }
-                PrisonGame.warden.sendMessage(ChatColor.GREEN + "You were given " + numberFormat.format(taxcount) + "$ in taxes!");
-                if (taxcount >= 4000.0) {
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + PrisonGame.warden.getName() + " only prison:taxes");
                 }
             }
         }
