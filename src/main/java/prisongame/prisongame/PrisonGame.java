@@ -269,7 +269,7 @@ public final class PrisonGame extends JavaPlugin {
         Bukkit.broadcastMessage("RELOAD: Safewaiting For Worlds");
 
         Bukkit.addRecipe(recipe);
-        while (Bukkit.getWorld("world") != null) {
+        while (Bukkit.getWorld("world") == null) {
             // hi chat
         }
             // code
