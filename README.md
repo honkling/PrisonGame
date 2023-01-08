@@ -1,14 +1,17 @@
-#-----------------------------
+-----------------------------
 # prisonbutbad --- github repo
-#-----------------------------
+-----------------------------
 
 > looking for prisonbutbad's ip?
+
 prisonbutbad.minehut.gg
 
 > wtf is this
+
 a minecraft prison server plugin. opensourced so people can fix my code, and roast me. burn me alive.
 
 > why are there a bunch of shit commit names at the start of commit history
+
 [Verse 1]
 I told you secrets that I thought that you could keep
 I'll give you anything, just show me what you need
