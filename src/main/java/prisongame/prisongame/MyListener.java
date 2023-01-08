@@ -1174,8 +1174,6 @@ public class MyListener implements Listener {
                 }
                 if (sign.getLine(1).equals("ASCENSION")) {
                     Inventory inv = Bukkit.createInventory(null, 9, ChatColor.AQUA + "ASCENSION");
-                    if (!event.getPlayer().getPersistentDataContainer().has(PrisonGame.taxevasion, PersistentDataType.INTEGER))
-                        inv.addItem(PrisonGame.createGuiItem(Material.IRON_BARS, ChatColor.DARK_AQUA + "Tax Evasion", ChatColor.GREEN + "Evades taxes.", ChatColor.AQUA + "25 Ascension Coins"));
                     if (!event.getPlayer().getPersistentDataContainer().has(PrisonGame.semicloak, PersistentDataType.INTEGER))
                         inv.addItem(PrisonGame.createGuiItem(Material.LEATHER_CHESTPLATE, ChatColor.DARK_AQUA + "Semi Cloak", ChatColor.GREEN + "You will not warn guards for breaking bars/opening doors", ChatColor.AQUA + "5 Ascension Coins"));
                     if (!event.getPlayer().getPersistentDataContainer().has(PrisonGame.reinforcement, PersistentDataType.INTEGER))
@@ -2247,8 +2245,8 @@ public class MyListener implements Listener {
                     bat.remove();
                     if (event.getPlayer().getGameMode() != GameMode.ADVENTURE) {
                         event.getPlayer().setGameMode(GameMode.ADVENTURE);
-                        event.getPlayer().setNoDamageTicks(20 * 30);
-                        event.getPlayer().addPotionEffect(PotionEffectType.DAMAGE_RESISTANCE.createEffect(20 * 30, 0));
+                        event.getPlayer().setNoDamageTicks(20 * 15);
+                        event.getPlayer().addPotionEffect(PotionEffectType.DAMAGE_RESISTANCE.createEffect(20 * 15, 0));
                         if (event.getPlayer().getGameMode() != GameMode.ADVENTURE) {
                             event.getPlayer().setGameMode(GameMode.ADVENTURE);
                             PrisonGame.tptoBed(event.getPlayer());
