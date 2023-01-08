@@ -432,6 +432,12 @@ public class MyListener implements Listener {
     }
     @EventHandler
     public void deathmsg(PlayerDeathEvent event) {
+        if (MyTask.bossbar.getTitle().equals("LIGHTS OUT") && PrisonGame.type.get(event.getPlayer()) == 0) {
+            Location sleeploc = event.getPlayer().getLocation();
+            MyListener.playerJoin(event.getPlayer(), false);
+            event.getPlayer().teleport(sleeploc);
+            event.getPlayer().sleep(sleeploc, true);
+        }
         if (event.getEntity().getKiller() != null) {
             if (!event.getEntity().getKiller().equals(event.getEntity())) {
                 event.getEntity().getKiller().getInventory().getItemInMainHand();
@@ -672,6 +678,9 @@ public class MyListener implements Listener {
     @EventHandler
     public void ee(InventoryClickEvent event) {
         if (event.getCurrentItem() != null) {
+            if (event.getCurrentItem().getType().equals(Material.RED_STAINED_GLASS_PANE) || event.getCurrentItem().getType().equals(Material.GRAY_STAINED_GLASS_PANE)) {
+                event.setCancelled(true);
+            }
             if (event.getCurrentItem().getItemMeta() != null) {
                 if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.YELLOW + "Not Drugs")) {
                     if (event.getWhoClicked().getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0) >= 30.0) {
@@ -729,15 +738,33 @@ public class MyListener implements Listener {
                 }
                 if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.BLUE + "Prot 1")) {
                     if (event.getWhoClicked().getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0) >= 500.0) {
-                        event.getWhoClicked().getPersistentDataContainer().set(PrisonGame.mny, PersistentDataType.DOUBLE, event.getWhoClicked().getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0)  - 30.0);
-                        if (event.getWhoClicked().getInventory().getHelmet() != null)
-                            event.getWhoClicked().getInventory().getHelmet().addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
-                        if (event.getWhoClicked().getInventory().getChestplate() != null)
-                            event.getWhoClicked().getInventory().getChestplate().addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
-                        if (event.getWhoClicked().getInventory().getLeggings() != null)
-                            event.getWhoClicked().getInventory().getLeggings().addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
-                        if (event.getWhoClicked().getInventory().getBoots() != null)
-                            event.getWhoClicked().getInventory().getBoots().addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+                        Boolean shouldpay = false;
+                        if (event.getWhoClicked().getInventory().getHelmet() != null) {
+                            if (event.getWhoClicked().getInventory().getHelmet().getItemMeta().hasEnchant(Enchantment.PROTECTION_ENVIRONMENTAL)) {
+                                event.getWhoClicked().getInventory().getHelmet().addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+                                shouldpay = true;
+                            }
+                        }
+                        if (event.getWhoClicked().getInventory().getChestplate() != null) {
+                            if (event.getWhoClicked().getInventory().getChestplate().getItemMeta().hasEnchant(Enchantment.PROTECTION_ENVIRONMENTAL)) {
+                                event.getWhoClicked().getInventory().getChestplate().addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+                                shouldpay = true;
+                            }
+                        }
+                        if (event.getWhoClicked().getInventory().getLeggings() != null) {
+                            if (event.getWhoClicked().getInventory().getLeggings().getItemMeta().hasEnchant(Enchantment.PROTECTION_ENVIRONMENTAL)) {
+                                event.getWhoClicked().getInventory().getLeggings().addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+                                shouldpay = true;
+                            }
+                        }
+                        if (event.getWhoClicked().getInventory().getBoots() != null) {
+                            if (event.getWhoClicked().getInventory().getBoots().getItemMeta().hasEnchant(Enchantment.PROTECTION_ENVIRONMENTAL)) {
+                                event.getWhoClicked().getInventory().getBoots().addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+                                shouldpay = true;
+                            }
+                        }
+                        if (shouldpay)
+                            event.getWhoClicked().getPersistentDataContainer().set(PrisonGame.mny, PersistentDataType.DOUBLE, event.getWhoClicked().getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0)  - 30.0);
                     }
                 }
                 if (PrisonGame.warden != null) {
@@ -1970,12 +1997,19 @@ public class MyListener implements Listener {
             }
         }
     }
+
+    @EventHandler
+    public void anyName(PlayerBedLeaveEvent event) {
+        if (MyTask.bossbar.getTitle().equals("LIGHTS OUT")) {
+            event.setCancelled(true);
+            event.getPlayer().sendMessage(ChatColor.RED + "You can't wake up until roll call!");
+        }
+    }
     @EventHandler
     public void anyName(PlayerDeathEvent event) {
         Player p = event.getEntity();
         if(p.isDead()) {
             if (p.getKiller() != null) {
-
                 p.getKiller().playSound(p.getKiller(), Sound.BLOCK_NOTE_BLOCK_BASS, 1, 2);
                 if (p.hasPotionEffect(PotionEffectType.GLOWING)) {
                     p.getKiller().sendMessage(ChatColor.GREEN + "You gained a little bit of money for killing a criminal.");

@@ -665,7 +665,6 @@ public class MyTask extends BukkitRunnable {
             if (p.getLocation().getY() < 118 && p.getWorld().getName().equals("endprison")) {
                 p.damage(999);
             }
-            p.setWalkSpeed(0.2f);
             if (p.getPersistentDataContainer().has(PrisonGame.nightvis, PersistentDataType.INTEGER)) {
                 p.addPotionEffect(PotionEffectType.NIGHT_VISION.createEffect(99999, 255));
             } else {
@@ -702,6 +701,16 @@ public class MyTask extends BukkitRunnable {
                 p.setMaxHealth(14);
             } else {
                 p.setMaxHealth(20);
+            }
+
+            if (!PrisonGame.escaped.get(p) && PrisonGame.type.get(p) == 0) {
+                p.setWalkSpeed(0.15f);
+            }
+            if (PrisonGame.escaped.get(p)) {
+                p.setWalkSpeed(0.2f);
+            }
+            if (PrisonGame.type.get(p) != 0) {
+                p.setWalkSpeed(0.2f);
             }
 
             if (PrisonGame.prisonerlevel.getOrDefault(p, 0) == 1) {
