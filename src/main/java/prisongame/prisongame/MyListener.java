@@ -433,6 +433,7 @@ public class MyListener implements Listener {
     @EventHandler
     public void deathmsg(PlayerDeathEvent event) {
         if (MyTask.bossbar.getTitle().equals("LIGHTS OUT") && PrisonGame.type.get(event.getPlayer()) == 0) {
+            event.setCancelled(true);
             Location sleeploc = event.getPlayer().getLocation();
             MyListener.playerJoin(event.getPlayer(), false);
             event.getPlayer().teleport(sleeploc);

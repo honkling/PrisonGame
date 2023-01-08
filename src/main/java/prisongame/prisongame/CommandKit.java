@@ -93,32 +93,7 @@ public class CommandKit implements CommandExecutor {
                     sender.sendMessage(ChatColor.RED + "Someone else is already the warden!");
                 }
             } else if (PrisonGame.warden.equals(sender)) {
-                if (args[0].equals("role")) {
-                    Player g = Bukkit.getPlayer(args[1]);
-                    if (g.isOnline() && g != sender) {
-                        Inventory inv = Bukkit.createInventory(null, 9, args[1]);
-                        if (PrisonGame.type.get(g) != 2) {
-                            inv.addItem(PrisonGame.createGuiItem(Material.PINK_CONCRETE, ChatColor.GOLD + "NURSE", ChatColor.GRAY + "Ask this player to become a prison nurse, \nto take care of prisoners!"));
-                        } else {
-                            inv.setItem(0, PrisonGame.createGuiItem(Material.RED_STAINED_GLASS_PANE, ChatColor.RED + "PLAYER ALREADY HAS ROLE"));
-                        }
-                        if (PrisonGame.type.get(g) != 1) {
-                            inv.addItem(PrisonGame.createGuiItem(Material.LIGHT_BLUE_CONCRETE, ChatColor.BLUE + "GUARD", ChatColor.GRAY + "Ask this player to become a prison guard, \nto discipline prisoners!"));
-                        } else {
-                            inv.setItem(0, PrisonGame.createGuiItem(Material.RED_STAINED_GLASS_PANE, ChatColor.RED + "PLAYER ALREADY HAS ROLE"));
-                        }
-                        if (PrisonGame.type.get(g) != 3 && PrisonGame.swat) {
-                            inv.addItem(PrisonGame.createGuiItem(Material.LIGHT_BLUE_CONCRETE, ChatColor.BLUE + "GUARD", ChatColor.GRAY + "Ask this player to become a prison guard, \nto discipline prisoners!"));
-                        } else {
-                            inv.setItem(0, PrisonGame.createGuiItem(Material.RED_STAINED_GLASS_PANE, ChatColor.RED + "ROLE UNAVAILABLE"));
-                        }
-                        ((Player) sender).openInventory(inv);
-                    }
-                }
                 if (args[0].equals("guard")) {
-                    if (args.length < 3) {
-                        sender.sendMessage(ChatColor.YELLOW + "" + ChatColor.BOLD + "!!! " + ChatColor.YELLOW + "This command is outdated! either end the command with \"-s\" or use " + ChatColor.WHITE + "\"warden role <player>\"");
-                    }
                     if (Bukkit.getPlayer(args[1]) != null) {
                         Player g = Bukkit.getPlayer(args[1]);
                         if (g.isOnline() && g != sender && PrisonGame.type.get(g) == 0) {
@@ -130,9 +105,6 @@ public class CommandKit implements CommandExecutor {
                     }
                 }
                 if (args[0].equals("swat")) {
-                    if (args.length < 3) {
-                        sender.sendMessage(ChatColor.YELLOW + "" + ChatColor.BOLD + "!!! " + ChatColor.YELLOW + "This command is outdated! either end the command with \"-s\" or use " + ChatColor.WHITE + "\"warden role <player>\"");
-                    }
                     if (PrisonGame.swat) {
                         if (Bukkit.getPlayer(args[1]) != null) {
                             Player g = Bukkit.getPlayer(args[1]);
@@ -148,9 +120,6 @@ public class CommandKit implements CommandExecutor {
                     }
                 }
                 if (args[0].equals("nurse")) {
-                    if (args.length < 3) {
-                        sender.sendMessage(ChatColor.YELLOW + "" + ChatColor.BOLD + "!!! " + ChatColor.YELLOW + "This command is outdated! either end the command with \"-s\" or use " + ChatColor.WHITE + "\"warden role <player>\"");
-                    }
                     if (Bukkit.getPlayer(args[1]) != null) {
                         Player g = Bukkit.getPlayer(args[1]);
                         if (g.isOnline() && g != sender) {
@@ -254,8 +223,10 @@ public class CommandKit implements CommandExecutor {
                         p.sendMessage(ChatColor.BLUE + "/warden prefix [prefix]" + ChatColor.DARK_GRAY + " - " + ChatColor.WHITE + "Adds a prefix to your name.");
                         p.sendMessage(ChatColor.BLUE + "/warden fire [guard name]" + ChatColor.DARK_GRAY + " - " + ChatColor.WHITE + "Fires a guard from their job");
                         p.sendMessage(ChatColor.BLUE + "/warden resign" + ChatColor.DARK_GRAY + " - " + ChatColor.WHITE + "Resigns you from your job.");
-                        p.sendMessage(ChatColor.BLUE + "/warden role [name]" + ChatColor.DARK_GRAY + " - " + ChatColor.WHITE + "Gives a player a job.");
-                        p.sendMessage(ChatColor.YELLOW + "DEPRECATED COMMANDS (STILL USABLE): guard, swat, nurse");
+                        p.sendMessage(ChatColor.BLUE + "/warden pass [name]" + ChatColor.DARK_GRAY + " - " + ChatColor.WHITE + "Gives a player warden.");
+                        p.sendMessage(ChatColor.BLUE + "/warden guard [name]" + ChatColor.DARK_GRAY + " - " + ChatColor.WHITE + "Makes another player a guard.");
+                        p.sendMessage(ChatColor.BLUE + "/warden swat [name]" + ChatColor.DARK_GRAY + " - " + ChatColor.WHITE + "Makes another player a SWAT guard." + ChatColor.RED + " [REQUIRES 'SWAT GUARDS' UPGRADE!]");
+                        p.sendMessage(ChatColor.BLUE + "/warden nurse [name]" + ChatColor.DARK_GRAY + " - " + ChatColor.WHITE + "Makes another player a nurse.");
                         p.sendMessage(ChatColor.DARK_GRAY + "-=-=-=-=-=-=-=-");
 
                     }
