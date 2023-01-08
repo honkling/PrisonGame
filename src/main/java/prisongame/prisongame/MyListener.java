@@ -432,7 +432,8 @@ public class MyListener implements Listener {
     @EventHandler
     public void deathmsg(PlayerDeathEvent event) {
         if (event.getEntity().getKiller() != null) {
-            if (event.getEntity().getKiller().getInventory().getItemInMainHand() != null) {
+            if (!event.getEntity().getKiller().equals(event.getEntity())) {
+                event.getEntity().getKiller().getInventory().getItemInMainHand();
                 if (event.getEntity().getKiller().getInventory().getItemInMainHand().getItemMeta() != null) {
                     if (event.getEntity().getKiller().getInventory().getItemInMainHand().getItemMeta().getDisplayName().equals(ChatColor.BLUE + "Handcuffs " + ChatColor.RED + "[CONTRABAND]")) {
                         if (!event.getEntity().getKiller().hasCooldown(Material.IRON_SHOVEL)) {

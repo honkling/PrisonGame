@@ -269,7 +269,9 @@ public final class PrisonGame extends JavaPlugin {
         Bukkit.broadcastMessage("RELOAD: Safewaiting For Worlds");
 
         Bukkit.addRecipe(recipe);
-        Bukkit.getScheduler().runTaskLater(getPlugin(this.getClass()), () -> {
+        while (Bukkit.getWorld("world") != null) {
+            // hi chat
+        }
             // code
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "minecraft:kick @a Reload");
 
@@ -395,8 +397,6 @@ public final class PrisonGame extends JavaPlugin {
             MyTask task = new MyTask();
             task.runTaskTimer(getPlugin(this.getClass()), 0, 1);
             getServer().getPluginManager().registerEvents(new MyListener(), this);
-        }, 50);
-
     }
 
     @Override
@@ -1039,7 +1039,6 @@ class settings implements CommandExecutor {
             inv.addItem(PrisonGame.createGuiItem(Material.PLAYER_HEAD, ChatColor.BLUE + "old tab", ChatColor.GRAY + "sets tab to the default minecraft one, if you're boring."));
             inv.addItem(PrisonGame.createGuiItem(Material.POTION, ChatColor.LIGHT_PURPLE + "epic bertude night vision", ChatColor.GRAY + "gives you night vision i think"));
             inv.addItem(PrisonGame.createGuiItem(Material.GRAY_STAINED_GLASS, ChatColor.LIGHT_PURPLE + "no warden spaces", ChatColor.GRAY + "disables/enables the spaces on the warden's messages"));
-            inv.addItem(PrisonGame.createGuiItem(Material.NETHERITE_SWORD, ChatColor.LIGHT_PURPLE + "-1 dollar", ChatColor.GRAY + "this is a robbery"));
             p.openInventory(inv);
         }
         return true;
