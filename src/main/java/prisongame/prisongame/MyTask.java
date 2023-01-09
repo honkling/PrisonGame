@@ -705,8 +705,7 @@ public class MyTask extends BukkitRunnable {
 
             if (!PrisonGame.escaped.get(p) && PrisonGame.type.get(p) == 0) {
                 p.setWalkSpeed(0.15f);
-                p.addPotionEffect(PotionEffectType.SLOW_DIGGING.createEffect(20 * 3, 1));
-                p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(4);
+                p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(3.3);
             }
             if (PrisonGame.escaped.get(p)) {
                 p.setWalkSpeed(0.2f);
