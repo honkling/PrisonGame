@@ -1,7 +1,6 @@
 package prisongame.prisongame;
 
 import com.comphenix.protocol.PacketType;
-import com.sun.tools.sjavac.Log;
 import io.papermc.paper.event.entity.EntityMoveEvent;
 import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.disguisetypes.PlayerDisguise;

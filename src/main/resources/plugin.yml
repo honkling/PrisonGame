@@ -11,21 +11,12 @@ commands:
   resign:
     description: Resign from your current position/Rejoin from prisoner.
     usage: /<command>
-  safereload:
-    permission: litteraly.do.not.give.this.lmao
-    description: Reloads the game
-    usage: /<command>
-  giverank:
-    permission: pbb.rankgive
-    description: gives a rank prefix
-    usage: /<command> <prefix-includecolourcodes>
   pbsettings:
     description: setting
     usage: /<command>
   hard:
     description: Enables HARD mode.
     usage: /<command>
-
   normal:
     description: Disables HARD mode.
     usage: /<command>
@@ -44,17 +35,9 @@ commands:
     permission: pbb.cheats
     description: gives 0 dollahs
     usage: /<command> <player>
-  amute:
-    permission: pbb.mute
-    description: mute de playah
-    usage: /<command> <player>
   pay:
     description: gib de monah
     usage: /<command> <player> <money>
-  aunmute:
-    permission: pbb.unmute
-    description: unmute de playah
-    usage: /<command> <player>
   setmoney:
     permission: pbb.set
     description: unmute de playah
@@ -63,9 +46,6 @@ commands:
     aliases: teamchat
     description: Resign from your current position/Rejoin from prisoner.
     usage: /<command>
-  bragrightpackage:
-    permission: litteraly.do.not.give.this.lmao
-    usage: /<command> <player>
   disc:
     aliases: discord
     description: Resign from your current position/Rejoin from prisoner.
