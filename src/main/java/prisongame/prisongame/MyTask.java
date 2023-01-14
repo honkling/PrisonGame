@@ -1,6 +1,5 @@
 package prisongame.prisongame;
 
-import com.sun.tools.javac.api.MultiTaskListener;
 import io.papermc.paper.entity.LookAnchor;
 import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.disguisetypes.PlayerDisguise;
