@@ -2,6 +2,7 @@ package prisongame.prisongame;
 
 import com.comphenix.protocol.PacketType;
 import com.sun.tools.sjavac.Log;
+import io.papermc.paper.event.entity.EntityMoveEvent;
 import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.disguisetypes.PlayerDisguise;
 import net.kyori.adventure.text.format.TextColor;
@@ -94,65 +95,71 @@ public class MyListener implements Listener {
         PrisonGame.guardsh.setInvulnerable(true);*/
     }
     public static void playerJoin(Player p, Boolean dontresetshit) {
-        if (!dontresetshit)
-            p.getInventory().clear();
-        if (!dontresetshit)
-            PrisonGame.escaped.put(p, false);
-        p.playSound(p, Sound.ENTITY_ZOMBIE_BREAK_WOODEN_DOOR, 1, 0.75f);
+        if (!p.getDisplayName().contains("ASCENDING")) {
+            if (!dontresetshit)
+                p.getInventory().clear();
+            if (!dontresetshit)
+                PrisonGame.escaped.put(p, false);
+            p.playSound(p, Sound.ENTITY_ZOMBIE_BREAK_WOODEN_DOOR, 1, 0.75f);
 
-        if (!dontresetshit) {
-            p.setCustomName(ChatColor.GRAY + "[" + ChatColor.GOLD + "PRISONER" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY + p.getName());
-            p.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.GOLD + "PRISONER" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY + p.getName());
-            p.setDisplayName(ChatColor.GRAY + "[" + ChatColor.GOLD + "PRISONER" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY + p.getName());
+            if (!dontresetshit) {
+                p.setCustomName(ChatColor.GRAY + "[" + ChatColor.GOLD + "PRISONER" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY + p.getName());
+                p.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.GOLD + "PRISONER" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY + p.getName());
+                p.setDisplayName(ChatColor.GRAY + "[" + ChatColor.GOLD + "PRISONER" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY + p.getName());
 
+            }
+
+            if (!dontresetshit) {
+                ItemStack orangechest = new ItemStack(Material.LEATHER_CHESTPLATE);
+                LeatherArmorMeta chestmeta = (LeatherArmorMeta) orangechest.getItemMeta();
+                chestmeta.setColor(Color.fromRGB(208, 133, 22));
+                chestmeta.setDisplayName("Prisoner Uniform");
+                orangechest.setItemMeta(chestmeta);
+
+                ItemStack orangeleg = new ItemStack(Material.LEATHER_LEGGINGS);
+                LeatherArmorMeta orangelegItemMeta = (LeatherArmorMeta) orangeleg.getItemMeta();
+                orangelegItemMeta.setColor(Color.fromRGB(208, 133, 22));
+                orangelegItemMeta.setDisplayName("Prisoner Uniform");
+                orangeleg.setItemMeta(orangelegItemMeta);
+
+                ItemStack orangeboot = new ItemStack(Material.LEATHER_BOOTS);
+                LeatherArmorMeta orangebootItemMeta = (LeatherArmorMeta) orangeboot.getItemMeta();
+                orangebootItemMeta.setColor(Color.fromRGB(40, 20, 2));
+                //if (p.getPersistentDataContainer().getOrDefault(PrisonGame.rank, PersistentDataType.INTEGER, 0) == 1) {
+                //    orangebootItemMeta.setColor(Color.YELLOW);
+                //}
+                orangebootItemMeta.setDisplayName("Prisoner Uniform");
+                orangeboot.setItemMeta(orangebootItemMeta);
+
+                p.getInventory().setChestplate(orangechest);
+                p.getInventory().setLeggings(orangeleg);
+                p.getInventory().setBoots(orangeboot);
+            }
+            if (!dontresetshit) {
+                PrisonGame.type.put(p, 0);
+            }
+            Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
+                p.teleport(PrisonGame.active.getSpwn());
+            }, 5L);
+            Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
+                p.teleport(PrisonGame.active.getSpwn());
+            }, 5L);
+            if (!PrisonGame.hardmode.containsKey(p))
+                PrisonGame.hardmode.put(p, false);
+            if (PrisonGame.hardmode.get(p)) {
+                String prisonerNumber = "" + new Random().nextInt(100, 999);
+                PrisonGame.prisonnumber.put(p, prisonerNumber);
+                PlayerDisguise playerDisguise = new PlayerDisguise("pdlCAMERA");
+                playerDisguise.setName("Prisoner " + prisonerNumber);
+                playerDisguise.setKeepDisguiseOnPlayerDeath(true);
+                DisguiseAPI.disguiseToAll(p, playerDisguise);
+                p.setCustomName(ChatColor.GRAY + "[" + ChatColor.GOLD + "PRISONER" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY + "Prisoner " + prisonerNumber);
+                p.setDisplayName(ChatColor.GRAY + "[" + ChatColor.GOLD + "PRISONER" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY + "Prisoner " + prisonerNumber);
+                p.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.RED + "HARD MODE" + ChatColor.DARK_GRAY + "] " + p.getName());
+            }
+            if (!dontresetshit)
+                Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Prisoners").addPlayer(p);
         }
-
-        if (!dontresetshit) {
-            ItemStack orangechest = new ItemStack(Material.LEATHER_CHESTPLATE);
-            LeatherArmorMeta chestmeta = (LeatherArmorMeta) orangechest.getItemMeta();
-            chestmeta.setColor(Color.fromRGB(208, 133, 22));
-            chestmeta.setDisplayName("Prisoner Uniform");
-            orangechest.setItemMeta(chestmeta);
-
-            ItemStack orangeleg = new ItemStack(Material.LEATHER_LEGGINGS);
-            LeatherArmorMeta orangelegItemMeta = (LeatherArmorMeta) orangeleg.getItemMeta();
-            orangelegItemMeta.setColor(Color.fromRGB(208, 133, 22));
-            orangelegItemMeta.setDisplayName("Prisoner Uniform");
-            orangeleg.setItemMeta(orangelegItemMeta);
-
-            ItemStack orangeboot = new ItemStack(Material.LEATHER_BOOTS);
-            LeatherArmorMeta orangebootItemMeta = (LeatherArmorMeta) orangeboot.getItemMeta();
-            orangebootItemMeta.setColor(Color.fromRGB(40, 20, 2));
-            //if (p.getPersistentDataContainer().getOrDefault(PrisonGame.rank, PersistentDataType.INTEGER, 0) == 1) {
-            //    orangebootItemMeta.setColor(Color.YELLOW);
-            //}
-            orangebootItemMeta.setDisplayName("Prisoner Uniform");
-            orangeboot.setItemMeta(orangebootItemMeta);
-
-            p.getInventory().setChestplate(orangechest);
-            p.getInventory().setLeggings(orangeleg);
-            p.getInventory().setBoots(orangeboot);
-        }
-        if (!dontresetshit) {
-            PrisonGame.type.put(p, 0);
-        }
-        Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {p.teleport(PrisonGame.active.getSpwn());}, 5L);
-        Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {p.teleport(PrisonGame.active.getSpwn());}, 5L);
-        if (!PrisonGame.hardmode.containsKey(p))
-            PrisonGame.hardmode.put(p, false);
-        if (PrisonGame.hardmode.get(p)) {
-            String prisonerNumber = "" + new Random().nextInt(100, 999);
-            PrisonGame.prisonnumber.put(p, prisonerNumber);
-            PlayerDisguise playerDisguise = new PlayerDisguise("pdlCAMERA");
-            playerDisguise.setName("Prisoner " + prisonerNumber);
-            playerDisguise.setKeepDisguiseOnPlayerDeath(true);
-            DisguiseAPI.disguiseToAll(p, playerDisguise);
-            p.setCustomName(ChatColor.GRAY + "[" + ChatColor.GOLD + "PRISONER" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY  + "Prisoner " + prisonerNumber);
-            p.setDisplayName(ChatColor.GRAY + "[" + ChatColor.GOLD + "PRISONER" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY  + "Prisoner " + prisonerNumber);
-            p.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.RED + "HARD MODE" + ChatColor.DARK_GRAY + "] " + p.getName());
-        }
-        if (!dontresetshit)
-            Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Prisoners").addPlayer(p);
     }
 
 
@@ -295,7 +302,40 @@ public class MyListener implements Listener {
             }
         }
     }
-
+    @EventHandler
+    public void islandboat(PlayerChatEvent event) {
+        if (PrisonGame.isInside(event.getPlayer(), new Location(Bukkit.getWorld("world"), 2141, -57, -2084), new Location(Bukkit.getWorld("world"), 2137, -62, -2080))) {
+            if (event.getMessage().equals("1775182") && PrisonGame.warden.equals(event.getPlayer())) {
+                event.setCancelled(true);
+                event.getPlayer().teleport(new Location(Bukkit.getWorld("world"), 2141, -60, -2087));
+                event.getPlayer().sendMessage(ChatColor.GREEN + "Access granted.");
+                Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
+                    event.getPlayer().sendMessage(ChatColor.GREEN + "You overhear some splashing sounds...");
+                }, 20 * 10);
+                Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
+                        for (Player p : Bukkit.getOnlinePlayers()) {
+                            p.teleport(new Location(Bukkit.getWorld("world"), -2062, -50, 1945));
+                        }
+                        PrisonGame.active = PrisonGame.boat;
+                        PrisonGame.swapcool = (20 * 60) * 5;
+                        reloadBert();
+                        for (Player p : Bukkit.getOnlinePlayers()) {
+                            if (PrisonGame.type.get(p) != -1) {
+                                MyListener.playerJoin(p, true);
+                                p.sendTitle("New prison!", "BOAT");
+                            } else {
+                                p.teleport(PrisonGame.active.getWardenspawn());
+                                Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
+                                    p.teleport(PrisonGame.active.getWardenspawn());
+                                }, 5);
+                                if (!p.getDisplayName().contains("ASCENDING"))
+                                    p.sendTitle("New prison!", "BOAT");
+                            }
+                        }
+                }, 20 * 15);
+            }
+        }
+    }
 
     @EventHandler
     public void onPlayerJoin(PlayerInteractAtEntityEvent event) {
@@ -440,6 +480,19 @@ public class MyListener implements Listener {
             }
         }
     }
+
+    @EventHandler
+    public void deathmsg(EntityDamageByEntityEvent event) {
+        if (event.getEntity().getType().equals(EntityType.ZOMBIE))
+            event.setCancelled(true);
+    }
+    @EventHandler
+    public void deathmsg(EntityMoveEvent event) {
+        if (event.getTo().getBlock().getType().equals(Material.MANGROVE_DOOR) && event.getEntity().getType().equals(EntityType.ZOMBIE)) {
+            event.setCancelled(true);
+            event.getEntity().teleport(new Location(Bukkit.getWorld("world"), -40, -58, -973));
+        }
+    }
     @EventHandler
     public void deathmsg(PlayerDeathEvent event) {
         if (event.getEntity().getKiller() != null) {
@@ -472,6 +525,13 @@ public class MyListener implements Listener {
         event.getDrops().removeIf(i -> i.getType() == Material.WOODEN_SWORD);
         event.getDrops().removeIf(i -> i.getType() == Material.CARROT_ON_A_STICK);
         event.getDrops().removeIf(i -> i.getType() == Material.IRON_DOOR);
+        if (Bukkit.getWorld("world").getTime() > 16000 && Bukkit.getWorld("world").getTime() < 24000) {
+            if (event.getPlayer().getKiller() != null) {
+                if (event.getPlayer().getKiller().getInventory().getItemInMainHand().getType().equals(Material.TORCH)) {
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + event.getEntity().getKiller().getName() + " only prison:lightsin");
+                }
+            }
+        }
         if (PrisonGame.type.get(event.getEntity()) == 3) {
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + event.getEntity().getName() + " only prison:invincible");
         }
@@ -493,6 +553,7 @@ public class MyListener implements Listener {
                 if (PrisonGame.type.get(event.getEntity().getKiller()) == -1) {
                     if (event.getEntity().getKiller().getInventory().getItemInMainHand().getType().equals(Material.AIR)) {
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + event.getEntity().getKiller().getName() + " only prison:yoink");
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + event.getEntity().getName() + " only prison:skillissue");
                     }
                 }
             }
@@ -501,10 +562,22 @@ public class MyListener implements Listener {
             if (PrisonGame.warden.equals(event.getEntity())) {
                 if (event.getEntity().getKiller() != null) {
                     if (PrisonGame.type.get(event.getEntity().getKiller()) != 0) {
+                        if (PrisonGame.type.get(event.getEntity().getKiller()) == 2) {
+                            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + event.getEntity().getKiller().getName() + " only prison:incorrectmogus");
+                        }
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + event.getEntity().getName() + " only prison:dieguard");
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + event.getEntity().getKiller().getName() + " only prison:killwardenguard");
+                        if (PrisonGame.active.getName().equals("Skeld")) {
+                            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + event.getEntity().getKiller().getName() + " only prison:impostor");
+                        }
                     }
                     Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + event.getEntity().getKiller().getName() + " only prison:killwarden");
+                }
+                if (PrisonGame.wardentime.get(event.getEntity()) < 0) {
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + event.getEntity().getName() + " only prison:afinishedstory");
+                    for (Player p : Bukkit.getOnlinePlayers()) {
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + p.getName() + " only prison:pbb");
+                    }
                 }
                 PrisonGame.wardenCooldown = 40;
                 event.getDrops().clear();
@@ -516,6 +589,9 @@ public class MyListener implements Listener {
         if (PrisonGame.type.get(event.getEntity()) == 0) {
             event.setDeathMessage(ChatColor.GRAY + event.getDeathMessage());
             if (event.getEntity().getKiller() != null) {
+                if (PrisonGame.type.get(event.getEntity().getKiller()) == -1) {
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + event.getEntity().getName() + " only prison:badluck");
+                }
                 if (PrisonGame.escaped.get(event.getEntity().getKiller())) {
                     Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + event.getEntity().getKiller().getName() + " only prison:nmng");
                 }
@@ -590,10 +666,7 @@ public class MyListener implements Listener {
                 } else {
                     if (PrisonGame.warden != event.getPlayer()) {
                         event.setCancelled(true);
-                        if (!event.getPlayer().hasCooldown(Material.OBSIDIAN)) {
-                            event.getPlayer().setCooldown(Material.OBSIDIAN, 20 * 5);
-                            Bukkit.broadcastMessage(event.getPlayer().getDisplayName() + ChatColor.GRAY + ": " + ChatColor.DARK_GRAY + "*silenced by solitary*");
-                        }
+                        Bukkit.broadcastMessage(event.getPlayer().getDisplayName() + ChatColor.GRAY + ": " + ChatColor.DARK_GRAY + "*silenced by solitary*");
                     }
                 }
             }
@@ -1222,7 +1295,6 @@ public class MyListener implements Listener {
                         inv.addItem(PrisonGame.createGuiItem(Material.DIAMOND_CHESTPLATE, ChatColor.DARK_AQUA + "ProtSpawn", ChatColor.GREEN + "Spawns you with PROT 1 as a warden, guard, nurse or swat.", ChatColor.AQUA + "10 Ascension Coins"));
                     if (!event.getPlayer().getPersistentDataContainer().has(PrisonGame.randomz, PersistentDataType.INTEGER))
                         inv.addItem(PrisonGame.createGuiItem(Material.SPLASH_POTION, ChatColor.DARK_AQUA + "Random Items", ChatColor.GREEN + "Gives you 3 random items when spawning.", ChatColor.AQUA + "3 Ascension Coins"));
-
                     event.getPlayer().openInventory(inv);
                 }
                 if (sign.getLine(0).equals("ASCEND")) {
@@ -1258,7 +1330,7 @@ public class MyListener implements Listener {
                 org.bukkit.block.Sign sign = (org.bukkit.block.Sign) event.getClickedBlock().getState();
                 if (sign.getLine(1).equals("LOCKDOWN")) {
                     if (PrisonGame.lockdowncool < 1) {
-                        Bukkit.getWorld("world").setTime(13000);
+                        Bukkit.getWorld("world").setTime(16000);
                         PrisonGame.lockdowncool = (20 * 60) * 10;
                     } else {
                         event.getPlayer().sendMessage(ChatColor.RED + "That's on cooldown! " + ChatColor.YELLOW + PrisonGame.lockdowncool / 20 + " seconds left");
@@ -1770,6 +1842,7 @@ public class MyListener implements Listener {
                             event.getPlayer().playSound(event.getPlayer(), Sound.BLOCK_NOTE_BLOCK_BASEDRUM, 1, 1);
                             ItemStack card = new ItemStack(Material.CARROT_ON_A_STICK);
                             ItemMeta cardm = card.getItemMeta();
+                            sign.setLine(1, "$0.5/click");
                             cardm.setDisplayName(ChatColor.LIGHT_PURPLE + "Plumber");
                             card.setItemMeta(cardm);
                             event.getPlayer().getInventory().addItem(card);
@@ -1793,6 +1866,7 @@ public class MyListener implements Listener {
                     }
                     if (sign.getLine(2).equals("Cafe Worker")) {
                         event.getPlayer().playSound(event.getPlayer(), Sound.BLOCK_NOTE_BLOCK_BELL, 1, 1);
+                        sign.setLine(1, "$2/fish");
                         event.getPlayer().sendMessage(ChatColor.WHITE + "Click on the trapped chest to get food, cook it in the blast furnace.");
                     }
                 } else {
@@ -1881,6 +1955,7 @@ public class MyListener implements Listener {
                     if (PrisonGame.type.get(event.getPlayer()) != 1 && PrisonGame.type.get(event.getPlayer()) != 2 && PrisonGame.type.get(event.getPlayer()) != 3) {
                         event.getPlayer().teleport(PrisonGame.active.getBm());
                         event.getPlayer().sendTitle("", ChatColor.GRAY + "-= Black Market =-");
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + event.getPlayer().getName() + " only prison:market");
                         event.getPlayer().playSound(event.getPlayer(), Sound.AMBIENT_UNDERWATER_ENTER, 1, 0.75f);
                         event.getPlayer().addPotionEffect(PotionEffectType.UNLUCK.createEffect(999999, 2));
                     } else {
