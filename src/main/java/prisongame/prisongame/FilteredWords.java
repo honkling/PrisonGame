@@ -38,8 +38,6 @@ public class FilteredWords {
         String sanitized = replaceConsecutiveDuplicates(msg
                 .replaceAll("\\s+", ""));
 
-        System.out.printf("Sanitized (%s)\n", sanitized);
-
         for (String i : filter) {
             if (sanitized.toLowerCase().contains(i))
                 return "I FUCKING LOVE AMONG US!!! YESS!!! AMONGER!! SUSS!!! SUSSY!!! SUSSY BAKA!! SUSS!! WALTUH!! KINDA SUS WALTUH!!";
