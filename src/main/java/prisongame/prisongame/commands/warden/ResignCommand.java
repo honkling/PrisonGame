@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import prisongame.prisongame.MyListener;
 import prisongame.prisongame.PrisonGame;
 
-public class WardResignCommand implements CommandExecutor {
+public class ResignCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (PrisonGame.wardenCooldown <= 0) {
