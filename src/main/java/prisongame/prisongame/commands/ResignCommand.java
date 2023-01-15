@@ -9,6 +9,9 @@ import org.bukkit.entity.Player;
 import prisongame.prisongame.MyListener;
 import prisongame.prisongame.PrisonGame;
 
+import java.util.HashMap;
+import java.util.UUID;
+
 public class ResignCommand implements CommandExecutor {
 
     // This method is called, when somebody uses our command
@@ -20,6 +23,15 @@ public class ResignCommand implements CommandExecutor {
                     if (PrisonGame.warden.equals(sender)) {
                         PrisonGame.wardenCooldown = 20 * 3;
                         PrisonGame.warden = null;
+                    }
+                }
+                if (PrisonGame.warden != null) {
+                    if (PrisonGame.savedPlayerGuards.containsKey(PrisonGame.warden.getUniqueId())) {
+                        HashMap<UUID, Integer> roleHashMap = PrisonGame.savedPlayerGuards.get(PrisonGame.warden.getUniqueId());
+                        if (PrisonGame.savedPlayerGuards.get(PrisonGame.warden.getUniqueId()).containsKey(((Player) sender).getUniqueId())) {
+                            roleHashMap.remove(((Player) sender).getUniqueId());
+                        }
+                        PrisonGame.savedPlayerGuards.put(PrisonGame.warden.getUniqueId(), roleHashMap);
                     }
                 }
                 PrisonGame.type.put((Player) sender, 0);

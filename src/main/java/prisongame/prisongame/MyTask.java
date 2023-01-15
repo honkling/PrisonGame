@@ -31,7 +31,6 @@ import org.bukkit.util.Vector;
 import oshi.jna.platform.mac.SystemB;
 
 import java.text.DecimalFormat;
-import java.util.logging.Level;
 
 public class MyTask extends BukkitRunnable {
 
@@ -239,8 +238,7 @@ public class MyTask extends BukkitRunnable {
                             p.playSound(p, Sound.BLOCK_NOTE_BLOCK_BIT, 1, 1);
                         }
                         p.addPotionEffect(PotionEffectType.SLOW.createEffect(10, 255));
-                        if (p.isOnGround())
-                            p.addPotionEffect(PotionEffectType.JUMP.createEffect(20, -25));
+                        p.addPotionEffect(PotionEffectType.JUMP.createEffect(20, -25));
                         p.addPotionEffect(PotionEffectType.WEAKNESS.createEffect(20, 255));
                         p.addPotionEffect(PotionEffectType.DAMAGE_RESISTANCE.createEffect(20, 255));
                         p.setCollidable(false);
@@ -251,8 +249,9 @@ public class MyTask extends BukkitRunnable {
                 }
             }
             if (allat && PrisonGame.warden != null) {
-                PrisonGame.warden.sendTitle("", ChatColor.GREEN + "All prisoners at roll call! +0.05$!", 0, 5, 0);
-                PrisonGame.warden.getPersistentDataContainer().set(PrisonGame.mny, PersistentDataType.DOUBLE, PrisonGame.warden.getPersistentDataContainer().get(PrisonGame.mny, PersistentDataType.DOUBLE) + 0.05);
+                PrisonGame.warden.sendTitle("", ChatColor.GREEN + "All prisoners at roll call! +1k$!", 0, 40, 0);
+                PrisonGame.warden.getPersistentDataContainer().set(PrisonGame.mny, PersistentDataType.DOUBLE, PrisonGame.warden.getPersistentDataContainer().get(PrisonGame.mny, PersistentDataType.DOUBLE) + 1000.0);
+                Bukkit.getWorld("world").setTime(timer2 - 1);
             }
         } else {
             for (Player p : Bukkit.getOnlinePlayers()) {
@@ -270,7 +269,7 @@ public class MyTask extends BukkitRunnable {
                             }
                             PrisonGame.wealthcycle.put(p, p.getPersistentDataContainer().get(PrisonGame.mny, PersistentDataType.DOUBLE));
                         } catch (NullPointerException ignored) {
-                            Bukkit.getLogger().log(Level.INFO, p.getName() + " seems to not have a money container?");
+                            Bukkit.getLogger().info(p.getName() + " seems to not have a money container?");
                         }
                     }
                 }
@@ -833,7 +832,7 @@ public class MyTask extends BukkitRunnable {
 
             if (!PrisonGame.escaped.get(p) && PrisonGame.type.get(p) == 0) {
                 p.setWalkSpeed(0.2f);
-                p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(4.4);
+                p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(4);
             }
             if (PrisonGame.escaped.get(p)) {
                 p.setWalkSpeed(0.2f);
@@ -861,6 +860,7 @@ public class MyTask extends BukkitRunnable {
 
             if (!p.hasPotionEffect(PotionEffectType.DOLPHINS_GRACE)) {
                 if (p.getVehicle() instanceof Player) {
+                    p.addPotionEffect(PotionEffectType.JUMP.createEffect(20, -25));
                     p.leaveVehicle();
                 }
             }

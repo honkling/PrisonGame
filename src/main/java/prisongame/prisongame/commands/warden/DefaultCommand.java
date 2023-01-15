@@ -40,9 +40,22 @@ public class DefaultCommand implements CommandExecutor {
             p.sendTitle("", ChatColor.RED + nw.getName() + ChatColor.GREEN + " is the new warden!");
             PrisonGame.wardenCooldown = 20 * 6;
         }
-        Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Warden").addPlayer(nw);
-        PrisonGame.type.put(nw, -1);
         PrisonGame.warden = nw;
+        Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Warden").addPlayer(nw);
+        if (PrisonGame.savedPlayerGuards.containsKey(PrisonGame.warden)) {
+            for (Player pe : Bukkit.getOnlinePlayers()) {
+                if (PrisonGame.savedPlayerGuards.get(PrisonGame.warden.getUniqueId()).containsKey(pe.getUniqueId())) {
+                    switch (PrisonGame.savedPlayerGuards.get(PrisonGame.warden.getUniqueId()).get(pe.getUniqueId())) {
+                        case 2 -> PrisonGame.setNurse((Player) pe);
+                        case 1 -> PrisonGame.setGuard((Player) pe);
+                        case 3 -> PrisonGame.setSwat((Player) pe);
+                        default -> ((Player) pe).sendMessage("An error has occured.");
+                    }
+                }
+            }
+        }
+
+        PrisonGame.type.put(nw, -1);
         PrisonGame.swat = false;
         nw.teleport(PrisonGame.active.getWardenspawn());
         nw.setCustomName(ChatColor.GRAY + "[" + ChatColor.RED + "WARDEN" + ChatColor.GRAY + "] " + ChatColor.WHITE + nw.getName());

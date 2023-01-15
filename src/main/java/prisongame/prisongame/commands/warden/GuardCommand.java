@@ -12,13 +12,16 @@ import prisongame.prisongame.PrisonGame;
 public class GuardCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (Bukkit.getPlayer(args[0]) != null) {
-            Player g = Bukkit.getPlayer(args[0]);
-            if (g.isOnline() && g != sender && PrisonGame.type.get(g) == 0) {
-                PrisonGame.askType.put(g, 1);
-                g.sendMessage(ChatColor.BLUE + "The wardens wants you to be a guard! use '/accept'");
-            } else {
-                sender.sendMessage(ChatColor.BLUE + "We had troubles promoting this player.");
+        if (args.length >= 1) {
+            if (Bukkit.getPlayer(args[0]) != null) {
+                Player g = Bukkit.getPlayer(args[0]);
+                if (g.isOnline() && g != sender && PrisonGame.type.get(g) == 0) {
+                    PrisonGame.askType.put(g, 1);
+                    sender.sendMessage(ChatColor.AQUA + "Succesfully asked player to be a guard!");
+                    g.sendMessage(ChatColor.BLUE + "The wardens wants you to be a guard! use '/accept'");
+                } else {
+                    sender.sendMessage(ChatColor.BLUE + "We had troubles promoting this player.");
+                }
             }
         }
 

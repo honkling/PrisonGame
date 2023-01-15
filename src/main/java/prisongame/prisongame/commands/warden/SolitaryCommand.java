@@ -14,42 +14,44 @@ import prisongame.prisongame.PrisonGame;
 public class SolitaryCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (Bukkit.getPlayer(args[0]) != null) {
-            Player g = Bukkit.getPlayer(args[0]);
-            Integer solitcount = 0;
-            for (Player p : Bukkit.getOnlinePlayers()) {
-                if (p.getDisplayName().contains("SOLITARY")) {
-                    solitcount += 1;
+        if (args.length >= 1) {
+            if (Bukkit.getPlayer(args[0]) != null) {
+                Player g = Bukkit.getPlayer(args[0]);
+                Integer solitcount = 0;
+                for (Player p : Bukkit.getOnlinePlayers()) {
+                    if (p.getDisplayName().contains("SOLITARY")) {
+                        solitcount += 1;
+                    }
                 }
-            }
-            if (solitcount < 3) {
-                if (PrisonGame.solitcooldown <= 0) {
-                    if (g.isOnline() && g != sender && PrisonGame.type.get(g) == 0) {
-                        if (g.getGameMode() == GameMode.SPECTATOR) {
-                            PrisonGame.solitcooldown = (20 * 60) * 2;
-                            Bukkit.broadcastMessage(ChatColor.GRAY + g.getName() + " was sent to solitary!");
-                            g.setGameMode(GameMode.ADVENTURE);
-                            g.removePotionEffect(PotionEffectType.LUCK);
-                            PrisonGame.escaped.put(g, true);
-                            PrisonGame.solittime.put(g, 20 * 120);
-                            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + g.getName() + " only prison:solit");
-                            Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
-                                g.teleport(PrisonGame.active.getSolit());
-                            }, 3);
-                            g.sendTitle("", "You're in solitary.", 10, 0, 10);
-                            g.addPotionEffect(PotionEffectType.WATER_BREATHING.createEffect(Integer.MAX_VALUE, 1));
-                            Player p = g;
-                            p.setCustomName(ChatColor.GRAY + "[" + ChatColor.BLACK + "SOLITARY" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY + p.getName());
-                            p.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.BLACK + "SOLITARY" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY + p.getName());
-                            p.setDisplayName(ChatColor.GRAY + "[" + ChatColor.BLACK + "SOLITARY" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY + p.getName());
+                if (solitcount < 3) {
+                    if (PrisonGame.solitcooldown <= 0) {
+                        if (g.isOnline() && g != sender && PrisonGame.type.get(g) == 0) {
+                            if (g.getGameMode() == GameMode.SPECTATOR) {
+                                PrisonGame.solitcooldown = (20 * 60) * 2;
+                                Bukkit.broadcastMessage(ChatColor.GRAY + g.getName() + " was sent to solitary!");
+                                g.setGameMode(GameMode.ADVENTURE);
+                                g.removePotionEffect(PotionEffectType.LUCK);
+                                PrisonGame.escaped.put(g, true);
+                                PrisonGame.solittime.put(g, 20 * 120);
+                                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + g.getName() + " only prison:solit");
+                                Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
+                                    g.teleport(PrisonGame.active.getSolit());
+                                }, 3);
+                                g.sendTitle("", "You're in solitary.", 10, 0, 10);
+                                g.addPotionEffect(PotionEffectType.WATER_BREATHING.createEffect(Integer.MAX_VALUE, 1));
+                                Player p = g;
+                                p.setCustomName(ChatColor.GRAY + "[" + ChatColor.BLACK + "SOLITARY" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY + p.getName());
+                                p.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.BLACK + "SOLITARY" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY + p.getName());
+                                p.setDisplayName(ChatColor.GRAY + "[" + ChatColor.BLACK + "SOLITARY" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY + p.getName());
 
+                            }
                         }
+                    } else {
+                        sender.sendMessage(ChatColor.RED + "Solitary is on cooldown!");
                     }
                 } else {
-                    sender.sendMessage(ChatColor.RED + "Solitary is on cooldown!");
+                    sender.sendMessage(ChatColor.RED + "Solitary can't hold more than 3 people!");
                 }
-            } else {
-                sender.sendMessage(ChatColor.RED + "Solitary can't hold more than 3 people!");
             }
         }
 

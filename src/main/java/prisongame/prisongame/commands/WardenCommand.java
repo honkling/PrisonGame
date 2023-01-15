@@ -4,17 +4,11 @@ import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
-import prisongame.prisongame.MyListener;
 import prisongame.prisongame.PrisonGame;
 import prisongame.prisongame.commands.warden.*;
-import prisongame.prisongame.commands.warden.ResignCommand;
+import prisongame.prisongame.commands.warden.WardResignCommand;
 
 import java.util.Arrays;
 
@@ -44,7 +38,7 @@ public class WardenCommand implements CommandExecutor {
             case "swat" -> new SwatCommand();
             case "fire" -> new FireCommand();
             case "pass" -> new PassCommand();
-            case "resign" -> new ResignCommand();
+            case "resign" -> new WardResignCommand();
             case "target" -> new TargetCommand();
             case "solitary" -> new SolitaryCommand();
             case "prefix" -> new PrefixCommand();

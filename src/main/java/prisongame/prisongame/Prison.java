@@ -5,8 +5,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 
-import java.util.logging.Level;
-
 public class Prison {
     public Location runpoint1;
     public Location runpoint2;

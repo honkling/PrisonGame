@@ -35,7 +35,6 @@ import oshi.jna.platform.mac.SystemB;
 
 import java.util.Arrays;
 import java.util.Random;
-import java.util.logging.Level;
 
 public class MyListener implements Listener {
 
@@ -164,6 +163,11 @@ public class MyListener implements Listener {
 
     @EventHandler
     public void bertrudeiosepic(EntityDamageEvent event) {
+        if (event.getCause().equals(EntityDamageEvent.DamageCause.FALL) && event.getEntity() instanceof LivingEntity le) {
+            if (le.hasPotionEffect(PotionEffectType.JUMP)) {
+                event.setCancelled(true);
+            }
+        }
         if (event.getEntity() instanceof Player) {
             Player p = (Player) event.getEntity();
             p.setCooldown(Material.IRON_DOOR, 75);
@@ -350,7 +354,6 @@ public class MyListener implements Listener {
             Inventory inv = Bukkit.createInventory(null, 9, "bertrude");
             inv.addItem(PrisonGame.createGuiItem(Material.PLAYER_HEAD, ChatColor.BLUE + "old tab", ChatColor.GRAY + "sets tab to the default minecraft one, if you're boring."));
             inv.addItem(PrisonGame.createGuiItem(Material.POTION, ChatColor.LIGHT_PURPLE + "epic bertude night vision", ChatColor.GRAY + "gives you night vision i think"));
-            inv.addItem(PrisonGame.createGuiItem(Material.GRAY_STAINED_GLASS, ChatColor.LIGHT_PURPLE + "no warden spaces", ChatColor.GRAY + "disables/enables the spaces on the warden's messages"));
             inv.addItem(PrisonGame.createGuiItem(Material.NETHERITE_SWORD, ChatColor.LIGHT_PURPLE + "-1 dollar", ChatColor.GRAY + "this is a robbery"));
             event.getPlayer().openInventory(inv);
         }
@@ -444,6 +447,15 @@ public class MyListener implements Listener {
             }
         }else{
             event.getPlayer().kickPlayer(ChatColor.translateAlternateColorCodes('&', "&4&lThe server is currently &a&lReloading &c&lOr &4Completely fucked up. &c&lIf this error is occuring constanly please alert me @ &bhttps://discord.gg/GrcHKkFQsv"));
+        }
+        Player pe = (Player) event.getPlayer();
+        if (PrisonGame.savedPlayerGuards.get(PrisonGame.warden.getUniqueId()).containsKey(pe.getUniqueId())) {
+            switch (PrisonGame.savedPlayerGuards.get(PrisonGame.warden.getUniqueId()).get(pe.getUniqueId())) {
+                case 2 -> PrisonGame.setNurse((Player) pe);
+                case 1 -> PrisonGame.setGuard((Player) pe);
+                case 3 -> PrisonGame.setSwat((Player) pe);
+                default -> ((Player) pe).sendMessage("An error has occured.");
+            }
         }
     }
 
@@ -618,7 +630,7 @@ public class MyListener implements Listener {
     public void chatCleanup(AsyncPlayerChatEvent event) {
             if (PrisonGame.warden == event.getPlayer()) {
                 if (!PrisonGame.word.get(event.getPlayer()).equals(event.getMessage())) {
-                    Bukkit.getLogger().log(Level.INFO, event.getPlayer().getDisplayName() + ChatColor.RED + ": " + FilteredWords.filtermsg(event.getMessage()));
+                    Bukkit.getLogger().info(event.getPlayer().getDisplayName() + ChatColor.RED + ": " + FilteredWords.filtermsg(event.getMessage()));
                     for (Player p : Bukkit.getOnlinePlayers()) {
                         if (!p.getPersistentDataContainer().has(PrisonGame.whiff, PersistentDataType.INTEGER)) {
                             p.playSound(p, Sound.BLOCK_NOTE_BLOCK_BIT, 1, 1);

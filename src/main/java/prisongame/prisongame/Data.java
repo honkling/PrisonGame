@@ -12,39 +12,27 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.UUID;
-import java.util.logging.Level;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 public class Data implements Serializable {
     private static transient final long serialVersionUID = -1681012206529286330L;
 
-    public final OfflinePlayer ward;
-    public final String map;
-    public final Boolean isreload;
-    public final Boolean hasSwat;
-    public final HashMap<Player, Location> playerLocationHashMap;
+    public final HashMap<UUID, HashMap<UUID, Integer>> playerguards;
 
 
     // Can be used for saving
-    public Data(OfflinePlayer ward, String map, Boolean isreload, Boolean hasSwat, HashMap<Player, Location> playerLocationHashMap) {
-        this.ward = ward;
-        this.map = map;
-        this.isreload = isreload;
-        this.hasSwat = hasSwat;
-        this.playerLocationHashMap = playerLocationHashMap;
+    public Data(HashMap<UUID, HashMap<UUID, Integer>> playerguards) {
+        this.playerguards = playerguards;
 
     }
     // Can be used for loading
     public Data(Data loadedData) {
-        this.ward = loadedData.ward;
-        this.map = loadedData.map;
-        this.isreload = loadedData.isreload;
-        this.hasSwat = loadedData.hasSwat;
-        this.playerLocationHashMap = loadedData.playerLocationHashMap;
+        this.playerguards = loadedData.playerguards;
     }
 
     public boolean saveData(String filePath) {
