@@ -3,7 +3,6 @@ package prisongame.prisongame;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 
 public class Prison {
     public Location runpoint1;

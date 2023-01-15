@@ -1,13 +1,10 @@
 package prisongame.prisongame;
 
-import io.papermc.paper.entity.LookAnchor;
 import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.disguisetypes.PlayerDisguise;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.minecraft.advancements.Advancements;
 import org.bukkit.*;
-import org.bukkit.advancement.Advancement;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.data.type.Door;
@@ -15,32 +12,28 @@ import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarFlag;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
-import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.util.Vector;
-import oshi.jna.platform.mac.SystemB;
 
 import java.text.DecimalFormat;
 
 public class MyTask extends BukkitRunnable {
 
-    static Integer jobm = 1;
+    public static Integer jobm = 1;
     static Boolean hasAlerted = true;
 
     static Integer timer1;
     static Integer timer2;
 
-    static BossBar bossbar = Bukkit.createBossBar(
+    public static BossBar bossbar = Bukkit.createBossBar(
             ChatColor.WHITE + "Morning",
             BarColor.WHITE,
             BarStyle.SOLID);
