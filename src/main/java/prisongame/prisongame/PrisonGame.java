@@ -1,27 +1,20 @@
 package prisongame.prisongame;
 
 import me.libraryaddict.disguise.DisguiseAPI;
-import me.libraryaddict.disguise.LibsDisguises;
 import me.libraryaddict.disguise.disguisetypes.PlayerDisguise;
 import org.bukkit.*;
-import org.bukkit.block.Sign;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scoreboard.Team;
 import org.bukkit.util.Vector;
-import oshi.jna.platform.mac.SystemB;
 import prisongame.prisongame.commands.*;
 import prisongame.prisongame.commands.completers.WardenComplete;
 import prisongame.prisongame.commands.danger.HardCommand;
@@ -32,16 +25,17 @@ import prisongame.prisongame.commands.economy.staff.NerdCheatCommand;
 import prisongame.prisongame.commands.economy.staff.ResetMoneyCommand;
 import prisongame.prisongame.commands.economy.staff.SetMoneyCommand;
 import prisongame.prisongame.commands.staff.BuilderCommand;
+import prisongame.prisongame.listeners.*;
 
-import java.io.Console;
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Random;
+import java.util.UUID;
 
 public final class PrisonGame extends JavaPlugin {
 
-    static HashMap<Player, Double> st = new HashMap<>();
-    static HashMap<Player, Double> sp = new HashMap<>();
+    public static HashMap<Player, Double> st = new HashMap<>();
+    public static HashMap<Player, Double> sp = new HashMap<>();
     public static Player warden = null;
     public static HashMap<Player, Boolean> escaped = new HashMap<>();
     public static HashMap<Player, Integer> type = new HashMap<>();
@@ -49,47 +43,47 @@ public final class PrisonGame extends JavaPlugin {
     static HashMap<Player, Integer> lastward = new HashMap<>();
     static HashMap<Player, Integer> lastward2 = new HashMap<>();
     static HashMap<Player, Integer> wardenban = new HashMap<>();
-    static HashMap<Player, String> word = new HashMap<>();
+    public static HashMap<Player, String> word = new HashMap<>();
     static HashMap<Player, Integer> saidcycle = new HashMap<>();
     public static HashMap<Player, String> prisonnumber = new HashMap<>();
     static HashMap<Player, Double> wealthcycle = new HashMap<>();
-    static HashMap<Player, Integer> wardentime = new HashMap<>();
+    public static HashMap<Player, Integer> wardentime = new HashMap<>();
     static HashMap<Player, Integer> calls = new HashMap<>();
-    static HashMap<Player, Integer> worryachieve = new HashMap<>();
-    static HashMap<Player, Integer> axekills = new HashMap<>();
+    public static HashMap<Player, Integer> worryachieve = new HashMap<>();
+    public static HashMap<Player, Integer> axekills = new HashMap<>();
     static HashMap<Player, Integer> timebet = new HashMap<>();
-    static Boolean givepig = false;
-    static Prison gaeae;
-    static Prison hyper;
-    static Prison endmap;
-    static Prison train;
-    static Prison gladiator;
-    static Prison island;
-    static Prison santa;
-    static Prison volcano;
-    static Prison boat;
-    static Prison nether;
-    static Prison amongus;
+    public static Boolean givepig = false;
+    public static Prison gaeae;
+    public static Prison hyper;
+    public static Prison endmap;
+    public static Prison train;
+    public static Prison gladiator;
+    public static Prison island;
+    public static Prison santa;
+    public static Prison volcano;
+    public static Prison boat;
+    public static Prison nether;
+    public static Prison amongus;
     public static Integer solitcooldown = 0;
     public static Prison active = null;
-    static NamespacedKey nightvis;
+    public static NamespacedKey nightvis;
     static NamespacedKey rank;
     static NamespacedKey coarsemined;
-    static NamespacedKey hg;
+    public static NamespacedKey hg;
     public static NamespacedKey ascendcoins;
-    static NamespacedKey doubincome;
+    public static NamespacedKey doubincome;
     public static NamespacedKey taxevasion;
     static NamespacedKey rankprefix;
     public static NamespacedKey semicloak;
     public static NamespacedKey reinforcement;
     public static NamespacedKey bckupmny;
     public static NamespacedKey protspawn;
-    static NamespacedKey tab;
+    public static NamespacedKey tab;
     public static NamespacedKey randomz;
-    static Integer swapcool = 0;
+    public static Integer swapcool = 0;
     public static Integer wardenCooldown = 20;
-    static Integer lockdowncool = 0;
-    static NamespacedKey whiff;
+    public static Integer lockdowncool = 0;
+    public static NamespacedKey whiff;
     public static Boolean wardenenabled = false;
 
     public static NamespacedKey mny;
@@ -97,16 +91,16 @@ public final class PrisonGame extends JavaPlugin {
     public static HashMap<Player, Integer> solittime = new HashMap<>();
     static HashMap<Material, Double> moneyore = new HashMap<>();
     static HashMap<Player, Player> handcuff = new HashMap<>();
-    static HashMap<Player, Integer> trustlevel = new HashMap<>();
-    static HashMap<Player, Integer> prisonerlevel = new HashMap<>();
+    public static HashMap<Player, Integer> trustlevel = new HashMap<>();
+    public static HashMap<Player, Integer> prisonerlevel = new HashMap<>();
     static NamespacedKey trust;
     public static HashMap<Player, Boolean> hardmode = new HashMap<>();
-    static HashMap<Player, Player> killior = new HashMap<>();
+    public static HashMap<Player, Player> killior = new HashMap<>();
     public static NamespacedKey muted;
 
     public static HashMap<UUID, HashMap<UUID, Integer>> savedPlayerGuards = new HashMap<>();
 
-    static Material[] oretypes = {
+    public static Material[] oretypes = {
             Material.DEEPSLATE_COPPER_ORE,
             Material.DEEPSLATE_COPPER_ORE,
             Material.DEEPSLATE_COPPER_ORE,
@@ -118,7 +112,7 @@ public final class PrisonGame extends JavaPlugin {
             Material.DEEPSLATE_LAPIS_ORE,
             Material.DEEPSLATE_EMERALD_ORE
     };
-    static LivingEntity bertrude;
+    public static LivingEntity bertrude;
     static LivingEntity guardsh;
     static Villager bmsh1;
     static Villager bmsh2;
@@ -284,65 +278,90 @@ public final class PrisonGame extends JavaPlugin {
         while (Bukkit.getWorld("world") == null) {
             // hi chat
         }
-            // code
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "minecraft:kick @a Reload");
+        // code
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "minecraft:kick @a Reload");
 
-            for (Entity e : Bukkit.getWorld("world").getEntities()) {
-                if (e.getType().equals(EntityType.VILLAGER) || e.getType().equals(EntityType.WOLF)) {
-                    e.remove();
-                }
+        for (Entity e : Bukkit.getWorld("world").getEntities()) {
+            if (e.getType().equals(EntityType.VILLAGER) || e.getType().equals(EntityType.WOLF)) {
+                e.remove();
             }
-            Bukkit.broadcastMessage("RELOAD: Removed Entities");
-            gaeae = new Prison("Gaeae Fort", new Location(Bukkit.getWorld("world"), 61, -54, -159), new Location(Bukkit.getWorld("world"), 76, -59, -169), new Location(Bukkit.getWorld("world"), 44, -58, -141), new Location(Bukkit.getWorld("world"), 44, -58, -137), new Location(Bukkit.getWorld("world"), 41.5, -52, -120.5), new Location(Bukkit.getWorld("world"), 12, -60, -119), new Location(Bukkit.getWorld("world"), -26.5, -56.5, -115.5), new Location(Bukkit.getWorld("world"), -8.5, -57, -108.5), new Location(Bukkit.getWorld("world"), 33, -59, -132), new Location(Bukkit.getWorld("world"), 70.5, -59, -137.5), new Location(Bukkit.getWorld("world"), 87, -59, -129), new Location(Bukkit.getWorld("world"), 87, -56, -125));
-            hyper = new Prison("HyperTech", new Location(Bukkit.getWorld("world"), 18, -56, -988), new Location(Bukkit.getWorld("world"), 8, -59, -981), new Location(Bukkit.getWorld("world"), -29, -58, -988, 0, 0), new Location(Bukkit.getWorld("world"), -29, -58, -991), new Location(Bukkit.getWorld("world"), 12, -53, -970), new Location(Bukkit.getWorld("world"), -18, -59, -995), new Location(Bukkit.getWorld("world"), -35.5, -56.5, -959.5), new Location(Bukkit.getWorld("world"), 3.5, -59, -1006.5), new Location(Bukkit.getWorld("world"), 13, -59, -1009), new Location(Bukkit.getWorld("world"), 0.5, -59, -996.5), new Location(Bukkit.getWorld("world"), 1, -58, -1008), new Location(Bukkit.getWorld("world"), 3, -58, -1008));
-            endmap = new Prison("The End?", new Location(Bukkit.getWorld("endprison"), 7, 133, 8), new Location(Bukkit.getWorld("endprison"), 19, 127, 20), new Location(Bukkit.getWorld("endprison"), -30, 170, -48), new Location(Bukkit.getWorld("endprison"), -32, 170, -47), new Location(Bukkit.getWorld("endprison"), -1, 150, 13), new Location(Bukkit.getWorld("endprison"), 0, 135, -41), new Location(Bukkit.getWorld("world"), -26.5, -56.5, -115.5), new Location(Bukkit.getWorld("endprison"), 0, 131, -6), new Location(Bukkit.getWorld("endprison"), 0, 125 ,0), new Location(Bukkit.getWorld("endprison"), 16.5, 129, 2.5), new Location(Bukkit.getWorld("endprison"), -100000, 256, -100000), new Location(Bukkit.getWorld("endprison"), -100000, 256, -100000));
-            train = new Prison("Train", nl("world",0D,0D,0D, 0f, 0f), nl("world",0D,0D,0D, 0f, 0f), nl("world",82.8D,-58D,953D, 0f, 0f), nl("world",82.8D,-58D,953D, 0f, 0f), nl("world",83.0D,-54D,980D, -180f, 0f), nl("world",91.9D,-58D,982D, 0f, 0f), nl("world",64D,-56D,981D, -180f, 0f), nl("world",75.5D,-58D,964.5D, 0f, 0f), nl("world",91D,-58D,946D, 0f, 0f), nl("world",80.5D,-54D,961.5D, 0f, 0f), nl("world",79D,-58D,976D, 0f, 0f), nl("world",79D,-56D,975D, 0f, 0f));
-            gladiator = new Prison("Gladiator", new Location(Bukkit.getWorld("world"), -2024, -55, 1919), new Location(Bukkit.getWorld("world"), -1999, -60, 1940), new Location(Bukkit.getWorld("world"), -2039, -59, 1933, 180, 0), new Location(Bukkit.getWorld("world"), -2040, -59, 1933, 180, 0), new Location(Bukkit.getWorld("world"), -2041, -47, 1957), new Location(Bukkit.getWorld("world"), -2037, -60, 1947), new Location(Bukkit.getWorld("world"), -2030, -60, 2015), new Location(Bukkit.getWorld("world"), -2022, -60, 1967), new Location(Bukkit.getWorld("world"), -1973, -60, 1984), new Location(Bukkit.getWorld("world"), -2022.5, -60, 1957.5), new Location(Bukkit.getWorld("world"), -2084, -60, 1973), new Location(Bukkit.getWorld("world"), -2080, -56, 1973));
-            island = new Prison("Island", new Location(Bukkit.getWorld("world"), 1976, -55, -2001), new Location(Bukkit.getWorld("world"), 1968, -60, -2009), new Location(Bukkit.getWorld("world"), 2003, -59, -1988, 90, 0), new Location(Bukkit.getWorld("world"), 2003, -59, -1988, 90, 0), new Location(Bukkit.getWorld("world"), 1988, -60, -1978), new Location(Bukkit.getWorld("world"), 1964, -60, -1981), new Location(Bukkit.getWorld("world"), 1990, -59, -1861), new Location(Bukkit.getWorld("world"), 1989, -60, -1990), new Location(Bukkit.getWorld("world"), 1979, -60, -1982), new Location(Bukkit.getWorld("world"), 1981.5, -60, -1989.5), new Location(Bukkit.getWorld("world"), 1958, -60, -1999), new Location(Bukkit.getWorld("world"), 1962, -57, -1999));
-            santa = new Prison("Santa's Workshop", nl("world", 1960D, -56D, 1990D, 0f, 0f), nl("world", 1973D, -60D, 1981D, 0f, 0f), nl("world", 1981D, -59D,  1993D, 0f, 0f), nl("world", 1981D, -59D, 1993D, 0f, 0f), nl("world", 1966D, -53D, 2003D, 0f, 0f), nl("world", 1961D, -60D, 1921D, 0f, 0f), nl("world", 1970D, -59D, 2041D, 0f, 0f), nl("world", 1957D, -60D, 1992D, 0f, 0f), nl("world", 1967D, -53D, 1999D, 0f, 0f), nl("world", 1957.5D, -60D, 2007.5D, 0f, 0f), nl("world", 1989D, -60D, 2008D, 0f, 0f), nl("world", 1989D, -57D, 2013D, 0f, 0f));
-            volcano = new Prison("Volcano", nl("world", -2016D, -56D, -1933D, 0f, 0f), nl("world", -2025D, -60D, -1925D, 0f, 0f), nl("world", -2029D, -59D,  -2001D, 0f, 0f), nl("world", -2029D, -59D,  -2001D, 0f, 0f), nl("world", -2026D, -55D, -1956D, -90f, 0f), nl("world", -2004D, -60D, -1981D, 0f, 0f), nl("world", -1931D, -57D, -1976D, 0f, 0f), nl("world", -2019D, -60D, -1990D, 0f, 0f), nl("world", -2032D, -60D, -1966D, 0f, 0f), nl("world", -2011.5D, -60D, -1965.5D, 0f, 0f), nl("world", -2041D, -60D, -1974D, 0f, 0f), nl("world", -2041D, -57D, -1979D, 0f, 0f));
-            boat = new Prison("Boat", nl("world", -1000D, -47D, 24D, 0f, 0f), nl("world", -996D, -50D, 22D, 0f, 0f), nl("world", -998D, -48D, 17D, 0f, 0f), nl("world", -998D, -48D, 17D, 0f, 0f), nl("world", -994D, -44D, 27D, -90f, 0f), nl("world", -993D, -54D, 7D, 0f, 0f), nl("world", -961D, -59D, 64D, 0f, 0f), nl("world",  -999.5D, -49D, 7D, 0f, 0f), nl("world", -988D, -57D, 18D, 0f, 0f), nl("world", -987D, -49D, 19D, 0f, 0f), nl("world", -992D, -48D, 27D, 0f, 0f), nl("world", -991D, -49D, 27D, 0f, 0f));
-            nether = new Prison("Nether", nl("world", -1000D, -47D, 24D, 0f, 0f), nl("world", -996D, -50D, 22D, 0f, 0f), nl("world",  1009D, -38D, 990D, 0f, 0f), nl("world", 1009D, -38D, 990D, 0f, 0f), nl("world", 1007D, -34D, 994D, -90f, 0f), nl("world", 948D, -39D, 946D, 0f, 0f), nl("world",  937D, -59D, 1030D, 0f, 0f), nl("world",  981D, -35D, 976D, 0f, 0f), nl("world", 1003D, -38D, 1003D, 0f, 0f), nl("world", 956.3, -38D, -168.8, 0f, 0f), nl("world", -992D, -48D, 27D, 0f, 0f), nl("world", -991D, -49D, 27D, 0f, 0f));
-            amongus = new Prison(
-                    "Skeld",
-                    nl("world", 0D, 0D, 0D, 0F, 0f),
-                    nl("world", 0D, 0D, 0D, 0F, 0f),
-                    nl("world", 1484D, -33D, 1475D, 0F, 0f),
-                    nl("world", 1484D, -33D, 1475D, 0F, 0f),
-                    nl("world", 1477D, -34D, 1433D, 0F, 0f),
-                    nl("world", 1500D, -40D, 1494D, 0F, 0f),
-                    nl("world", 1445D, -34D, 1497D, 0F, 0f),
-                    nl("world", 1488D, -34D, 1507D, 0F, 0f),
-                    nl("world", 1472D, -33D, 1470D, 0F, 0f),
-                    nl("world", 1483D, -34D, 1502D, 0F, 0f),
-                    nl("world", 0D, 0D, 0D, 0F, 0f),
-                    nl("world", 0D, 0D, 0D, 0F, 0f)
-            );
-            active = gaeae;
-            Bukkit.broadcastMessage("RELOAD: Loaded Maps");
-            MyListener.reloadBert();
-            Bukkit.broadcastMessage("RELOAD: loaded bertrude lmao");
+        }
+        Bukkit.broadcastMessage("RELOAD: Removed Entities");
+        gaeae = new Prison("Gaeae Fort", new Location(Bukkit.getWorld("world"), 61, -54, -159), new Location(Bukkit.getWorld("world"), 76, -59, -169), new Location(Bukkit.getWorld("world"), 44, -58, -141), new Location(Bukkit.getWorld("world"), 44, -58, -137), new Location(Bukkit.getWorld("world"), 41.5, -52, -120.5), new Location(Bukkit.getWorld("world"), 12, -60, -119), new Location(Bukkit.getWorld("world"), -26.5, -56.5, -115.5), new Location(Bukkit.getWorld("world"), -8.5, -57, -108.5), new Location(Bukkit.getWorld("world"), 33, -59, -132), new Location(Bukkit.getWorld("world"), 70.5, -59, -137.5), new Location(Bukkit.getWorld("world"), 87, -59, -129), new Location(Bukkit.getWorld("world"), 87, -56, -125));
+        hyper = new Prison("HyperTech", new Location(Bukkit.getWorld("world"), 18, -56, -988), new Location(Bukkit.getWorld("world"), 8, -59, -981), new Location(Bukkit.getWorld("world"), -29, -58, -988, 0, 0), new Location(Bukkit.getWorld("world"), -29, -58, -991), new Location(Bukkit.getWorld("world"), 12, -53, -970), new Location(Bukkit.getWorld("world"), -18, -59, -995), new Location(Bukkit.getWorld("world"), -35.5, -56.5, -959.5), new Location(Bukkit.getWorld("world"), 3.5, -59, -1006.5), new Location(Bukkit.getWorld("world"), 13, -59, -1009), new Location(Bukkit.getWorld("world"), 0.5, -59, -996.5), new Location(Bukkit.getWorld("world"), 1, -58, -1008), new Location(Bukkit.getWorld("world"), 3, -58, -1008));
+        endmap = new Prison("The End?", new Location(Bukkit.getWorld("endprison"), 7, 133, 8), new Location(Bukkit.getWorld("endprison"), 19, 127, 20), new Location(Bukkit.getWorld("endprison"), -30, 170, -48), new Location(Bukkit.getWorld("endprison"), -32, 170, -47), new Location(Bukkit.getWorld("endprison"), -1, 150, 13), new Location(Bukkit.getWorld("endprison"), 0, 135, -41), new Location(Bukkit.getWorld("world"), -26.5, -56.5, -115.5), new Location(Bukkit.getWorld("endprison"), 0, 131, -6), new Location(Bukkit.getWorld("endprison"), 0, 125, 0), new Location(Bukkit.getWorld("endprison"), 16.5, 129, 2.5), new Location(Bukkit.getWorld("endprison"), -100000, 256, -100000), new Location(Bukkit.getWorld("endprison"), -100000, 256, -100000));
+        train = new Prison("Train", nl("world", 0D, 0D, 0D, 0f, 0f), nl("world", 0D, 0D, 0D, 0f, 0f), nl("world", 82.8D, -58D, 953D, 0f, 0f), nl("world", 82.8D, -58D, 953D, 0f, 0f), nl("world", 83.0D, -54D, 980D, -180f, 0f), nl("world", 91.9D, -58D, 982D, 0f, 0f), nl("world", 64D, -56D, 981D, -180f, 0f), nl("world", 75.5D, -58D, 964.5D, 0f, 0f), nl("world", 91D, -58D, 946D, 0f, 0f), nl("world", 80.5D, -54D, 961.5D, 0f, 0f), nl("world", 79D, -58D, 976D, 0f, 0f), nl("world", 79D, -56D, 975D, 0f, 0f));
+        gladiator = new Prison("Gladiator", new Location(Bukkit.getWorld("world"), -2024, -55, 1919), new Location(Bukkit.getWorld("world"), -1999, -60, 1940), new Location(Bukkit.getWorld("world"), -2039, -59, 1933, 180, 0), new Location(Bukkit.getWorld("world"), -2040, -59, 1933, 180, 0), new Location(Bukkit.getWorld("world"), -2041, -47, 1957), new Location(Bukkit.getWorld("world"), -2037, -60, 1947), new Location(Bukkit.getWorld("world"), -2030, -60, 2015), new Location(Bukkit.getWorld("world"), -2022, -60, 1967), new Location(Bukkit.getWorld("world"), -1973, -60, 1984), new Location(Bukkit.getWorld("world"), -2022.5, -60, 1957.5), new Location(Bukkit.getWorld("world"), -2084, -60, 1973), new Location(Bukkit.getWorld("world"), -2080, -56, 1973));
+        island = new Prison("Island", new Location(Bukkit.getWorld("world"), 1976, -55, -2001), new Location(Bukkit.getWorld("world"), 1968, -60, -2009), new Location(Bukkit.getWorld("world"), 2003, -59, -1988, 90, 0), new Location(Bukkit.getWorld("world"), 2003, -59, -1988, 90, 0), new Location(Bukkit.getWorld("world"), 1988, -60, -1978), new Location(Bukkit.getWorld("world"), 1964, -60, -1981), new Location(Bukkit.getWorld("world"), 1990, -59, -1861), new Location(Bukkit.getWorld("world"), 1989, -60, -1990), new Location(Bukkit.getWorld("world"), 1979, -60, -1982), new Location(Bukkit.getWorld("world"), 1981.5, -60, -1989.5), new Location(Bukkit.getWorld("world"), 1958, -60, -1999), new Location(Bukkit.getWorld("world"), 1962, -57, -1999));
+        santa = new Prison("Santa's Workshop", nl("world", 1960D, -56D, 1990D, 0f, 0f), nl("world", 1973D, -60D, 1981D, 0f, 0f), nl("world", 1981D, -59D, 1993D, 0f, 0f), nl("world", 1981D, -59D, 1993D, 0f, 0f), nl("world", 1966D, -53D, 2003D, 0f, 0f), nl("world", 1961D, -60D, 1921D, 0f, 0f), nl("world", 1970D, -59D, 2041D, 0f, 0f), nl("world", 1957D, -60D, 1992D, 0f, 0f), nl("world", 1967D, -53D, 1999D, 0f, 0f), nl("world", 1957.5D, -60D, 2007.5D, 0f, 0f), nl("world", 1989D, -60D, 2008D, 0f, 0f), nl("world", 1989D, -57D, 2013D, 0f, 0f));
+        volcano = new Prison("Volcano", nl("world", -2016D, -56D, -1933D, 0f, 0f), nl("world", -2025D, -60D, -1925D, 0f, 0f), nl("world", -2029D, -59D, -2001D, 0f, 0f), nl("world", -2029D, -59D, -2001D, 0f, 0f), nl("world", -2026D, -55D, -1956D, -90f, 0f), nl("world", -2004D, -60D, -1981D, 0f, 0f), nl("world", -1931D, -57D, -1976D, 0f, 0f), nl("world", -2019D, -60D, -1990D, 0f, 0f), nl("world", -2032D, -60D, -1966D, 0f, 0f), nl("world", -2011.5D, -60D, -1965.5D, 0f, 0f), nl("world", -2041D, -60D, -1974D, 0f, 0f), nl("world", -2041D, -57D, -1979D, 0f, 0f));
+        boat = new Prison("Boat", nl("world", -1000D, -47D, 24D, 0f, 0f), nl("world", -996D, -50D, 22D, 0f, 0f), nl("world", -998D, -48D, 17D, 0f, 0f), nl("world", -998D, -48D, 17D, 0f, 0f), nl("world", -994D, -44D, 27D, -90f, 0f), nl("world", -993D, -54D, 7D, 0f, 0f), nl("world", -961D, -59D, 64D, 0f, 0f), nl("world", -999.5D, -49D, 7D, 0f, 0f), nl("world", -988D, -57D, 18D, 0f, 0f), nl("world", -987D, -49D, 19D, 0f, 0f), nl("world", -992D, -48D, 27D, 0f, 0f), nl("world", -991D, -49D, 27D, 0f, 0f));
+        nether = new Prison("Nether", nl("world", -1000D, -47D, 24D, 0f, 0f), nl("world", -996D, -50D, 22D, 0f, 0f), nl("world", 1009D, -38D, 990D, 0f, 0f), nl("world", 1009D, -38D, 990D, 0f, 0f), nl("world", 1007D, -34D, 994D, -90f, 0f), nl("world", 948D, -39D, 946D, 0f, 0f), nl("world", 937D, -59D, 1030D, 0f, 0f), nl("world", 981D, -35D, 976D, 0f, 0f), nl("world", 1003D, -38D, 1003D, 0f, 0f), nl("world", 956.3, -38D, -168.8, 0f, 0f), nl("world", -992D, -48D, 27D, 0f, 0f), nl("world", -991D, -49D, 27D, 0f, 0f));
+        amongus = new Prison(
+                "Skeld",
+                nl("world", 0D, 0D, 0D, 0F, 0f),
+                nl("world", 0D, 0D, 0D, 0F, 0f),
+                nl("world", 1484D, -33D, 1475D, 0F, 0f),
+                nl("world", 1484D, -33D, 1475D, 0F, 0f),
+                nl("world", 1477D, -34D, 1433D, 0F, 0f),
+                nl("world", 1500D, -40D, 1494D, 0F, 0f),
+                nl("world", 1445D, -34D, 1497D, 0F, 0f),
+                nl("world", 1488D, -34D, 1507D, 0F, 0f),
+                nl("world", 1472D, -33D, 1470D, 0F, 0f),
+                nl("world", 1483D, -34D, 1502D, 0F, 0f),
+                nl("world", 0D, 0D, 0D, 0F, 0f),
+                nl("world", 0D, 0D, 0D, 0F, 0f)
+        );
+        active = gaeae;
+        Bukkit.broadcastMessage("RELOAD: Loaded Maps");
+        MyListener.reloadBert();
+        Bukkit.broadcastMessage("RELOAD: loaded bertrude lmao");
 
-            wardenenabled = true;
-            for (Player p : Bukkit.getOnlinePlayers()) {
-                p.removePotionEffect(PotionEffectType.DARKNESS);
-                p.removePotionEffect(PotionEffectType.WEAKNESS);
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "whitelist off");
-                p.sendTitle(ChatColor.GREEN + "Loaded!", "thanks for your patience!", 0, 40, 0);
-                PrisonGame.st.put(p, 0.0);
-                PrisonGame.sp.put(p, 0.0);
-                if (!PrisonGame.type.containsKey(p)) {
-                    PrisonGame.type.put(p, 0);
-                    MyListener.playerJoin(p, true);
-                }
-
-                if (PrisonGame.warden != null) {
-                    PrisonGame.warden.teleport(active.wardenspawn);
-                }
+        wardenenabled = true;
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            p.removePotionEffect(PotionEffectType.DARKNESS);
+            p.removePotionEffect(PotionEffectType.WEAKNESS);
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "whitelist off");
+            p.sendTitle(ChatColor.GREEN + "Loaded!", "thanks for your patience!", 0, 40, 0);
+            PrisonGame.st.put(p, 0.0);
+            PrisonGame.sp.put(p, 0.0);
+            if (!PrisonGame.type.containsKey(p)) {
+                PrisonGame.type.put(p, 0);
+                MyListener.playerJoin(p, true);
             }
-            MyTask task = new MyTask();
-            task.runTaskTimer(getPlugin(this.getClass()), 0, 1);
-            getServer().getPluginManager().registerEvents(new MyListener(), this);
+
+            if (PrisonGame.warden != null) {
+                PrisonGame.warden.teleport(active.wardenspawn);
+            }
+        }
+        MyTask task = new MyTask();
+        task.runTaskTimer(getPlugin(this.getClass()), 0, 1);
+
+        PluginManager pm = Bukkit.getPluginManager();
+        pm.registerEvents(new AsyncPlayerChatListener(), this);
+        pm.registerEvents(new BlockBreakListener(), this);
+        pm.registerEvents(new BlockPlaceListener(), this);
+        pm.registerEvents(new EntityDamageByEntityListener(), this);
+        pm.registerEvents(new EntityDamageListener(), this);
+        pm.registerEvents(new EntityDismountListener(), this);
+        pm.registerEvents(new EntityMoveListener(), this);
+        pm.registerEvents(new InventoryClickListener(), this);
+        pm.registerEvents(new PlayerAdvancementDoneListener(), this);
+        pm.registerEvents(new PlayerBedLeaveListener(), this);
+        pm.registerEvents(new PlayerChatListener(), this);
+        pm.registerEvents(new PlayerDeathListener(), this);
+        pm.registerEvents(new PlayerDropItemListener(), this);
+        pm.registerEvents(new PlayerInteractAtEntityListener(), this);
+        pm.registerEvents(new PlayerInteractListener(), this);
+        pm.registerEvents(new PlayerItemConsumeListener(), this);
+        pm.registerEvents(new PlayerJoinListener(), this);
+        pm.registerEvents(new PlayerMoveListener(), this);
+        pm.registerEvents(new PlayerQuitListener(), this);
+        pm.registerEvents(new PlayerRespawnListener(), this);
+        pm.registerEvents(new PlayerTeleportListener(), this);
+        pm.registerEvents(new PlayerToggleSneakListener(), this);
+
+
     }
 
     @Override
@@ -353,7 +372,7 @@ public final class PrisonGame extends JavaPlugin {
         MyTask.bossbar.removeAll();
     }
 
-    static Location nl(String world, Double X, Double Y, Double Z, Float yaw, Float pitch) {
+    public static Location nl(String world, Double X, Double Y, Double Z, Float yaw, Float pitch) {
         return new Location(Bukkit.getWorld(world), X, Y, Z, yaw, pitch);
     }
     public static void setNurse(Player g) {
