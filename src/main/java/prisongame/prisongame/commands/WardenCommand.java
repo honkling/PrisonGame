@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import prisongame.prisongame.PrisonGame;
 import prisongame.prisongame.commands.warden.*;
-import prisongame.prisongame.commands.warden.WardResignCommand;
+import prisongame.prisongame.commands.warden.ResignCommand;
 
 import java.util.Arrays;
 
@@ -38,7 +38,7 @@ public class WardenCommand implements CommandExecutor {
             case "swat" -> new SwatCommand();
             case "fire" -> new FireCommand();
             case "pass" -> new PassCommand();
-            case "resign" -> new WardResignCommand();
+            case "resign" -> new ResignCommand();
             case "target" -> new TargetCommand();
             case "solitary" -> new SolitaryCommand();
             case "prefix" -> new PrefixCommand();
