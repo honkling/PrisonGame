@@ -12,14 +12,8 @@ public class FilteredWords {
             "noga",
             "noger",
             "retard",
-            "kys",
             "fag",
-            "vagina",
-            "pusy",
-            "dick",
-            "cock",
-            "penis",
-            "sex"
+            "vagina"
     };
 
     private static String replaceConsecutiveDuplicates(String msg) {
