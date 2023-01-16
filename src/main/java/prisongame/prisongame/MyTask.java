@@ -683,7 +683,7 @@ public class MyTask extends BukkitRunnable {
             }
         }
         DecimalFormat numberFormat3 = new DecimalFormat("#0.0");
-        String tab = ChatColor.translateAlternateColorCodes('&', "&7---\n&ePrisonButBad\n&fMade by agmass!\n&8Like the old tab? Use /pbsettings!\n&aPlayers: ") + Bukkit.getOnlinePlayers().size() + ChatColor.translateAlternateColorCodes('&',"\n&7---\n\n&bGuards:\n&r");
+        String tab = ChatColor.translateAlternateColorCodes('&', "&7---\n&ePrisonButBad\n&fMade by agmass!\n&8Like the old tab? Use /pbsettings!\n&aPlayers: ") + Bukkit.getOnlinePlayers().size() + ChatColor.translateAlternateColorCodes('&',"\n&cWarden Time: {wardentime}\n&7---\n\n&bGuards:\n&r").replace("{wardentime}", PrisonGame.wardentime.get(PrisonGame.warden) / (20 * 60) + "m");
         String prisoners = "";
         String guards = "";
         String civs = "";
