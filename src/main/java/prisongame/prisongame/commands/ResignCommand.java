@@ -1,6 +1,7 @@
 package prisongame.prisongame.commands;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -19,7 +20,8 @@ public class ResignCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!((Player) sender).hasCooldown(Material.IRON_DOOR)) {
-            if (!((Player) sender).getDisplayName().contains("SOLITARY")) {
+            Player p = (Player) sender;
+            if (!((Player) sender).getDisplayName().contains("SOLITARY") || new Location(p.getWorld(), p.getLocation().getX(), p.getLocation().getY() - 1, p.getLocation().getZ()).getBlock().getType().equals(Material.RED_SAND)) {
                 if (PrisonGame.warden != null) {
                     if (PrisonGame.warden.equals(sender)) {
                         PrisonGame.wardenCooldown = 20 * 3;

@@ -729,7 +729,7 @@ public class MyTask extends BukkitRunnable {
                     pingColor = ChatColor.DARK_RED;
                 }
                 if (!p.hasPotionEffect(PotionEffectType.LUCK) && !p.isDead()) {
-                    guards = guards + "\n" + p.getPlayerListName() + ChatColor.GRAY  + " [" + pingColor + p.getPing() + ChatColor.GRAY + "ms]";
+                    guards = guards + "\n" + p.getPlayerListName() + ChatColor.GRAY  + "[" + ChatColor.GREEN + p.getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0) + "$" + ChatColor.GRAY + "]" + " [" + pingColor + p.getPing() + ChatColor.GRAY + "ms]";
                 }else {
                     guards = guards + ChatColor.translateAlternateColorCodes('&', "\n &4☠&7 " + p.getName());
                 }
@@ -743,7 +743,7 @@ public class MyTask extends BukkitRunnable {
                     pingColor = ChatColor.RED;
                 }
                 if (!p.hasPotionEffect(PotionEffectType.LUCK) && !p.isDead()) {
-                    prisoners = prisoners + "\n" + p.getDisplayName() + ChatColor.GRAY + " [" + pingColor + p.getPing() + ChatColor.GRAY + "ms]";
+                    prisoners = prisoners + "\n" + p.getDisplayName() + ChatColor.GRAY + "[" + ChatColor.GREEN + p.getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0) + "$" + ChatColor.GRAY + "]" + " [" + pingColor + p.getPing() + ChatColor.GRAY + "ms]";
                 } else {
                     prisoners = prisoners + ChatColor.translateAlternateColorCodes('&', "\n &4☠&7 " + p.getName());
                 }
@@ -1023,7 +1023,11 @@ public class MyTask extends BukkitRunnable {
                         if (PrisonGame.hardmode.get(p)) {
                             mode = ChatColor.RED + "HARD MODE (/normal)";
                         }
-                        p.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GREEN + numberFormat.format(p.getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0)) + "$" + ChatColor.GRAY + " || " + acbar + ChatColor.GRAY + " || Current Warden: " + ChatColor.DARK_RED + PrisonGame.warden.getName() + ChatColor.RED + " (" + Math.round(PrisonGame.warden.getHealth()) + " HP)"));
+                        String finisher = ")";
+                        if (PrisonGame.warden.getNoDamageTicks() > 0) {
+                            finisher = ChatColor.AQUA + " [" + PrisonGame.warden.getNoDamageTicks() / 20 + "s of No-Damage]" + ChatColor.RED + ")";
+                        }
+                        p.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GREEN + numberFormat.format(p.getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0)) + "$" + ChatColor.GRAY + " || " + acbar + ChatColor.GRAY + " || Current Warden: " + ChatColor.DARK_RED + PrisonGame.warden.getName() + ChatColor.RED + " (" + Math.round(PrisonGame.warden.getHealth()) + " HP" + finisher));
                     } else {
                         p.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GREEN + numberFormat.format(p.getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0)) + "$" + ChatColor.GRAY + " || " + ChatColor.GRAY + "Current Warden: " + ChatColor.GREEN + "You! Use '/warden help' to see warden commands!"));
                     }

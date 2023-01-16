@@ -12,6 +12,7 @@ import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import prisongame.prisongame.MyListener;
 import prisongame.prisongame.PrisonGame;
+import prisongame.prisongame.lib.Role;
 
 public class DefaultCommand implements CommandExecutor {
 
@@ -31,10 +32,10 @@ public class DefaultCommand implements CommandExecutor {
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + sender.getName() + " only prison:mprison");
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + sender.getName() + " only prison:guard");
         for (Player p : Bukkit.getOnlinePlayers()) {
-            if (PrisonGame.roles.get(p) != 0) {
+            if (PrisonGame.roles.get(p) != Role.PRISONER) {
                 MyListener.playerJoin(p, false);
             }
-            PrisonGame.roles.put(p, 0);
+            PrisonGame.roles.put(p, Role.PRISONER);
             PrisonGame.askType.put(p, 0);
             p.playSound(p, Sound.BLOCK_END_PORTAL_SPAWN, 1, 1);
             p.sendTitle("", ChatColor.RED + nw.getName() + ChatColor.GREEN + " is the new warden!");
@@ -55,13 +56,14 @@ public class DefaultCommand implements CommandExecutor {
             }
         }
 
-        PrisonGame.roles.put(nw, -1);
+        PrisonGame.roles.put(nw, Role.WARDEN);
         PrisonGame.swat = false;
         nw.teleport(PrisonGame.active.getWardenspawn());
         nw.setCustomName(ChatColor.GRAY + "[" + ChatColor.RED + "WARDEN" + ChatColor.GRAY + "] " + ChatColor.WHITE + nw.getName());
         nw.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.RED + "WARDEN" + ChatColor.GRAY + "] " + ChatColor.WHITE + nw.getName());
         nw.setDisplayName(ChatColor.GRAY + "[" + ChatColor.RED + "WARDEN" + ChatColor.GRAY + "] " + ChatColor.WHITE + nw.getName());
 
+        nw.setNoDamageTicks(20 * 45);
         ItemStack card2 = new ItemStack(Material.IRON_SHOVEL);
         ItemMeta cardm2 = card2.getItemMeta();
         cardm2.setDisplayName(ChatColor.BLUE + "Handcuffs " + ChatColor.RED + "[CONTRABAND]");

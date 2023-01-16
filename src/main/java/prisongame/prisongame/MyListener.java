@@ -3,9 +3,7 @@ package prisongame.prisongame;
 import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.disguisetypes.PlayerDisguise;
 import org.bukkit.*;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
@@ -16,6 +14,12 @@ import java.util.Random;
 public class MyListener implements Listener {
 
     public static void reloadBert() {
+
+        for (Entity e : Bukkit.getWorld("world").getEntities()) {
+            if (e.getType().equals(EntityType.VILLAGER))
+                e.remove();
+        }
+
         if (PrisonGame.bertrude != null) {
             PrisonGame.bertrude.remove();
             PrisonGame.bertrude = null;

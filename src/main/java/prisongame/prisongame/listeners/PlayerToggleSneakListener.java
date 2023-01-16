@@ -1,5 +1,7 @@
 package prisongame.prisongame.listeners;
 
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -17,6 +19,13 @@ public class PlayerToggleSneakListener implements Listener {
                 p.removePotionEffect(PotionEffectType.DOLPHINS_GRACE);
                 p.removePotionEffect(PotionEffectType.WEAKNESS);
                 p.removePotionEffect(PotionEffectType.BLINDNESS);
+                if (event.getPlayer().isOnGround() || event.getPlayer().isSprinting()) {
+                    event.getPlayer().sendMessage(ChatColor.GREEN + "You threw a player (You can throw players with handcuffs by sprint or jump)");
+                    p.sendTitle("THROWN!", "");
+                    p.addPotionEffect(PotionEffectType.BLINDNESS.createEffect(20 * 15, 10));
+                    p.addPotionEffect(PotionEffectType.SLOW.createEffect(20 * 15, 2));
+                    p.setCooldown(Material.IRON_DOOR, 20 * 15);
+                }
             }
         }
     }
