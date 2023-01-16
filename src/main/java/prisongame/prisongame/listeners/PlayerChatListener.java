@@ -9,6 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChatEvent;
 import prisongame.prisongame.MyListener;
 import prisongame.prisongame.PrisonGame;
+import prisongame.prisongame.lib.Role;
 
 import static prisongame.prisongame.MyListener.reloadBert;
 
@@ -31,7 +32,7 @@ public class PlayerChatListener implements Listener {
                     PrisonGame.swapcool = (20 * 60) * 5;
                     reloadBert();
                     for (Player p : Bukkit.getOnlinePlayers()) {
-                        if (PrisonGame.roles.get(p) != -1) {
+                        if (PrisonGame.roles.get(p) != Role.WARDEN) {
                             MyListener.playerJoin(p, true);
                             p.sendTitle("New prison!", "BOAT");
                         } else {

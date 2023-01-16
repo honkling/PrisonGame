@@ -12,6 +12,7 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffectType;
 import prisongame.prisongame.MyListener;
 import prisongame.prisongame.PrisonGame;
+import prisongame.prisongame.lib.Role;
 
 public class PlayerDeathListener implements Listener {
     @EventHandler
@@ -24,7 +25,7 @@ public class PlayerDeathListener implements Listener {
                     p.getKiller().sendMessage(ChatColor.GREEN + "You gained a little bit of money for killing a criminal.");
                     p.getKiller().getPersistentDataContainer().set(PrisonGame.mny, PersistentDataType.DOUBLE ,p.getKiller().getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0) + 100.0);
                 } else {
-                    if (PrisonGame.roles.get(p.getKiller()) == 0) {
+                    if (PrisonGame.roles.get(p.getKiller()) == Role.PRISONER) {
                         p.getKiller().addPotionEffect(PotionEffectType.GLOWING.createEffect(20 * 5, 0));
                     }
                 }
@@ -35,7 +36,7 @@ public class PlayerDeathListener implements Listener {
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
         if (event.getEntity().getKiller() != null) {
-            if (!event.getEntity().getKiller().equals(event.getEntity())) {
+            if (!event.getEntity().getKiller().equals(event.getEntity()) ) {
                 event.getEntity().getKiller().getInventory().getItemInMainHand();
                 if (event.getEntity().getKiller().getInventory().getItemInMainHand().getItemMeta() != null) {
                     if (event.getEntity().getKiller().getInventory().getItemInMainHand().getItemMeta().getDisplayName().equals(ChatColor.BLUE + "Handcuffs " + ChatColor.RED + "[CONTRABAND]")) {
@@ -48,10 +49,6 @@ public class PlayerDeathListener implements Listener {
                             Player p = event.getEntity();
                             p.getKiller().addPassenger(p);
                             event.getEntity().getKiller().sendMessage(ChatColor.GREEN + "Shift to drop players.");
-                            return;
-                        } else {
-                            event.setCancelled(true);
-                            event.getEntity().getKiller().sendMessage(ChatColor.GRAY + "Your handcuffs are on cooldown/in use!");
                             return;
                         }
                     }
@@ -71,10 +68,10 @@ public class PlayerDeathListener implements Listener {
                 }
             }
         }
-        if (PrisonGame.roles.get(event.getEntity()) == 3) {
+        if (PrisonGame.roles.get(event.getEntity()) == Role.SWAT) {
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + event.getEntity().getName() + " only prison:invincible");
         }
-        if (PrisonGame.roles.get(event.getEntity()) != 0) {
+        if (PrisonGame.roles.get(event.getEntity()) != Role.PRISONER) {
             if (event.getEntity().getKiller() != null) {
 
                 if (event.getEntity().getKiller().getInventory().getItemInMainHand().getType().equals(Material.WOODEN_AXE)) {
@@ -87,9 +84,9 @@ public class PlayerDeathListener implements Listener {
                 }
             }
         }
-        if (PrisonGame.roles.get(event.getEntity()) == 0) {
+        if (PrisonGame.roles.get(event.getEntity()) == Role.PRISONER) {
             if (event.getEntity().getKiller() != null) {
-                if (PrisonGame.roles.get(event.getEntity().getKiller()) == -1) {
+                if (PrisonGame.roles.get(event.getEntity().getKiller()) == Role.WARDEN) {
                     if (event.getEntity().getKiller().getInventory().getItemInMainHand().getType().equals(Material.AIR)) {
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + event.getEntity().getKiller().getName() + " only prison:yoink");
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + event.getEntity().getName() + " only prison:skillissue");
@@ -100,8 +97,8 @@ public class PlayerDeathListener implements Listener {
         if (PrisonGame.warden != null) {
             if (PrisonGame.warden.equals(event.getEntity())) {
                 if (event.getEntity().getKiller() != null) {
-                    if (PrisonGame.roles.get(event.getEntity().getKiller()) != 0) {
-                        if (PrisonGame.roles.get(event.getEntity().getKiller()) == 2) {
+                    if (PrisonGame.roles.get(event.getEntity().getKiller()) != Role.PRISONER) {
+                        if (PrisonGame.roles.get(event.getEntity().getKiller()) == Role.NURSE) {
                             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + event.getEntity().getKiller().getName() + " only prison:incorrectmogus");
                         }
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + event.getEntity().getName() + " only prison:dieguard");
@@ -121,14 +118,14 @@ public class PlayerDeathListener implements Listener {
                 PrisonGame.wardenCooldown = 40;
                 event.getDrops().clear();
                 PrisonGame.warden = null;
-                PrisonGame.roles.put(event.getEntity(), 0);
+                PrisonGame.roles.put(event.getEntity(), Role.PRISONER);
                 MyListener.playerJoin(event.getEntity(), false);
             }
         }
-        if (PrisonGame.roles.get(event.getEntity()) == 0) {
+        if (PrisonGame.roles.get(event.getEntity()) == Role.PRISONER) {
             event.setDeathMessage(ChatColor.GRAY + event.getDeathMessage());
             if (event.getEntity().getKiller() != null) {
-                if (PrisonGame.roles.get(event.getEntity().getKiller()) == -1) {
+                if (PrisonGame.roles.get(event.getEntity().getKiller()) == Role.WARDEN) {
                     Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + event.getEntity().getName() + " only prison:badluck");
                 }
                 if (PrisonGame.escaped.get(event.getEntity().getKiller())) {
@@ -136,7 +133,7 @@ public class PlayerDeathListener implements Listener {
                 }
             }
         }
-        if (PrisonGame.roles.get(event.getEntity()) != 0) {
+        if (PrisonGame.roles.get(event.getEntity()) != Role.PRISONER) {
             event.setDeathMessage(ChatColor.GOLD + event.getDeathMessage());
         }
     }

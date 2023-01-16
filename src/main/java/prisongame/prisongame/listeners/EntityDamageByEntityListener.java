@@ -3,6 +3,7 @@ package prisongame.prisongame.listeners;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -24,6 +25,12 @@ public class EntityDamageByEntityListener implements Listener {
     public void onEntityDamageByEntity2(EntityDamageByEntityEvent event) {
         if (event.getDamager() instanceof Player) {
             Player a = (Player) event.getDamager();
+            if (a.getInventory().getItemInMainHand().getType().equals(Material.IRON_SHOVEL)) {
+                a.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(9999);
+                if (event.getEntity() instanceof Player p) {
+                    p.setNoDamageTicks(0);
+                }
+            }
             if (PrisonGame.roles.get(a) == Role.PRISONER) {
                 if (a.getInventory().getItemInMainHand().getType().equals(Material.WOODEN_AXE)) {
                     a.sendMessage(ChatColor.GREEN + "You cannot use prison work tools to fight!");

@@ -18,6 +18,7 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffectType;
 import prisongame.prisongame.MyTask;
 import prisongame.prisongame.PrisonGame;
+import prisongame.prisongame.lib.Role;
 
 import static prisongame.prisongame.MyListener.playerJoin;
 
@@ -89,7 +90,7 @@ public class PlayerInteractListener implements Listener {
                 }
             }
             if (event.getClickedBlock().getType().equals(Material.ENDER_CHEST) || event.getClickedBlock().getType().equals(Material.SMOKER) || event.getClickedBlock().getType().equals(Material.FURNACE) || event.getClickedBlock().getType().equals(Material.BARREL) || event.getClickedBlock().getType().equals(Material.CHEST) || event.getClickedBlock().getType().equals(Material.HOPPER) || event.getClickedBlock().getType().equals(Material.DROPPER) || event.getClickedBlock().getType().equals(Material.DISPENSER)) {
-                if (PrisonGame.roles.get(event.getPlayer()) != 0 || PrisonGame.hardmode.get(event.getPlayer())) {
+                if (PrisonGame.roles.get(event.getPlayer()) != Role.PRISONER || PrisonGame.hardmode.get(event.getPlayer())) {
                     event.getPlayer().sendMessage(ChatColor.RED + "You can't access this!");
                     event.setCancelled(true);
                 } else {
