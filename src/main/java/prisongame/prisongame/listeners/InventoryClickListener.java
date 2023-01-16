@@ -14,6 +14,7 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffectType;
 import prisongame.prisongame.MyListener;
 import prisongame.prisongame.PrisonGame;
+import prisongame.prisongame.lib.Role;
 
 import static prisongame.prisongame.MyListener.reloadBert;
 
@@ -149,7 +150,7 @@ public class InventoryClickListener implements Listener {
 
     @EventHandler
     public void onInventoryClick2(InventoryClickEvent event) {
-        if (!PrisonGame.escaped.get(event.getWhoClicked()) && PrisonGame.roles.get(event.getWhoClicked()) == 0) {
+        if (!PrisonGame.escaped.get(event.getWhoClicked()) && PrisonGame.roles.get(event.getWhoClicked()) == Role.PRISONER) {
             if (event.getSlotType().equals(InventoryType.SlotType.ARMOR)) {
                 event.setCancelled(true);
                 event.getWhoClicked().closeInventory();
@@ -257,7 +258,7 @@ public class InventoryClickListener implements Listener {
                             PrisonGame.swapcool = (20 * 60) * 5;
                             reloadBert();
                             for (Player p : Bukkit.getOnlinePlayers()) {
-                                if (PrisonGame.roles.get(p) != -1) {
+                                if (PrisonGame.roles.get(p) != Role.WARDEN) {
                                     MyListener.playerJoin(p, true);
                                     p.sendTitle("New prison!", "THE END?");
                                 } else {
@@ -278,7 +279,7 @@ public class InventoryClickListener implements Listener {
                             PrisonGame.swapcool = (20 * 60) * 5;
                             reloadBert();
                             for (Player p : Bukkit.getOnlinePlayers()) {
-                                if (PrisonGame.roles.get(p) != -1) {
+                                if (PrisonGame.roles.get(p) != Role.WARDEN) {
                                     MyListener.playerJoin(p, true);
                                     p.sendTitle("New prison!", "FORTRESS OF GAEAE");
                                 } else {
@@ -299,7 +300,7 @@ public class InventoryClickListener implements Listener {
                             PrisonGame.swapcool = (20 * 60) * 5;
                             reloadBert();
                             for (Player p : Bukkit.getOnlinePlayers()) {
-                                if (PrisonGame.roles.get(p) != -1) {
+                                if (PrisonGame.roles.get(p) != Role.WARDEN) {
                                     MyListener.playerJoin(p, true);
                                     p.sendTitle("New prison!", "VOLCANO");
                                 } else {
@@ -320,7 +321,7 @@ public class InventoryClickListener implements Listener {
                             PrisonGame.swapcool = (20 * 60) * 5;
                             reloadBert();
                             for (Player p : Bukkit.getOnlinePlayers()) {
-                                if (PrisonGame.roles.get(p) != -1) {
+                                if (PrisonGame.roles.get(p) != Role.WARDEN) {
                                     MyListener.playerJoin(p, true);
                                     p.sendTitle("New prison!", "SKELD");
                                 } else {
@@ -341,7 +342,7 @@ public class InventoryClickListener implements Listener {
                             PrisonGame.swapcool = (20 * 60) * 5;
                             reloadBert();
                             for (Player p : Bukkit.getOnlinePlayers()) {
-                                if (PrisonGame.roles.get(p) != -1) {
+                                if (PrisonGame.roles.get(p) != Role.WARDEN) {
                                     MyListener.playerJoin(p, true);
                                     p.sendTitle("New prison!", "ISLAND");
                                 } else {
@@ -362,7 +363,7 @@ public class InventoryClickListener implements Listener {
                             PrisonGame.swapcool = (20 * 60) * 5;
                             reloadBert();
                             for (Player p : Bukkit.getOnlinePlayers()) {
-                                if (PrisonGame.roles.get(p) != -1) {
+                                if (PrisonGame.roles.get(p) != Role.WARDEN) {
                                     MyListener.playerJoin(p, true);
                                     p.sendTitle("New prison!", "SANTA'S WORKSHOP");
                                 } else {
@@ -383,7 +384,7 @@ public class InventoryClickListener implements Listener {
                             PrisonGame.swapcool = (20 * 60) * 5;
                             reloadBert();
                             for (Player p : Bukkit.getOnlinePlayers()) {
-                                if (PrisonGame.roles.get(p) != -1) {
+                                if (PrisonGame.roles.get(p) != Role.WARDEN) {
                                     MyListener.playerJoin(p, true);
                                     p.sendTitle("New prison!", "GLADIATOR");
                                 } else {
@@ -404,7 +405,7 @@ public class InventoryClickListener implements Listener {
                             PrisonGame.swapcool = (20 * 60) * 5;
                             reloadBert();
                             for (Player p : Bukkit.getOnlinePlayers()) {
-                                if (PrisonGame.roles.get(p) != -1) {
+                                if (PrisonGame.roles.get(p) != Role.WARDEN) {
                                     MyListener.playerJoin(p, true);
                                     p.sendTitle("New prison!", "TRAIN");
                                 } else {
@@ -425,7 +426,7 @@ public class InventoryClickListener implements Listener {
                             PrisonGame.swapcool = (20 * 60) * 5;
                             reloadBert();
                             for (Player p : Bukkit.getOnlinePlayers()) {
-                                if (PrisonGame.roles.get(p) != -1) {
+                                if (PrisonGame.roles.get(p) != Role.WARDEN) {
                                     MyListener.playerJoin(p, true);
                                     p.sendTitle("New prison!", "Nether");
                                 } else {
@@ -446,7 +447,7 @@ public class InventoryClickListener implements Listener {
                             PrisonGame.swapcool = (20 * 60) * 5;
                             reloadBert();
                             for (Player p : Bukkit.getOnlinePlayers()) {
-                                if (PrisonGame.roles.get(p) != -1) {
+                                if (PrisonGame.roles.get(p) != Role.WARDEN) {
                                     MyListener.playerJoin(p, true);
                                     p.sendTitle("New prison!", "BOAT");
                                 } else {
@@ -467,7 +468,7 @@ public class InventoryClickListener implements Listener {
                             PrisonGame.swapcool = (20 * 60) * 5;
                             reloadBert();
                             for (Player p : Bukkit.getOnlinePlayers()) {
-                                if (PrisonGame.roles.get(p) != -1) {
+                                if (PrisonGame.roles.get(p) != Role.WARDEN) {
                                     MyListener.playerJoin(p, true);
                                     p.sendTitle("New prison!", "HYPERTECH");
                                 } else {
