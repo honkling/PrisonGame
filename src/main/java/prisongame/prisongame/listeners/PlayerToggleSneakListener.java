@@ -25,7 +25,11 @@ public class PlayerToggleSneakListener implements Listener {
                     event.getPlayer().sendMessage(ChatColor.GREEN + "You threw a player (You can throw players with handcuffs by sprint or jump)");
                     p.sendTitle("THROWN!", "");
                     Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
-                                p.setVelocity(event.getPlayer().getLocation().getDirection().multiply(2));
+                            p.setVelocity(event.getPlayer().getLocation().getDirection().multiply(0.5).setY(0));
+                            p.setHealth(20);
+                            p.damage(1);
+                            p.setHealth(3);
+                            p.setNoDamageTicks(20 * 3);
                             }, 4L);
                     p.addPotionEffect(PotionEffectType.BLINDNESS.createEffect(20 * 15, 10));
                     p.addPotionEffect(PotionEffectType.SLOW.createEffect(20 * 15, 2));
