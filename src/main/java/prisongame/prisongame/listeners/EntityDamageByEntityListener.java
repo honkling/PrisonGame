@@ -10,6 +10,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.potion.PotionEffectType;
 import prisongame.prisongame.MyTask;
 import prisongame.prisongame.PrisonGame;
+import prisongame.prisongame.lib.Role;
 
 public class EntityDamageByEntityListener implements Listener {
     @EventHandler
@@ -22,9 +23,9 @@ public class EntityDamageByEntityListener implements Listener {
     public void onEntityDamageByEntity2(EntityDamageByEntityEvent event) {
         if (event.getDamager() instanceof Player) {
             Player a = (Player) event.getDamager();
-            if (PrisonGame.type.get(a) == 0) {
+            if (PrisonGame.roles.get(a) == Role.PRISONER) {
                 Player d = (Player) event.getEntity();
-                if (PrisonGame.type.get(d) != 0) {
+                if (PrisonGame.roles.get(d) != Role.PRISONER) {
                     a.addPotionEffect(PotionEffectType.GLOWING.createEffect(20 * 5, 0));
                 }
             }

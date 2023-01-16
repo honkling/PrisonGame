@@ -17,6 +17,7 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffectType;
 import prisongame.prisongame.PrisonGame;
+import prisongame.prisongame.lib.Role;
 
 import java.util.Random;
 
@@ -28,7 +29,7 @@ public class PlayerRespawnListener implements Listener {
         event.getPlayer().playSound(event.getPlayer(), Sound.MUSIC_DISC_CHIRP, 1, 2);
         PrisonGame.worryachieve.put(event.getPlayer(), -1);
         Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
-            if (PrisonGame.type.get(event.getPlayer()) == -1) {
+            if (PrisonGame.roles.get(event.getPlayer()) == Role.WARDEN) {
                 Player nw = event.getPlayer();
                 nw.getInventory().setHelmet(new ItemStack(Material.CHAINMAIL_HELMET));
                 nw.getInventory().setChestplate(new ItemStack(Material.IRON_CHESTPLATE));
@@ -49,7 +50,7 @@ public class PlayerRespawnListener implements Listener {
                 card.setItemMeta(cardm);
                 nw.getInventory().addItem(card);
             }
-            if (PrisonGame.type.get(event.getPlayer()) == 3) {
+            if (PrisonGame.roles.get(event.getPlayer()) == Role.SWAT) {
                 Player g = event.getPlayer();
                 ItemStack orangechest = new ItemStack(Material.NETHERITE_CHESTPLATE);
 
@@ -93,7 +94,7 @@ public class PlayerRespawnListener implements Listener {
                 card.setItemMeta(cardm);
                 g.getInventory().addItem(card);
             }
-            if (PrisonGame.type.get(event.getPlayer()) == 2) {
+            if (PrisonGame.roles.get(event.getPlayer()) == Role.NURSE) {
                 Player g = event.getPlayer();
 
                 ItemStack orangechest = new ItemStack(Material.LEATHER_CHESTPLATE);
@@ -154,7 +155,7 @@ public class PlayerRespawnListener implements Listener {
                 g.getInventory().addItem(card);
 
             }
-            if (PrisonGame.type.get(event.getPlayer()) == 1) {
+            if (PrisonGame.roles.get(event.getPlayer()) == Role.GUARD) {
                 Player g = event.getPlayer();
 
 
@@ -211,7 +212,7 @@ public class PlayerRespawnListener implements Listener {
 
 
             }
-            if (PrisonGame.type.get(event.getPlayer()) == 0) {
+            if (PrisonGame.roles.get(event.getPlayer()) == Role.PRISONER) {
                 playerJoin(event.getPlayer(), false);
                 Player p = event.getPlayer();
                 event.getPlayer().sendTitle("", ChatColor.GOLD + "you died.");
@@ -221,7 +222,7 @@ public class PlayerRespawnListener implements Listener {
 
             }
             if (event.getPlayer().getPersistentDataContainer().has(PrisonGame.protspawn, PersistentDataType.INTEGER)) {
-                if (PrisonGame.type.get(event.getPlayer()) != 0) {
+                if (PrisonGame.roles.get(event.getPlayer()) != Role.PRISONER) {
                     if (event.getPlayer().getInventory().getHelmet() != null)
                         event.getPlayer().getInventory().getHelmet().addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
                     if (event.getPlayer().getInventory().getChestplate() != null)

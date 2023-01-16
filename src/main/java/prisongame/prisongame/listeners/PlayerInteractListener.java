@@ -89,7 +89,7 @@ public class PlayerInteractListener implements Listener {
                 }
             }
             if (event.getClickedBlock().getType().equals(Material.ENDER_CHEST) || event.getClickedBlock().getType().equals(Material.SMOKER) || event.getClickedBlock().getType().equals(Material.FURNACE) || event.getClickedBlock().getType().equals(Material.BARREL) || event.getClickedBlock().getType().equals(Material.CHEST) || event.getClickedBlock().getType().equals(Material.HOPPER) || event.getClickedBlock().getType().equals(Material.DROPPER) || event.getClickedBlock().getType().equals(Material.DISPENSER)) {
-                if (PrisonGame.type.get(event.getPlayer()) != 0 || PrisonGame.hardmode.get(event.getPlayer())) {
+                if (PrisonGame.roles.get(event.getPlayer()) != 0 || PrisonGame.hardmode.get(event.getPlayer())) {
                     event.getPlayer().sendMessage(ChatColor.RED + "You can't access this!");
                     event.setCancelled(true);
                 } else {
@@ -127,7 +127,7 @@ public class PlayerInteractListener implements Listener {
                             PrisonGame.warden.getPersistentDataContainer().set(PrisonGame.ascendcoins, PersistentDataType.DOUBLE, event.getPlayer().getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0) / 2000);
                             PrisonGame.warden.getPersistentDataContainer().set(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0);
                             Bukkit.broadcastMessage(ChatColor.GREEN + "The warden has ascended!");
-                            PrisonGame.type.put(PrisonGame.warden, 0);
+                            PrisonGame.roles.put(PrisonGame.warden, 0);
                             PrisonGame.warden.getInventory().clear();
                             PrisonGame.wardenCooldown = 60 + (20 * 4);
                             PrisonGame.warden.teleport(PrisonGame.nl("world", 1999.5D, -14D, -2049.9D, 180f, 0f));
@@ -170,7 +170,7 @@ public class PlayerInteractListener implements Listener {
             if (event.getClickedBlock().getType().equals(Material.BIRCH_WALL_SIGN)) {
                 org.bukkit.block.Sign sign = (org.bukkit.block.Sign) event.getClickedBlock().getState();
                 if (sign.getLine(1).equals("TP To Island")) {
-                    if (PrisonGame.type.get(event.getPlayer()) != 0 && PrisonGame.type.get(event.getPlayer()) != -1 && PrisonGame.warden != event.getPlayer()) {
+                    if (PrisonGame.roles.get(event.getPlayer()) != 0 && PrisonGame.roles.get(event.getPlayer()) != -1 && PrisonGame.warden != event.getPlayer()) {
                         event.getPlayer().teleport(new Location(Bukkit.getWorld("world"), 1924, -60, -2027));
                     } else {
                         event.getPlayer().sendMessage(ChatColor.RED + "You're not a guard/You can't come here as warden");
@@ -328,7 +328,7 @@ public class PlayerInteractListener implements Listener {
                     }
                 }
                 if (sign.getLine(1).equals("Restore Kit")) {
-                    if (PrisonGame.type.get(event.getPlayer()) == -1) {
+                    if (PrisonGame.roles.get(event.getPlayer()) == -1) {
                         Player nw = event.getPlayer();
                         nw.getInventory().setHelmet(new ItemStack(Material.CHAINMAIL_HELMET));
                         nw.getInventory().setChestplate(new ItemStack(Material.IRON_CHESTPLATE));
@@ -360,7 +360,7 @@ public class PlayerInteractListener implements Listener {
                             nw.getInventory().addItem(card);
                         }
                     }
-                    if (PrisonGame.type.get(event.getPlayer()) == 3) {
+                    if (PrisonGame.roles.get(event.getPlayer()) == 3) {
                         Player g = event.getPlayer();
                         ItemStack orangechest = new ItemStack(Material.NETHERITE_CHESTPLATE);
 
@@ -399,7 +399,7 @@ public class PlayerInteractListener implements Listener {
                         card.setItemMeta(cardm);
                         g.getInventory().addItem(card);
                     }
-                    if (PrisonGame.type.get(event.getPlayer()) == 2) {
+                    if (PrisonGame.roles.get(event.getPlayer()) == 2) {
                         Player g = event.getPlayer();
 
                         ItemStack card2 = new ItemStack(Material.IRON_SHOVEL);
@@ -456,7 +456,7 @@ public class PlayerInteractListener implements Listener {
                         g.getInventory().addItem(card);
 
                     }
-                    if (PrisonGame.type.get(event.getPlayer()) == 1) {
+                    if (PrisonGame.roles.get(event.getPlayer()) == 1) {
                         Player g = event.getPlayer();
 
                         ItemStack card2 = new ItemStack(Material.IRON_SHOVEL);
@@ -706,7 +706,7 @@ public class PlayerInteractListener implements Listener {
                     event.getPlayer().removePotionEffect(PotionEffectType.UNLUCK);
                 }
                 if (sign.getLine(1).equals("Get Gear")) {
-                    if (PrisonGame.type.get(event.getPlayer()) == 0 && !PrisonGame.escaped.get(event.getPlayer())) {
+                    if (PrisonGame.roles.get(event.getPlayer()) == 0 && !PrisonGame.escaped.get(event.getPlayer())) {
                         Player g = event.getPlayer();
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + event.getPlayer().getName() + " only prison:escape");
                         g.playSound(g, Sound.ITEM_GOAT_HORN_SOUND_1, 1, 1);
@@ -776,7 +776,7 @@ public class PlayerInteractListener implements Listener {
             }
             if (event.getClickedBlock().getType().equals(Material.CAULDRON)) {
                 if (!event.getPlayer().hasCooldown(Material.IRON_DOOR)) {
-                    if (PrisonGame.type.get(event.getPlayer()) != 1 && PrisonGame.type.get(event.getPlayer()) != 2 && PrisonGame.type.get(event.getPlayer()) != 3) {
+                    if (PrisonGame.roles.get(event.getPlayer()) != 1 && PrisonGame.roles.get(event.getPlayer()) != 2 && PrisonGame.roles.get(event.getPlayer()) != 3) {
                         event.getPlayer().teleport(PrisonGame.active.getBm());
                         event.getPlayer().sendTitle("", ChatColor.GRAY + "-= Black Market =-");
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + event.getPlayer().getName() + " only prison:market");
@@ -791,7 +791,7 @@ public class PlayerInteractListener implements Listener {
                 }
             }
             if (event.getClickedBlock().getType().equals(Material.JUNGLE_DOOR)) {
-                if (PrisonGame.type.get(event.getPlayer()) != -1) {
+                if (PrisonGame.roles.get(event.getPlayer()) != -1) {
                     event.setCancelled(true);
                     event.getPlayer().playSound(event.getPlayer(), Sound.ENTITY_VILLAGER_NO, 1, 1);
                     event.getPlayer().sendMessage(ChatColor.RED + "This door can only be opened by the warden!");
@@ -852,11 +852,11 @@ public class PlayerInteractListener implements Listener {
                                     }
                                 }
                                 if (yesdothat && !event.getPlayer().hasPotionEffect(PotionEffectType.GLOWING) && !event.getPlayer().getPersistentDataContainer().has(PrisonGame.semicloak, PersistentDataType.INTEGER)) {
-                                    if (PrisonGame.type.get(event.getPlayer()) == 0 && !PrisonGame.escaped.get(event.getPlayer())) {
+                                    if (PrisonGame.roles.get(event.getPlayer()) == 0 && !PrisonGame.escaped.get(event.getPlayer())) {
                                         event.getPlayer().sendMessage(ChatColor.RED + "You were caught opening a door! Get a cloak next time!");
                                         event.getPlayer().addPotionEffect(PotionEffectType.GLOWING.createEffect(20 * 30, 0));
                                         for (Player g : Bukkit.getOnlinePlayers()) {
-                                            if (PrisonGame.type.get(g) != 0) {
+                                            if (PrisonGame.roles.get(g) != 0) {
                                                 g.playSound(g, Sound.ENTITY_SILVERFISH_DEATH, 1, 0.5f);
                                                 g.sendMessage(ChatColor.RED + event.getPlayer().getName() + ChatColor.DARK_RED + " was caught opening a door!");
                                             }

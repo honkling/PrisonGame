@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;
 import prisongame.prisongame.MyListener;
 import prisongame.prisongame.PrisonGame;
+import prisongame.prisongame.lib.Role;
 
 import java.util.Random;
 
@@ -30,7 +31,7 @@ public class HardCommand implements CommandExecutor {
                         PrisonGame.warden = null;
                     }
                 }
-                PrisonGame.type.put((Player) sender, 0);
+                PrisonGame.roles.put((Player) sender, Role.PRISONER);
                 PrisonGame.hardmode.put(p, true);
                 MyListener.playerJoin(p, false);
                 String prisonerNumber = "" + new Random().nextInt(100, 999);

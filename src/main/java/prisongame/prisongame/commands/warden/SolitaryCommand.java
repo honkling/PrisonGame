@@ -25,7 +25,7 @@ public class SolitaryCommand implements CommandExecutor {
                 }
                 if (solitcount < 3) {
                     if (PrisonGame.solitcooldown <= 0) {
-                        if (g.isOnline() && g != sender && PrisonGame.type.get(g) == 0) {
+                        if (g.isOnline() && g != sender && PrisonGame.roles.get(g) == 0) {
                             if (g.getGameMode() == GameMode.SPECTATOR) {
                                 PrisonGame.solitcooldown = (20 * 60) * 2;
                                 Bukkit.broadcastMessage(ChatColor.GRAY + g.getName() + " was sent to solitary!");

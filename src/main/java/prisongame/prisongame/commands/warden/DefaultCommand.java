@@ -31,10 +31,10 @@ public class DefaultCommand implements CommandExecutor {
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + sender.getName() + " only prison:mprison");
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + sender.getName() + " only prison:guard");
         for (Player p : Bukkit.getOnlinePlayers()) {
-            if (PrisonGame.type.get(p) != 0) {
+            if (PrisonGame.roles.get(p) != 0) {
                 MyListener.playerJoin(p, false);
             }
-            PrisonGame.type.put(p, 0);
+            PrisonGame.roles.put(p, 0);
             PrisonGame.askType.put(p, 0);
             p.playSound(p, Sound.BLOCK_END_PORTAL_SPAWN, 1, 1);
             p.sendTitle("", ChatColor.RED + nw.getName() + ChatColor.GREEN + " is the new warden!");
@@ -55,7 +55,7 @@ public class DefaultCommand implements CommandExecutor {
             }
         }
 
-        PrisonGame.type.put(nw, -1);
+        PrisonGame.roles.put(nw, -1);
         PrisonGame.swat = false;
         nw.teleport(PrisonGame.active.getWardenspawn());
         nw.setCustomName(ChatColor.GRAY + "[" + ChatColor.RED + "WARDEN" + ChatColor.GRAY + "] " + ChatColor.WHITE + nw.getName());

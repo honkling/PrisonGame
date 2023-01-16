@@ -9,6 +9,7 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffectType;
 import prisongame.prisongame.MyTask;
 import prisongame.prisongame.PrisonGame;
+import prisongame.prisongame.lib.Role;
 
 import java.util.Arrays;
 import java.util.Random;
@@ -23,7 +24,7 @@ public class BlockBreakListener implements Listener {
             event.setCancelled(true);
             if (event.getBlock().getType().equals(Material.IRON_BARS)) {
                 event.setCancelled(false);
-                if (PrisonGame.type.get(event.getPlayer()) == 0) {
+                if (PrisonGame.roles.get(event.getPlayer()) == Role.PRISONER) {
                     Boolean yesdothat = true;
                     if (event.getPlayer().getInventory().getChestplate() != null) {
                         if (event.getPlayer().getInventory().getChestplate().getItemMeta() != null) {
@@ -35,7 +36,7 @@ public class BlockBreakListener implements Listener {
                     if (yesdothat && !event.getPlayer().hasPotionEffect(PotionEffectType.GLOWING) && !event.getPlayer().getPersistentDataContainer().has(PrisonGame.semicloak, PersistentDataType.INTEGER)) {
                         event.getPlayer().sendMessage(ChatColor.RED + "You were caught breaking bars! Get a cloak next time!");
                         for (Player g : Bukkit.getOnlinePlayers()) {
-                            if (PrisonGame.type.get(g) != 0) {
+                            if (PrisonGame.roles.get(g) != Role.PRISONER) {
                                 g.playSound(g, Sound.ENTITY_SILVERFISH_DEATH, 1, 0.5f);
                                 g.addPotionEffect(PotionEffectType.GLOWING.createEffect(20 * 30, 0));
                                 g.sendMessage(ChatColor.RED + event.getPlayer().getName() + ChatColor.DARK_RED + " was caught breaking bars!");

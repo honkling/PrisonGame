@@ -31,7 +31,7 @@ public class PlayerChatListener implements Listener {
                     PrisonGame.swapcool = (20 * 60) * 5;
                     reloadBert();
                     for (Player p : Bukkit.getOnlinePlayers()) {
-                        if (PrisonGame.type.get(p) != -1) {
+                        if (PrisonGame.roles.get(p) != -1) {
                             MyListener.playerJoin(p, true);
                             p.sendTitle("New prison!", "BOAT");
                         } else {
