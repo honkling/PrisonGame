@@ -26,7 +26,7 @@ public class NormalCommand implements CommandExecutor {
                         PrisonGame.warden = null;
                     }
                 }
-                PrisonGame.type.put((Player) sender, 0);
+                PrisonGame.roles.put((Player) sender, Role.PRISONER);
                 DisguiseAPI.undisguiseToAll(p);
                 PrisonGame.hardmode.put(p, false);
                 MyListener.playerJoin(p, false);

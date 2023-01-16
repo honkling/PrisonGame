@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
+import prisongame.prisongame.lib.Role;
 
 import java.util.Random;
 
@@ -68,7 +69,7 @@ public class MyListener implements Listener {
                 p.getInventory().setBoots(orangeboot);
             }
             if (!dontresetshit) {
-                PrisonGame.type.put(p, 0);
+                PrisonGame.roles.put(p, Role.PRISONER);
             }
             Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
                 p.teleport(PrisonGame.active.getSpwn());
