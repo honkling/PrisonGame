@@ -683,7 +683,11 @@ public class MyTask extends BukkitRunnable {
             }
         }
         DecimalFormat numberFormat3 = new DecimalFormat("#0.0");
-        String tab = ChatColor.translateAlternateColorCodes('&', "&7---\n&ePrisonButBad\n&fMade by agmass!\n&8Like the old tab? Use /pbsettings!\n&aPlayers: ") + Bukkit.getOnlinePlayers().size() + ChatColor.translateAlternateColorCodes('&',"\n&cWarden Time: {wardentime}\n&7---\n\n&bGuards:\n&r").replace("{wardentime}", PrisonGame.wardentime.get(PrisonGame.warden) / (20 * 60) + "m");
+        String n = "(No Warden!)";
+        if (PrisonGame.warden != null) {
+            n = PrisonGame.wardentime.get(PrisonGame.warden) / (20 * 60) + "m";
+        }
+        String tab = ChatColor.translateAlternateColorCodes('&', "&7---\n&ePrisonButBad\n&fMade by agmass!\n&8Like the old tab? Use /pbsettings!\n&aPlayers: ") + Bukkit.getOnlinePlayers().size() + ChatColor.translateAlternateColorCodes('&',"\n&cWarden Time: {wardentime}\n&7---\n\n&bGuards:\n&r").replace("{wardentime}", n);
         String prisoners = "";
         String guards = "";
         String civs = "";
@@ -729,7 +733,7 @@ public class MyTask extends BukkitRunnable {
                     pingColor = ChatColor.DARK_RED;
                 }
                 if (!p.hasPotionEffect(PotionEffectType.LUCK) && !p.isDead()) {
-                    guards = guards + "\n" + p.getPlayerListName() + ChatColor.GRAY  + "[" + ChatColor.GREEN + p.getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0) + "$" + ChatColor.GRAY + "]" + " [" + pingColor + p.getPing() + ChatColor.GRAY + "ms]";
+                    guards = guards + "\n" + p.getPlayerListName() + ChatColor.GRAY  + " [" + pingColor + p.getPing() + ChatColor.GRAY + "ms]";
                 }else {
                     guards = guards + ChatColor.translateAlternateColorCodes('&', "\n &4☠&7 " + p.getName());
                 }
@@ -743,7 +747,7 @@ public class MyTask extends BukkitRunnable {
                     pingColor = ChatColor.RED;
                 }
                 if (!p.hasPotionEffect(PotionEffectType.LUCK) && !p.isDead()) {
-                    prisoners = prisoners + "\n" + p.getDisplayName() + ChatColor.GRAY + "[" + ChatColor.GREEN + p.getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0) + "$" + ChatColor.GRAY + "]" + " [" + pingColor + p.getPing() + ChatColor.GRAY + "ms]";
+                    prisoners = prisoners + "\n" + p.getDisplayName() + ChatColor.GRAY  + " [" + pingColor + p.getPing() + ChatColor.GRAY + "ms]";
                 } else {
                     prisoners = prisoners + ChatColor.translateAlternateColorCodes('&', "\n &4☠&7 " + p.getName());
                 }
@@ -823,6 +827,8 @@ public class MyTask extends BukkitRunnable {
                 p.setMaxHealth(20);
             }
 
+
+            if (!p.getInventory().getItemInMainHand().getType().equals(Material.IRON_SHOVEL)) {
             if (!PrisonGame.escaped.get(p) && PrisonGame.roles.get(p) == Role.PRISONER) {
                 p.setWalkSpeed(0.2f);
                 p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(4);
@@ -834,6 +840,9 @@ public class MyTask extends BukkitRunnable {
             if (PrisonGame.roles.get(p) != Role.PRISONER) {
                 p.setWalkSpeed(0.2f);
                 p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(4.4);
+            }
+            } else {
+                p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(9999);
             }
 
             if (PrisonGame.prisonerlevel.getOrDefault(p, 0) == 1) {

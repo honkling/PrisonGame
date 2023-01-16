@@ -22,6 +22,7 @@ public class PlayerToggleSneakListener implements Listener {
                 if (event.getPlayer().isOnGround() || event.getPlayer().isSprinting()) {
                     event.getPlayer().sendMessage(ChatColor.GREEN + "You threw a player (You can throw players with handcuffs by sprint or jump)");
                     p.sendTitle("THROWN!", "");
+                    p.setVelocity(p.getLocation().getDirection().multiply(2));
                     p.addPotionEffect(PotionEffectType.BLINDNESS.createEffect(20 * 15, 10));
                     p.addPotionEffect(PotionEffectType.SLOW.createEffect(20 * 15, 2));
                     p.setCooldown(Material.IRON_DOOR, 20 * 15);

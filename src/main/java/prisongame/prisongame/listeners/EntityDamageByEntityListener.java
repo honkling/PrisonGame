@@ -26,7 +26,6 @@ public class EntityDamageByEntityListener implements Listener {
         if (event.getDamager() instanceof Player) {
             Player a = (Player) event.getDamager();
             if (a.getInventory().getItemInMainHand().getType().equals(Material.IRON_SHOVEL)) {
-                a.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(9999);
                 if (event.getEntity() instanceof Player p) {
                     p.setNoDamageTicks(0);
                 }
