@@ -703,7 +703,7 @@ public class MyTask extends BukkitRunnable {
                         MyListener.reloadBert();
                         for (Player pe : Bukkit.getOnlinePlayers()) {
                             if (PrisonGame.roles.get(pe) != Role.WARDEN) {
-                                MyListener.playerJoin(p, true);
+                                MyListener.playerJoin(pe, true);
                                 pe.sendTitle("New prison!", "NETHER");
                             } else {
                                 pe.teleport(PrisonGame.active.getWardenspawn());
