@@ -187,6 +187,7 @@ public class MyTask extends BukkitRunnable {
         }
         if (MyTask.bossbar.getTitle().equals("ROLL CALL") || MyTask.bossbar.getTitle().equals("EVENING ROLL CALL")) {
             Boolean allat = true;
+            PrisonGame.gotcafefood.clear();
             for (Player p : Bukkit.getOnlinePlayers()) {
 
                 p.removePotionEffect(PotionEffectType.BAD_OMEN);
@@ -336,6 +337,11 @@ public class MyTask extends BukkitRunnable {
             for (Player p : Bukkit.getOnlinePlayers()) {
                 if (!PrisonGame.hardmode.get(p) && !PrisonGame.escaped.get(p) && PrisonGame.roles.get(p) == Role.PRISONER)
                     p.addPotionEffect(PotionEffectType.SATURATION.createEffect(120, 0));
+            }
+        }
+        if (bossbar.getTitle().equals("Breakfast") || bossbar.getTitle().equals("Lunch")) {
+            if (Bukkit.getWorld("world").getTime() == timer1) {
+                Bukkit.broadcastMessage(ChatColor.DARK_GREEN + "Go get free food at the cafeteria!");
             }
         }
         if (Bukkit.getWorld("world").getTime() > 13000 && Bukkit.getWorld("world").getTime() < 15000) {

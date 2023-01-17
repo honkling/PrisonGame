@@ -16,6 +16,7 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffectType;
+import prisongame.prisongame.MyListener;
 import prisongame.prisongame.MyTask;
 import prisongame.prisongame.PrisonGame;
 import prisongame.prisongame.lib.Role;
@@ -105,6 +106,17 @@ public class PlayerInteractListener implements Listener {
             }
             if (event.getClickedBlock().getType().equals(Material.OAK_WALL_SIGN)) {
                 org.bukkit.block.Sign sign = (org.bukkit.block.Sign) event.getClickedBlock().getState();
+                if (MyTask.bossbar.getTitle().equals("Breakfast") || MyTask.bossbar.getTitle().equals("Lunch")) {
+                    if (sign.getLine(1).equals("Get Cafe")) {
+                        if (PrisonGame.gotcafefood.getOrDefault(event.getPlayer(), false)) {
+                            PrisonGame.gotcafefood.put(event.getPlayer(), true);
+                            event.getPlayer().getInventory().addItem(new ItemStack(Material.BEETROOT_SOUP));
+                            event.getPlayer().getInventory().addItem(new ItemStack(Material.BEETROOT_SOUP));
+                            event.getPlayer().getInventory().addItem(new ItemStack(Material.BEETROOT_SOUP));
+                            event.getPlayer().sendMessage(ChatColor.RED + "You recieved your meal.");
+                        }
+                    }
+                }
                 if (sign.getLine(1).equals("Leave")) {
                     event.getPlayer().stopAllSounds();
                     playerJoin(event.getPlayer(), false);
