@@ -361,7 +361,7 @@ public final class PrisonGame extends JavaPlugin {
         pm.registerEvents(new PlayerRespawnListener(), this);
         pm.registerEvents(new PlayerTeleportListener(), this);
         pm.registerEvents(new PlayerToggleSneakListener(), this);
-
+        pm.registerEvents(new PlayerBedEnterListener(), this);
 
     }
 
