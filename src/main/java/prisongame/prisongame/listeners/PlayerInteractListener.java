@@ -217,6 +217,7 @@ public class PlayerInteractListener implements Listener {
                             inv.addItem(PrisonGame.createGuiItem(Material.SNOW_BLOCK, ChatColor.BOLD + "Santa's Workshop"));
                             inv.addItem(PrisonGame.createGuiItem(Material.LAVA_BUCKET, ChatColor.RED + "Volcano"));
                             inv.addItem(PrisonGame.createGuiItem(Material.GRAY_CONCRETE, ChatColor.GRAY + "Skeld"));
+                            inv.addItem(PrisonGame.createGuiItem(Material.DEEPSLATE_TILES, ChatColor.DARK_GRAY + "Maximum Security"));
                             //inv.addItem(PrisonGame.createGuiItem(Material.QUARTZ, ChatColor.BLUE + "Boat"));
                             //inv.addItem(PrisonGame.createGuiItem(Material.NETHERRACK, ChatColor.RED + "Nether"));
                             event.getPlayer().openInventory(inv);

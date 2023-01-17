@@ -65,6 +65,7 @@ public final class PrisonGame extends JavaPlugin {
     public static Prison boat;
     public static Prison nether;
     public static Prison amongus;
+    public static Prison ms;
     public static Integer solitcooldown = 0;
     public static Prison active = null;
     public static NamespacedKey nightvis;
@@ -311,6 +312,21 @@ public final class PrisonGame extends JavaPlugin {
                 nl("world", 1488D, -34D, 1507D, 0F, 0f),
                 nl("world", 1472D, -33D, 1470D, 0F, 0f),
                 nl("world", 1483D, -34D, 1502D, 0F, 0f),
+                nl("world", 0D, 0D, 0D, 0F, 0f),
+                nl("world", 0D, 0D, 0D, 0F, 0f)
+        );
+        ms = new Prison(
+                "Maximum Security",
+                nl("world", 0D, 0D, 0D, 0F, 0f),
+                nl("world", 0D, 0D, 0D, 0F, 0f),
+                nl("world", 707.5, -58D, 705.5, 0F, 0f),
+                nl("world", 707.5, -58D, 705.5, 0F, 0f),
+                nl("world", 699.5, -55D, 689.5, 0F, 0f),
+                nl("world", 689.5, -59D, 690.5, 0F, 0f),
+                nl("world", 673.5, -60D, 664.5, 0F, 0f),
+                nl("world", 689.5, -59D, 697.5, 0F, 0f),
+                nl("world", 691.5, -59D, 702.5, 0F, 0f),
+                nl("world", 705.5, -59D, 692.5, 0F, 0f),
                 nl("world", 0D, 0D, 0D, 0F, 0f),
                 nl("world", 0D, 0D, 0D, 0F, 0f)
         );

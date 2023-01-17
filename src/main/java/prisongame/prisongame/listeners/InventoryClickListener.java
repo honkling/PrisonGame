@@ -292,6 +292,27 @@ public class InventoryClickListener implements Listener {
                                 }
                             }
                         }
+                        if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.DARK_GRAY + "Maximum Security")) {
+                            for (Player p : Bukkit.getOnlinePlayers()) {
+                                p.teleport(new Location(Bukkit.getWorld("world"), -2062, -50, 1945));
+                            }
+                            PrisonGame.active = PrisonGame.ms;
+                            PrisonGame.swapcool = (20 * 60) * 5;
+                            reloadBert();
+                            for (Player p : Bukkit.getOnlinePlayers()) {
+                                if (PrisonGame.roles.get(p) != Role.WARDEN) {
+                                    MyListener.playerJoin(p, true);
+                                    p.sendTitle("New prison!", "MAXIMUM SECURITY");
+                                } else {
+                                    p.teleport(PrisonGame.active.getWardenspawn());
+                                    Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
+                                        p.teleport(PrisonGame.active.getWardenspawn());
+                                    }, 5);
+                                    if (!p.getDisplayName().contains("ASCENDING"))
+                                        p.sendTitle("New prison!", "MAXIMUM SECURITY");
+                                }
+                            }
+                        }
                         if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.RED + "Volcano")) {
                             for (Player p : Bukkit.getOnlinePlayers()) {
                                 p.teleport(new Location(Bukkit.getWorld("world"), -2062, -50, 1945));
