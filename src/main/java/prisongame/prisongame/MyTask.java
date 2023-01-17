@@ -242,9 +242,21 @@ public class MyTask extends BukkitRunnable {
                 }
             }
             if (allat && PrisonGame.warden != null) {
-                PrisonGame.warden.sendTitle("", ChatColor.GREEN + "All prisoners at roll call! +1k$!", 0, 40, 0);
+                PrisonGame.warden.sendMessage(ChatColor.GREEN + "All prisoners at roll call! +1k$!");
                 PrisonGame.warden.getPersistentDataContainer().set(PrisonGame.mny, PersistentDataType.DOUBLE, PrisonGame.warden.getPersistentDataContainer().get(PrisonGame.mny, PersistentDataType.DOUBLE) + 1000.0);
-                Bukkit.getWorld("world").setTime(timer2 - 1);
+                for (Player p : Bukkit.getOnlinePlayers()) {
+                    Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
+                        p.sendTitle("", ChatColor.BOLD + bossbar.getTitle(), 20, 40, 20);
+                    }, 4);
+                    p.playSound(p, Sound.BLOCK_BELL_USE, 1, 1);
+                    Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
+                        p.playSound(p, Sound.BLOCK_BELL_USE, 1, 1);
+                    }, 4);
+                    Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
+                        p.playSound(p, Sound.BLOCK_BELL_USE, 1, 1);
+                    }, 8);
+                }
+                Bukkit.getWorld("world").setTime(timer2 + 1);
             }
         } else {
             for (Player p : Bukkit.getOnlinePlayers()) {
