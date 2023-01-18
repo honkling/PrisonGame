@@ -23,7 +23,7 @@ public class HardCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player && !PrisonGame.hardmode.get((Player) sender)) {
             Player pe = (Player) sender;
-            if (!((Player) sender).getDisplayName().contains("SOLITARY") && !((Player) sender).hasCooldown(Material.IRON_DOOR) || new Location(pe.getWorld(), pe.getLocation().getX(), pe.getLocation().getY() - 1, pe.getLocation().getZ()).getBlock().getType().equals(Material.RED_SAND)) {
+            if (!((Player) sender).getDisplayName().contains("SOLITARY") && !((Player) sender).hasCooldown(Material.IRON_DOOR) && !new Location(pe.getWorld(), pe.getLocation().getX(), pe.getLocation().getY() - 1, pe.getLocation().getZ()).getBlock().getType().equals(Material.RED_SAND)) {
                 Player p = (Player) sender;
                 p.setViewDistance(2);
                 p.getPersistentDataContainer().set(PrisonGame.bckupmny, PersistentDataType.DOUBLE, p.getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0));

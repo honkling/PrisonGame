@@ -31,8 +31,7 @@ public class MyListener implements Listener {
         PrisonGame.bertrude.setInvulnerable(true);
     }
 
-    public static void playerJoin(Player p, Boolean dontresetshit) {
-        if (!p.getDisplayName().contains("ASCENDING")) {
+    public static void playerJoinignoreAsc(Player p, Boolean dontresetshit) {
             if (!dontresetshit)
                 p.getInventory().clear();
             if (!dontresetshit)
@@ -96,6 +95,11 @@ public class MyListener implements Listener {
             }
             if (!dontresetshit)
                 Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Prisoners").addPlayer(p);
+    }
+
+    public static void playerJoin(Player p, Boolean dontresetshit) {
+        if (!p.getDisplayName().contains("ASCENDING")) {
+            playerJoinignoreAsc(p, dontresetshit);
         }
     }
 

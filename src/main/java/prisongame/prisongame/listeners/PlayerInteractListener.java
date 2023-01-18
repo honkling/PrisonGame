@@ -22,6 +22,7 @@ import prisongame.prisongame.PrisonGame;
 import prisongame.prisongame.lib.Role;
 
 import static prisongame.prisongame.MyListener.playerJoin;
+import static prisongame.prisongame.MyListener.playerJoinignoreAsc;
 
 public class PlayerInteractListener implements Listener {
     @EventHandler
@@ -119,7 +120,7 @@ public class PlayerInteractListener implements Listener {
                 }
                 if (sign.getLine(1).equals("Leave")) {
                     event.getPlayer().stopAllSounds();
-                    playerJoin(event.getPlayer(), false);
+                    playerJoinignoreAsc(event.getPlayer(), false);
                     event.getPlayer().sendMessage(ChatColor.GREEN + "Welcome back!");
                 }
                 if (sign.getLine(1).equals("ASCENSION")) {
