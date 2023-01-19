@@ -43,7 +43,6 @@ public class PlayerDeathListener implements Listener {
                         if (!event.getEntity().getKiller().hasCooldown(Material.IRON_SHOVEL)) {
                             event.setCancelled(true);
                             event.getEntity().addPotionEffect(PotionEffectType.WEAKNESS.createEffect(20 * 30, 255));
-                            event.getEntity().addPotionEffect(PotionEffectType.BLINDNESS.createEffect(20 * 30, 255));
                             event.getEntity().addPotionEffect(PotionEffectType.DOLPHINS_GRACE.createEffect(20 * 30, 255));
                             event.getEntity().sendTitle(ChatColor.RED + "HANDCUFFED!", "", 20, 160, 20);
                             Player p = event.getEntity();

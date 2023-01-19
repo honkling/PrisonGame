@@ -2,18 +2,28 @@ package prisongame.prisongame.listeners;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.AsyncPlayerChatPreviewEvent;
 import org.bukkit.persistence.PersistentDataType;
 import prisongame.prisongame.FilteredWords;
+import prisongame.prisongame.MyListener;
 import prisongame.prisongame.PrisonGame;
+import prisongame.prisongame.lib.Role;
+
+import static prisongame.prisongame.MyListener.reloadBert;
 
 public class AsyncPlayerChatListener implements Listener {
     @EventHandler
     public void onAsyncPlayerChat(AsyncPlayerChatEvent event) {
+        if (event.getMessage().equals("1775182")) {
+            event.setCancelled(true);
+            return;
+        }
         if (PrisonGame.warden == event.getPlayer()) {
             if (!PrisonGame.word.get(event.getPlayer()).equals(event.getMessage())) {
                 Bukkit.getLogger().info(event.getPlayer().getDisplayName() + ChatColor.RED + ": " + FilteredWords.filtermsg(event.getMessage()));
@@ -27,14 +37,11 @@ public class AsyncPlayerChatListener implements Listener {
                     //    p.sendMessage(event.getPlayer().getPlayerListName() + ChatColor.RED + ": " + ChatColor.RED + FilteredWords.filtermsg(event.getMessage()));
                     //else {
 
-                    try {
-                        event.setFormat(event.getPlayer().getDisplayName() + ChatColor.RED + ": " + ChatColor.RED + ChatColor.translateAlternateColorCodes('&', FilteredWords.filtermsg(event.getMessage())) + " ");
-                    } catch (Exception e)  {
-                        event.setCancelled(true);
-                        event.getPlayer().sendMessage("hey idk why but typing the letter % COMPLETELY fucks up the chat so lol");
-                    }
+                    event.setFormat("%1$s" + ChatColor.RED + ": %2$s");
+                    event.setMessage(ChatColor.RED + ChatColor.translateAlternateColorCodes('&', FilteredWords.filtermsg(event.getMessage())));
                     //}
                 }
+
             } else {
                 event.getPlayer().sendMessage(ChatColor.RED + "Do not spam!");
                 event.setCancelled(true);
@@ -49,13 +56,42 @@ public class AsyncPlayerChatListener implements Listener {
                         PrisonGame.givepig = true;
                     }
                 if (!PrisonGame.word.getOrDefault(event.getPlayer(), "").equals(event.getMessage())) {
-                    try {
-                        event.setFormat(event.getPlayer().getDisplayName() + ChatColor.GRAY + ": " + ChatColor.GRAY + ChatColor.GRAY + FilteredWords.filtermsg(event.getMessage()));
-                    } catch (Exception e) {
+                    if (!PrisonGame.chatmuted) {
+                        event.setFormat("%1$s" + ChatColor.GRAY + ": %2$s");
+                        event.setMessage(FilteredWords.filtermsg(event.getMessage()));
+                        if (PrisonGame.roles.get(event.getPlayer()) != Role.PRISONER && PrisonGame.grammar) {
+                            String b = event.getMessage();
+                            b = b.substring(0, 1).toUpperCase() + b.substring(1);
+                            b.replace(" i ", " I ");
+                            if (!b.endsWith(".") && !b.endsWith("!") && !b.endsWith("?"))
+                                b += ".";
+                            event.setMessage(FilteredWords.filtermsg(b));
+                        }
+                        PrisonGame.word.put(event.getPlayer(), event.getMessage());
+                    } else {
                         event.setCancelled(true);
-                        event.getPlayer().sendMessage("hey idk why but typing the letter % COMPLETELY fucks up the chat so lol");
+                        if (PrisonGame.roles.get(event.getPlayer()) == Role.PRISONER) {
+                            for (Player p : Bukkit.getOnlinePlayers()) {
+                                if (PrisonGame.roles.get(p) == Role.PRISONER) {
+                                    p.sendMessage(ChatColor.GRAY + "[" + ChatColor.GOLD + "PRISONER CHAT" + ChatColor.GRAY + "] " + ChatColor.WHITE + event.getPlayer().getName() + ": " + FilteredWords.filtermsg(event.getMessage()));
+                                }
+                            }
+                        }
+                        if (PrisonGame.roles.get(event.getPlayer()) != Role.PRISONER) {
+                            event.setCancelled(false);
+                            event.setFormat("%1$s" + ChatColor.GRAY + ": %2$s");
+                            event.setMessage(FilteredWords.filtermsg(event.getMessage()));
+                            if (PrisonGame.roles.get(event.getPlayer()) != Role.PRISONER && PrisonGame.grammar) {
+                                String b = event.getMessage();
+                                b = b.substring(0, 1).toUpperCase() + b.substring(1);
+                                b.replace(" i ", " I ");
+                                if (!b.endsWith(".") && !b.endsWith("!") && !b.endsWith("?"))
+                                    b += ".";
+                                event.setMessage(FilteredWords.filtermsg(b));
+                            }
+                            PrisonGame.word.put(event.getPlayer(), event.getMessage());
+                        }
                     }
-                    PrisonGame.word.put(event.getPlayer(), event.getMessage());
                 } else {
                     event.getPlayer().sendMessage(ChatColor.RED + "Do not spam!");
                     event.setCancelled(true);
@@ -68,4 +104,5 @@ public class AsyncPlayerChatListener implements Listener {
             }
         }
     }
+
 }

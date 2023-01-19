@@ -24,6 +24,7 @@ public class FireCommand implements CommandExecutor {
                     Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + sender.getName() + " only prison:strike");
                     Bukkit.broadcastMessage(ChatColor.GOLD + g.getName() + " was fired.");
                     MyListener.playerJoin(g, false);
+                    g.sendTitle(ChatColor.RED + "you were fired.", "", 20, 60, 20);
                     if (PrisonGame.savedPlayerGuards.containsKey(PrisonGame.warden.getUniqueId())) {
                         HashMap<UUID, Integer> roleHashMap = PrisonGame.savedPlayerGuards.get(PrisonGame.warden.getUniqueId());
                         if (PrisonGame.savedPlayerGuards.get(PrisonGame.warden.getUniqueId()).containsKey(((Player) sender).getUniqueId())) {

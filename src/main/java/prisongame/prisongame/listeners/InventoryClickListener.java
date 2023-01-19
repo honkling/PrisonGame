@@ -557,7 +557,7 @@ public class InventoryClickListener implements Listener {
                             orangelegItemMeta.setDisplayName(ChatColor.DARK_GRAY + "Cloak Chestplate");
                             orangelegItemMeta.setColor(Color.BLACK);
                             orangeboot.setItemMeta(orangelegItemMeta);
-                            event.getWhoClicked().getInventory().addItem(orangeboot);
+                            event.getWhoClicked().getInventory().setChestplate(orangeboot);
                         }
                     } else {
                         event.getWhoClicked().sendMessage(ChatColor.RED + "Not enough money!");

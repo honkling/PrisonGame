@@ -120,6 +120,8 @@ public final class PrisonGame extends JavaPlugin {
     static Villager bmsh1;
     static Villager bmsh2;
     static Villager shop;
+    public static Boolean chatmuted = false;
+    public static Boolean grammar = false;
     public static Boolean swat = false;
 
     public static void tptoBed(Player p) {

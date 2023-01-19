@@ -31,7 +31,6 @@ public class PlayerToggleSneakListener implements Listener {
                             p.setHealth(3);
                             p.setNoDamageTicks(20 * 3);
                             }, 4L);
-                    p.addPotionEffect(PotionEffectType.BLINDNESS.createEffect(20 * 15, 10));
                     p.addPotionEffect(PotionEffectType.SLOW.createEffect(20 * 15, 2));
                     p.setCooldown(Material.IRON_DOOR, 20 * 15);
                 }

@@ -21,30 +21,22 @@ public class PlayerChatListener implements Listener {
                 event.setCancelled(true);
                 event.getPlayer().teleport(new Location(Bukkit.getWorld("world"), 2141, -60, -2087));
                 event.getPlayer().sendMessage(ChatColor.GREEN + "Access granted.");
-                Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
-                    event.getPlayer().sendMessage(ChatColor.GREEN + "You overhear some splashing sounds...");
-                }, 20 * 10);
-                Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
-                    for (Player p : Bukkit.getOnlinePlayers()) {
-                        p.teleport(new Location(Bukkit.getWorld("world"), -2062, -50, 1945));
+                for (Player pe : Bukkit.getOnlinePlayers()) {
+                    pe.teleport(new Location(Bukkit.getWorld("world"), -2062, -50, 1945));
+                }
+                PrisonGame.active = PrisonGame.boat;
+                PrisonGame.swapcool = (20 * 60) * 5;
+                reloadBert();
+                for (Player pe : Bukkit.getOnlinePlayers()) {
+                    if (PrisonGame.roles.get(pe) != Role.WARDEN) {
+                        MyListener.playerJoin(pe, true);
+                        pe.sendTitle("New prison!", "BOAT");
+                    } else {
+                        pe.teleport(PrisonGame.active.getWardenspawn());
+                        if (!pe.getDisplayName().contains("ASCENDING"))
+                            pe.sendTitle("New prison!", "BOAT");
                     }
-                    PrisonGame.active = PrisonGame.boat;
-                    PrisonGame.swapcool = (20 * 60) * 5;
-                    reloadBert();
-                    for (Player p : Bukkit.getOnlinePlayers()) {
-                        if (PrisonGame.roles.get(p) != Role.WARDEN) {
-                            MyListener.playerJoin(p, true);
-                            p.sendTitle("New prison!", "BOAT");
-                        } else {
-                            p.teleport(PrisonGame.active.getWardenspawn());
-                            Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
-                                p.teleport(PrisonGame.active.getWardenspawn());
-                            }, 5);
-                            if (!p.getDisplayName().contains("ASCENDING"))
-                                p.sendTitle("New prison!", "BOAT");
-                        }
-                    }
-                }, 20 * 15);
+                }
             }
         }
     }

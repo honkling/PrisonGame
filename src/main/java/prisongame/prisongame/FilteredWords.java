@@ -15,7 +15,6 @@ public class FilteredWords {
             "faggot",
             "fagg",
             //"fag", this one's disabled as it disables things such as "of agmass"
-            "vagina"
     };
 
     private static String replaceConsecutiveDuplicates(String msg) {
@@ -40,6 +39,18 @@ public class FilteredWords {
         }
 
         return msg;
+    }
+
+    public static Boolean isClean(String msg) {
+        String sanitized = replaceConsecutiveDuplicates(msg
+                .replaceAll("\\s+", ""));
+
+        for (String i : filter) {
+            if (sanitized.toLowerCase().contains(i))
+                return false;
+        }
+
+        return true;
     }
 
 

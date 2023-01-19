@@ -10,7 +10,7 @@ import org.spigotmc.event.entity.EntityDismountEvent;
 public class EntityDismountListener implements Listener {
     @EventHandler
     public void onEntityDismount(EntityDismountEvent event) {
-        if (event.getEntity() instanceof Player) {
+        if (event.getEntity() instanceof Player && ((Player) event.getEntity()).isOnline()) {
             Player p = (Player) event.getEntity();
             if (p.hasPotionEffect(PotionEffectType.DOLPHINS_GRACE)) {
                 p.sendTitle(ChatColor.RED + "", "YOU'RE HANDCUFFED!", 20, 20, 20);

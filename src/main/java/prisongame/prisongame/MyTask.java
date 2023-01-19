@@ -860,6 +860,7 @@ public class MyTask extends BukkitRunnable {
                 p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(4.4);
             }
             } else {
+                p.getInventory().getItemInMainHand().setDurability((short) 3);
                 p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(9999);
             }
 
@@ -878,25 +879,18 @@ public class MyTask extends BukkitRunnable {
                 }
             }
 
-            if (!p.hasPotionEffect(PotionEffectType.DOLPHINS_GRACE)) {
-                if (p.getVehicle() instanceof Player) {
-                    p.addPotionEffect(PotionEffectType.JUMP.createEffect(20, -25));
-                    p.leaveVehicle();
-                }
-            }
-
             for (Player pe : Bukkit.getOnlinePlayers()) {
-                if (!p.canSee(pe)) {
-                    if (!pe.isInsideVehicle()) {
+                if (!p.canSee(pe) && p.isOnline()) {
+                    if (!pe.isInsideVehicle() && pe.isOnline()) {
                         p.showPlayer(PrisonGame.getPlugin(PrisonGame.class), pe);
                     }
                 }
             }
 
             if (p.hasPotionEffect(PotionEffectType.DOLPHINS_GRACE)) {
-                if (p.isInsideVehicle()) {
+                if (p.isInsideVehicle() && p.isOnline()) {
                     if (p.getVehicle() instanceof Player) {
-                        ((Player) p.getVehicle()).setCooldown(Material.IRON_SHOVEL, 20 * 10);
+                        ((Player) p.getVehicle()).setCooldown(Material.IRON_SHOVEL, 20 * 5);
                         ((Player) p.getVehicle()).hidePlayer(PrisonGame.getPlugin(PrisonGame.class), p);
                     }
                 }
@@ -906,6 +900,7 @@ public class MyTask extends BukkitRunnable {
             if (p.hasPotionEffect(PotionEffectType.DOLPHINS_GRACE)) {
                 p.removePotionEffect(PotionEffectType.GLOWING);
             }
+
 
             if (!PrisonGame.hardmode.get(p)) {
                 if (p.getName().equals("Jacco100") && !p.getPlayerListName().contains("REPORTER") || p.getName().equals("Goodgamer121") && !p.getPlayerListName().contains("REPORTER") || p.getName().equals("Evanbeer") && !p.getPlayerListName().contains("REPORTER") || p.getName().equals("teuli") && !p.getPlayerListName().contains("REPORTER")) {
@@ -984,7 +979,7 @@ public class MyTask extends BukkitRunnable {
                             for (ItemStack i : p.getInventory()) {
                                 if (i != null) {
                                     if (i.getItemMeta().getDisplayName().contains("[CONTRABAND]") || i.getType().equals(Material.STONE_SWORD) || i.getType().equals(Material.IRON_SWORD) || i.getType().equals(Material.IRON_HELMET) || i.getType().equals(Material.IRON_CHESTPLATE) || i.getType().equals(Material.IRON_LEGGINGS) || i.getType().equals(Material.IRON_BOOTS)) {
-                                        if (!p.isInsideVehicle()) {
+                                        if (!p.isInsideVehicle() && p.isOnline()) {
                                             p.addPotionEffect(PotionEffectType.GLOWING.createEffect(1200, 0));
                                             p.sendMessage(ChatColor.RED + "You were caught with contraband!");
                                             if (PrisonGame.prisonerlevel.getOrDefault(p, 0) == 1) {

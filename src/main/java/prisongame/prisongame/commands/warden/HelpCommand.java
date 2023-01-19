@@ -22,6 +22,9 @@ public class HelpCommand implements CommandExecutor {
         p.sendMessage(ChatColor.BLUE + "/warden guard [name]" + ChatColor.DARK_GRAY + " - " + ChatColor.WHITE + "Makes another player a guard.");
         p.sendMessage(ChatColor.BLUE + "/warden swat [name]" + ChatColor.DARK_GRAY + " - " + ChatColor.WHITE + "Makes another player a SWAT guard." + ChatColor.RED + " [REQUIRES 'SWAT GUARDS' UPGRADE!]");
         p.sendMessage(ChatColor.BLUE + "/warden nurse [name]" + ChatColor.DARK_GRAY + " - " + ChatColor.WHITE + "Makes another player a nurse.");
+        p.sendMessage(ChatColor.BLUE + "/warden intercom [msg]" + ChatColor.DARK_GRAY + " - " + ChatColor.WHITE + "Plays a loud message to all players.");
+        p.sendMessage(ChatColor.BLUE + "/warden grammar" + ChatColor.DARK_GRAY + " - " + ChatColor.WHITE + "Makes all guards type with proper grammar.");
+        p.sendMessage(ChatColor.BLUE + "/warden mutechat" + ChatColor.DARK_GRAY + " - " + ChatColor.WHITE + "Forces all players to use teamchat.");
         p.sendMessage(ChatColor.DARK_GRAY + "-=-=-=-=-=-=-=-");
 
         return true;

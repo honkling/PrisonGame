@@ -790,6 +790,7 @@ public class PlayerInteractListener implements Listener {
                 }
             }
             if (event.getClickedBlock().getType().equals(Material.CAULDRON)) {
+                event.setCancelled(true);
                 if (!event.getPlayer().hasCooldown(Material.IRON_DOOR)) {
                     if (PrisonGame.roles.get(event.getPlayer()) != Role.GUARD && PrisonGame.roles.get(event.getPlayer()) != Role.NURSE && PrisonGame.roles.get(event.getPlayer()) != Role.SWAT) {
                         event.getPlayer().teleport(PrisonGame.active.getBm());
