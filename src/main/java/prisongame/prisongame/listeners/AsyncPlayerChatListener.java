@@ -99,7 +99,6 @@ public class AsyncPlayerChatListener implements Listener {
             } else {
                 if (PrisonGame.warden != event.getPlayer()) {
                     event.setCancelled(true);
-                    Bukkit.broadcastMessage(event.getPlayer().getDisplayName() + ChatColor.GRAY + ": " + ChatColor.DARK_GRAY + "*silenced by solitary*");
                 }
             }
         }
