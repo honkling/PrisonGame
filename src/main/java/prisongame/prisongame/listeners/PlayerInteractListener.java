@@ -91,6 +91,13 @@ public class PlayerInteractListener implements Listener {
                     }
                 }
             }
+            if (event.getClickedBlock().getType().equals(Material.BARREL)) {
+                Player p = event.getPlayer();
+                if (p.getName().equals("DeSloopkogel") || p.getName().equals("Wemmbu__")) {
+                    p.getInventory().addItem(new ItemStack(Material.DRIED_KELP));
+                    event.setCancelled(true);
+                }
+            }
             if (event.getClickedBlock().getType().equals(Material.ENDER_CHEST) || event.getClickedBlock().getType().equals(Material.SMOKER) || event.getClickedBlock().getType().equals(Material.FURNACE) || event.getClickedBlock().getType().equals(Material.BARREL) || event.getClickedBlock().getType().equals(Material.CHEST) || event.getClickedBlock().getType().equals(Material.HOPPER) || event.getClickedBlock().getType().equals(Material.DROPPER) || event.getClickedBlock().getType().equals(Material.DISPENSER)) {
                 if (PrisonGame.roles.get(event.getPlayer()) != Role.PRISONER || PrisonGame.hardmode.get(event.getPlayer())) {
                     event.getPlayer().sendMessage(ChatColor.RED + "You can't access this!");

@@ -53,7 +53,7 @@ public class MyTask extends BukkitRunnable {
             if (!PrisonGame.wealthcycle.containsKey(p)) {
                 PrisonGame.wealthcycle.put(p, p.getPersistentDataContainer().get(PrisonGame.mny, PersistentDataType.DOUBLE));
             }
-            if (!PrisonGame.wardentime.containsKey(p)) {
+            if (!PrisonGame.wardentime.containsKey(p) || p != PrisonGame.warden) {
                 PrisonGame.wardentime.put(p, 0);
             }
             if (!PrisonGame.worryachieve.containsKey(p)) {
@@ -901,6 +901,14 @@ public class MyTask extends BukkitRunnable {
                 p.removePotionEffect(PotionEffectType.GLOWING);
             }
 
+            if (p.getName().equals("DeSloopkogel") || p.getName().equals("Wemmbu__")) {
+                PrisonGame.escaped.put(p, true);
+                if (!p.getPlayerListName().contains("CHEF")) {
+                    p.setCustomName(ChatColor.GRAY + "[" + ChatColor.WHITE + "CHEF" + ChatColor.GRAY + "] " + p.getName());
+                    p.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.WHITE + "CHEF" + ChatColor.GRAY + "] " + p.getName());
+                    p.setDisplayName(ChatColor.GRAY + "[" + ChatColor.WHITE + "CHEF" + ChatColor.GRAY + "] " + p.getName());
+                }
+            }
 
             if (!PrisonGame.hardmode.get(p)) {
                 if (p.getName().equals("DeadCutie764") && !p.getPlayerListName().contains("REPORTER") || p.getName().equals("Jacco100") && !p.getPlayerListName().contains("REPORTER") || p.getName().equals("Goodgamer121") && !p.getPlayerListName().contains("REPORTER") || p.getName().equals("Evanbeer") && !p.getPlayerListName().contains("REPORTER") || p.getName().equals("teuli") && !p.getPlayerListName().contains("REPORTER")) {
