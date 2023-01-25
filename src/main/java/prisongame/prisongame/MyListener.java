@@ -50,7 +50,7 @@ public class MyListener implements Listener {
                 ItemStack orangechest = new ItemStack(Material.LEATHER_CHESTPLATE);
                 LeatherArmorMeta chestmeta = (LeatherArmorMeta) orangechest.getItemMeta();
                 chestmeta.setColor(Color.fromRGB(208, 133, 22));
-                if (p.getName().equals("Desloopkogel") || p.getName().equals("Wemmbu__")) {
+                if (p.getName().equals("Kingdarksword") || p.getName().equals("Wemmbu__")) {
                     chestmeta.setColor(Color.fromRGB(255, 0, 255));
                 }
                 chestmeta.setDisplayName("Prisoner Uniform");
@@ -59,7 +59,7 @@ public class MyListener implements Listener {
                 ItemStack orangeleg = new ItemStack(Material.LEATHER_LEGGINGS);
                 LeatherArmorMeta orangelegItemMeta = (LeatherArmorMeta) orangeleg.getItemMeta();
                 orangelegItemMeta.setColor(Color.fromRGB(208, 133, 22));
-                if (p.getName().equals("Desloopkogel") || p.getName().equals("Wemmbu__")) {
+                if (p.getName().equals("Kingdarksword") || p.getName().equals("Wemmbu__")) {
                     orangelegItemMeta.setColor(Color.fromRGB(255, 0, 255));
                 }
                 orangelegItemMeta.setDisplayName("Prisoner Uniform");
@@ -71,7 +71,7 @@ public class MyListener implements Listener {
                 //if (p.getPersistentDataContainer().getOrDefault(PrisonGame.rank, PersistentDataType.INTEGER, 0) == 1) {
                 //    orangebootItemMeta.setColor(Color.YELLOW);
                 //}
-                if (p.getName().equals("Desloopkogel") || p.getName().equals("Wemmbu__")) {
+                if (p.getName().equals("Kingdarksword") || p.getName().equals("Wemmbu__")) {
                     orangebootItemMeta.setColor(Color.fromRGB(255, 100, 255));
                 }
                 orangebootItemMeta.setDisplayName("Prisoner Uniform");
@@ -80,7 +80,7 @@ public class MyListener implements Listener {
                 p.getInventory().setChestplate(orangechest);
                 p.getInventory().setLeggings(orangeleg);
                 p.getInventory().setBoots(orangeboot);
-                if (p.getName().equals("Desloopkogel") || p.getName().equals("Wemmbu__")) {
+                if (p.getName().equals("Kingdarksword") || p.getName().equals("Wemmbu__")) {
                     ItemStack card = new ItemStack(Material.TRIPWIRE_HOOK);
                     ItemMeta cardm = card.getItemMeta();
                     cardm.setDisplayName(ChatColor.BLUE + "Keycard " + ChatColor.RED + "[CONTRABAND]");
