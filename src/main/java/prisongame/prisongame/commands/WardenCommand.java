@@ -45,6 +45,7 @@ public class WardenCommand implements CommandExecutor {
             case "intercom" -> new IntercomCommand();
             case "mutechat" -> new MuteChatCommand();
             case "grammar" -> new GrammarCommand();
+            case "release" -> new ReleaseCommand();
             default -> new HelpCommand();
         };
 
