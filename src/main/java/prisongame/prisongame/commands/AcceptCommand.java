@@ -9,6 +9,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;
 import oshi.jna.platform.mac.SystemB;
+import prisongame.prisongame.MyListener;
 import prisongame.prisongame.PrisonGame;
 
 import java.util.HashMap;
@@ -23,7 +24,17 @@ public class AcceptCommand implements CommandExecutor {
             case 2 -> PrisonGame.setNurse((Player) sender);
             case 1 -> PrisonGame.setGuard((Player) sender);
             case 3 -> PrisonGame.setSwat((Player) sender);
-            default -> ((Player) sender).sendMessage("You haven't been invited!");
+            case -1 -> {
+                MyListener.playerJoin(PrisonGame.warden, false);
+                PrisonGame.warden = null;
+                ((Player) sender).performCommand("warden");
+
+                PrisonGame.askType.entrySet().forEach((entry) -> {
+                   if (entry.getValue() == -1)
+                       PrisonGame.askType.put(entry.getKey(), 0);
+                });
+            }
+            default -> sender.sendMessage("You haven't been invited!");
         }
         if (PrisonGame.askType.get((Player) sender) > 0) {
             if (!PrisonGame.savedPlayerGuards.containsKey(PrisonGame.warden.getUniqueId())) {
