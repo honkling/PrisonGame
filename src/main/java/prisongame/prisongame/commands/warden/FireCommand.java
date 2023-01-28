@@ -26,9 +26,10 @@ public class FireCommand implements CommandExecutor {
                     MyListener.playerJoin(g, false);
                     g.sendTitle(ChatColor.RED + "you were fired.", "", 20, 60, 20);
                     if (PrisonGame.savedPlayerGuards.containsKey(PrisonGame.warden.getUniqueId())) {
+                        Bukkit.broadcastMessage(ChatColor.AQUA + "Saving warden save file...");
                         HashMap<UUID, Integer> roleHashMap = PrisonGame.savedPlayerGuards.get(PrisonGame.warden.getUniqueId());
-                        if (PrisonGame.savedPlayerGuards.get(PrisonGame.warden.getUniqueId()).containsKey(((Player) sender).getUniqueId())) {
-                            roleHashMap.remove(((Player) sender).getUniqueId());
+                        if (PrisonGame.savedPlayerGuards.get(PrisonGame.warden.getUniqueId()).containsKey((g.getUniqueId()))) {
+                            roleHashMap.remove(g.getUniqueId());
                         }
                         PrisonGame.savedPlayerGuards.put(PrisonGame.warden.getUniqueId(), roleHashMap);
                     }
