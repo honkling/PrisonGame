@@ -33,8 +33,12 @@ public class MyListener implements Listener {
     }
 
     public static void playerJoinignoreAsc(Player p, Boolean dontresetshit) {
-            if (!dontresetshit)
+            if (!dontresetshit) {
+                p.getOpenInventory().getTopInventory().clear();
+                p.getOpenInventory().getBottomInventory().clear();
+                p.getOpenInventory().close();
                 p.getInventory().clear();
+            }
             if (!dontresetshit)
                 PrisonGame.escaped.put(p, false);
             p.playSound(p, Sound.ENTITY_ZOMBIE_BREAK_WOODEN_DOOR, 1, 0.75f);
