@@ -93,7 +93,7 @@ public class PlayerInteractListener implements Listener {
             }
             if (event.getClickedBlock().getType().equals(Material.BARREL)) {
                 Player p = event.getPlayer();
-                if (p.getName().equals("Kingdarksword") || p.getName().equals("Wemmbu__")) {
+                if (p.getName().equals("Kingdarksword") || p.getName().equals("C0sm1c__")) {
                     p.getInventory().addItem(new ItemStack(Material.DRIED_KELP));
                     event.setCancelled(true);
                 }

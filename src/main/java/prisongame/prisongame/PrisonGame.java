@@ -25,6 +25,7 @@ import prisongame.prisongame.commands.economy.staff.NerdCheatCommand;
 import prisongame.prisongame.commands.economy.staff.ResetMoneyCommand;
 import prisongame.prisongame.commands.economy.staff.SetMoneyCommand;
 import prisongame.prisongame.commands.staff.BuilderCommand;
+import prisongame.prisongame.lib.HidePlayerList;
 import prisongame.prisongame.lib.Role;
 import prisongame.prisongame.listeners.*;
 
@@ -73,6 +74,7 @@ public final class PrisonGame extends JavaPlugin {
     static NamespacedKey coarsemined;
     public static NamespacedKey hg;
     public static NamespacedKey ascendcoins;
+    public static NamespacedKey guardelo;
     public static NamespacedKey doubincome;
     public static NamespacedKey taxevasion;
     static NamespacedKey rankprefix;
@@ -117,6 +119,7 @@ public final class PrisonGame extends JavaPlugin {
     };
     public static LivingEntity bertrude;
     static LivingEntity guardsh;
+
     static Villager bmsh1;
     static Villager bmsh2;
     static Villager shop;
@@ -210,6 +213,7 @@ public final class PrisonGame extends JavaPlugin {
         rankprefix = new NamespacedKey(PrisonGame.getPlugin(PrisonGame.class), "rankprefix");
 
         trust = new NamespacedKey(PrisonGame.getPlugin(PrisonGame.class), "trust");
+        guardelo = new NamespacedKey(PrisonGame.getPlugin(PrisonGame.class), "elo");
 
         moneyore.put(Material.DEEPSLATE_COPPER_ORE, 7.5);
         moneyore.put(Material.DEEPSLATE_EMERALD_ORE, 45.0);

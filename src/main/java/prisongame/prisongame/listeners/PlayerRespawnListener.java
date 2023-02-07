@@ -245,7 +245,7 @@ public class PlayerRespawnListener implements Listener {
                 event.getPlayer().getInventory().setBoots(orangeboot);
 
             }
-            event.getPlayer().sendTitle("RESPAWNING", "Wait 15 seconds.");
+            event.getPlayer().sendTitle( ChatColor.DARK_RED + "RESPAWNING", ChatColor.RED + "Wait 15 seconds.");
             PrisonGame.tptoBed(event.getPlayer());
             event.getPlayer().addPotionEffect(PotionEffectType.LUCK.createEffect(15 * 20, 255));
             event.getPlayer().addPotionEffect(PotionEffectType.BLINDNESS.createEffect(15 * 20, 0));
@@ -256,16 +256,6 @@ public class PlayerRespawnListener implements Listener {
             bat.setSilent(true);
             bat.addPotionEffect(PotionEffectType.INVISIBILITY.createEffect(99999999, 10));
             event.getPlayer().setGameMode(GameMode.SPECTATOR);
-            if (PrisonGame.killior.get(event.getPlayer()) == null) {
-                event.getPlayer().setSpectatorTarget(bat);
-            } else {
-                if (PrisonGame.killior.get(event.getPlayer()).isOnline()) {
-                    event.getPlayer().teleport(PrisonGame.killior.get(event.getPlayer()));
-                    Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {event.getPlayer().setSpectatorTarget(PrisonGame.killior.get(event.getPlayer()));}, 3);
-                } else {
-                    event.getPlayer().setSpectatorTarget(bat);
-                }
-            }
             if (event.getPlayer().getPersistentDataContainer().has(PrisonGame.randomz, PersistentDataType.INTEGER)) {
                 Material[] rands = {
                         Material.WOODEN_AXE,
