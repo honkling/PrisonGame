@@ -17,7 +17,7 @@ public class NurseCommand implements CommandExecutor {
                 Player g = Bukkit.getPlayer(args[0]);
                 if (g.isOnline() && g != sender) {
                     PrisonGame.askType.put(g, 2);
-                    sender.sendMessage(ChatColor.LIGHT_PURPLE + "Succesfully asked player to be a guard!");
+                    sender.sendMessage(ChatColor.LIGHT_PURPLE + "Succesfully asked player to be a nurse!");
                     g.sendMessage(ChatColor.LIGHT_PURPLE + "The wardens wants you to be a nurse! use '/accept'");
                 } else {
                     sender.sendMessage(ChatColor.BLUE + "We had troubles promoting this player.");
