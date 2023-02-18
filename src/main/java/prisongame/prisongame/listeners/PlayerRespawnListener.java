@@ -46,7 +46,7 @@ public class PlayerRespawnListener implements Listener {
 
                 ItemStack card = new ItemStack(Material.TRIPWIRE_HOOK);
                 ItemMeta cardm = card.getItemMeta();
-                cardm.setDisplayName(ChatColor.BLUE + "Keycard " + ChatColor.RED + "[CONTRABAND]");
+                cardm.setDisplayName(ChatColor.BLUE + "Keycard " + Color.fromRGB(255, 59, 98) + "[CONTRABAND]");
                 card.setItemMeta(cardm);
                 nw.getInventory().addItem(card);
             }
@@ -83,14 +83,14 @@ public class PlayerRespawnListener implements Listener {
 
                 ItemStack card2 = new ItemStack(Material.IRON_SHOVEL);
                 ItemMeta cardm2 = card2.getItemMeta();
-                cardm2.setDisplayName(ChatColor.BLUE + "Handcuffs " + ChatColor.RED + "[CONTRABAND]");
+                cardm2.setDisplayName(ChatColor.BLUE + "Handcuffs " + Color.fromRGB(255, 59, 98) + "[CONTRABAND]");
                 cardm2.addEnchant(Enchantment.KNOCKBACK, 1, true);
                 card2.setItemMeta(cardm2);
                 g.getInventory().addItem(card2);
 
                 ItemStack card = new ItemStack(Material.TRIPWIRE_HOOK);
                 ItemMeta cardm = card.getItemMeta();
-                cardm.setDisplayName(ChatColor.BLUE + "Keycard " + ChatColor.RED + "[CONTRABAND]");
+                cardm.setDisplayName(ChatColor.BLUE + "Keycard " + Color.fromRGB(255, 59, 98) + "[CONTRABAND]");
                 card.setItemMeta(cardm);
                 g.getInventory().addItem(card);
             }
@@ -143,14 +143,14 @@ public class PlayerRespawnListener implements Listener {
 
                 ItemStack card2 = new ItemStack(Material.IRON_SHOVEL);
                 ItemMeta cardm2 = card2.getItemMeta();
-                cardm2.setDisplayName(ChatColor.BLUE + "Handcuffs " + ChatColor.RED + "[CONTRABAND]");
+                cardm2.setDisplayName(ChatColor.BLUE + "Handcuffs " + Color.fromRGB(255, 59, 98) + "[CONTRABAND]");
                 cardm2.addEnchant(Enchantment.KNOCKBACK, 1, true);
                 card2.setItemMeta(cardm2);
                 g.getInventory().addItem(card2);
 
                 ItemStack card = new ItemStack(Material.TRIPWIRE_HOOK);
                 ItemMeta cardm = card.getItemMeta();
-                cardm.setDisplayName(ChatColor.BLUE + "Keycard " + ChatColor.RED + "[CONTRABAND]");
+                cardm.setDisplayName(ChatColor.BLUE + "Keycard " + Color.fromRGB(255, 59, 98) + "[CONTRABAND]");
                 card.setItemMeta(cardm);
                 g.getInventory().addItem(card);
 
@@ -199,14 +199,14 @@ public class PlayerRespawnListener implements Listener {
 
                 ItemStack card2 = new ItemStack(Material.IRON_SHOVEL);
                 ItemMeta cardm2 = card2.getItemMeta();
-                cardm2.setDisplayName(ChatColor.BLUE + "Handcuffs " + ChatColor.RED + "[CONTRABAND]");
+                cardm2.setDisplayName(ChatColor.BLUE + "Handcuffs " + Color.fromRGB(255, 59, 98) + "[CONTRABAND]");
                 cardm2.addEnchant(Enchantment.KNOCKBACK, 1, true);
                 card2.setItemMeta(cardm2);
                 g.getInventory().addItem(card2);
 
                 ItemStack card = new ItemStack(Material.TRIPWIRE_HOOK);
                 ItemMeta cardm = card.getItemMeta();
-                cardm.setDisplayName(ChatColor.BLUE + "Keycard " + ChatColor.RED + "[CONTRABAND]");
+                cardm.setDisplayName(ChatColor.BLUE + "Keycard " + Color.fromRGB(255, 59, 98) + "[CONTRABAND]");
                 card.setItemMeta(cardm);
                 g.getInventory().addItem(card);
 
@@ -245,7 +245,7 @@ public class PlayerRespawnListener implements Listener {
                 event.getPlayer().getInventory().setBoots(orangeboot);
 
             }
-            event.getPlayer().sendTitle( ChatColor.DARK_RED + "RESPAWNING", ChatColor.RED + "Wait 15 seconds.");
+            event.getPlayer().sendTitle( ChatColor.DARK_RED + "RESPAWNING", Color.fromRGB(255, 59, 98) + "Wait 15 seconds.");
             PrisonGame.tptoBed(event.getPlayer());
             event.getPlayer().addPotionEffect(PotionEffectType.LUCK.createEffect(15 * 20, 255));
             event.getPlayer().addPotionEffect(PotionEffectType.BLINDNESS.createEffect(15 * 20, 0));
@@ -305,7 +305,7 @@ public class PlayerRespawnListener implements Listener {
                 DisguiseAPI.disguiseToAll(p, playerDisguise);
                 p.setCustomName(ChatColor.GRAY + "[" + ChatColor.GOLD + "PRISONER" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY  + "Prisoner " + prisonerNumber);
                 p.setDisplayName(ChatColor.GRAY + "[" + ChatColor.GOLD + "PRISONER" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY  + "Prisoner " + prisonerNumber);
-                p.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.RED + "HARD MODE" + ChatColor.DARK_GRAY + "] " + p.getName());
+                p.setPlayerListName(ChatColor.GRAY + "[" + Color.fromRGB(255, 59, 98) + "HARD MODE" + ChatColor.DARK_GRAY + "] " + p.getName());
             }
         }, 1);
     }

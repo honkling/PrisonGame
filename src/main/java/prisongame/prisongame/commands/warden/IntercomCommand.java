@@ -15,7 +15,7 @@ import prisongame.prisongame.PrisonGame;
 public class IntercomCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        StringBuilder b = new StringBuilder(ChatColor.BLUE + "INTERCOM >> " + ChatColor.RED);
+        StringBuilder b = new StringBuilder(ChatColor.BLUE + "INTERCOM >> " + Color.fromRGB(255, 59, 98));
         for (String a : args) {
             b.append(a + " ");
         }

@@ -34,12 +34,12 @@ public class BlockBreakListener implements Listener {
                         }
                     }
                     if (yesdothat && !event.getPlayer().hasPotionEffect(PotionEffectType.GLOWING) && !event.getPlayer().getPersistentDataContainer().has(PrisonGame.semicloak, PersistentDataType.INTEGER)) {
-                        event.getPlayer().sendMessage(ChatColor.RED + "You were caught breaking bars! Get a cloak next time!");
+                        event.getPlayer().sendMessage(Color.fromRGB(255, 59, 98) + "You were caught breaking bars! Get a cloak next time!");
                         for (Player g : Bukkit.getOnlinePlayers()) {
                             if (PrisonGame.roles.get(g) != Role.PRISONER) {
                                 g.playSound(g, Sound.ENTITY_SILVERFISH_DEATH, 1, 0.5f);
                                 g.addPotionEffect(PotionEffectType.GLOWING.createEffect(20 * 30, 0));
-                                g.sendMessage(ChatColor.RED + event.getPlayer().getName() + ChatColor.DARK_RED + " was caught breaking bars!");
+                                g.sendMessage(Color.fromRGB(255, 59, 98) + event.getPlayer().getName() + ChatColor.DARK_RED + " was caught breaking bars!");
                             }
                         }
                     }

@@ -1,8 +1,10 @@
 package prisongame.prisongame.listeners;
 
 import me.libraryaddict.disguise.DisguiseAPI;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -22,7 +24,7 @@ public class PlayerJoinListener implements Listener {
             DisguiseAPI.undisguiseToAll(event.getPlayer());
             event.getPlayer().removePotionEffect(PotionEffectType.DARKNESS);
             event.getPlayer().removePotionEffect(PotionEffectType.WEAKNESS);
-            event.setJoinMessage(ChatColor.GOLD + event.getPlayer().getName() + " was caught and sent to prison! (JOIN)");
+            event.setJoinMessage(MiniMessage.miniMessage().deserialize( "<color:#ffae6b>" + event.getPlayer().getName() + " was sent to prison! (JOIN)" + "<color>").toString());
             event.getPlayer().setGameMode(GameMode.ADVENTURE);
             PrisonGame.st.put(event.getPlayer(), 0.0);
             PrisonGame.sp.put(event.getPlayer(), 0.0);
@@ -45,7 +47,7 @@ public class PlayerJoinListener implements Listener {
                 pe.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.BLACK + "SOLITARY" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY + pe.getName());
                 pe.setDisplayName(ChatColor.GRAY + "[" + ChatColor.BLACK + "SOLITARY" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY + pe.getName());
 
-                event.setJoinMessage(ChatColor.RED + event.getPlayer().getName() + " was caught and sent back to solitary! (JOIN)");
+                event.setJoinMessage(Color.fromRGB(255, 59, 98) + event.getPlayer().getName() + " was caught and sent back to solitary! (JOIN)");
             }
         }else{
             event.getPlayer().kickPlayer(ChatColor.translateAlternateColorCodes('&', "&4&lThe server is currently &a&lReloading &c&lOr &4Completely fucked up. &c&lIf this error is occuring constanly please alert me @ &bhttps://discord.gg/GrcHKkFQsv"));

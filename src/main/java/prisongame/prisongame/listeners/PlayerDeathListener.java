@@ -38,12 +38,12 @@ public class PlayerDeathListener implements Listener {
             if (!event.getEntity().getKiller().equals(event.getEntity()) ) {
                 event.getEntity().getKiller().getInventory().getItemInMainHand();
                 if (event.getEntity().getKiller().getInventory().getItemInMainHand().getItemMeta() != null) {
-                    if (event.getEntity().getKiller().getInventory().getItemInMainHand().getItemMeta().getDisplayName().equals(ChatColor.BLUE + "Handcuffs " + ChatColor.RED + "[CONTRABAND]")) {
+                    if (event.getEntity().getKiller().getInventory().getItemInMainHand().getItemMeta().getDisplayName().equals(ChatColor.BLUE + "Handcuffs " + Color.fromRGB(255, 59, 98) + "[CONTRABAND]")) {
                         if (!event.getEntity().getKiller().hasCooldown(Material.IRON_SHOVEL)) {
                             event.setCancelled(true);
                             event.getEntity().addPotionEffect(PotionEffectType.WEAKNESS.createEffect(20 * 30, 255));
                             event.getEntity().addPotionEffect(PotionEffectType.DOLPHINS_GRACE.createEffect(20 * 30, 255));
-                            event.getEntity().sendTitle(ChatColor.RED + "HANDCUFFED!", "", 20, 160, 20);
+                            event.getEntity().sendTitle(Color.fromRGB(255, 59, 98) + "HANDCUFFED!", "", 20, 160, 20);
                             Player p = event.getEntity();
                             p.getKiller().addPassenger(p);
                             event.getEntity().getKiller().sendMessage(ChatColor.GREEN + "Shift to drop players.");

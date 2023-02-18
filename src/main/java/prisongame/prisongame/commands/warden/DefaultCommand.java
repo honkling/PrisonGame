@@ -1,5 +1,6 @@
 package prisongame.prisongame.commands.warden;
 
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -19,7 +20,7 @@ public class DefaultCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (PrisonGame.warden != null || !(sender instanceof Player) || PrisonGame.wardenCooldown > 0) {
-            sender.sendMessage(ChatColor.RED + "Someone else is already the warden!");
+            sender.sendMessage(Color.fromRGB(255, 59, 98) + "Someone else is already the warden!");
             return true;
         }
 
@@ -38,7 +39,7 @@ public class DefaultCommand implements CommandExecutor {
             PrisonGame.roles.put(p, Role.PRISONER);
             PrisonGame.askType.put(p, 0);
             p.playSound(p, Sound.BLOCK_END_PORTAL_SPAWN, 1, 1);
-            p.sendTitle("", ChatColor.RED + nw.getName() + ChatColor.GREEN + " is the new warden!");
+            p.sendTitle(Color.fromRGB(255, 59, 98) + nw.getName() , MiniMessage.miniMessage().deserialize("<gradient:#00ff51:#9dff00>is the new warden!<gradient>").toString());
             PrisonGame.wardenCooldown = 20 * 6;
         }
         PrisonGame.warden = nw;
@@ -61,14 +62,14 @@ public class DefaultCommand implements CommandExecutor {
         PrisonGame.chatmuted = false;
         PrisonGame.grammar = false;
         nw.teleport(PrisonGame.active.getWardenspawn());
-        nw.setCustomName(ChatColor.GRAY + "[" + ChatColor.RED + "WARDEN" + ChatColor.GRAY + "] " + ChatColor.WHITE + nw.getName());
-        nw.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.RED + "WARDEN" + ChatColor.GRAY + "] " + ChatColor.WHITE + nw.getName());
-        nw.setDisplayName(ChatColor.GRAY + "[" + ChatColor.RED + "WARDEN" + ChatColor.GRAY + "] " + ChatColor.WHITE + nw.getName());
+        nw.setCustomName(ChatColor.GRAY + "[" + Color.fromRGB(255, 59, 98) + "WARDEN" + ChatColor.GRAY + "] " + ChatColor.WHITE + nw.getName());
+        nw.setPlayerListName(ChatColor.GRAY + "[" + Color.fromRGB(255, 59, 98) + "WARDEN" + ChatColor.GRAY + "] " + ChatColor.WHITE + nw.getName());
+        nw.setDisplayName(ChatColor.GRAY + "[" + Color.fromRGB(255, 59, 98) + "WARDEN" + ChatColor.GRAY + "] " + ChatColor.WHITE + nw.getName());
 
         nw.setNoDamageTicks(20 * 45);
         ItemStack card2 = new ItemStack(Material.IRON_SHOVEL);
         ItemMeta cardm2 = card2.getItemMeta();
-        cardm2.setDisplayName(ChatColor.BLUE + "Handcuffs " + ChatColor.RED + "[CONTRABAND]");
+        cardm2.setDisplayName(ChatColor.BLUE + "Handcuffs " + Color.fromRGB(255, 59, 98) + "[CONTRABAND]");
         cardm2.addEnchant(Enchantment.KNOCKBACK, 1, true);
         card2.setItemMeta(cardm2);
         nw.getInventory().addItem(card2);
@@ -94,7 +95,7 @@ public class DefaultCommand implements CommandExecutor {
 
         ItemStack card = new ItemStack(Material.TRIPWIRE_HOOK);
         ItemMeta cardm = card.getItemMeta();
-        cardm.setDisplayName(ChatColor.BLUE + "Keycard " + ChatColor.RED + "[CONTRABAND]");
+        cardm.setDisplayName(ChatColor.BLUE + "Keycard " + Color.fromRGB(255, 59, 98) + "[CONTRABAND]");
         card.setItemMeta(cardm);
         nw.getInventory().addItem(card);
 

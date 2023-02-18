@@ -13,7 +13,7 @@ public class EntityDismountListener implements Listener {
         if (event.getEntity() instanceof Player && ((Player) event.getEntity()).isOnline()) {
             Player p = (Player) event.getEntity();
             if (p.hasPotionEffect(PotionEffectType.DOLPHINS_GRACE)) {
-                p.sendTitle(ChatColor.RED + "", "YOU'RE HANDCUFFED!", 20, 20, 20);
+                p.sendTitle(Color.fromRGB(255, 59, 98) + "", "YOU'RE HANDCUFFED!", 20, 20, 20);
                 event.setCancelled(true);
             }
         }

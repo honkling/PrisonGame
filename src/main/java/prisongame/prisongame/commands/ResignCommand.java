@@ -41,7 +41,7 @@ public class ResignCommand implements CommandExecutor {
                 MyListener.playerJoin((Player) sender, false);
             }
         } else {
-            sender.sendMessage(ChatColor.RED + "You're in combat!");
+            sender.sendMessage(Color.fromRGB(255, 59, 98) + "You're in combat!");
         }
         return true;
     }

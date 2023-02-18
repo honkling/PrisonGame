@@ -15,7 +15,7 @@ public class PassCommand implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (args.length >= 1) {
             if (args[0].equalsIgnoreCase(sender.getName())) {
-                sender.sendMessage(ChatColor.RED + "You cannot pass to yourself.");
+                sender.sendMessage(Color.fromRGB(255, 59, 98) + "You cannot pass to yourself.");
                 return true;
             }
 
@@ -28,7 +28,7 @@ public class PassCommand implements CommandExecutor {
 
             PrisonGame.askType.put(g, -1);
             sender.sendMessage(ChatColor.AQUA + "Succesfully asked player to be the warden!");
-            g.sendMessage(ChatColor.RED + "The wardens wants you to be the warden! use '/accept'");
+            g.sendMessage(Color.fromRGB(255, 59, 98) + "The wardens wants you to be the warden! use '/accept'");
         }
         return true;
     }

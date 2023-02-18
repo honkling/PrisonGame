@@ -20,9 +20,9 @@ public class PrefixCommand implements CommandExecutor {
                 }*/
         if (prefix.length() <= prefixlength) {
             Player g = (Player) sender;
-            g.setCustomName(ChatColor.GRAY + "[" + ChatColor.RED + ChatColor.translateAlternateColorCodes('&', prefix) + " WARDEN" + ChatColor.GRAY + "] " + ChatColor.WHITE + g.getName());
-            g.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.RED + ChatColor.translateAlternateColorCodes('&', prefix) + " WARDEN" + ChatColor.GRAY + "] " + ChatColor.WHITE + g.getName());
-            g.setDisplayName(ChatColor.GRAY + "[" + ChatColor.RED + ChatColor.translateAlternateColorCodes('&', prefix) + " WARDEN" + ChatColor.GRAY + "] " + ChatColor.WHITE + g.getName());
+            g.setCustomName(ChatColor.GRAY + "[" + Color.fromRGB(255, 59, 98) + ChatColor.translateAlternateColorCodes('&', prefix) + " WARDEN" + ChatColor.GRAY + "] " + ChatColor.WHITE + g.getName());
+            g.setPlayerListName(ChatColor.GRAY + "[" + Color.fromRGB(255, 59, 98) + ChatColor.translateAlternateColorCodes('&', prefix) + " WARDEN" + ChatColor.GRAY + "] " + ChatColor.WHITE + g.getName());
+            g.setDisplayName(ChatColor.GRAY + "[" + Color.fromRGB(255, 59, 98) + ChatColor.translateAlternateColorCodes('&', prefix) + " WARDEN" + ChatColor.GRAY + "] " + ChatColor.WHITE + g.getName());
         } else {
             sender.sendMessage("That's too long!");
         }

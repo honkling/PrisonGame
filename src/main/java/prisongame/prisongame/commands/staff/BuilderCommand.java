@@ -21,7 +21,7 @@ public class BuilderCommand implements CommandExecutor {
                 Inventory inv = Bukkit.createInventory(null, 9 * 6, "BUILDER ZONE");
                 inv.addItem(PrisonGame.createGuiItem(Material.ENDER_PEARL, ChatColor.YELLOW + "Fortress [CMD]", "tp 0 0 0"));
                 inv.addItem(PrisonGame.createGuiItem(Material.ENDER_PEARL, ChatColor.YELLOW + "HyperTech [CMD]", "tp 0 0 -1000"));
-                inv.addItem(PrisonGame.createGuiItem(Material.ENDER_PEARL, ChatColor.YELLOW + "The End [CMD]", "mvtp endprison", ChatColor.RED + "DO /mvtp world TO GET OUT!"));
+                inv.addItem(PrisonGame.createGuiItem(Material.ENDER_PEARL, ChatColor.YELLOW + "The End [CMD]", "mvtp endprison", Color.fromRGB(255, 59, 98) + "DO /mvtp world TO GET OUT!"));
                 inv.addItem(PrisonGame.createGuiItem(Material.ENDER_PEARL, ChatColor.YELLOW + "Train [CMD]", "tp 0 0 1000"));
                 inv.addItem(PrisonGame.createGuiItem(Material.ENDER_PEARL, ChatColor.YELLOW + "Gladiator [CMD]", "tp -2000 0 2000"));
                 inv.addItem(PrisonGame.createGuiItem(Material.ENDER_PEARL, ChatColor.YELLOW + "Island [CMD]", "tp 2000 0 -2000"));

@@ -26,7 +26,7 @@ public class SwatCommand implements CommandExecutor {
                 }
             }
         } else {
-            sender.sendMessage(ChatColor.RED + "You don't have the 'SWAT GUARDS' upgrade! Buy it from the guard shop!");
+            sender.sendMessage(Color.fromRGB(255, 59, 98) + "You don't have the 'SWAT GUARDS' upgrade! Buy it from the guard shop!");
         }
 
         return true;

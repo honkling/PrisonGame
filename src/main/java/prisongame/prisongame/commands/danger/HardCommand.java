@@ -47,7 +47,7 @@ public class HardCommand implements CommandExecutor {
 
             }
         }  else {
-            sender.sendMessage(ChatColor.RED + "Really? Did you deadass try to run hard when already in hard mode? Come on. You're better than this. (I had to add this since people were losing money by doing hard... come on...)");
+            sender.sendMessage(Color.fromRGB(255, 59, 98) + "Really? Did you deadass try to run hard when already in hard mode? Come on. You're better than this. (I had to add this since people were losing money by doing hard... come on...)");
         }
         return true;
     }
