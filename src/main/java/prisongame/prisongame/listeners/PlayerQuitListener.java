@@ -25,6 +25,6 @@ public class PlayerQuitListener implements Listener {
             Bukkit.broadcastMessage(ChatColor.GREEN + "The warden has left the game!");
             PrisonGame.wardenCooldown = 40;
         }
-        event.setQuitMessage(MiniMessage.miniMessage().deserialize( "<color:#ff7c6e>" + event.getPlayer().getName() + " walked out through the front door. (QUIT)" + "<color>").toString());
+        event.setQuitMessage(MiniMessage.minimessage().parseFormat( "<color:#ff7c6e>" + event.getPlayer().getName() + " walked out through the front door. (QUIT)" + "<color>").toString());
     }
 }
