@@ -1,14 +1,13 @@
 package prisongame.prisongame.lib;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Color;
 
 public enum Role {
     PRISONER(ChatColor.GOLD),
     NURSE(ChatColor.LIGHT_PURPLE),
     GUARD(ChatColor.BLUE),
     SWAT(ChatColor.DARK_GRAY),
-    WARDEN(ChatColor.RED);
+    WARDEN(Color.fromRGB(255, 59, 98));
 
     public ChatColor color;
 

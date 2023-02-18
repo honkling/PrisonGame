@@ -2,7 +2,6 @@ package prisongame.prisongame.commands.danger;
 
 import me.libraryaddict.disguise.DisguiseAPI;
 import org.bukkit.ChatColor;
-import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
