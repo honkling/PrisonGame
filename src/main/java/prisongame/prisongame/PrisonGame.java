@@ -453,13 +453,13 @@ public final class PrisonGame extends JavaPlugin {
 
         ItemStack card = new ItemStack(Material.TRIPWIRE_HOOK);
         ItemMeta cardm = card.getItemMeta();
-        cardm.setDisplayName(ChatColor.BLUE + "Keycard " + Color.fromRGB(255, 59, 98) + "[CONTRABAND]");
+        cardm.setDisplayName(ChatColor.BLUE + "Keycard " + ChatColor.RED + "[CONTRABAND]");
         card.setItemMeta(cardm);
         g.getInventory().addItem(card);
 
         ItemStack card2 = new ItemStack(Material.IRON_SHOVEL);
         ItemMeta cardm2 = card2.getItemMeta();
-        cardm2.setDisplayName(ChatColor.BLUE + "Handcuffs " + Color.fromRGB(255, 59, 98) + "[CONTRABAND]");
+        cardm2.setDisplayName(ChatColor.BLUE + "Handcuffs " + ChatColor.RED + "[CONTRABAND]");
         cardm2.addEnchant(Enchantment.KNOCKBACK, 1, true);
         card2.setItemMeta(cardm2);
         g.getInventory().addItem(card2);
@@ -472,7 +472,7 @@ public final class PrisonGame extends JavaPlugin {
             playerDisguise.setKeepDisguiseOnPlayerDeath(true);
             DisguiseAPI.disguiseToAll(g, playerDisguise);
             g.setCustomName(ChatColor.GRAY + "[" + ChatColor.LIGHT_PURPLE + "NURSE " + ChatColor.GRAY + "] " + ChatColor.GRAY + "NURSE" + prisonerNumber);
-            g.setPlayerListName(ChatColor.GRAY + "[" + Color.fromRGB(255, 59, 98) + "HARD MODE" + ChatColor.GRAY + "] " + ChatColor.GRAY + g.getName());
+            g.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.RED + "HARD MODE" + ChatColor.GRAY + "] " + ChatColor.GRAY + g.getName());
             g.setDisplayName(ChatColor.GRAY + "[" + ChatColor.LIGHT_PURPLE + "NURSE " + ChatColor.GRAY + "] " + ChatColor.GRAY + "NURSE" + prisonerNumber);
         }
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + g.getName() + " only prison:guard");
@@ -531,14 +531,14 @@ public final class PrisonGame extends JavaPlugin {
 
         ItemStack card2 = new ItemStack(Material.IRON_SHOVEL);
         ItemMeta cardm2 = card2.getItemMeta();
-        cardm2.setDisplayName(ChatColor.BLUE + "Handcuffs " + Color.fromRGB(255, 59, 98) + "[CONTRABAND]");
+        cardm2.setDisplayName(ChatColor.BLUE + "Handcuffs " + ChatColor.RED + "[CONTRABAND]");
         cardm2.addEnchant(Enchantment.KNOCKBACK, 1, true);
         card2.setItemMeta(cardm2);
         g.getInventory().addItem(card2);
 
         ItemStack card = new ItemStack(Material.TRIPWIRE_HOOK);
         ItemMeta cardm = card.getItemMeta();
-        cardm.setDisplayName(ChatColor.BLUE + "Keycard " + Color.fromRGB(255, 59, 98) + "[CONTRABAND]");
+        cardm.setDisplayName(ChatColor.BLUE + "Keycard " + ChatColor.RED + "[CONTRABAND]");
         card.setItemMeta(cardm);
         g.getInventory().addItem(card);
 
@@ -550,7 +550,7 @@ public final class PrisonGame extends JavaPlugin {
             playerDisguise.setKeepDisguiseOnPlayerDeath(true);
             DisguiseAPI.disguiseToAll(g, playerDisguise);
             g.setCustomName(ChatColor.GRAY + "[" + ChatColor.DARK_GRAY + "SWAT" + ChatColor.GRAY + "] " + ChatColor.GRAY + "SWAT " + prisonerNumber);
-            g.setPlayerListName(ChatColor.GRAY + "[" + Color.fromRGB(255, 59, 98) + "HARD MODE" + ChatColor.GRAY + "] " + ChatColor.GRAY + g.getName());
+            g.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.RED + "HARD MODE" + ChatColor.GRAY + "] " + ChatColor.GRAY + g.getName());
             g.setDisplayName(ChatColor.GRAY + "[" + ChatColor.DARK_GRAY + "SWAT" + ChatColor.GRAY + "] " + ChatColor.GRAY + "SWAT " + prisonerNumber);
         }
 
@@ -620,14 +620,14 @@ public final class PrisonGame extends JavaPlugin {
 
         ItemStack card2 = new ItemStack(Material.IRON_SHOVEL);
         ItemMeta cardm2 = card2.getItemMeta();
-        cardm2.setDisplayName(ChatColor.BLUE + "Handcuffs " + Color.fromRGB(255, 59, 98) + "[CONTRABAND]");
+        cardm2.setDisplayName(ChatColor.BLUE + "Handcuffs " + ChatColor.RED + "[CONTRABAND]");
         cardm2.addEnchant(Enchantment.KNOCKBACK, 1, true);
         card2.setItemMeta(cardm2);
         g.getInventory().addItem(card2);
 
         ItemStack card = new ItemStack(Material.TRIPWIRE_HOOK);
         ItemMeta cardm = card.getItemMeta();
-        cardm.setDisplayName(ChatColor.BLUE + "Keycard " + Color.fromRGB(255, 59, 98) + "[CONTRABAND]");
+        cardm.setDisplayName(ChatColor.BLUE + "Keycard " + ChatColor.RED + "[CONTRABAND]");
         card.setItemMeta(cardm);
         g.getInventory().addItem(card);
 
@@ -639,7 +639,7 @@ public final class PrisonGame extends JavaPlugin {
             playerDisguise.setKeepDisguiseOnPlayerDeath(true);
             DisguiseAPI.disguiseToAll(g, playerDisguise);
             g.setCustomName(ChatColor.GRAY + "[" + ChatColor.BLUE + "GUARD" + ChatColor.GRAY + "] " + ChatColor.GRAY + "GUARD " + prisonerNumber);
-            g.setPlayerListName(ChatColor.GRAY + "[" + Color.fromRGB(255, 59, 98) + "HARD MODE" + ChatColor.GRAY + "] " + ChatColor.GRAY + g.getName());
+            g.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.RED + "HARD MODE" + ChatColor.GRAY + "] " + ChatColor.GRAY + g.getName());
             g.setDisplayName(ChatColor.GRAY + "[" + ChatColor.BLUE + "GUARD" + ChatColor.GRAY + "] " + ChatColor.GRAY + "GUARD " + prisonerNumber);
         }
 

@@ -48,10 +48,10 @@ public class SolitaryCommand implements CommandExecutor {
                             }
                         }
                     } else {
-                        sender.sendMessage(Color.fromRGB(255, 59, 98) + "Solitary is on cooldown!");
+                        sender.sendMessage(ChatColor.RED + "Solitary is on cooldown!");
                     }
                 } else {
-                    sender.sendMessage(Color.fromRGB(255, 59, 98) + "Solitary can't hold more than 3 people!");
+                    sender.sendMessage(ChatColor.RED + "Solitary can't hold more than 3 people!");
                 }
             }
         }

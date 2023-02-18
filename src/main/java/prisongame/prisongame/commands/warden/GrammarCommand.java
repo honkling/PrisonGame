@@ -13,9 +13,9 @@ public class GrammarCommand implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         PrisonGame.grammar = !PrisonGame.grammar;
         if (PrisonGame.grammar)
-            Bukkit.broadcastMessage(Color.fromRGB(255, 59, 98) + "Warden has enabled grammar mode!" + ChatColor.GRAY + " (Guards will now speak with proper grammar)");
+            Bukkit.broadcastMessage(ChatColor.RED + "Warden has enabled grammar mode!" + ChatColor.GRAY + " (Guards will now speak with proper grammar)");
         if (!PrisonGame.grammar)
-            Bukkit.broadcastMessage(Color.fromRGB(255, 59, 98) + "Warden has disabled grammar mode!" + ChatColor.GRAY + " (Guards are no longer forced to speak with proper grammar)");
+            Bukkit.broadcastMessage(ChatColor.RED + "Warden has disabled grammar mode!" + ChatColor.GRAY + " (Guards are no longer forced to speak with proper grammar)");
         return true;
     }
 }

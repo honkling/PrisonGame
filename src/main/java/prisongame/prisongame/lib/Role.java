@@ -7,7 +7,7 @@ public enum Role {
     NURSE(ChatColor.LIGHT_PURPLE),
     GUARD(ChatColor.BLUE),
     SWAT(ChatColor.DARK_GRAY),
-    WARDEN(Color.fromRGB(255, 59, 98));
+    WARDEN(ChatColor.RED);
 
     public ChatColor color;
 

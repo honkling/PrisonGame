@@ -1,6 +1,5 @@
 package prisongame.prisongame.listeners;
 
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -25,6 +24,6 @@ public class PlayerQuitListener implements Listener {
             Bukkit.broadcastMessage(ChatColor.GREEN + "The warden has left the game!");
             PrisonGame.wardenCooldown = 40;
         }
-        event.setQuitMessage(MiniMessage.minimessage().parseFormat( "<color:#ff7c6e>" + event.getPlayer().getName() + " walked out through the front door. (QUIT)" + "<color>").toString());
+        event.setQuitMessage(ChatColor.GOLD + event.getPlayer().getName() + " walked out through the front door.. (QUIT)");
     }
 }

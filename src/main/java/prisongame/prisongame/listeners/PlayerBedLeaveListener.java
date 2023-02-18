@@ -11,7 +11,7 @@ public class PlayerBedLeaveListener implements Listener {
     public void onPlayerBedLeave(PlayerBedLeaveEvent event) {
         if (MyTask.bossbar.getTitle().equals("LIGHTS OUT")) {
             event.setCancelled(true);
-            event.getPlayer().sendMessage(Color.fromRGB(255, 59, 98) + "You can't wake up until roll call!");
+            event.getPlayer().sendMessage(ChatColor.RED + "You can't wake up until roll call!");
         }
     }
 }

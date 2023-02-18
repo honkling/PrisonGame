@@ -15,9 +15,9 @@ public class MuteChatCommand implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         PrisonGame.chatmuted = !PrisonGame.chatmuted;
         if (PrisonGame.chatmuted)
-            Bukkit.broadcastMessage(Color.fromRGB(255, 59, 98) + "Warden has muted the chat!");
+            Bukkit.broadcastMessage(ChatColor.RED + "Warden has muted the chat!");
         if (!PrisonGame.chatmuted)
-            Bukkit.broadcastMessage(Color.fromRGB(255, 59, 98) + "Warden has unmuted the chat!");
+            Bukkit.broadcastMessage(ChatColor.RED + "Warden has unmuted the chat!");
         return true;
     }
 }

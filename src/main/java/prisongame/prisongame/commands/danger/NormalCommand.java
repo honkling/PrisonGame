@@ -35,7 +35,7 @@ public class NormalCommand implements CommandExecutor {
                 MyListener.playerJoin(p, false);
             }
         } else {
-            sender.sendMessage(Color.fromRGB(255, 59, 98) + "Really? Did you deadass try to run normal when already in normal mode? Come on. You're better than this. (I had to add this since people were losing money by doing normal... come on...)");
+            sender.sendMessage(ChatColor.RED + "Really? Did you deadass try to run normal when already in normal mode? Come on. You're better than this. (I had to add this since people were losing money by doing normal... come on...)");
         }
         return true;
     }

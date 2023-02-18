@@ -19,8 +19,8 @@ public class WardenCommand implements CommandExecutor {
         Player player = (Player) sender;
 
         if (!PrisonGame.wardenenabled || PrisonGame.hardmode.get(sender)) {
-            player.kickPlayer(Color.fromRGB(255, 59, 98) + "Do not /warden during a reload.");
-            player.sendMessage(Color.fromRGB(255, 59, 98) + sender.getName() + " was kicked for doing /warden during a reload");
+            player.kickPlayer(ChatColor.RED + "Do not /warden during a reload.");
+            player.sendMessage(ChatColor.RED + sender.getName() + " was kicked for doing /warden during a reload");
             return true;
         }
 

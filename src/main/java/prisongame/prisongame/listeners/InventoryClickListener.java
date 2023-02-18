@@ -154,7 +154,7 @@ public class InventoryClickListener implements Listener {
             if (event.getSlotType().equals(InventoryType.SlotType.ARMOR)) {
                 event.setCancelled(true);
                 event.getWhoClicked().closeInventory();
-                event.getWhoClicked().sendMessage(Color.fromRGB(255, 59, 98) + "You can't take armor off till you've escaped!");
+                event.getWhoClicked().sendMessage(ChatColor.RED + "You can't take armor off till you've escaped!");
             }
         }
     }
@@ -313,7 +313,7 @@ public class InventoryClickListener implements Listener {
                                 }
                             }
                         }
-                        if (event.getCurrentItem().getItemMeta().getDisplayName().equals(Color.fromRGB(255, 59, 98) + "Volcano")) {
+                        if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.RED + "Volcano")) {
                             for (Player p : Bukkit.getOnlinePlayers()) {
                                 p.teleport(new Location(Bukkit.getWorld("world"), -2062, -50, 1945));
                             }
@@ -439,7 +439,7 @@ public class InventoryClickListener implements Listener {
                                 }
                             }
                         }
-                        if (event.getCurrentItem().getItemMeta().getDisplayName().equals(Color.fromRGB(255, 59, 98) + "Nether")) {
+                        if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.RED + "Nether")) {
                             for (Player p : Bukkit.getOnlinePlayers()) {
                                 p.teleport(new Location(Bukkit.getWorld("world"), -2062, -50, 1945));
                             }
@@ -521,7 +521,7 @@ public class InventoryClickListener implements Listener {
                             event.getWhoClicked().getInventory().addItem(new ItemStack(Material.PAPER));
                         }
                     } else {
-                        event.getWhoClicked().sendMessage(Color.fromRGB(255, 59, 98) + "Not enough money!");
+                        event.getWhoClicked().sendMessage(ChatColor.RED + "Not enough money!");
                     }
                 }
                 if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.LIGHT_PURPLE + "Fake Card")) {
@@ -531,7 +531,7 @@ public class InventoryClickListener implements Listener {
                         event.getWhoClicked().getInventory().removeItem(new ItemStack(Material.STICK, 2));
                         ItemStack card = new ItemStack(Material.TRIPWIRE_HOOK);
                         ItemMeta cardm = card.getItemMeta();
-                        cardm.setDisplayName(ChatColor.BLUE + "Keycard " + Color.fromRGB(255, 59, 98) + "[CONTRABAND]");
+                        cardm.setDisplayName(ChatColor.BLUE + "Keycard " + ChatColor.RED + "[CONTRABAND]");
                         card.setItemMeta(cardm);
                         event.getWhoClicked().getInventory().addItem(card);
                     }
@@ -560,7 +560,7 @@ public class InventoryClickListener implements Listener {
                             event.getWhoClicked().getInventory().setChestplate(orangeboot);
                         }
                     } else {
-                        event.getWhoClicked().sendMessage(Color.fromRGB(255, 59, 98) + "Not enough money!");
+                        event.getWhoClicked().sendMessage(ChatColor.RED + "Not enough money!");
                     }
                 }
                 if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.LIGHT_PURPLE + "Normal Crafting")) {

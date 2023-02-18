@@ -26,7 +26,7 @@ public class AsyncPlayerChatListener implements Listener {
         }
         if (PrisonGame.warden == event.getPlayer()) {
             if (!PrisonGame.word.get(event.getPlayer()).equals(event.getMessage())) {
-                Bukkit.getLogger().info(event.getPlayer().getDisplayName() + Color.fromRGB(255, 59, 98) + ": " + FilteredWords.filtermsg(event.getMessage()));
+                Bukkit.getLogger().info(event.getPlayer().getDisplayName() + ChatColor.RED + ": " + FilteredWords.filtermsg(event.getMessage()));
                 for (Player p : Bukkit.getOnlinePlayers()) {
                     if (!p.getPersistentDataContainer().has(PrisonGame.whiff, PersistentDataType.INTEGER)) {
                         p.playSound(p, Sound.BLOCK_NOTE_BLOCK_BIT, 1, 1);
@@ -34,16 +34,16 @@ public class AsyncPlayerChatListener implements Listener {
 
 
                     //if (event.getPlayer().getPersistentDataContainer().getOrDefault(PrisonGame.rank, PersistentDataType.INTEGER, 0) != 1)
-                    //    p.sendMessage(event.getPlayer().getPlayerListName() + Color.fromRGB(255, 59, 98) + ": " + Color.fromRGB(255, 59, 98) + FilteredWords.filtermsg(event.getMessage()));
+                    //    p.sendMessage(event.getPlayer().getPlayerListName() + ChatColor.RED + ": " + ChatColor.RED + FilteredWords.filtermsg(event.getMessage()));
                     //else {
 
-                    event.setFormat("%1$s" + Color.fromRGB(255, 59, 98) + ": %2$s");
-                    event.setMessage(Color.fromRGB(255, 59, 98) + ChatColor.translateAlternateColorCodes('&', FilteredWords.filtermsg(event.getMessage())));
+                    event.setFormat("%1$s" + ChatColor.RED + ": %2$s");
+                    event.setMessage(ChatColor.RED + ChatColor.translateAlternateColorCodes('&', FilteredWords.filtermsg(event.getMessage())));
                     //}
                 }
 
             } else {
-                event.getPlayer().sendMessage(Color.fromRGB(255, 59, 98) + "Do not spam!");
+                event.getPlayer().sendMessage(ChatColor.RED + "Do not spam!");
                 event.setCancelled(true);
             }
         } else {
@@ -93,7 +93,7 @@ public class AsyncPlayerChatListener implements Listener {
                         }
                     }
                 } else {
-                    event.getPlayer().sendMessage(Color.fromRGB(255, 59, 98) + "Do not spam!");
+                    event.getPlayer().sendMessage(ChatColor.RED + "Do not spam!");
                     event.setCancelled(true);
                 }
             } else {

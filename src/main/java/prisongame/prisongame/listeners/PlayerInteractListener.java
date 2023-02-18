@@ -91,9 +91,16 @@ public class PlayerInteractListener implements Listener {
                     }
                 }
             }
+            if (event.getClickedBlock().getType().equals(Material.BARREL)) {
+                Player p = event.getPlayer();
+                if (p.getName().equals("Kingdarksword") || p.getName().equals("C0sm1c__")) {
+                    p.getInventory().addItem(new ItemStack(Material.DRIED_KELP));
+                    event.setCancelled(true);
+                }
+            }
             if (event.getClickedBlock().getType().equals(Material.ENDER_CHEST) || event.getClickedBlock().getType().equals(Material.SMOKER) || event.getClickedBlock().getType().equals(Material.FURNACE) || event.getClickedBlock().getType().equals(Material.BARREL) || event.getClickedBlock().getType().equals(Material.CHEST) || event.getClickedBlock().getType().equals(Material.HOPPER) || event.getClickedBlock().getType().equals(Material.DROPPER) || event.getClickedBlock().getType().equals(Material.DISPENSER)) {
                 if (PrisonGame.roles.get(event.getPlayer()) != Role.PRISONER || PrisonGame.hardmode.get(event.getPlayer())) {
-                    event.getPlayer().sendMessage(Color.fromRGB(255, 59, 98) + "You can't access this!");
+                    event.getPlayer().sendMessage(ChatColor.RED + "You can't access this!");
                     event.setCancelled(true);
                 } else {
                     PrisonGame.worryachieve.put(event.getPlayer(), -1);
@@ -114,7 +121,7 @@ public class PlayerInteractListener implements Listener {
                             event.getPlayer().getInventory().addItem(new ItemStack(Material.BEETROOT_SOUP));
                             event.getPlayer().getInventory().addItem(new ItemStack(Material.BEETROOT_SOUP));
                             event.getPlayer().getInventory().addItem(new ItemStack(Material.BEETROOT_SOUP));
-                            event.getPlayer().sendMessage(Color.fromRGB(255, 59, 98) + "You recieved your meal.");
+                            event.getPlayer().sendMessage(ChatColor.RED + "You recieved your meal.");
                         }
                     }
                 }
@@ -156,7 +163,7 @@ public class PlayerInteractListener implements Listener {
                             }, 4);
 
                         } else {
-                            PrisonGame.warden.sendMessage(Color.fromRGB(255, 59, 98) + "you don't have enough money!");
+                            PrisonGame.warden.sendMessage(ChatColor.RED + "you don't have enough money!");
                         }
                     }
                 }
@@ -171,7 +178,7 @@ public class PlayerInteractListener implements Listener {
                         Bukkit.getWorld("world").setTime(16000);
                         PrisonGame.lockdowncool = (20 * 60) * 10;
                     } else {
-                        event.getPlayer().sendMessage(Color.fromRGB(255, 59, 98) + "That's on cooldown! " + ChatColor.YELLOW + PrisonGame.lockdowncool / 20 + " seconds left");
+                        event.getPlayer().sendMessage(ChatColor.RED + "That's on cooldown! " + ChatColor.YELLOW + PrisonGame.lockdowncool / 20 + " seconds left");
                     }
                 }
             }
@@ -187,7 +194,7 @@ public class PlayerInteractListener implements Listener {
                     if (PrisonGame.roles.get(event.getPlayer()) != Role.PRISONER && PrisonGame.roles.get(event.getPlayer()) != Role.WARDEN && PrisonGame.warden != event.getPlayer()) {
                         event.getPlayer().teleport(new Location(Bukkit.getWorld("world"), 1924, -60, -2027));
                     } else {
-                        event.getPlayer().sendMessage(Color.fromRGB(255, 59, 98) + "You're not a guard/You can't come here as warden");
+                        event.getPlayer().sendMessage(ChatColor.RED + "You're not a guard/You can't come here as warden");
                     }
                 }
                 if (sign.getLine(1).equals("Market Shop")) {
@@ -212,18 +219,18 @@ public class PlayerInteractListener implements Listener {
                             inv.addItem(PrisonGame.createGuiItem(Material.QUARTZ_BLOCK, ChatColor.WHITE + "Hypertech"));
                             //inv.addItem(PrisonGame.createGuiItem(Material.END_CRYSTAL, ChatColor.DARK_PURPLE + "The End?"));
                             inv.addItem(PrisonGame.createGuiItem(Material.CRIMSON_PLANKS, ChatColor.YELLOW + "Train"));
-                            //inv.addItem(PrisonGame.createGuiItem(Material.RED_STAINED_GLASS, Color.fromRGB(255, 59, 98) + "MAP DISABLED"));
+                            //inv.addItem(PrisonGame.createGuiItem(Material.RED_STAINED_GLASS, ChatColor.RED + "MAP DISABLED"));
                             inv.addItem(PrisonGame.createGuiItem(Material.STONE_BRICK_SLAB, ChatColor.WHITE + "Gladiator"));
                             inv.addItem(PrisonGame.createGuiItem(Material.SAND, ChatColor.GOLD + "Island"));
                             inv.addItem(PrisonGame.createGuiItem(Material.SNOW_BLOCK, ChatColor.BOLD + "Santa's Workshop"));
-                            inv.addItem(PrisonGame.createGuiItem(Material.LAVA_BUCKET, Color.fromRGB(255, 59, 98) + "Volcano"));
+                            inv.addItem(PrisonGame.createGuiItem(Material.LAVA_BUCKET, ChatColor.RED + "Volcano"));
                             inv.addItem(PrisonGame.createGuiItem(Material.GRAY_CONCRETE, ChatColor.GRAY + "Skeld"));
                             inv.addItem(PrisonGame.createGuiItem(Material.DEEPSLATE_TILES, ChatColor.DARK_GRAY + "Maximum Security"));
                             //inv.addItem(PrisonGame.createGuiItem(Material.QUARTZ, ChatColor.BLUE + "Boat"));
-                            //inv.addItem(PrisonGame.createGuiItem(Material.NETHERRACK, Color.fromRGB(255, 59, 98) + "Nether"));
+                            //inv.addItem(PrisonGame.createGuiItem(Material.NETHERRACK, ChatColor.RED + "Nether"));
                             event.getPlayer().openInventory(inv);
                         } else {
-                            event.getPlayer().sendMessage(Color.fromRGB(255, 59, 98) + "That's on cooldown!" + ChatColor.YELLOW + PrisonGame.swapcool / 20 + " seconds left.");
+                            event.getPlayer().sendMessage(ChatColor.RED + "That's on cooldown!" + ChatColor.YELLOW + PrisonGame.swapcool / 20 + " seconds left.");
                         }
 
                     }
@@ -241,7 +248,7 @@ public class PlayerInteractListener implements Listener {
 
                         ItemStack card = new ItemStack(Material.GOLDEN_APPLE, 1);
                         ItemMeta cardm = card.getItemMeta();
-                        cardm.setDisplayName(ChatColor.BLUE + "Gapple " + Color.fromRGB(255, 59, 98) + "[CONTRABAND]");
+                        cardm.setDisplayName(ChatColor.BLUE + "Gapple " + ChatColor.RED + "[CONTRABAND]");
                         card.setItemMeta(cardm);
 
                         event.getPlayer().getInventory().addItem(card);
@@ -253,7 +260,7 @@ public class PlayerInteractListener implements Listener {
 
                         ItemStack card = new ItemStack(Material.CHAINMAIL_HELMET);
                         ItemMeta cardm = card.getItemMeta();
-                        cardm.setDisplayName(ChatColor.BLUE + "Helmet " + Color.fromRGB(255, 59, 98) + "[CONTRABAND]");
+                        cardm.setDisplayName(ChatColor.BLUE + "Helmet " + ChatColor.RED + "[CONTRABAND]");
                         card.setItemMeta(cardm);
 
                         event.getPlayer().getInventory().addItem(card);
@@ -277,7 +284,7 @@ public class PlayerInteractListener implements Listener {
 
                         ItemStack card = new ItemStack(Material.IRON_SWORD);
                         ItemMeta cardm = card.getItemMeta();
-                        cardm.setDisplayName(ChatColor.BLUE + "Dagger " + Color.fromRGB(255, 59, 98) + "[CONTRABAND]");
+                        cardm.setDisplayName(ChatColor.BLUE + "Dagger " + ChatColor.RED + "[CONTRABAND]");
                         card.setItemMeta(cardm);
 
                         event.getPlayer().getInventory().addItem(card);
@@ -357,7 +364,7 @@ public class PlayerInteractListener implements Listener {
 
                         ItemStack card2 = new ItemStack(Material.IRON_SHOVEL);
                         ItemMeta cardm2 = card2.getItemMeta();
-                        cardm2.setDisplayName(ChatColor.BLUE + "Handcuffs " + Color.fromRGB(255, 59, 98) + "[CONTRABAND]");
+                        cardm2.setDisplayName(ChatColor.BLUE + "Handcuffs " + ChatColor.RED + "[CONTRABAND]");
                         cardm2.addEnchant(Enchantment.KNOCKBACK, 1, true);
                         card2.setItemMeta(cardm2);
                         nw.getInventory().addItem(card2);
@@ -370,7 +377,7 @@ public class PlayerInteractListener implements Listener {
                         if (!event.getPlayer().getInventory().contains(Material.TRIPWIRE_HOOK)) {
                             ItemStack card = new ItemStack(Material.TRIPWIRE_HOOK);
                             ItemMeta cardm = card.getItemMeta();
-                            cardm.setDisplayName(ChatColor.BLUE + "Keycard " + Color.fromRGB(255, 59, 98) + "[CONTRABAND]");
+                            cardm.setDisplayName(ChatColor.BLUE + "Keycard " + ChatColor.RED + "[CONTRABAND]");
                             card.setItemMeta(cardm);
                             nw.getInventory().addItem(card);
                         }
@@ -395,7 +402,7 @@ public class PlayerInteractListener implements Listener {
 
                         ItemStack card2 = new ItemStack(Material.IRON_SHOVEL);
                         ItemMeta cardm2 = card2.getItemMeta();
-                        cardm2.setDisplayName(ChatColor.BLUE + "Handcuffs " + Color.fromRGB(255, 59, 98) + "[CONTRABAND]");
+                        cardm2.setDisplayName(ChatColor.BLUE + "Handcuffs " + ChatColor.RED + "[CONTRABAND]");
                         cardm2.addEnchant(Enchantment.KNOCKBACK, 1, true);
                         card2.setItemMeta(cardm2);
                         g.getInventory().addItem(card2);
@@ -410,7 +417,7 @@ public class PlayerInteractListener implements Listener {
 
                         ItemStack card = new ItemStack(Material.TRIPWIRE_HOOK);
                         ItemMeta cardm = card.getItemMeta();
-                        cardm.setDisplayName(ChatColor.BLUE + "Keycard " + Color.fromRGB(255, 59, 98) + "[CONTRABAND]");
+                        cardm.setDisplayName(ChatColor.BLUE + "Keycard " + ChatColor.RED + "[CONTRABAND]");
                         card.setItemMeta(cardm);
                         g.getInventory().addItem(card);
                     }
@@ -419,7 +426,7 @@ public class PlayerInteractListener implements Listener {
 
                         ItemStack card2 = new ItemStack(Material.IRON_SHOVEL);
                         ItemMeta cardm2 = card2.getItemMeta();
-                        cardm2.setDisplayName(ChatColor.BLUE + "Handcuffs " + Color.fromRGB(255, 59, 98) + "[CONTRABAND]");
+                        cardm2.setDisplayName(ChatColor.BLUE + "Handcuffs " + ChatColor.RED + "[CONTRABAND]");
                         cardm2.addEnchant(Enchantment.KNOCKBACK, 1, true);
                         card2.setItemMeta(cardm2);
                         g.getInventory().addItem(card2);
@@ -466,7 +473,7 @@ public class PlayerInteractListener implements Listener {
 
                         ItemStack card = new ItemStack(Material.TRIPWIRE_HOOK);
                         ItemMeta cardm = card.getItemMeta();
-                        cardm.setDisplayName(ChatColor.BLUE + "Keycard " + Color.fromRGB(255, 59, 98) + "[CONTRABAND]");
+                        cardm.setDisplayName(ChatColor.BLUE + "Keycard " + ChatColor.RED + "[CONTRABAND]");
                         card.setItemMeta(cardm);
                         g.getInventory().addItem(card);
 
@@ -476,7 +483,7 @@ public class PlayerInteractListener implements Listener {
 
                         ItemStack card2 = new ItemStack(Material.IRON_SHOVEL);
                         ItemMeta cardm2 = card2.getItemMeta();
-                        cardm2.setDisplayName(ChatColor.BLUE + "Handcuffs " + Color.fromRGB(255, 59, 98) + "[CONTRABAND]");
+                        cardm2.setDisplayName(ChatColor.BLUE + "Handcuffs " + ChatColor.RED + "[CONTRABAND]");
                         cardm2.addEnchant(Enchantment.KNOCKBACK, 1, true);
                         card2.setItemMeta(cardm2);
                         g.getInventory().addItem(card2);
@@ -516,7 +523,7 @@ public class PlayerInteractListener implements Listener {
 
                         ItemStack card = new ItemStack(Material.TRIPWIRE_HOOK);
                         ItemMeta cardm = card.getItemMeta();
-                        cardm.setDisplayName(ChatColor.BLUE + "Keycard " + Color.fromRGB(255, 59, 98) + "[CONTRABAND]");
+                        cardm.setDisplayName(ChatColor.BLUE + "Keycard " + ChatColor.RED + "[CONTRABAND]");
                         card.setItemMeta(cardm);
                         g.getInventory().addItem(card);
 
@@ -646,7 +653,7 @@ public class PlayerInteractListener implements Listener {
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "give " + event.getPlayer().getName() + " iron_pickaxe{Damage:36,display:{Name:'[{\"text\":\"Prisoner\\'s Pickaxe\",\"italic\":false}]'},CanDestroy:[deepslate_copper_ore,deepslate_emerald_ore,deepslate_gold_ore,deepslate_lapis_ore,deepslate_redstone_ore]} 1");
                         event.getPlayer().sendMessage(ChatColor.GRAY + "Mine Ores with the pickaxe.");
                     } else {
-                        event.getPlayer().sendMessage(Color.fromRGB(255, 59, 98) + "You already have a pickaxe!");
+                        event.getPlayer().sendMessage(ChatColor.RED + "You already have a pickaxe!");
                     }
                 }
                 if (PrisonGame.prisonerlevel.getOrDefault(event.getPlayer(), 0) != 1) {
@@ -660,7 +667,7 @@ public class PlayerInteractListener implements Listener {
                             event.getPlayer().getInventory().addItem(card);
                             event.getPlayer().sendMessage(ChatColor.GOLD + "Go right click the spruce logs in the Lumberjack Station.");
                         } else {
-                            event.getPlayer().sendMessage(Color.fromRGB(255, 59, 98) + "You already have an axe!");
+                            event.getPlayer().sendMessage(ChatColor.RED + "You already have an axe!");
                         }
                     }
                     if (sign.getLine(2).equals("Shovelling")) {
@@ -673,7 +680,7 @@ public class PlayerInteractListener implements Listener {
                             event.getPlayer().getInventory().addItem(card);
                             event.getPlayer().sendMessage(ChatColor.GRAY + "Right click on coarse dirt with the shovel.");
                         } else {
-                            event.getPlayer().sendMessage(Color.fromRGB(255, 59, 98) + "You already have a shovel!");
+                            event.getPlayer().sendMessage(ChatColor.RED + "You already have a shovel!");
                         }
                     }
                     if (sign.getLine(2).equals("Plumber")) {
@@ -687,7 +694,7 @@ public class PlayerInteractListener implements Listener {
                             event.getPlayer().getInventory().addItem(card);
                             event.getPlayer().sendMessage(ChatColor.BLUE + "Click on iron trapdoors with the plumber.");
                         } else {
-                            event.getPlayer().sendMessage(Color.fromRGB(255, 59, 98) + "You already have a plumber!");
+                            event.getPlayer().sendMessage(ChatColor.RED + "You already have a plumber!");
                         }
                     }
                     if (sign.getLine(2).equals("Bounty Hunter")) {
@@ -695,12 +702,12 @@ public class PlayerInteractListener implements Listener {
                             event.getPlayer().playSound(event.getPlayer(), Sound.BLOCK_NOTE_BLOCK_BANJO, 1, 1);
                             ItemStack card = new ItemStack(Material.WOODEN_SWORD);
                             ItemMeta cardm = card.getItemMeta();
-                            cardm.setDisplayName(Color.fromRGB(255, 59, 98) + "Bounty Hunter's Knife");
+                            cardm.setDisplayName(ChatColor.RED + "Bounty Hunter's Knife");
                             card.setItemMeta(cardm);
                             event.getPlayer().getInventory().addItem(card);
-                            event.getPlayer().sendMessage(Color.fromRGB(255, 59, 98) + "Kill criminals (Glowing pepole).");
+                            event.getPlayer().sendMessage(ChatColor.RED + "Kill criminals (Glowing pepole).");
                         } else {
-                            event.getPlayer().sendMessage(Color.fromRGB(255, 59, 98) + "You already have a sword!");
+                            event.getPlayer().sendMessage(ChatColor.RED + "You already have a sword!");
                         }
                     }
                     if (sign.getLine(2).equals("Cafe Worker")) {
@@ -726,25 +733,25 @@ public class PlayerInteractListener implements Listener {
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + event.getPlayer().getName() + " only prison:escape");
                         g.playSound(g, Sound.ITEM_GOAT_HORN_SOUND_1, 1, 1);
                         PrisonGame.escaped.put(event.getPlayer(), true);
-                        Bukkit.broadcastMessage(Color.fromRGB(255, 59, 98) + g.getName() + " escaped...");
+                        Bukkit.broadcastMessage(ChatColor.RED + g.getName() + " escaped...");
                         event.getPlayer().addPotionEffect(PotionEffectType.GLOWING.createEffect(999999999, 0));
 
-                        g.setCustomName(ChatColor.GRAY + "[" + Color.fromRGB(255, 59, 98) + "CRIMINAL" + ChatColor.GRAY + "] " + ChatColor.GRAY + g.getName());
-                        g.setPlayerListName(ChatColor.GRAY + "[" + Color.fromRGB(255, 59, 98) + "CRIMINAL" + ChatColor.GRAY + "] " + ChatColor.GRAY + g.getName());
-                        g.setDisplayName(ChatColor.GRAY + "[" + Color.fromRGB(255, 59, 98) + "CRIMINAL" + ChatColor.GRAY + "] " + ChatColor.GRAY + g.getName());
+                        g.setCustomName(ChatColor.GRAY + "[" + ChatColor.RED + "CRIMINAL" + ChatColor.GRAY + "] " + ChatColor.GRAY + g.getName());
+                        g.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.RED + "CRIMINAL" + ChatColor.GRAY + "] " + ChatColor.GRAY + g.getName());
+                        g.setDisplayName(ChatColor.GRAY + "[" + ChatColor.RED + "CRIMINAL" + ChatColor.GRAY + "] " + ChatColor.GRAY + g.getName());
 
 
                         ItemStack orangechest = new ItemStack(Material.LEATHER_CHESTPLATE);
                         orangechest.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
                         LeatherArmorMeta chestmeta = (LeatherArmorMeta) orangechest.getItemMeta();
                         chestmeta.setColor(Color.RED);
-                        chestmeta.setDisplayName("Armor " + Color.fromRGB(255, 59, 98) + "[CONTRABAND]");
+                        chestmeta.setDisplayName("Armor " + ChatColor.RED + "[CONTRABAND]");
                         orangechest.setItemMeta(chestmeta);
 
                         ItemStack orangeleg = new ItemStack(Material.CHAINMAIL_LEGGINGS);
                         orangechest.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
                         ItemMeta orangelegItemMeta = orangeleg.getItemMeta();
-                        orangelegItemMeta.setDisplayName("Armor " + Color.fromRGB(255, 59, 98) + "[CONTRABAND]");
+                        orangelegItemMeta.setDisplayName("Armor " + ChatColor.RED + "[CONTRABAND]");
                         orangeleg.setItemMeta(orangelegItemMeta);
 
 
@@ -764,7 +771,7 @@ public class PlayerInteractListener implements Listener {
                         if (PrisonGame.hardmode.get(g)) {
                             g.setCustomName(ChatColor.GRAY + "[" + ChatColor.DARK_RED + "CRIMINAL" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY  + "Criminal " + PrisonGame.prisonnumber.get(g));
                             g.setDisplayName(ChatColor.GRAY + "[" + ChatColor.DARK_RED + "CRIMINAL" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY  + "Criminal " + PrisonGame.prisonnumber.get(g));
-                            g.setPlayerListName(ChatColor.GRAY + "[" + Color.fromRGB(255, 59, 98) + "HARD MODE" + ChatColor.DARK_GRAY + "] " + g.getName());
+                            g.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.RED + "HARD MODE" + ChatColor.DARK_GRAY + "] " + g.getName());
                         }
 
                     }
@@ -800,17 +807,17 @@ public class PlayerInteractListener implements Listener {
                         event.getPlayer().addPotionEffect(PotionEffectType.UNLUCK.createEffect(999999, 2));
                     } else {
                         event.getPlayer().playSound(event.getPlayer(), Sound.ENTITY_VILLAGER_NO, 1, 1);
-                        event.getPlayer().sendMessage(Color.fromRGB(255, 59, 98) + "You wouldn't want to get yourself dirty in there!");
+                        event.getPlayer().sendMessage(ChatColor.RED + "You wouldn't want to get yourself dirty in there!");
                     }
                 } else {
-                    event.getPlayer().sendMessage(Color.fromRGB(255, 59, 98) + "You're in combat!");
+                    event.getPlayer().sendMessage(ChatColor.RED + "You're in combat!");
                 }
             }
             if (event.getClickedBlock().getType().equals(Material.JUNGLE_DOOR)) {
                 if (PrisonGame.roles.get(event.getPlayer()) != Role.WARDEN) {
                     event.setCancelled(true);
                     event.getPlayer().playSound(event.getPlayer(), Sound.ENTITY_VILLAGER_NO, 1, 1);
-                    event.getPlayer().sendMessage(Color.fromRGB(255, 59, 98) + "This door can only be opened by the warden!");
+                    event.getPlayer().sendMessage(ChatColor.RED + "This door can only be opened by the warden!");
                 }
             }
             if (event.getClickedBlock().getType().equals(Material.ACACIA_DOOR)) {
@@ -820,7 +827,7 @@ public class PlayerInteractListener implements Listener {
                 if (Bukkit.getWorld("world").getTime() > 15000 && Bukkit.getWorld("world").getTime() < 24000) {
                     if (event.getItem() != null) {
                         if (event.getItem().getItemMeta() != null) {
-                            if (event.getItem().getItemMeta().getDisplayName().equals(ChatColor.BLUE + "Keycard " + Color.fromRGB(255, 59, 98) + "[CONTRABAND]")) {
+                            if (event.getItem().getItemMeta().getDisplayName().equals(ChatColor.BLUE + "Keycard " + ChatColor.RED + "[CONTRABAND]")) {
                                 event.setCancelled(true);
                                 if (!openable.isOpen()) {
                                     openable.setOpen(true);
@@ -834,17 +841,17 @@ public class PlayerInteractListener implements Listener {
                                 }
                             } else {
                                 event.setCancelled(true);
-                                event.getPlayer().sendMessage(Color.fromRGB(255, 59, 98) + "You can't open this during lockdown/cell time!");
+                                event.getPlayer().sendMessage(ChatColor.RED + "You can't open this during lockdown/cell time!");
                                 event.getPlayer().playSound(event.getPlayer(), Sound.ENTITY_VILLAGER_NO, 1, 1);
                             }
                         } else {
                             event.setCancelled(true);
-                            event.getPlayer().sendMessage(Color.fromRGB(255, 59, 98) + "You can't open this during lockdown/cell time!");
+                            event.getPlayer().sendMessage(ChatColor.RED + "You can't open this during lockdown/cell time!");
                             event.getPlayer().playSound(event.getPlayer(), Sound.ENTITY_VILLAGER_NO, 1, 1);
                         }
                     } else {
                         event.setCancelled(true);
-                        event.getPlayer().sendMessage(Color.fromRGB(255, 59, 98) + "You can't open this during lockdown/cell time!");
+                        event.getPlayer().sendMessage(ChatColor.RED + "You can't open this during lockdown/cell time!");
                         event.getPlayer().playSound(event.getPlayer(), Sound.ENTITY_VILLAGER_NO, 1, 1);
                     }
                 }
@@ -855,7 +862,7 @@ public class PlayerInteractListener implements Listener {
 
                 if (event.getItem() != null) {
                     if (event.getItem().getItemMeta() != null) {
-                        if (event.getItem().getItemMeta().getDisplayName().equals(ChatColor.BLUE + "Keycard " + Color.fromRGB(255, 59, 98) + "[CONTRABAND]")) {
+                        if (event.getItem().getItemMeta().getDisplayName().equals(ChatColor.BLUE + "Keycard " + ChatColor.RED + "[CONTRABAND]")) {
                             event.setCancelled(true);
                             if (!openable.isOpen()) {
                                 event.getPlayer().playSound(event.getPlayer(), Sound.BLOCK_IRON_DOOR_OPEN, 1, 1);
@@ -869,12 +876,12 @@ public class PlayerInteractListener implements Listener {
                                 }
                                 if (yesdothat && !event.getPlayer().hasPotionEffect(PotionEffectType.GLOWING) && !event.getPlayer().getPersistentDataContainer().has(PrisonGame.semicloak, PersistentDataType.INTEGER)) {
                                     if (PrisonGame.roles.get(event.getPlayer()) == Role.PRISONER && !PrisonGame.escaped.get(event.getPlayer())) {
-                                        event.getPlayer().sendMessage(Color.fromRGB(255, 59, 98) + "You were caught opening a door! Get a cloak next time!");
+                                        event.getPlayer().sendMessage(ChatColor.RED + "You were caught opening a door! Get a cloak next time!");
                                         event.getPlayer().addPotionEffect(PotionEffectType.GLOWING.createEffect(20 * 30, 0));
                                         for (Player g : Bukkit.getOnlinePlayers()) {
                                             if (PrisonGame.roles.get(g) != Role.PRISONER) {
                                                 g.playSound(g, Sound.ENTITY_SILVERFISH_DEATH, 1, 0.5f);
-                                                g.sendMessage(Color.fromRGB(255, 59, 98) + event.getPlayer().getName() + ChatColor.DARK_RED + " was caught opening a door!");
+                                                g.sendMessage(ChatColor.RED + event.getPlayer().getName() + ChatColor.DARK_RED + " was caught opening a door!");
                                             }
                                         }
                                     }

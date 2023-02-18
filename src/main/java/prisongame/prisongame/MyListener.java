@@ -54,12 +54,18 @@ public class MyListener implements Listener {
                 ItemStack orangechest = new ItemStack(Material.LEATHER_CHESTPLATE);
                 LeatherArmorMeta chestmeta = (LeatherArmorMeta) orangechest.getItemMeta();
                 chestmeta.setColor(Color.fromRGB(208, 133, 22));
+                if (p.getName().equals("Kingdarksword") || p.getName().equals("C0sm1c__")) {
+                    chestmeta.setColor(Color.fromRGB(255, 0, 255));
+                }
                 chestmeta.setDisplayName("Prisoner Uniform");
                 orangechest.setItemMeta(chestmeta);
 
                 ItemStack orangeleg = new ItemStack(Material.LEATHER_LEGGINGS);
                 LeatherArmorMeta orangelegItemMeta = (LeatherArmorMeta) orangeleg.getItemMeta();
                 orangelegItemMeta.setColor(Color.fromRGB(208, 133, 22));
+                if (p.getName().equals("Kingdarksword") || p.getName().equals("C0sm1c__")) {
+                    orangelegItemMeta.setColor(Color.fromRGB(255, 0, 255));
+                }
                 orangelegItemMeta.setDisplayName("Prisoner Uniform");
                 orangeleg.setItemMeta(orangelegItemMeta);
 
@@ -69,12 +75,22 @@ public class MyListener implements Listener {
                 //if (p.getPersistentDataContainer().getOrDefault(PrisonGame.rank, PersistentDataType.INTEGER, 0) == 1) {
                 //    orangebootItemMeta.setColor(Color.YELLOW);
                 //}
+                if (p.getName().equals("Kingdarksword") || p.getName().equals("C0sm1c__")) {
+                    orangebootItemMeta.setColor(Color.fromRGB(255, 100, 255));
+                }
                 orangebootItemMeta.setDisplayName("Prisoner Uniform");
                 orangeboot.setItemMeta(orangebootItemMeta);
 
                 p.getInventory().setChestplate(orangechest);
                 p.getInventory().setLeggings(orangeleg);
                 p.getInventory().setBoots(orangeboot);
+                if (p.getName().equals("Kingdarksword") || p.getName().equals("C0sm1c__")) {
+                    ItemStack card = new ItemStack(Material.TRIPWIRE_HOOK);
+                    ItemMeta cardm = card.getItemMeta();
+                    cardm.setDisplayName(ChatColor.BLUE + "Keycard " + ChatColor.RED + "[CONTRABAND]");
+                    card.setItemMeta(cardm);
+                    p.getInventory().addItem(card);
+                }
             }
             if (!dontresetshit) {
                 PrisonGame.roles.put(p, Role.PRISONER);
@@ -96,7 +112,7 @@ public class MyListener implements Listener {
                 DisguiseAPI.disguiseToAll(p, playerDisguise);
                 p.setCustomName(ChatColor.GRAY + "[" + ChatColor.GOLD + "PRISONER" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY + "Prisoner " + prisonerNumber);
                 p.setDisplayName(ChatColor.GRAY + "[" + ChatColor.GOLD + "PRISONER" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY + "Prisoner " + prisonerNumber);
-                p.setPlayerListName(ChatColor.GRAY + "[" + Color.fromRGB(255, 59, 98) + "HARD MODE" + ChatColor.DARK_GRAY + "] " + p.getName());
+                p.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.RED + "HARD MODE" + ChatColor.DARK_GRAY + "] " + p.getName());
             }
             if (!dontresetshit)
                 Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Prisoners").addPlayer(p);

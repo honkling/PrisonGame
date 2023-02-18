@@ -20,7 +20,7 @@ public class ResetAscensionCommand implements CommandExecutor {
             p.getPersistentDataContainer().remove(PrisonGame.reinforcement);
             p.getPersistentDataContainer().remove(PrisonGame.semicloak);
             p.getPersistentDataContainer().remove(PrisonGame.ascendcoins);
-            p.sendMessage(Color.fromRGB(255, 59, 98) + "Your ascension has been reset!");
+            p.sendMessage(ChatColor.RED + "Your ascension has been reset!");
         }
         return true;
     }
