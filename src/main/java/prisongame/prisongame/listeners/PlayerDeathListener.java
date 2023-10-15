@@ -1,8 +1,6 @@
 package prisongame.prisongame.listeners;
 
 import org.bukkit.*;
-import org.bukkit.entity.BlockDisplay;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

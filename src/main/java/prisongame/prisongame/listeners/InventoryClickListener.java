@@ -13,6 +13,7 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffectType;
 import prisongame.prisongame.MyListener;
+import prisongame.prisongame.Prison;
 import prisongame.prisongame.PrisonGame;
 import prisongame.prisongame.lib.Role;
 
@@ -253,255 +254,24 @@ public class InventoryClickListener implements Listener {
                 }
                 if (PrisonGame.warden != null) {
                     if (PrisonGame.swapcool <= 0 && PrisonGame.warden.equals(event.getWhoClicked())) {
-                        if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.DARK_PURPLE + "The End?")) {
-                            PrisonGame.active = PrisonGame.endmap;
-                            PrisonGame.swapcool = (20 * 60) * 5;
-                            reloadBert();
-                            for (Player p : Bukkit.getOnlinePlayers()) {
-                                if (PrisonGame.roles.get(p) != Role.WARDEN) {
-                                    MyListener.playerJoin(p, true);
-                                    p.sendTitle("New prison!", "THE END?");
-                                } else {
-                                    p.teleport(PrisonGame.active.getWardenspawn());
-                                    Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
-                                        p.teleport(PrisonGame.active.getWardenspawn());
-                                    }, 5);
-                                    if (!p.getDisplayName().contains("ASCENDING"))
-                                        p.sendTitle("New prison!", "THE END?");
-                                }
-                            }
-                        }
-                        if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.GRAY + "Fortress Of Gaeae")) {
-                            for (Player p : Bukkit.getOnlinePlayers()) {
-                                p.teleport(new Location(Bukkit.getWorld("world"), -2062, -50, 1945));
-                            }
-                            PrisonGame.active = PrisonGame.gaeae;
-                            PrisonGame.swapcool = (20 * 60) * 5;
-                            reloadBert();
-                            for (Player p : Bukkit.getOnlinePlayers()) {
-                                if (PrisonGame.roles.get(p) != Role.WARDEN) {
-                                    MyListener.playerJoin(p, true);
-                                    p.sendTitle("New prison!", "FORTRESS OF GAEAE");
-                                } else {
-                                    p.teleport(PrisonGame.active.getWardenspawn());
-                                    Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
-                                        p.teleport(PrisonGame.active.getWardenspawn());
-                                    }, 5);
-                                    if (!p.getDisplayName().contains("ASCENDING"))
-                                        p.sendTitle("New prison!", "FORTRESS OF GAEAE");
-                                }
-                            }
-                        }
-                        if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.DARK_GRAY + "Maximum Security")) {
-                            for (Player p : Bukkit.getOnlinePlayers()) {
-                                p.teleport(new Location(Bukkit.getWorld("world"), -2062, -50, 1945));
-                            }
-                            PrisonGame.active = PrisonGame.ms;
-                            PrisonGame.swapcool = (20 * 60) * 5;
-                            reloadBert();
-                            for (Player p : Bukkit.getOnlinePlayers()) {
-                                if (PrisonGame.roles.get(p) != Role.WARDEN) {
-                                    MyListener.playerJoin(p, true);
-                                    p.sendTitle("New prison!", "MAXIMUM SECURITY");
-                                } else {
-                                    p.teleport(PrisonGame.active.getWardenspawn());
-                                    Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
-                                        p.teleport(PrisonGame.active.getWardenspawn());
-                                    }, 5);
-                                    if (!p.getDisplayName().contains("ASCENDING"))
-                                        p.sendTitle("New prison!", "MAXIMUM SECURITY");
-                                }
-                            }
-                        }
-                        if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.RED + "Volcano")) {
-                            for (Player p : Bukkit.getOnlinePlayers()) {
-                                p.teleport(new Location(Bukkit.getWorld("world"), -2062, -50, 1945));
-                            }
-                            PrisonGame.active = PrisonGame.volcano;
-                            PrisonGame.swapcool = (20 * 60) * 5;
-                            reloadBert();
-                            for (Player p : Bukkit.getOnlinePlayers()) {
-                                if (PrisonGame.roles.get(p) != Role.WARDEN) {
-                                    MyListener.playerJoin(p, true);
-                                    p.sendTitle("New prison!", "VOLCANO");
-                                } else {
-                                    p.teleport(PrisonGame.active.getWardenspawn());
-                                    Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
-                                        p.teleport(PrisonGame.active.getWardenspawn());
-                                    }, 5);
-                                    if (!p.getDisplayName().contains("ASCENDING"))
-                                        p.sendTitle("New prison!", "VOLCANO");
-                                }
-                            }
-                        }
-                        if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.GRAY + "Skeld")) {
-                            for (Player p : Bukkit.getOnlinePlayers()) {
-                                p.teleport(new Location(Bukkit.getWorld("world"), -2062, -50, 1945));
-                            }
-                            PrisonGame.active = PrisonGame.amongus;
-                            PrisonGame.swapcool = (20 * 60) * 5;
-                            reloadBert();
-                            for (Player p : Bukkit.getOnlinePlayers()) {
-                                if (PrisonGame.roles.get(p) != Role.WARDEN) {
-                                    MyListener.playerJoin(p, true);
-                                    p.sendTitle("New prison!", "SKELD");
-                                } else {
-                                    p.teleport(PrisonGame.active.getWardenspawn());
-                                    Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
-                                        p.teleport(PrisonGame.active.getWardenspawn());
-                                    }, 5);
-                                    if (!p.getDisplayName().contains("ASCENDING"))
-                                        p.sendTitle("New prison!", "SKELD");
-                                }
-                            }
-                        }
-                        if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.GOLD + "Island")) {
-                            for (Player p : Bukkit.getOnlinePlayers()) {
-                                p.teleport(new Location(Bukkit.getWorld("world"), -2062, -50, 1945));
-                            }
-                            PrisonGame.active = PrisonGame.island;
-                            PrisonGame.swapcool = (20 * 60) * 5;
-                            reloadBert();
-                            for (Player p : Bukkit.getOnlinePlayers()) {
-                                if (PrisonGame.roles.get(p) != Role.WARDEN) {
-                                    MyListener.playerJoin(p, true);
-                                    p.sendTitle("New prison!", "ISLAND");
-                                } else {
-                                    p.teleport(PrisonGame.active.getWardenspawn());
-                                    Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
-                                        p.teleport(PrisonGame.active.getWardenspawn());
-                                    }, 5);
-                                    if (!p.getDisplayName().contains("ASCENDING"))
-                                        p.sendTitle("New prison!", "ISLAND");
-                                }
-                            }
-                        }
-                        if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.BOLD + "Santa's Workshop")) {
-                            for (Player p : Bukkit.getOnlinePlayers()) {
-                                p.teleport(new Location(Bukkit.getWorld("world"), -2062, -50, 1945));
-                            }
-                            PrisonGame.active = PrisonGame.santa;
-                            PrisonGame.swapcool = (20 * 60) * 5;
-                            reloadBert();
-                            for (Player p : Bukkit.getOnlinePlayers()) {
-                                if (PrisonGame.roles.get(p) != Role.WARDEN) {
-                                    MyListener.playerJoin(p, true);
-                                    p.sendTitle("New prison!", "SANTA'S WORKSHOP");
-                                } else {
-                                    p.teleport(PrisonGame.active.getWardenspawn());
-                                    Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
-                                        p.teleport(PrisonGame.active.getWardenspawn());
-                                    }, 5);
-                                    if (!p.getDisplayName().contains("ASCENDING"))
-                                        p.sendTitle("New prison!", "SANTA'S WORKSHOP");
-                                }
-                            }
-                        }
-                        if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.WHITE + "Gladiator")) {
-                            for (Player p : Bukkit.getOnlinePlayers()) {
-                                p.teleport(new Location(Bukkit.getWorld("world"), -2062, -50, 1945));
-                            }
-                            PrisonGame.active = PrisonGame.gladiator;
-                            PrisonGame.swapcool = (20 * 60) * 5;
-                            reloadBert();
-                            for (Player p : Bukkit.getOnlinePlayers()) {
-                                if (PrisonGame.roles.get(p) != Role.WARDEN) {
-                                    MyListener.playerJoin(p, true);
-                                    p.sendTitle("New prison!", "GLADIATOR");
-                                } else {
-                                    p.teleport(PrisonGame.active.getWardenspawn());
-                                    Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
-                                        p.teleport(PrisonGame.active.getWardenspawn());
-                                    }, 5);
-                                    if (!p.getDisplayName().contains("ASCENDING"))
-                                        p.sendTitle("New prison!", "GLADIATOR");
-                                }
-                            }
-                        }
-                        if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.YELLOW + "Train")) {
-                            for (Player p : Bukkit.getOnlinePlayers()) {
-                                p.teleport(new Location(Bukkit.getWorld("world"), -2062, -50, 1945));
-                            }
-                            PrisonGame.active = PrisonGame.train;
-                            PrisonGame.swapcool = (20 * 60) * 5;
-                            reloadBert();
-                            for (Player p : Bukkit.getOnlinePlayers()) {
-                                if (PrisonGame.roles.get(p) != Role.WARDEN) {
-                                    MyListener.playerJoin(p, true);
-                                    p.sendTitle("New prison!", "TRAIN");
-                                } else {
-                                    p.teleport(PrisonGame.active.getWardenspawn());
-                                    Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
-                                        p.teleport(PrisonGame.active.getWardenspawn());
-                                    }, 5);
-                                    if (!p.getDisplayName().contains("ASCENDING"))
-                                        p.sendTitle("New prison!", "TRAIN");
-                                }
-                            }
-                        }
-                        if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.RED + "Nether")) {
-                            for (Player p : Bukkit.getOnlinePlayers()) {
-                                p.teleport(new Location(Bukkit.getWorld("world"), -2062, -50, 1945));
-                            }
-                            PrisonGame.active = PrisonGame.nether;
-                            PrisonGame.swapcool = (20 * 60) * 5;
-                            reloadBert();
-                            for (Player p : Bukkit.getOnlinePlayers()) {
-                                if (PrisonGame.roles.get(p) != Role.WARDEN) {
-                                    MyListener.playerJoin(p, true);
-                                    p.sendTitle("New prison!", "Nether");
-                                } else {
-                                    p.teleport(PrisonGame.active.getWardenspawn());
-                                    Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
-                                        p.teleport(PrisonGame.active.getWardenspawn());
-                                    }, 5);
-                                    if (!p.getDisplayName().contains("ASCENDING"))
-                                        p.sendTitle("New prison!", "Nether");
-                                }
-                            }
-                        }
-                        if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.BLUE + "Boat")) {
-                            for (Player p : Bukkit.getOnlinePlayers()) {
-                                p.teleport(new Location(Bukkit.getWorld("world"), -2062, -50, 1945));
-                            }
-                            PrisonGame.active = PrisonGame.boat;
-                            PrisonGame.swapcool = (20 * 60) * 5;
-                            reloadBert();
-                            for (Player p : Bukkit.getOnlinePlayers()) {
-                                if (PrisonGame.roles.get(p) != Role.WARDEN) {
-                                    MyListener.playerJoin(p, true);
-                                    p.sendTitle("New prison!", "BOAT");
-                                } else {
-                                    p.teleport(PrisonGame.active.getWardenspawn());
-                                    Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
-                                        p.teleport(PrisonGame.active.getWardenspawn());
-                                    }, 5);
-                                    if (!p.getDisplayName().contains("ASCENDING"))
-                                        p.sendTitle("New prison!", "BOAT");
-                                }
-                            }
-                        }
-                        if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.WHITE + "Hypertech")) {
-                            for (Player p : Bukkit.getOnlinePlayers()) {
-                                p.teleport(new Location(Bukkit.getWorld("world"), -2062, -50, 1945));
-                            }
-                            PrisonGame.active = PrisonGame.hyper;
-                            PrisonGame.swapcool = (20 * 60) * 5;
-                            reloadBert();
-                            for (Player p : Bukkit.getOnlinePlayers()) {
-                                if (PrisonGame.roles.get(p) != Role.WARDEN) {
-                                    MyListener.playerJoin(p, true);
-                                    p.sendTitle("New prison!", "HYPERTECH");
-                                } else {
-                                    p.teleport(PrisonGame.active.getWardenspawn());
-                                    Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
-                                        p.teleport(PrisonGame.active.getWardenspawn());
-                                    }, 5);
-                                    if (!p.getDisplayName().contains("ASCENDING"))
-                                        p.sendTitle("New prison!", "HYPERTECH");
-                                }
-                            }
-                        }
+                        Prison prison = switch (event.getCurrentItem().getItemMeta().getDisplayName()) {
+                            case "§5The End?" -> PrisonGame.endmap;
+                            case "§9Boat" -> PrisonGame.boat;
+                            case "§7Fortress of Gaeae" -> PrisonGame.gaeae;
+                            case "§eTrain" -> PrisonGame.train;
+                            case "§fGladiator" -> PrisonGame.gladiator;
+                            case "§6Island" -> PrisonGame.island;
+                            case "§bSanta's Workshop" -> PrisonGame.santa;
+                            case "§cVolcano" -> PrisonGame.volcano;
+                            case "§7Skeld" -> PrisonGame.amongus;
+                            case "§8Maximum Security" -> PrisonGame.ms;
+                            default -> null;
+                        };
+
+                        if (prison == null)
+                            return;
+
+                        switchMap(prison);
                     }
                 }
                 if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.LIGHT_PURPLE + "Rock")) {
@@ -567,6 +337,37 @@ public class InventoryClickListener implements Listener {
                     event.getWhoClicked().openWorkbench(null, true);
                 }
             }
+        }
+    }
+
+    private void switchMap(Prison prison) {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (player.getDisplayName().contains("ASCENDING"))
+                continue;
+
+            player.teleport(prison.mapSwitch);
+        }
+
+        PrisonGame.active = prison;
+        PrisonGame.swapcool = 20 * 60 * 5;
+
+        reloadBert();
+
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (PrisonGame.roles.get(player) != Role.WARDEN) {
+                MyListener.playerJoin(player, true);
+                player.sendTitle("New prison!", prison.name.toUpperCase());
+                continue;
+            }
+
+            player.teleport(prison.getWardenspawn());
+
+            Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
+                player.teleport(prison.getWardenspawn());
+            }, 5);
+
+            if (!player.getDisplayName().contains("ASCENDING"))
+                player.sendTitle("New prison!", prison.name.toUpperCase());
         }
     }
 }

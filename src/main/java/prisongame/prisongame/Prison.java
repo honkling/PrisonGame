@@ -23,8 +23,10 @@ public class Prison {
     public Location bmshop;
     public Location bmshop2;
     public Location guardShop;
-    public Prison(String nm, Location rp1, Location rp2, Location nb, Location nbot, Location ws, Location cls, Location bme, Location bmoute, Location sol, Location br, Location cfd1, Location cfd2) {
+    public Location mapSwitch;
+    public Prison(String nm, Location ms, Location rp1, Location rp2, Location nb, Location nbot, Location ws, Location cls, Location bme, Location bmoute, Location sol, Location br, Location cfd1, Location cfd2) {
         name = nm;
+        mapSwitch = ms;
         runpoint1 = rp1;
         runpoint2 = rp2;
         nursebed = nb;

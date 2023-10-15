@@ -1,7 +1,5 @@
 package prisongame.prisongame.listeners;
 
-import org.bukkit.ChatColor;
-import org.bukkit.entity.BlockDisplay;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -48,7 +46,6 @@ public class EntityDismountListener implements Listener {
             Method isDisconnectedMethod = connection.getClass().getMethod("isDisconnected");
             return (boolean) isDisconnectedMethod.invoke(connection);
         } catch (NoSuchFieldException | InvocationTargetException | IllegalAccessException | NoSuchMethodException e) {
-
             return false;
         }
     }
