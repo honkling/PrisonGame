@@ -387,7 +387,7 @@ public class MyTask extends BukkitRunnable {
             Bukkit.getWorld("world").setTime(0);
         }
         if (Bukkit.getWorld("world").getTime() == 16000) {
-            Bukkit.broadcastMessage(ChatColor.RED + "All cells have been automatticaly closed! " + ChatColor.DARK_RED + "GET TO SLEEP!");
+            Bukkit.broadcastMessage(ChatColor.RED + "All cells have been automatically closed! " + ChatColor.DARK_RED + "GET TO SLEEP!");
             LivingEntity le = (LivingEntity) Bukkit.getWorld("world").spawnEntity(new Location(Bukkit.getWorld("world"), -40, -58, -973), EntityType.ZOMBIE);
             le.addPotionEffect(PotionEffectType.INCREASE_DAMAGE.createEffect(999999, 255));
             le.addPotionEffect(PotionEffectType.SPEED.createEffect(999999, 2));
