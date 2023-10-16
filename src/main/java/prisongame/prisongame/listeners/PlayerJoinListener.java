@@ -51,7 +51,7 @@ public class PlayerJoinListener implements Listener {
             event.getPlayer().kickPlayer(ChatColor.translateAlternateColorCodes('&', "&4&lThe server is currently &a&lReloading &c&lOr &4Completely fucked up. &c&lIf this error is occuring constanly please alert me @ &bhttps://discord.gg/GrcHKkFQsv"));
         }
         Player pe = (Player) event.getPlayer();
-        if (PrisonGame.savedPlayerGuards.get(PrisonGame.warden.getUniqueId()).containsKey(pe.getUniqueId())) {
+        if (PrisonGame.warden != null && PrisonGame.savedPlayerGuards.get(PrisonGame.warden.getUniqueId()).containsKey(pe.getUniqueId())) {
             switch (PrisonGame.savedPlayerGuards.get(PrisonGame.warden.getUniqueId()).get(pe.getUniqueId())) {
                 case 2 -> PrisonGame.setNurse((Player) pe);
                 case 1 -> PrisonGame.setGuard((Player) pe);
