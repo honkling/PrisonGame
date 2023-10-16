@@ -14,6 +14,7 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
@@ -394,7 +395,6 @@ public final class PrisonGame extends JavaPlugin {
         pm.registerEvents(new PlayerTeleportListener(), this);
         pm.registerEvents(new PlayerToggleSneakListener(), this);
         pm.registerEvents(new PlayerBedEnterListener(), this);
-
     }
 
     @Override

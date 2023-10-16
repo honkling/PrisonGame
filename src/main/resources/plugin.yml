@@ -1,10 +1,12 @@
-name: ZPrisonGame
+name: PrisonGame
 version: ${project.version}
+softdepend:
+  - LuckPerms
 depend:
   - LuckPerms
   - LibsDisguises
 main: prisongame.prisongame.PrisonGame
-api-version: 1.19
+api-version: 1.20
 
 commands:
   warden:
