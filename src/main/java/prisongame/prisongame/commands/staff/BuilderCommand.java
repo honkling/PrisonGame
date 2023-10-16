@@ -28,11 +28,13 @@ public class BuilderCommand implements CommandExecutor {
                 inv.addItem(PrisonGame.createGuiItem(Material.ENDER_PEARL, ChatColor.YELLOW + "Santa's Workshop [CMD]", "tp 2000 0 2000"));
                 inv.addItem(PrisonGame.createGuiItem(Material.ENDER_PEARL, ChatColor.YELLOW + "Volcano [CMD]", "tp -2000 0 -2000"));
                 inv.addItem(PrisonGame.createGuiItem(Material.ENDER_PEARL, ChatColor.YELLOW + "Skeld [CMD]", "tp 1500 0 1500"));
+                inv.addItem(PrisonGame.createGuiItem(Material.ENDER_PEARL, ChatColor.YELLOW + "RAG [CMD]", "tp 200 0 200"));
                 inv.addItem(PrisonGame.createGuiItem(Material.ENDER_PEARL, ChatColor.YELLOW + "Nether [CMD]", "tp 1000 0 1000"));
                 inv.addItem(PrisonGame.createGuiItem(Material.ENDER_PEARL, ChatColor.YELLOW + "Boat [CMD]", "tp -1000 0 0"));
                 inv.addItem(PrisonGame.createGuiItem(Material.ENDER_PEARL, ChatColor.YELLOW + "Maximum Security [CMD]", "tp 700 0 700"));
                 inv.addItem(PrisonGame.createGuiItem(Material.PLAYER_HEAD, ChatColor.YELLOW + "Teleport All Creative [CMD]", "tp @a[gamemode=creative] @s"));
                 inv.addItem(PrisonGame.createGuiItem(Material.PLAYER_HEAD, ChatColor.YELLOW + "Get Coords [CUSTOM]", "gets you the coords required for me to put in the plugin"));
+
                 p.openInventory(inv);
             } else {
                 p.sendMessage("You aren't a builder!");
