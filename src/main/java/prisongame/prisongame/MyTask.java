@@ -918,9 +918,8 @@ public class MyTask extends BukkitRunnable {
             }
 
             if (!PrisonGame.hardmode.get(p)) {
-                LuckPerms api = LuckPermsProvider.get();;
-                if (api.getPlayerAdapter(Player.class).getUser(p).getCachedData().getMetaData().getPrefix() != null) {
-                    p.setCustomName(ChatColor.GRAY + "[" + api.getPlayerAdapter(Player.class).getUser(p).getCachedData().getMetaData().getPrefix() + ChatColor.GRAY + "] " + p.getDisplayName());
+                if (PrisonGame.api.getPlayerAdapter(Player.class).getUser(p).getCachedData().getMetaData().getPrefix() != null) {
+                    p.setCustomName(ChatColor.GRAY + "[" + PrisonGame.api.getPlayerAdapter(Player.class).getUser(p).getCachedData().getMetaData().getPrefix() + ChatColor.GRAY + "] " + p.getDisplayName());
                 }
             } else {
                 p.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.RED + "HARD MODE" + ChatColor.GRAY + "] " + ChatColor.GRAY + p.getName());

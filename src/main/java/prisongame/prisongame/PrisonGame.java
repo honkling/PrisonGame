@@ -2,6 +2,8 @@ package prisongame.prisongame;
 
 import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.disguisetypes.PlayerDisguise;
+import net.luckperms.api.LuckPerms;
+import net.luckperms.api.LuckPermsProvider;
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
@@ -184,9 +186,12 @@ public final class PrisonGame extends JavaPlugin {
 
         return loc;
     }
+
+    public static LuckPerms api;
     @Override
     public void onEnable() {
         // Plugin startup logic
+        api = LuckPermsProvider.get();
         if (Data.loadData("saveguard.data") != null) {
             Data data = new Data(Data.loadData("saveguard.data"));
             savedPlayerGuards = data.playerguards;
