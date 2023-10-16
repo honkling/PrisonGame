@@ -1,5 +1,7 @@
 name: ZPrisonGame
 version: ${project.version}
+loadbefore:
+  - LuckPerms
 depend:
   - LuckPerms
   - LibsDisguises
