@@ -680,7 +680,7 @@ public class MyTask extends BukkitRunnable {
         if (PrisonGame.active.getName().equals("Island")) {
             bossbar.addFlag(BarFlag.CREATE_FOG);
         }
-        bossbar.setProgress(((float) Bukkit.getWorld("world").getTime() - (float) timer1) / ((float) timer2 - (float) timer1));
+        bossbar.setProgress(Math.max(0, Math.min(1, ((float) Bukkit.getWorld("world").getTime() - (float) timer1) / ((float) timer2 - (float) timer1))));
         if (Bukkit.getWorld("world").getTime() == timer2) {
             for (Player p : Bukkit.getOnlinePlayers()) {
                 Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
