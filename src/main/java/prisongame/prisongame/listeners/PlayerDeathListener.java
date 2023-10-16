@@ -123,7 +123,7 @@ public class PlayerDeathListener implements Listener {
         if (PrisonGame.roles.get(event.getEntity()) == Role.PRISONER) {
             event.setDeathMessage(ChatColor.GRAY + event.getDeathMessage());
             if (event.getEntity().getKiller() != null) {
-                if (PrisonGame.roles.get(event.getEntity().getKiller()) == Role.WARDEN) {
+                if (PrisonGame.roles.get(event.getEntity().getKiller()) == Role.WARDEN && event.getEntity().hasPotionEffect(PotionEffectType.UNLUCK)) {
                     Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + event.getEntity().getName() + " only prison:badluck");
                 }
                 if (PrisonGame.escaped.get(event.getEntity().getKiller())) {

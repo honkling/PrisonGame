@@ -271,6 +271,7 @@ public class InventoryClickListener implements Listener {
                         if (prison == null)
                             return;
 
+                        event.setCancelled(true);
                         switchMap(prison);
                     }
                 }
