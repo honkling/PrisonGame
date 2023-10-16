@@ -254,10 +254,13 @@ public class InventoryClickListener implements Listener {
                 }
                 if (PrisonGame.warden != null) {
                     if (PrisonGame.swapcool <= 0 && PrisonGame.warden.equals(event.getWhoClicked())) {
+                        System.out.println(event.getCurrentItem().getItemMeta().getDisplayName());
+
                         Prison prison = switch (event.getCurrentItem().getItemMeta().getDisplayName()) {
                             case "§5The End?" -> PrisonGame.endmap;
                             case "§9Boat" -> PrisonGame.boat;
-                            case "§7Fortress of Gaeae" -> PrisonGame.gaeae;
+                            case "§7Fortress Of Gaeae" -> PrisonGame.gaeae;
+                            case "§fHypertech" -> PrisonGame.hyper;
                             case "§eTrain" -> PrisonGame.train;
                             case "§fGladiator" -> PrisonGame.gladiator;
                             case "§6Island" -> PrisonGame.island;
@@ -267,6 +270,8 @@ public class InventoryClickListener implements Listener {
                             case "§8Maximum Security" -> PrisonGame.ms;
                             default -> null;
                         };
+
+                        System.out.println();
 
                         if (prison == null)
                             return;
