@@ -267,6 +267,7 @@ public class InventoryClickListener implements Listener {
                             case "§bSanta's Workshop" -> PrisonGame.santa;
                             case "§cVolcano" -> PrisonGame.volcano;
                             case "§7Skeld" -> PrisonGame.amongus;
+                            case "§aRocksNGrass" -> PrisonGame.rag;
                             case "§8Maximum Security" -> PrisonGame.ms;
                             default -> null;
                         };

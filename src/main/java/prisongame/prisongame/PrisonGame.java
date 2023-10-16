@@ -56,6 +56,7 @@ public final class PrisonGame extends JavaPlugin {
     static HashMap<Player, Integer> timebet = new HashMap<>();
     public static Boolean givepig = false;
     public static Prison gaeae;
+    public static Prison rag;
     public static Prison hyper;
     public static Prison endmap;
     public static Prison train;
@@ -186,12 +187,12 @@ public final class PrisonGame extends JavaPlugin {
     @Override
     public void onEnable() {
         // Plugin startup logic
-
         if (Data.loadData("saveguard.data") != null) {
             Data data = new Data(Data.loadData("saveguard.data"));
             savedPlayerGuards = data.playerguards;
             Bukkit.broadcastMessage("LOADED PLAYER'S GUARDS");
         }
+
         active = gaeae;
         nightvis = new NamespacedKey(PrisonGame.getPlugin(PrisonGame.class), "night");
         mny = new NamespacedKey(PrisonGame.getPlugin(PrisonGame.class), "money");
@@ -306,6 +307,7 @@ public final class PrisonGame extends JavaPlugin {
         volcano = new Prison("Volcano", new Location(Bukkit.getWorld("world"), -2062, -50, 1945), nl("world", -2016D, -56D, -1933D, 0f, 0f), nl("world", -2025D, -60D, -1925D, 0f, 0f), nl("world", -2029D, -59D, -2001D, 0f, 0f), nl("world", -2029D, -59D, -2001D, 0f, 0f), nl("world", -2026D, -55D, -1956D, -90f, 0f), nl("world", -2004D, -60D, -1981D, 0f, 0f), nl("world", -1931D, -57D, -1976D, 0f, 0f), nl("world", -2019D, -60D, -1990D, 0f, 0f), nl("world", -2032D, -60D, -1966D, 0f, 0f), nl("world", -2011.5D, -60D, -1965.5D, 0f, 0f), nl("world", -2041D, -60D, -1974D, 0f, 0f), nl("world", -2041D, -57D, -1979D, 0f, 0f));
         boat = new Prison("Boat", new Location(Bukkit.getWorld("world"), -2062, -50, 1945), nl("world", -1000D, -47D, 24D, 0f, 0f), nl("world", -996D, -50D, 22D, 0f, 0f), nl("world", -998D, -48D, 17D, 0f, 0f), nl("world", -998D, -48D, 17D, 0f, 0f), nl("world", -994D, -44D, 27D, -90f, 0f), nl("world", -993D, -54D, 7D, 0f, 0f), nl("world", -961D, -59D, 64D, 0f, 0f), nl("world", -999.5D, -49D, 7D, 0f, 0f), nl("world", -988D, -57D, 18D, 0f, 0f), nl("world", -987D, -49D, 19D, 0f, 0f), nl("world", -992D, -48D, 27D, 0f, 0f), nl("world", -991D, -49D, 27D, 0f, 0f));
         nether = new Prison("Nether", new Location(Bukkit.getWorld("world"), -2062, -50, 1945), nl("world", -1000D, -47D, 24D, 0f, 0f), nl("world", -996D, -50D, 22D, 0f, 0f), nl("world", 1009D, -38D, 990D, 0f, 0f), nl("world", 1009D, -38D, 990D, 0f, 0f), nl("world", 1007D, -34D, 994D, -90f, 0f), nl("world", 948D, -39D, 946D, 0f, 0f), nl("world", 937D, -59D, 1030D, 0f, 0f), nl("world", 981D, -35D, 976D, 0f, 0f), nl("world", 1003D, -38D, 1003D, 0f, 0f), nl("world", 956.3, -38D, -168.8, 0f, 0f), nl("world", -992D, -48D, 27D, 0f, 0f), nl("world", -991D, -49D, 27D, 0f, 0f));
+        rag = new Prison("Rocks and Grass", new Location(Bukkit.getWorld("world"), -2062, -50, 1945), nl("world", -1000D, -47D, 24D, 0f, 0f), nl("world", -996D, -50D, 22D, 0f, 0f), nl("world", -259D, -60D, -177D, 0f, 0f),  nl("world", -259D, -60D, -177D, 0f, 0f),  nl("world", -267D, -44D, -241D, 0f, 0f), nl("world", -259D, -60D, -177D, 0f, 0f), nl("world", -208D, -54D, -248D, 0f, 0f), nl("world", -259D, -60D, -177D, 0f, 0f), nl("world", -243D, -59D, -207D, 0f, 0f), nl("world", 956.3, -38D, -168.8, 0f, 0f), nl("world", -992D, -48D, 27D, 0f, 0f), nl("world", -991D, -49D, 27D, 0f, 0f));
         amongus = new Prison(
                 "Skeld",
                 new Location(Bukkit.getWorld("world"), -2062, -50, 1945),
