@@ -915,15 +915,6 @@ public class MyTask extends BukkitRunnable {
                 p.removePotionEffect(PotionEffectType.GLOWING);
             }
 
-            if (p.getName().equals("Kingdarksword") || p.getName().equals("C0sm1c__")) {
-                PrisonGame.escaped.put(p, true);
-                if (!p.getPlayerListName().contains("CHEF")) {
-                    p.setCustomName(ChatColor.GRAY + "[" + ChatColor.WHITE + "CHEF" + ChatColor.GRAY + "] " + p.getName());
-                    p.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.WHITE + "CHEF" + ChatColor.GRAY + "] " + p.getName());
-                    p.setDisplayName(ChatColor.GRAY + "[" + ChatColor.WHITE + "CHEF" + ChatColor.GRAY + "] " + p.getName());
-                }
-            }
-
             if (!PrisonGame.hardmode.get(p)) {
                 if (p.getName().equals("DeadCutie764") && !p.getPlayerListName().contains("REPORTER") || p.getName().equals("Jacco100") && !p.getPlayerListName().contains("REPORTER") || p.getName().equals("Goodgamer121") && !p.getPlayerListName().contains("REPORTER") || p.getName().equals("Evanbeer") && !p.getPlayerListName().contains("REPORTER") || p.getName().equals("teuli") && !p.getPlayerListName().contains("REPORTER")) {
                     p.setCustomName(ChatColor.GRAY + "[" + ChatColor.GREEN + "REPORTER" + ChatColor.GRAY + "] " + p.getDisplayName());
