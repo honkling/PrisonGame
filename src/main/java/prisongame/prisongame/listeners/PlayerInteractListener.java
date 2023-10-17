@@ -700,7 +700,7 @@ public class PlayerInteractListener implements Listener {
                             cardm.setDisplayName(ChatColor.RED + "Bounty Hunter's Knife");
                             card.setItemMeta(cardm);
                             event.getPlayer().getInventory().addItem(card);
-                            event.getPlayer().sendMessage(ChatColor.RED + "Kill criminals (Glowing pepole).");
+                            event.getPlayer().sendMessage(ChatColor.RED + "Kill criminals (Glowing people).");
                         } else {
                             event.getPlayer().sendMessage(ChatColor.RED + "You already have a sword!");
                         }
