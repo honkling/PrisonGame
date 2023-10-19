@@ -96,5 +96,12 @@
             <version>5.4</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>me.coralise</groupId>
+            <artifactId>custombansplus</artifactId>
+            <version>3.6</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/libs/CustomBansPlus-3.6.jar</systemPath>
+        </dependency>
     </dependencies>
 </project>
