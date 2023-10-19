@@ -254,8 +254,6 @@ public class InventoryClickListener implements Listener {
                 }
                 if (PrisonGame.warden != null) {
                     if (PrisonGame.swapcool <= 0 && PrisonGame.warden.equals(event.getWhoClicked())) {
-                        System.out.println(event.getCurrentItem().getItemMeta().getDisplayName());
-
                         Prison prison = switch (event.getCurrentItem().getItemMeta().getDisplayName()) {
                             case "§5The End?" -> PrisonGame.endmap;
                             case "§9Boat" -> PrisonGame.boat;
@@ -271,8 +269,6 @@ public class InventoryClickListener implements Listener {
                             case "§8Maximum Security" -> PrisonGame.ms;
                             default -> null;
                         };
-
-                        System.out.println();
 
                         if (prison == null)
                             return;
@@ -376,5 +372,16 @@ public class InventoryClickListener implements Listener {
             if (!player.getDisplayName().contains("ASCENDING"))
                 player.sendTitle("New prison!", prison.name.toUpperCase());
         }
+    }
+
+    @EventHandler
+    public void onInventoryClick4(InventoryClickEvent event) {
+        Player player = (Player) event.getWhoClicked();
+
+        if (PrisonGame.roles.get(player) != Role.WARDEN)
+            return;
+
+        player.sendMessage(ChatColor.RED + "Wardens cannot interact with containers.");
+        event.setCancelled(true);
     }
 }

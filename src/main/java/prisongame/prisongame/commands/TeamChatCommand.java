@@ -16,8 +16,6 @@ import prisongame.prisongame.PrisonGame;
 import prisongame.prisongame.lib.Role;
 
 public class TeamChatCommand implements CommandExecutor {
-
-    // This method is called, when somebody uses our command
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player player)) {
