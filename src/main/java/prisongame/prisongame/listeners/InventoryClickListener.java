@@ -254,6 +254,8 @@ public class InventoryClickListener implements Listener {
                 }
                 if (PrisonGame.warden != null) {
                     if (PrisonGame.swapcool <= 0 && PrisonGame.warden.equals(event.getWhoClicked())) {
+                        System.out.println(event.getCurrentItem().getItemMeta().getDisplayName());
+
                         Prison prison = switch (event.getCurrentItem().getItemMeta().getDisplayName()) {
                             case "§5The End?" -> PrisonGame.endmap;
                             case "§9Boat" -> PrisonGame.boat;
@@ -262,7 +264,7 @@ public class InventoryClickListener implements Listener {
                             case "§eTrain" -> PrisonGame.train;
                             case "§fGladiator" -> PrisonGame.gladiator;
                             case "§6Island" -> PrisonGame.island;
-                            case "§bSanta's Workshop" -> PrisonGame.santa;
+                            case "§lSanta's Workshop" -> PrisonGame.santa;
                             case "§cVolcano" -> PrisonGame.volcano;
                             case "§7Skeld" -> PrisonGame.amongus;
                             case "§aRocksNGrass" -> PrisonGame.rag;
