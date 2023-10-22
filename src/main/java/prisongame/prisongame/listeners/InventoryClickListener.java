@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
@@ -379,7 +380,7 @@ public class InventoryClickListener implements Listener {
     public void onInventoryClick4(InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
 
-        if (PrisonGame.roles.get(player) != Role.WARDEN || event.isCancelled())
+        if (PrisonGame.roles.get(player) != Role.WARDEN || event.isCancelled() || player.getOpenInventory().getType() == InventoryType.CRAFTING)
             return;
 
         player.sendMessage(ChatColor.RED + "Wardens cannot interact with containers.");
