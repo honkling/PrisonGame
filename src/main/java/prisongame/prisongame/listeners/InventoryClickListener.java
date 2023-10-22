@@ -4,6 +4,7 @@ import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
@@ -254,8 +255,6 @@ public class InventoryClickListener implements Listener {
                 }
                 if (PrisonGame.warden != null) {
                     if (PrisonGame.swapcool <= 0 && PrisonGame.warden.equals(event.getWhoClicked())) {
-                        System.out.println(event.getCurrentItem().getItemMeta().getDisplayName());
-
                         Prison prison = switch (event.getCurrentItem().getItemMeta().getDisplayName()) {
                             case "§5The End?" -> PrisonGame.endmap;
                             case "§9Boat" -> PrisonGame.boat;
@@ -376,11 +375,11 @@ public class InventoryClickListener implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onInventoryClick4(InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
 
-        if (PrisonGame.roles.get(player) != Role.WARDEN)
+        if (PrisonGame.roles.get(player) != Role.WARDEN || event.isCancelled())
             return;
 
         player.sendMessage(ChatColor.RED + "Wardens cannot interact with containers.");
