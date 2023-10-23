@@ -10,7 +10,7 @@ public class DiscCommand implements CommandExecutor {
     // This method is called, when somebody uses our command
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        sender.sendMessage(ChatColor.BLUE + "https://discord.gg/GrcHKkFQsv");
+        sender.sendMessage(ChatColor.BLUE + "https://discord.gg/fJBXvq28bx");
         return true;
     }
 }
