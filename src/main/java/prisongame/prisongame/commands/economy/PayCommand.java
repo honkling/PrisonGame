@@ -29,6 +29,11 @@ public class PayCommand implements CommandExecutor {
             return true;
         }
 
+        if (target.equals(player)) {
+            player.sendMessage(ChatColor.RED + "Invalid player provided. (cant pay self)");
+            return true;
+        }
+
         try {
             double value = Double.valueOf(args[1]);
 
