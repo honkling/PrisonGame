@@ -17,6 +17,7 @@ import org.bukkit.potion.PotionEffectType;
 import prisongame.prisongame.MyListener;
 import prisongame.prisongame.Prison;
 import prisongame.prisongame.PrisonGame;
+import prisongame.prisongame.lib.Config;
 import prisongame.prisongame.lib.Role;
 
 import static prisongame.prisongame.MyListener.reloadBert;
@@ -256,27 +257,15 @@ public class InventoryClickListener implements Listener {
                 }
                 if (PrisonGame.warden != null) {
                     if (PrisonGame.swapcool <= 0 && PrisonGame.warden.equals(event.getWhoClicked())) {
-                        Prison prison = switch (event.getCurrentItem().getItemMeta().getDisplayName()) {
-                            case "§5The End?" -> PrisonGame.endmap;
-                            case "§9Boat" -> PrisonGame.boat;
-                            case "§7Fortress Of Gaeae" -> PrisonGame.gaeae;
-                            case "§fHypertech" -> PrisonGame.hyper;
-                            case "§eTrain" -> PrisonGame.train;
-                            case "§fGladiator" -> PrisonGame.gladiator;
-                            case "§6Island" -> PrisonGame.island;
-                            case "§lSanta's Workshop" -> PrisonGame.santa;
-                            case "§cVolcano" -> PrisonGame.volcano;
-                            case "§7Skeld" -> PrisonGame.amongus;
-                            case "§aRocksNGrass" -> PrisonGame.rag;
-                            case "§8Maximum Security" -> PrisonGame.ms;
-                            default -> null;
-                        };
+                        var name = event.getCurrentItem().getItemMeta().getDisplayName().replace("§", "&");
 
-                        if (prison == null)
-                            return;
-
-                        event.setCancelled(true);
-                        switchMap(prison);
+                        for (var prison : Config.prisons.values()) {
+                            if (prison.displayName.equals(name)) {
+                                switchMap(prison);
+                                event.setCancelled(true);
+                                break;
+                            }
+                        }
                     }
                 }
                 if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.LIGHT_PURPLE + "Rock")) {

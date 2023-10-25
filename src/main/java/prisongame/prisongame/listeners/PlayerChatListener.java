@@ -9,6 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChatEvent;
 import prisongame.prisongame.MyListener;
 import prisongame.prisongame.PrisonGame;
+import prisongame.prisongame.lib.Config;
 import prisongame.prisongame.lib.Role;
 
 import static prisongame.prisongame.MyListener.reloadBert;
@@ -24,7 +25,7 @@ public class PlayerChatListener implements Listener {
                 for (Player pe : Bukkit.getOnlinePlayers()) {
                     pe.teleport(new Location(Bukkit.getWorld("world"), -2062, -50, 1945));
                 }
-                PrisonGame.active = PrisonGame.boat;
+                PrisonGame.active = Config.prisons.get("boat");
                 PrisonGame.swapcool = (20 * 60) * 5;
                 reloadBert();
                 for (Player pe : Bukkit.getOnlinePlayers()) {

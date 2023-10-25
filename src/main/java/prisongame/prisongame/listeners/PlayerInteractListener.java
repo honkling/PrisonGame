@@ -18,8 +18,12 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffectType;
 import prisongame.prisongame.MyListener;
 import prisongame.prisongame.MyTask;
+import prisongame.prisongame.Prison;
 import prisongame.prisongame.PrisonGame;
+import prisongame.prisongame.lib.Config;
 import prisongame.prisongame.lib.Role;
+
+import java.util.Comparator;
 
 import static prisongame.prisongame.MyListener.playerJoin;
 import static prisongame.prisongame.MyListener.playerJoinignoreAsc;
@@ -208,18 +212,26 @@ public class PlayerInteractListener implements Listener {
                     if (event.getPlayer() == PrisonGame.warden && event.getPlayer().getPassengers().size() == 0) {
                         if (PrisonGame.swapcool <= 0) {
                             Inventory inv = Bukkit.createInventory(null, 9 * 2, "Map Switch");
-                            inv.addItem(PrisonGame.createGuiItem(Material.COBBLESTONE, ChatColor.GRAY + "Fortress Of Gaeae"));
-                            inv.addItem(PrisonGame.createGuiItem(Material.QUARTZ_BLOCK, ChatColor.WHITE + "Hypertech"));
+
+                            for (Prison prison : Config.prisons.values().stream().sorted(Comparator.comparingInt((p) -> p.priority)).toList()) {
+                                if (!prison.displayInSelector)
+                                    continue;
+
+                                var displayName = ChatColor.translateAlternateColorCodes('&', prison.displayName);
+                                inv.addItem(PrisonGame.createGuiItem(prison.material, displayName));
+                            }
+//                            inv.addItem(PrisonGame.createGuiItem(Material.COBBLESTONE, ChatColor.GRAY + "Fortress Of Gaeae"));
+//                            inv.addItem(PrisonGame.createGuiItem(Material.QUARTZ_BLOCK, ChatColor.WHITE + "Hypertech"));
                             //inv.addItem(PrisonGame.createGuiItem(Material.END_CRYSTAL, ChatColor.DARK_PURPLE + "The End?"));
-                            inv.addItem(PrisonGame.createGuiItem(Material.CRIMSON_PLANKS, ChatColor.YELLOW + "Train"));
+//                            inv.addItem(PrisonGame.createGuiItem(Material.CRIMSON_PLANKS, ChatColor.YELLOW + "Train"));
                             //inv.addItem(PrisonGame.createGuiItem(Material.RED_STAINED_GLASS, ChatColor.RED + "MAP DISABLED"));
-                            inv.addItem(PrisonGame.createGuiItem(Material.STONE_BRICK_SLAB, ChatColor.WHITE + "Gladiator"));
-                            inv.addItem(PrisonGame.createGuiItem(Material.SAND, ChatColor.GOLD + "Island"));
-                            inv.addItem(PrisonGame.createGuiItem(Material.SNOW_BLOCK, ChatColor.BOLD + "Santa's Workshop"));
-                            inv.addItem(PrisonGame.createGuiItem(Material.LAVA_BUCKET, ChatColor.RED + "Volcano"));
-                            inv.addItem(PrisonGame.createGuiItem(Material.GRAY_CONCRETE, ChatColor.GRAY + "Skeld"));
-                            inv.addItem(PrisonGame.createGuiItem(Material.DEEPSLATE_TILES, ChatColor.DARK_GRAY + "Maximum Security"));
-                            inv.addItem(PrisonGame.createGuiItem(Material.DEEPSLATE_TILES, "§aRocksNGrass"));
+//                            inv.addItem(PrisonGame.createGuiItem(Material.STONE_BRICK_SLAB, ChatColor.WHITE + "Gladiator"));
+//                            inv.addItem(PrisonGame.createGuiItem(Material.SAND, ChatColor.GOLD + "Island"));
+//                            inv.addItem(PrisonGame.createGuiItem(Material.SNOW_BLOCK, ChatColor.BOLD + "Santa's Workshop"));
+//                            inv.addItem(PrisonGame.createGuiItem(Material.LAVA_BUCKET, ChatColor.RED + "Volcano"));
+//                            inv.addItem(PrisonGame.createGuiItem(Material.GRAY_CONCRETE, ChatColor.GRAY + "Skeld"));
+//                            inv.addItem(PrisonGame.createGuiItem(Material.DEEPSLATE_TILES, ChatColor.DARK_GRAY + "Maximum Security"));
+//                            inv.addItem(PrisonGame.createGuiItem(Material.DEEPSLATE_TILES, "§aRocksNGrass"));
 
                             //inv.addItem(PrisonGame.createGuiItem(Material.QUARTZ, ChatColor.BLUE + "Boat"));
                             //inv.addItem(PrisonGame.createGuiItem(Material.NETHERRACK, ChatColor.RED + "Nether"));
@@ -582,7 +594,7 @@ public class PlayerInteractListener implements Listener {
                         if (PrisonGame.active.cafedoor2.getBlock().getType().equals(Material.MUD_BRICKS)) {
                             event.getPlayer().getPersistentDataContainer().set(PrisonGame.mny, PersistentDataType.DOUBLE, event.getPlayer().getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0) - 1000.0);
                             Bukkit.broadcastMessage(ChatColor.GREEN + event.getPlayer().getName() + " Bought the cafeteria!");
-                            if (!PrisonGame.active.equals(PrisonGame.hyper)) {
+                            if (!PrisonGame.active.equals(Config.prisons.get("hyper"))) {
                                 for (Integer x = PrisonGame.active.cafedoor1.getBlockX(); x <= PrisonGame.active.cafedoor2.getBlockX(); x++) {
                                     for (Integer y = PrisonGame.active.cafedoor1.getBlockY(); y <= PrisonGame.active.cafedoor2.getBlockY(); y++) {
                                         for (Integer z = PrisonGame.active.cafedoor1.getBlockZ(); z <= PrisonGame.active.cafedoor2.getBlockZ(); z++) {
@@ -600,7 +612,7 @@ public class PlayerInteractListener implements Listener {
                             }
                         }
                         if (new Location(Bukkit.getWorld("world"), 3, -58, -1008).getBlock().getType().equals(Material.MUD_BRICKS)) {
-                            if (PrisonGame.active.equals(PrisonGame.hyper)) {
+                            if (PrisonGame.active.equals(Config.prisons.get("hyper"))) {
                                 Bukkit.getWorld("world").getBlockAt(1, -58, -1008).setType(Material.AIR);
                                 Bukkit.getWorld("world").getBlockAt(2, -58, -1008).setType(Material.AIR);
                                 Bukkit.getWorld("world").getBlockAt(3, -58, -1008).setType(Material.AIR);

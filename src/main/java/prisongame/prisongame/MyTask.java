@@ -24,6 +24,7 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
+import prisongame.prisongame.lib.Config;
 import prisongame.prisongame.lib.Role;
 
 import java.text.DecimalFormat;
@@ -729,7 +730,7 @@ public class MyTask extends BukkitRunnable {
                         for (Player pe : Bukkit.getOnlinePlayers()) {
                             pe.teleport(new Location(Bukkit.getWorld("world"), -2062, -50, 1945));
                         }
-                        PrisonGame.active = PrisonGame.nether;
+                        PrisonGame.active = Config.prisons.get("nether");
                         PrisonGame.swapcool = (20 * 60) * 5;
                         MyListener.reloadBert();
                         for (Player pe : Bukkit.getOnlinePlayers()) {
