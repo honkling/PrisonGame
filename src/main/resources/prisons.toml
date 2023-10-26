@@ -38,7 +38,7 @@ bertrude = { world = "world", x = 0.5, y = -59.0, z = -996.5 }
 priority = 2
 selector-item = ""
 show-in-selector = false
-display-name = ""
+display-name = "&5The End?"
 name = "The End?"
 track-1 = { world = "endprison", x = 19.0, y = 127.0, z = 20.0 }
 track-2 = { world = "endprison", x = -30.0, y = 170.0, z = -48.0 }
@@ -140,7 +140,7 @@ bertrude = { world = "world", x = -2011.5, y = -60.0, z = -1965.5 }
 priority = 8
 selector-item = ""
 show-in-selector = false
-display-name = ""
+display-name = "&1Boat"
 name = "Boat"
 track-1 = { world = "world", x = -1000.0, y = -47.0, z = 24.0 }
 track-2 = { world = "world", x = -996.0, y = -50.0, z = 22.0 }
@@ -157,7 +157,7 @@ bertrude = { world = "world", x = -987.0, y = -49.0, z = 19.0 }
 priority = 9
 selector-item = ""
 show-in-selector = false
-display-name = ""
+display-name = "&cNether"
 name = "Nether"
 track-1 = { world = "world", x = -1000.0, y = -47.0, z = 24.0 }
 track-2 = { world = "world", x = -996.0, y = -50.0, z = 22.0 }
