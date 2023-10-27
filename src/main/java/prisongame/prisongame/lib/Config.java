@@ -11,7 +11,6 @@ import prisongame.prisongame.PrisonGame;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,8 +25,9 @@ public class Config {
     public static Prison defaultPrison;
     public static final Map<String, Prison> prisons = new HashMap<>();
 
-    public static class Discord {
-        public static String invite;
+    public static class General {
+        public static String discordInvite;
+        public static final List<String> rules = new ArrayList<>();
     }
 
     static {
@@ -41,6 +41,9 @@ public class Config {
         try {
             var config = parseFile(CONFIG);
             var prisons = parseFile(PRISONS);
+
+            Config.prisons.clear();
+            General.rules.clear();
 
             for (var entry : prisons.getTable("prisons").entrySet()) {
                 var key = entry.getKey();
@@ -73,7 +76,12 @@ public class Config {
 
             defaultPrison = Config.prisons.get(prisons.getString("default-prison"));
 
-            Discord.invite = config.getString("discord.invite");
+            General.discordInvite = config.getString("general.discord-invite");
+
+            var rules = config.getArray("general.rules");
+
+            for (int i = 0; i < rules.size(); i++)
+                General.rules.add(rules.getString(i));
         } catch (IOException exception) {
             INSTANCE.getLogger().severe("An error occurred parsing the config.");
             INSTANCE.getLogger().severe(exception.getMessage());

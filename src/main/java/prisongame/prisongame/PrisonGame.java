@@ -2,6 +2,7 @@ package prisongame.prisongame;
 
 import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.disguisetypes.PlayerDisguise;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
 import org.bukkit.*;
@@ -38,7 +39,7 @@ import java.util.Random;
 import java.util.UUID;
 
 public final class PrisonGame extends JavaPlugin {
-
+    public static MiniMessage mm = MiniMessage.miniMessage();
     public static HashMap<Player, Double> st = new HashMap<>();
     public static HashMap<Player, Double> sp = new HashMap<>();
     public static Player warden = null;

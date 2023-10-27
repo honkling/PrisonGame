@@ -1,2 +1,12 @@
-[discord]
-invite = "fJBXvq28bx"
+[general]
+discord-invite = "fJBXvq28bx"
+rules = [
+    "No saying slurs.",
+    "No spamming.",
+    "No death threats / death wishes.",
+    "No hacking.",
+    "No mini knighting. (killing prisoners / criminals for the warden, as a prisoner / criminal)",
+    "No bug abusing.",
+    "No server lagging.",
+    "No advertising."
+]

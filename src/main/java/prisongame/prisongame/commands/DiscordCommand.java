@@ -11,7 +11,7 @@ public class DiscordCommand implements CommandExecutor {
     // This method is called, when somebody uses our command
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        sender.sendMessage(ChatColor.BLUE + "https://discord.gg/" + Config.Discord.invite);
+        sender.sendMessage(ChatColor.BLUE + "https://discord.gg/" + Config.General.invite);
         return true;
     }
 }
