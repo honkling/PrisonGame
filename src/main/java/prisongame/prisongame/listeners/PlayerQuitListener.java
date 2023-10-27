@@ -12,11 +12,6 @@ import prisongame.prisongame.PrisonGame;
 public class PlayerQuitListener implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerQuitEvent event) {
-        if (event.getPlayer().isInsideVehicle()) {
-            if (event.getPlayer().getVehicle() instanceof Player e) {
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "ban " + event.getPlayer().getName() + " 30m Headbugging (AUTOBAN, QUIT REASON:" + event.getReason().name() + ")");
-            }
-        }
         if (PrisonGame.hardmode.get(event.getPlayer())) {
             event.getPlayer().getPersistentDataContainer().set(PrisonGame.mny, PersistentDataType.DOUBLE, event.getPlayer().getPersistentDataContainer().getOrDefault(PrisonGame.bckupmny, PersistentDataType.DOUBLE, 0.0));
         }
