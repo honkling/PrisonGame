@@ -251,6 +251,7 @@ public final class PrisonGame extends JavaPlugin {
     }
 
     public void registerCommands() {
+        this.getCommand("rules").setExecutor(new RulesCommand());
         this.getCommand("pbbreload").setExecutor(new PBBReloadCommand());
         this.getCommand("warden").setExecutor(new WardenCommand());
         this.getCommand("warden").setTabCompleter(new WardenComplete());

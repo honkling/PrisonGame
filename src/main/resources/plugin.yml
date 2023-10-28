@@ -13,6 +13,9 @@ commands:
     description: Reloads configuration.
     usage: /pbbreload
     permission: pbb.reload
+  rules:
+    description: Rules.
+    usage: /rules
   warden:
     description: Warden-Based commands.
     usage: /<command>

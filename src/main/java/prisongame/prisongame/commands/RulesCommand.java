@@ -10,7 +10,11 @@ import prisongame.prisongame.lib.Config;
 public class RulesCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        var message = new StringBuilder("\n<red>Tip: Rules are also stored in our discord server. Join with /discord.</red>");
+        var message = new StringBuilder(String.format(
+                "\n<red>Tip: Rules are also stored in our Discord server. Join with <b><hover:show_text:'%s'><click:open_url:%s>/discord</click></hover></b>.</red>",
+                "<red>Click to join the Discord server.",
+                "https://discord.gg/" + Config.General.discordInvite
+        ));
 
         for (int i = 0; i < Config.General.rules.size(); i++) {
             String rule = Config.General.rules.get(i);
