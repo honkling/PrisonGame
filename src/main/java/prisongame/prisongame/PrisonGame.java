@@ -31,6 +31,7 @@ import prisongame.prisongame.commands.economy.staff.SetMoneyCommand;
 import prisongame.prisongame.commands.staff.BuilderCommand;
 import prisongame.prisongame.commands.staff.EnderChestCommand;
 import prisongame.prisongame.commands.staff.PBBReloadCommand;
+import prisongame.prisongame.commands.staff.VanishCommand;
 import prisongame.prisongame.lib.Config;
 import prisongame.prisongame.lib.Role;
 import prisongame.prisongame.listeners.*;
@@ -41,6 +42,7 @@ import java.util.Random;
 import java.util.UUID;
 
 public final class PrisonGame extends JavaPlugin {
+    public static PrisonGame instance;
     public static MiniMessage mm = MiniMessage.miniMessage();
     public static HashMap<Player, Double> st = new HashMap<>();
     public static HashMap<Player, Double> sp = new HashMap<>();
@@ -194,6 +196,7 @@ public final class PrisonGame extends JavaPlugin {
     public static LuckPerms api;
     @Override
     public void onEnable() {
+        instance = this;
         Config.register();
         setupLuckPerms();
         loadGuardData();
@@ -253,6 +256,7 @@ public final class PrisonGame extends JavaPlugin {
     }
 
     public void registerCommands() {
+        this.getCommand("vanish").setExecutor(new VanishCommand());
         this.getCommand("enderchest").setExecutor(new EnderChestCommand());
         this.getCommand("rules").setExecutor(new RulesCommand());
         this.getCommand("pbbreload").setExecutor(new PBBReloadCommand());

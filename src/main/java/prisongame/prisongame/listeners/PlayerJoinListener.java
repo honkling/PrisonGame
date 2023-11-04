@@ -10,10 +10,28 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.potion.PotionEffectType;
 import prisongame.prisongame.PrisonGame;
+import prisongame.prisongame.commands.staff.VanishCommand;
 
 import static prisongame.prisongame.MyListener.playerJoin;
 
 public class PlayerJoinListener implements Listener {
+    @EventHandler
+    public void onJoinVanish(PlayerJoinEvent event) {
+        var player = event.getPlayer();
+        var container = player.getPersistentDataContainer();
+
+        for (var loopedPlayer : Bukkit.getOnlinePlayers()) {
+            var loopedContainer = loopedPlayer.getPersistentDataContainer();
+
+            if (container.has(VanishCommand.VANISHED))
+                loopedPlayer.hidePlayer(PrisonGame.instance, player);
+
+            if (loopedContainer.has(VanishCommand.VANISHED))
+                player.hidePlayer(PrisonGame.instance, loopedPlayer);
+        }
+
+    }
+
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         if (PrisonGame.wardenenabled) {

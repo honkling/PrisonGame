@@ -24,6 +24,7 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
+import prisongame.prisongame.commands.staff.VanishCommand;
 import prisongame.prisongame.lib.Config;
 import prisongame.prisongame.lib.Role;
 
@@ -898,7 +899,7 @@ public class MyTask extends BukkitRunnable {
 
             for (Player pe : Bukkit.getOnlinePlayers()) {
                 if (!p.canSee(pe) && p.isOnline()) {
-                    if (!pe.isInsideVehicle() && pe.isOnline()) {
+                    if (!pe.isInsideVehicle() && pe.isOnline() && !pe.getPersistentDataContainer().has(VanishCommand.VANISHED)) {
                         p.showPlayer(PrisonGame.getPlugin(PrisonGame.class), pe);
                     }
                 }
