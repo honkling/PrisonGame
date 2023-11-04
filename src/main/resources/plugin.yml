@@ -9,6 +9,11 @@ main: prisongame.prisongame.PrisonGame
 api-version: "1.20"
 
 commands:
+  enderchest:
+    description: Inspect/clear ender chests.
+    usage: /enderchest <inspect/view> (player)
+    permission: pbb.enderchest
+    aliases: /ec
   pbbreload:
     description: Reloads configuration.
     usage: /pbbreload

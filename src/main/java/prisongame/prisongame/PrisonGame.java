@@ -19,6 +19,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 import prisongame.prisongame.commands.*;
+import prisongame.prisongame.commands.completers.EnderChestComplete;
 import prisongame.prisongame.commands.completers.WardenComplete;
 import prisongame.prisongame.commands.danger.HardCommand;
 import prisongame.prisongame.commands.danger.NormalCommand;
@@ -28,6 +29,7 @@ import prisongame.prisongame.commands.economy.staff.NerdCheatCommand;
 import prisongame.prisongame.commands.economy.staff.ResetMoneyCommand;
 import prisongame.prisongame.commands.economy.staff.SetMoneyCommand;
 import prisongame.prisongame.commands.staff.BuilderCommand;
+import prisongame.prisongame.commands.staff.EnderChestCommand;
 import prisongame.prisongame.commands.staff.PBBReloadCommand;
 import prisongame.prisongame.lib.Config;
 import prisongame.prisongame.lib.Role;
@@ -251,10 +253,10 @@ public final class PrisonGame extends JavaPlugin {
     }
 
     public void registerCommands() {
+        this.getCommand("enderchest").setExecutor(new EnderChestCommand());
         this.getCommand("rules").setExecutor(new RulesCommand());
         this.getCommand("pbbreload").setExecutor(new PBBReloadCommand());
         this.getCommand("warden").setExecutor(new WardenCommand());
-        this.getCommand("warden").setTabCompleter(new WardenComplete());
         this.getCommand("resign").setExecutor(new ResignCommand());
         this.getCommand("tc").setExecutor(new TeamChatCommand());
         this.getCommand("disc").setExecutor(new DiscordCommand());
@@ -269,6 +271,9 @@ public final class PrisonGame extends JavaPlugin {
         this.getCommand("normal").setExecutor(new NormalCommand());
         this.getCommand("setmoney").setExecutor(new SetMoneyCommand());
         this.getCommand("pbsettings").setExecutor(new PBSettingsCommand());
+
+        this.getCommand("warden").setTabCompleter(new WardenComplete());
+        this.getCommand("enderchest").setTabCompleter(new EnderChestComplete());
         Bukkit.broadcastMessage("RELOAD: Loaded Commands");
     }
 
