@@ -14,6 +14,6 @@ import prisongame.prisongame.lib.Config;
 
 public class WardenComplete extends SubcommandCompleter {
     public WardenComplete() {
-        super(Config.Warden.help.keySet().toArray(new String[0]));
+        super("warden", Config.Warden.help.keySet().toArray(new String[0]));
     }
 }

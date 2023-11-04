@@ -13,19 +13,21 @@ import java.util.Collections;
 import java.util.List;
 
 public abstract class SubcommandCompleter implements TabCompleter {
-    private static String[] COMMANDS;
+    private String name;
+    private String[] commands;
 
-    public SubcommandCompleter(String[] commands) {
-        COMMANDS = commands;
+    public SubcommandCompleter(String name, String[] commands) {
+        this.name = name;
+        this.commands = commands;
     }
 
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (args.length != 1)
+        if (args.length != 1 || !command.getName().equalsIgnoreCase(name))
             return null;
 
         var completions = new ArrayList<String>();
-        StringUtil.copyPartialMatches(args[0], List.of(COMMANDS), completions);
+        StringUtil.copyPartialMatches(args[0], List.of(commands), completions);
         Collections.sort(completions);
         return completions;
     }
