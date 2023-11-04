@@ -25,7 +25,8 @@ public class EntityDamageByEntityListener implements Listener {
     public void onEntityDamageByEntity2(EntityDamageByEntityEvent event) {
         if (event.getDamager() instanceof Player) {
             Player a = (Player) event.getDamager();
-            if (a.getInventory().getItemInMainHand().getType().equals(Material.IRON_SHOVEL)) {
+            var main = a.getInventory().getItemInMainHand();
+            if (main.getItemMeta().getDisplayName().equals(ChatColor.BLUE + "Handcuffs " + ChatColor.RED + "[CONTRABAND]")) {
                 if (event.getEntity() instanceof Player p) {
                     p.setNoDamageTicks(0);
                 }
