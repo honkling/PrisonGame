@@ -864,19 +864,19 @@ public class MyTask extends BukkitRunnable {
             }
 
 
-            if (!p.getInventory().getItemInMainHand().getType().equals(Material.IRON_SHOVEL)) {
-            if (!PrisonGame.escaped.get(p) && PrisonGame.roles.get(p) == Role.PRISONER) {
-                p.setWalkSpeed(0.2f);
-                p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(4);
-            }
-            if (PrisonGame.escaped.get(p)) {
-                p.setWalkSpeed(0.2f);
-                p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(4.4);
-            }
-            if (PrisonGame.roles.get(p) != Role.PRISONER) {
-                p.setWalkSpeed(0.2f);
-                p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(4.4);
-            }
+            if (!p.getInventory().getItemInMainHand().getItemMeta().getDisplayName().equals(ChatColor.BLUE + "Handcuffs " + ChatColor.RED + "[CONTRABAND]")) {
+                if (!PrisonGame.escaped.get(p) && PrisonGame.roles.get(p) == Role.PRISONER) {
+                    p.setWalkSpeed(0.2f);
+                    p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(4);
+                }
+                if (PrisonGame.escaped.get(p)) {
+                    p.setWalkSpeed(0.2f);
+                    p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(4.4);
+                }
+                if (PrisonGame.roles.get(p) != Role.PRISONER) {
+                    p.setWalkSpeed(0.2f);
+                    p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(4.4);
+                }
             } else {
                 p.getInventory().getItemInMainHand().setDurability((short) 3);
                 p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(9999);
