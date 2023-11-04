@@ -18,8 +18,8 @@ out/
 *.ctxt
 
 # Package Files #
-!CustomBansPlus-3.6.jar
 *.jar
+!CustomBansPlus-3.6.jar
 *.war
 *.nar
 *.ear
