@@ -10,24 +10,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.util.StringUtil;
 import prisongame.prisongame.PrisonGame;
+import prisongame.prisongame.lib.Config;
 
 public class WardenComplete extends SubcommandCompleter {
     public WardenComplete() {
-        super(new String[] {
-                "help",
-                "fire",
-                "guard",
-                "nurse",
-                "pass",
-                "prefix",
-                "resign",
-                "release",
-                "solitary",
-                "skip",
-                "swat",
-                "target",
-                "intercom",
-                "mutechat",
-                "grammar" });
+        super(Config.Warden.help.keySet().toArray(new String[0]));
     }
 }
