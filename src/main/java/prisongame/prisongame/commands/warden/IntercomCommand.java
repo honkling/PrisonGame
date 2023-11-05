@@ -12,9 +12,28 @@ import prisongame.prisongame.FilteredWords;
 import prisongame.prisongame.MyListener;
 import prisongame.prisongame.PrisonGame;
 
+import java.time.Instant;
+
 public class IntercomCommand implements CommandExecutor {
+    public static Instant lastUse = null;
+
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        var now = Instant.now();
+
+        if (lastUse != null) {
+            var lastSec = lastUse.getEpochSecond();
+            var nowSec = now.getEpochSecond();
+            var diff = nowSec - lastSec;
+
+            if (diff < 5) {
+                sender.sendMessage(PrisonGame.mm.deserialize("<red>Please wait " + (5 - diff) + " seconds before using the intercom again."));
+                return true;
+            }
+        }
+
+        lastUse = now;
+
         StringBuilder b = new StringBuilder(ChatColor.BLUE + "INTERCOM >> " + ChatColor.RED);
         for (String a : args) {
             b.append(a + " ");
