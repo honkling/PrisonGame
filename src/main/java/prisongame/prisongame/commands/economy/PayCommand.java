@@ -37,8 +37,8 @@ public class PayCommand implements CommandExecutor {
         try {
             double value = Double.valueOf(args[1]);
 
-            if (value <= 0) {
-                player.sendMessage(ChatColor.RED + "Please provide a valid amount. (amount is less than zero)");
+            if (value < 1) {
+                player.sendMessage(ChatColor.RED + "Please provide a valid amount. (amount is less than one)");
                 return true;
             }
 
