@@ -713,7 +713,7 @@ public class MyTask extends BukkitRunnable {
                 finisher = ChatColor.AQUA + " [" + PrisonGame.warden.getNoDamageTicks() / 20 + "s of No-Damage]" + ChatColor.RED + ")";
             }
 
-            warden2 = "{wardenname}\n {wardenstats} for {wardentime}";
+            warden2 = "{wardenname} &7[{ping}]\n {wardenstats} for {wardentime}";
             warden2 = warden2.replace("{wardenname}", PrisonGame.warden.getDisplayName()).replace("{wardenstats}", ChatColor.RED + " (" + Math.round(PrisonGame.warden.getHealth()) + " HP" + finisher).replace("{wardentime}", n);
         }
         String tab = ChatColor.translateAlternateColorCodes('&', "&7---\n&ePrisonButBad &7- &fmade by agmass!\n&aPlayers: ") + Bukkit.getOnlinePlayers().size() + ChatColor.translateAlternateColorCodes('&',"\n&c{warden}\n&7---\n\n&bGuards ").replace("{warden}", warden2);
@@ -791,7 +791,7 @@ public class MyTask extends BukkitRunnable {
             }
         }
 
-        tab = tab + ChatColor.translateAlternateColorCodes('&', "&b(" + guard + "):\n" + guards + "\n&7---\n\n&6Prisoners (" + pris + "):\n" + prisoners + "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+        tab = tab + ChatColor.translateAlternateColorCodes('&', "&b(" + Math.max(0, (guard - 1)) + "):\n" + guards + "\n&7---\n\n&6Prisoners (" + pris + "):\n" + prisoners + "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
         for (Player p : Bukkit.getOnlinePlayers()) {
             if (PrisonGame.calls.getOrDefault(p, 0) >= 10) {
                 PrisonGame.calls.put(p, Integer.MIN_VALUE);
@@ -864,7 +864,9 @@ public class MyTask extends BukkitRunnable {
             }
 
 
-            if (!p.getInventory().getItemInMainHand().getItemMeta().getDisplayName().equals(ChatColor.BLUE + "Handcuffs " + ChatColor.RED + "[CONTRABAND]")) {
+            var mainHand = p.getInventory().getItemInMainHand();
+            var meta = mainHand.getItemMeta();
+            if (meta != null && !meta.getDisplayName().equals(ChatColor.BLUE + "Handcuffs " + ChatColor.RED + "[CONTRABAND]")) {
                 if (!PrisonGame.escaped.get(p) && PrisonGame.roles.get(p) == Role.PRISONER) {
                     p.setWalkSpeed(0.2f);
                     p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(4);
