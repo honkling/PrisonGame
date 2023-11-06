@@ -864,7 +864,7 @@ public class MyTask extends BukkitRunnable {
             }
 
 
-            if (p.getInventory().getItemInMainHand() != null) {
+            if (p.getInventory().getItemInMainHand().getItemMeta() != null) {
                 var mainHand = p.getInventory().getItemInMainHand();
                 var meta = mainHand.getItemMeta();
                 if (meta != null && !meta.getDisplayName().equals(ChatColor.BLUE + "Handcuffs " + ChatColor.RED + "[CONTRABAND]")) {
