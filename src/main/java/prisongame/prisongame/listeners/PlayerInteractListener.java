@@ -846,7 +846,7 @@ public class PlayerInteractListener implements Listener {
                         orangeleg.setItemMeta(orangelegItemMeta);
 
 
-                        g.sendMessage(ChatColor.LIGHT_PURPLE + "Reclick the sign to get armor; it will override any current armor~");
+                        g.sendMessage(ChatColor.LIGHT_PURPLE + "Reclick the sign to get armor; it will override any current armor!");
 
                         ItemStack wardenSword = new ItemStack(Material.STONE_SWORD);
                         wardenSword.addEnchantment(Enchantment.DAMAGE_ALL, 2);
