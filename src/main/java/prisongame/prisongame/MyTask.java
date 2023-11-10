@@ -909,7 +909,7 @@ public class MyTask extends BukkitRunnable {
                 var meta = mainHand.getItemMeta();
                 if (meta != null && !meta.getDisplayName().equals(ChatColor.BLUE + "Handcuffs " + ChatColor.RED + "[CONTRABAND]")) {
                     p.setWalkSpeed(0.2f);
-                    p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(4);
+                    p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(4.4);
                 } else {
                     p.getInventory().getItemInMainHand().setDurability((short) 3);
                     p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(9999);
