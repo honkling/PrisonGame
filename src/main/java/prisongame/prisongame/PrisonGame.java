@@ -55,6 +55,7 @@ public final class PrisonGame extends JavaPlugin {
     static HashMap<Player, Integer> wardenban = new HashMap<>();
     public static HashMap<Player, String> word = new HashMap<>();
     static HashMap<Player, Integer> saidcycle = new HashMap<>();
+    public static Integer BBpower = 100;
     public static HashMap<Player, String> prisonnumber = new HashMap<>();
     static HashMap<Player, Double> wealthcycle = new HashMap<>();
     public static HashMap<Player, Integer> wardentime = new HashMap<>();
