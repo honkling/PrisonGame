@@ -876,11 +876,13 @@ public class MyTask extends BukkitRunnable {
             }
 
             if (p.getInventory().getHelmet() != null) {
-                if (!p.getInventory().getHelmet().getType().equals(Material.BELL)) {
+                if (!p.getInventory().getHelmet().getType().equals(Material.YELLOW_WOOL)) {
                     p.setMaxHealth(20);
                 } else {
                     p.addPotionEffect(PotionEffectType.SPEED.createEffect(20, 2));
                 }
+            } else {
+                p.setMaxHealth(20);
             }
 
 

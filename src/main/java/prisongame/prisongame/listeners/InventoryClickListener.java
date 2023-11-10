@@ -337,6 +337,7 @@ public class InventoryClickListener implements Listener {
         PrisonGame.swapcool = 20 * 60 * 5;
 
         reloadBert();
+        Bukkit.getWorld("world").getBlockAt(new Location(Bukkit.getWorld("world"),-1023,-57,-994)).setType(Material.REDSTONE_BLOCK);
 
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (PrisonGame.roles.get(player) != Role.WARDEN) {

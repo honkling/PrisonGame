@@ -85,9 +85,9 @@ public class PlayerInteractListener implements Listener {
                 if (PrisonGame.active.getName().equals("Barreled")) {
                     if (PrisonGame.roles.get(event.getPlayer()).equals(Role.PRISONER)) {
                         event.getPlayer().sendMessage(ChatColor.YELLOW + "Bell.");
-                        event.getPlayer().getInventory().setHelmet(new ItemStack(Material.BELL));
                         event.getPlayer().setMaxHealth(10);
                         event.getPlayer().getInventory().clear();
+                        event.getPlayer().getInventory().setHelmet(new ItemStack(Material.YELLOW_WOOL));
                         event.getPlayer().getInventory().addItem(new ItemStack(Material.BELL));
 
                     }
@@ -846,7 +846,7 @@ public class PlayerInteractListener implements Listener {
                         orangeleg.setItemMeta(orangelegItemMeta);
 
 
-                        g.sendMessage(ChatColor.LIGHT_PURPLE + "Reclick the sign to get armor; it will override any current armor~");
+                        g.sendMessage(ChatColor.LIGHT_PURPLE + "Reclick the sign to get armor; it will override any current armor!");
 
                         ItemStack wardenSword = new ItemStack(Material.STONE_SWORD);
                         wardenSword.addEnchantment(Enchantment.DAMAGE_ALL, 2);
