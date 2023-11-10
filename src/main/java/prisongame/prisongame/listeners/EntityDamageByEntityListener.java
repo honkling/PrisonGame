@@ -27,7 +27,7 @@ public class EntityDamageByEntityListener implements Listener {
         if (event.getDamager() instanceof Player) {
             Player a = (Player) event.getDamager();
             if (a.getInventory().getHelmet() != null) {
-                if (a.getInventory().getHelmet().getType().equals(Material.BELL)) {
+                if (a.getInventory().getHelmet().getType().equals(Material.YELLOW_WOOL)) {
                     event.setDamage(0);
                     if (event.getEntity() instanceof LivingEntity le) {
                         le.damage(2);

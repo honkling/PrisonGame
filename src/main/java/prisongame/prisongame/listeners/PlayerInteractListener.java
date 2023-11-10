@@ -85,9 +85,9 @@ public class PlayerInteractListener implements Listener {
                 if (PrisonGame.active.getName().equals("Barreled")) {
                     if (PrisonGame.roles.get(event.getPlayer()).equals(Role.PRISONER)) {
                         event.getPlayer().sendMessage(ChatColor.YELLOW + "Bell.");
-                        event.getPlayer().getInventory().setHelmet(new ItemStack(Material.BELL));
                         event.getPlayer().setMaxHealth(10);
                         event.getPlayer().getInventory().clear();
+                        event.getPlayer().getInventory().setHelmet(new ItemStack(Material.YELLOW_WOOL));
                         event.getPlayer().getInventory().addItem(new ItemStack(Material.BELL));
 
                     }
