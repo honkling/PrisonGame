@@ -5,7 +5,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -26,14 +25,6 @@ public class EntityDamageByEntityListener implements Listener {
     public void onEntityDamageByEntity2(EntityDamageByEntityEvent event) {
         if (event.getDamager() instanceof Player) {
             Player a = (Player) event.getDamager();
-            if (a.getInventory().getHelmet() != null) {
-                if (a.getInventory().getHelmet().getType().equals(Material.BELL)) {
-                    event.setDamage(0);
-                    if (event.getEntity() instanceof LivingEntity le) {
-                        le.damage(2);
-                    }
-                }
-            }
             var main = a.getInventory().getItemInMainHand();
             if (main.getItemMeta().getDisplayName().equals(ChatColor.BLUE + "Handcuffs " + ChatColor.RED + "[CONTRABAND]")) {
                 if (event.getEntity() instanceof Player p) {

@@ -151,7 +151,17 @@ public class InventoryClickListener implements Listener {
             }
         }
     }
-    
+
+    @EventHandler
+    public void onInventoryClick2(InventoryClickEvent event) {
+        if (!PrisonGame.escaped.get(event.getWhoClicked()) && PrisonGame.roles.get(event.getWhoClicked()) == Role.PRISONER) {
+            if (event.getSlotType().equals(InventoryType.SlotType.ARMOR)) {
+                event.setCancelled(true);
+                event.getWhoClicked().closeInventory();
+                event.getWhoClicked().sendMessage(ChatColor.RED + "You can't take armor off till you've escaped!");
+            }
+        }
+    }
 
     @EventHandler
     public void onInventoryClick3(InventoryClickEvent event) {
@@ -332,7 +342,6 @@ public class InventoryClickListener implements Listener {
             player.teleport(prison.mapSwitch);
         }
 
-        PrisonGame.BBpower = 100;
         PrisonGame.active = prison;
         PrisonGame.swapcool = 20 * 60 * 5;
 
@@ -341,7 +350,7 @@ public class InventoryClickListener implements Listener {
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (PrisonGame.roles.get(player) != Role.WARDEN) {
                 MyListener.playerJoin(player, true);
-                player.sendTitle(ChatColor.GREEN + "New prison!", ChatColor.BOLD + prison.name.toUpperCase());
+                player.sendTitle("New prison!", prison.name.toUpperCase());
                 continue;
             }
 

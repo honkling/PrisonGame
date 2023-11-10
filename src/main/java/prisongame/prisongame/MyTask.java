@@ -684,20 +684,7 @@ public class MyTask extends BukkitRunnable {
         if (PrisonGame.active.getName().equals("Island")) {
             bossbar.addFlag(BarFlag.CREATE_FOG);
         }
-        bossbar.setTitle(ChatColor.BOLD + bossbar.getTitle());
         bossbar.setProgress(Math.max(0, Math.min(1, ((float) Bukkit.getWorld("world").getTime() - (float) timer1) / ((float) timer2 - (float) timer1))));
-        if (PrisonGame.active.getName().equals("Barreled")) {
-            bossbar.setTitle(bossbar.getTitle() + ChatColor.GREEN + " Power: " + PrisonGame.BBpower);
-            if (Bukkit.getWorld("world").getBlockAt(new Location(Bukkit.getWorld("world"),-1023,-57,-994)).getType().equals(Material.AIR)) {
-                for (Player p : Bukkit.getOnlinePlayers()) {
-                    if (PrisonGame.roles.get(p).equals(Role.PRISONER)) {
-                        p.addPotionEffect(PotionEffectType.SPEED.createEffect(20*5,0));
-                    }
-                }
-            } else {
-
-            }
-        }
         if (Bukkit.getWorld("world").getTime() == timer2) {
             for (Player p : Bukkit.getOnlinePlayers()) {
                 Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
@@ -764,44 +751,42 @@ public class MyTask extends BukkitRunnable {
                     p.sendTitle("", ChatColor.RED + "YOU MUST BE WARDEN!", 0, 50, 0);
                 }
             }
-            if (!p.getPersistentDataContainer().has(VanishCommand.VANISHED)) {
-                if (PrisonGame.roles.get(p) != Role.PRISONER) {
-                    ChatColor pingColor = ChatColor.GREEN;
-                    if (p.getPing() >= 150) {
-                        pingColor = ChatColor.YELLOW;
-                    }
-                    if (p.getPing() >= 300) {
-                        pingColor = ChatColor.GOLD;
-                    }
-                    if (p.getPing() >= 450) {
-                        pingColor = ChatColor.RED;
-                    }
-                    if (p.getPing() >= 600) {
-                        pingColor = ChatColor.DARK_RED;
-                    }
-                    guard++;
-                    if (!p.equals(PrisonGame.warden)) {
-                        if (!p.hasPotionEffect(PotionEffectType.LUCK) && !p.isDead()) {
-                            guards = guards + "\n" + p.getPlayerListName() + ChatColor.GRAY + " [" + pingColor + p.getPing() + ChatColor.GRAY + "ms]";
-                        } else {
-                            guards = guards + ChatColor.translateAlternateColorCodes('&', "\n &4☠&7 " + p.getName()) + ChatColor.GRAY + "[" + pingColor + p.getPing() + ChatColor.GRAY + "ms]";
-                        }
+            if (PrisonGame.roles.get(p) != Role.PRISONER) {
+                ChatColor pingColor = ChatColor.GREEN;
+                if (p.getPing() >= 150) {
+                    pingColor = ChatColor.YELLOW;
+                }
+                if (p.getPing() >= 300) {
+                    pingColor = ChatColor.GOLD;
+                }
+                if (p.getPing() >= 450) {
+                    pingColor = ChatColor.RED;
+                }
+                if (p.getPing() >= 600) {
+                    pingColor = ChatColor.DARK_RED;
+                }
+                guard++;
+                if (!p.equals(PrisonGame.warden)) {
+                    if (!p.hasPotionEffect(PotionEffectType.LUCK) && !p.isDead()) {
+                        guards = guards + "\n" + p.getPlayerListName() + ChatColor.GRAY + " [" + pingColor + p.getPing() + ChatColor.GRAY + "ms]";
+                    } else {
+                        guards = guards + ChatColor.translateAlternateColorCodes('&', "\n &4☠&7 " + p.getName()) + ChatColor.GRAY + "[" + pingColor + p.getPing() + ChatColor.GRAY + "ms]";
                     }
                 }
-                if (PrisonGame.roles.get(p) == Role.PRISONER) {
-                    ChatColor pingColor = ChatColor.GREEN;
-                    if (p.getPing() > 200) {
-                        pingColor = ChatColor.YELLOW;
-                    }
-                    if (p.getPing() > 400) {
-                        pingColor = ChatColor.RED;
-                    }
-                    pris++;
-                    if (!p.hasPotionEffect(PotionEffectType.LUCK) && !p.isDead()) {
-                        prisoners = prisoners + "\n" + p.getDisplayName() + ChatColor.GRAY + " [" + pingColor + p.getPing() + ChatColor.GRAY + "ms]";
-                    } else {
-                        prisoners = prisoners + ChatColor.translateAlternateColorCodes('&', "\n &4☠&7 " + p.getName()) + ChatColor.GRAY + "[" + pingColor + p.getPing() + ChatColor.GRAY + "ms]";
-                    }
+            }
+            if (PrisonGame.roles.get(p) == Role.PRISONER) {
+                ChatColor pingColor = ChatColor.GREEN;
+                if (p.getPing() > 200) {
+                    pingColor = ChatColor.YELLOW;
+                }
+                if (p.getPing() > 400) {
+                    pingColor = ChatColor.RED;
+                }
+                pris++;
+                if (!p.hasPotionEffect(PotionEffectType.LUCK) && !p.isDead()) {
+                    prisoners = prisoners + "\n" + p.getDisplayName() + ChatColor.GRAY  + " [" + pingColor + p.getPing() + ChatColor.GRAY + "ms]";
+                } else {
+                    prisoners = prisoners + ChatColor.translateAlternateColorCodes('&', "\n &4☠&7 " + p.getName()) + ChatColor.GRAY  + "[" + pingColor + p.getPing() + ChatColor.GRAY + "ms]";
                 }
             }
         }
@@ -873,43 +858,28 @@ public class MyTask extends BukkitRunnable {
                     p.setFoodLevel(p.getFoodLevel() - 1);
                     p.sendTitle("", ChatColor.RED + "You can only sprint when you've escaped! [HARD MODE]", 0, 5, 0);
                 }
-            }
-
-            if (p.getInventory().getHelmet() != null) {
-                if (!p.getInventory().getHelmet().getType().equals(Material.BELL)) {
-                    p.setMaxHealth(20);
-                } else {
-                    p.addPotionEffect(PotionEffectType.SPEED.createEffect(20, 2));
-                }
+                p.setMaxHealth(14);
+            } else {
+                p.setMaxHealth(20);
             }
 
 
-            if (p.getPersistentDataContainer().has(PrisonGame.semicloak, PersistentDataType.INTEGER)) {
-                p.getPersistentDataContainer().set(PrisonGame.mny, PersistentDataType.DOUBLE, p.getPersistentDataContainer().get(PrisonGame.mny, PersistentDataType.DOUBLE)+1000);
-                p.sendMessage(ChatColor.RED + "Your semicloak ascension has been refunded and removed as ascensions have been removed!");
-                p.getPersistentDataContainer().remove(PrisonGame.semicloak);
-            }
-            if (p.getPersistentDataContainer().has(PrisonGame.reinforcement, PersistentDataType.INTEGER)) {
-                p.getPersistentDataContainer().set(PrisonGame.mny, PersistentDataType.DOUBLE, p.getPersistentDataContainer().get(PrisonGame.mny, PersistentDataType.DOUBLE)+1000);
-                p.sendMessage(ChatColor.RED + "Your Reinforcement ascension has been refunded and removed as ascensions have been removed!");
-                p.getPersistentDataContainer().remove(PrisonGame.reinforcement);
-            }
-            if (p.getPersistentDataContainer().has(PrisonGame.protspawn, PersistentDataType.INTEGER)) {
-                p.getPersistentDataContainer().set(PrisonGame.mny, PersistentDataType.DOUBLE, p.getPersistentDataContainer().get(PrisonGame.mny, PersistentDataType.DOUBLE)+1000);
-                p.sendMessage(ChatColor.RED + "Your protspawn ascension has been refunded and removed as ascensions have been removed!");
-                p.getPersistentDataContainer().remove(PrisonGame.protspawn);
-            }
-            if (p.getPersistentDataContainer().has(PrisonGame.randomz, PersistentDataType.INTEGER)) {
-                p.sendMessage(ChatColor.RED + "Your Random item ascension has been refunded and removed as ascensions have been removed!");
-                p.getPersistentDataContainer().set(PrisonGame.mny, PersistentDataType.DOUBLE, p.getPersistentDataContainer().get(PrisonGame.mny, PersistentDataType.DOUBLE)+1000);
-                p.getPersistentDataContainer().remove(PrisonGame.randomz);
-            }
             if (p.getInventory().getItemInMainHand().getItemMeta() != null) {
                 var mainHand = p.getInventory().getItemInMainHand();
                 var meta = mainHand.getItemMeta();
                 if (meta != null && !meta.getDisplayName().equals(ChatColor.BLUE + "Handcuffs " + ChatColor.RED + "[CONTRABAND]")) {
-                    p.setWalkSpeed(0.2f);
-                    p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(4);
+                    if (!PrisonGame.escaped.get(p) && PrisonGame.roles.get(p) == Role.PRISONER) {
+                        p.setWalkSpeed(0.2f);
+                        p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(4);
+                    }
+                    if (PrisonGame.escaped.get(p)) {
+                        p.setWalkSpeed(0.2f);
+                        p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(4.4);
+                    }
+                    if (PrisonGame.roles.get(p) != Role.PRISONER) {
+                        p.setWalkSpeed(0.2f);
+                        p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(4.4);
+                    }
                 } else {
                     p.getInventory().getItemInMainHand().setDurability((short) 3);
                     p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(9999);

@@ -34,7 +34,6 @@ public class PlayerJoinListener implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-
         if (PrisonGame.wardenenabled) {
             Player p = event.getPlayer();
             PrisonGame.trustlevel.put(event.getPlayer(), 0);

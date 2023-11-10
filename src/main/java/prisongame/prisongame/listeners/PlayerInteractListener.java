@@ -23,9 +23,7 @@ import prisongame.prisongame.PrisonGame;
 import prisongame.prisongame.lib.Config;
 import prisongame.prisongame.lib.Role;
 
-import java.util.Arrays;
 import java.util.Comparator;
-import java.util.Random;
 
 import static prisongame.prisongame.MyListener.playerJoin;
 import static prisongame.prisongame.MyListener.playerJoinignoreAsc;
@@ -40,27 +38,8 @@ public class PlayerInteractListener implements Listener {
         }
     }
 
-    protected ItemStack createGuiItem(final Material material, final String name, final String... lore) {
-        final ItemStack item = new ItemStack(material, 1);
-        final ItemMeta meta = item.getItemMeta();
-
-        // Set the name of the item
-        meta.setDisplayName(name);
-
-        // Set the lore of the item
-        meta.setLore(Arrays.asList(lore));
-
-        item.setItemMeta(meta);
-
-        return item;
-    }
-
     @EventHandler
     public void onPlayerInteract2(PlayerInteractEvent event) {
-        if (event.getPlayer().getActivePotionEffects().contains(PotionEffectType.CONFUSION)) {
-            event.setCancelled(true);
-            return;
-        }
         if (event.getItem() != null) {
             if (event.getItem().getType().equals(Material.IRON_DOOR)) {
                 if (!event.getPlayer().hasCooldown(Material.IRON_DOOR)) {
@@ -74,68 +53,6 @@ public class PlayerInteractListener implements Listener {
             }
         }
         if (event.getClickedBlock() != null) {
-            if (event.getClickedBlock().getType().equals(Material.BAMBOO_DOOR)) {
-                if (PrisonGame.active.getName().equals("Barreled")) {
-                    if (!Bukkit.getWorld("world").getBlockAt(new Location(Bukkit.getWorld("world"),-1023,-57,-994)).getType().equals(Material.AIR)) {
-                        event.setCancelled(true);
-                    }
-                }
-            }
-            if (event.getClickedBlock().getType().equals(Material.BELL)) {
-                if (PrisonGame.active.getName().equals("Barreled")) {
-                    if (PrisonGame.roles.get(event.getPlayer()).equals(Role.PRISONER)) {
-                        event.getPlayer().sendMessage(ChatColor.YELLOW + "Bell.");
-                        event.getPlayer().getInventory().setHelmet(new ItemStack(Material.BELL));
-                        event.getPlayer().setMaxHealth(10);
-                        event.getPlayer().getInventory().clear();
-                        event.getPlayer().getInventory().addItem(new ItemStack(Material.BELL));
-
-                    }
-                }
-            }
-            if (event.getClickedBlock().getType().equals(Material.BAMBOO_BUTTON)) {
-                if (PrisonGame.active.getName().equals("Barreled")) {
-                    if (PrisonGame.roles.get(event.getPlayer()).equals(Role.PRISONER)) {
-                        Boolean justUnpowered = false;
-                        if (PrisonGame.BBpower > 0) {
-                            justUnpowered = true;
-                        }
-                        PrisonGame.BBpower -= new Random().nextInt(1, 3);
-                        if (PrisonGame.BBpower < 0) {
-                            PrisonGame.BBpower = 0;
-                            if (justUnpowered) {
-                                Bukkit.getWorld("world").getBlockAt(new Location(Bukkit.getWorld("world"),-1023,-57,-994)).setType(Material.AIR);
-                                Bukkit.broadcastMessage(ChatColor.RED + "The facility power has gone off! " + ChatColor.GREEN + "Prisoner now get speed, and a door has opened somewhere...");
-                            }
-                        }
-                    } else {
-                        Boolean justUnpowered = false;
-                        if (PrisonGame.BBpower < 100) {
-                            justUnpowered = true;
-                        }
-                        PrisonGame.BBpower -= new Random().nextInt(2, 4);
-                        if (PrisonGame.BBpower >= 100) {
-                            PrisonGame.BBpower = 100;
-                            if (justUnpowered) {
-                                Location[] doors5 = {
-                                        new Location(Bukkit.getWorld("world"), -979, -53, -984),
-                                        new Location(Bukkit.getWorld("world"), -980, -53, -984)
-                                };
-                                for (Location l : doors5) {
-                                    BlockState state = l.getBlock().getState();
-                                    Door openable = (Door) state.getBlockData();
-                                    openable.setOpen(false);
-                                    state.setBlockData(openable);
-                                    state.update();
-                                    l.getWorld().playSound(l, Sound.BLOCK_IRON_DOOR_CLOSE, 0.75f, 0.75f);
-                                }
-                                Bukkit.broadcastMessage(ChatColor.RED + "Power has returned.");
-                                Bukkit.getWorld("world").getBlockAt(new Location(Bukkit.getWorld("world"),-1023,-57,-994)).setType(Material.REDSTONE_BLOCK);
-                            }
-                        }
-                    }
-                }
-            }
             if (event.getClickedBlock().getType().equals(Material.COARSE_DIRT)) {
                 if (event.getItem() != null) {
                     if (event.getItem().getType().equals(Material.WOODEN_SHOVEL)) {
@@ -223,8 +140,29 @@ public class PlayerInteractListener implements Listener {
                     event.getPlayer().openInventory(inv);
                 }
                 if (sign.getLine(0).equals("ASCEND")) {
-                    sign.setType(Material.AIR);
-                    event.getPlayer().sendMessage(ChatColor.RED + "Congratulations! You just deleted an old sign. You must feel very accomplished");
+                    if (event.getPlayer().equals(PrisonGame.warden)) {
+                        if (PrisonGame.warden.getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0) >= 10000) {
+                            PrisonGame.warden.getPersistentDataContainer().set(PrisonGame.ascendcoins, PersistentDataType.DOUBLE, event.getPlayer().getPersistentDataContainer().getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0) / 2000);
+                            PrisonGame.warden.getPersistentDataContainer().set(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0);
+                            Bukkit.broadcastMessage(ChatColor.GREEN + "The warden has ascended!");
+                            PrisonGame.roles.put(PrisonGame.warden, Role.PRISONER);
+                            PrisonGame.warden.getInventory().clear();
+                            PrisonGame.wardenCooldown = 60 + (20 * 4);
+                            PrisonGame.warden.teleport(PrisonGame.nl("world", 1999.5D, -14D, -2049.9D, 180f, 0f));
+                            PrisonGame.warden.playSound(PrisonGame.warden, Sound.ENTITY_ENDER_DRAGON_DEATH, 1, 1);
+                            PrisonGame.warden.playSound(PrisonGame.warden, Sound.MUSIC_DISC_OTHERSIDE, 1, 0.5f);
+                            PrisonGame.warden.addPotionEffect(PotionEffectType.SLOW_FALLING.createEffect(20 * 5, 0));
+                            Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
+                                event.getPlayer().setDisplayName(ChatColor.GRAY + "[" + ChatColor.AQUA + "ASCENDING" + ChatColor.GRAY + "] " + ChatColor.AQUA + PrisonGame.warden.getName());
+                                event.getPlayer().setCustomName(ChatColor.GRAY + "[" + ChatColor.AQUA + "ASCENDING" + ChatColor.GRAY + "] " + ChatColor.AQUA + PrisonGame.warden.getName());
+                                event.getPlayer().setPlayerListName(ChatColor.GRAY + "[" + ChatColor.AQUA + "ASCENDING" + ChatColor.GRAY + "] " + ChatColor.AQUA + PrisonGame.warden.getName());
+                                PrisonGame.warden = null;
+                            }, 4);
+
+                        } else {
+                            PrisonGame.warden.sendMessage(ChatColor.RED + "you don't have enough money!");
+                        }
+                    }
                 }
                 if (sign.getLine(1).equals("+1 time tick")) {
                     Bukkit.getWorld("world").setTime(Bukkit.getWorld("world").getTime() + 1);
@@ -353,7 +291,6 @@ public class PlayerInteractListener implements Listener {
 
                         ItemStack card = new ItemStack(Material.IRON_SWORD);
                         ItemMeta cardm = card.getItemMeta();
-                        cardm.addEnchant(Enchantment.DAMAGE_ALL, 2, true);
                         cardm.setDisplayName(ChatColor.BLUE + "Dagger " + ChatColor.RED + "[CONTRABAND]");
                         card.setItemMeta(cardm);
 
@@ -645,7 +582,7 @@ public class PlayerInteractListener implements Listener {
 
                         ItemStack pot = new ItemStack(new ItemStack(Material.SPLASH_POTION));
                         PotionMeta potMeta = (PotionMeta) pot.getItemMeta();
-                        potMeta.addCustomEffect(PotionEffectType.CONFUSION.createEffect(20 * 10, 0), true);
+                        potMeta.addCustomEffect(PotionEffectType.POISON.createEffect(20 * 10, 1), true);
                         potMeta.setColor(Color.LIME);
                         pot.setItemMeta(potMeta);
 
@@ -798,27 +735,6 @@ public class PlayerInteractListener implements Listener {
                     event.getPlayer().removePotionEffect(PotionEffectType.UNLUCK);
                 }
                 if (sign.getLine(1).equals("Get Gear")) {
-                    if (PrisonGame.roles.get(event.getPlayer()) == Role.PRISONER && PrisonGame.escaped.get(event.getPlayer())) {
-                        Player g = event.getPlayer();
-                        ItemStack orangechest = new ItemStack(Material.LEATHER_CHESTPLATE);
-                        orangechest.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
-                        LeatherArmorMeta chestmeta = (LeatherArmorMeta) orangechest.getItemMeta();
-                        chestmeta.setColor(Color.RED);
-                        chestmeta.setDisplayName("Armor " + ChatColor.RED + "[CONTRABAND]");
-                        orangechest.setItemMeta(chestmeta);
-
-                        ItemStack orangeleg = new ItemStack(Material.CHAINMAIL_LEGGINGS);
-                        orangechest.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
-                        ItemMeta orangelegItemMeta = orangeleg.getItemMeta();
-                        orangelegItemMeta.setDisplayName("Armor " + ChatColor.RED + "[CONTRABAND]");
-                        orangeleg.setItemMeta(orangelegItemMeta);
-
-
-                        g.getInventory().setHelmet(new ItemStack(Material.CHAINMAIL_HELMET));
-                        g.getInventory().setBoots(new ItemStack(Material.CHAINMAIL_BOOTS));
-                        g.getInventory().setChestplate(orangechest);
-                        g.getInventory().setLeggings(orangeleg);
-                    }
                     if (PrisonGame.roles.get(event.getPlayer()) == Role.PRISONER && !PrisonGame.escaped.get(event.getPlayer())) {
                         Player g = event.getPlayer();
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + event.getPlayer().getName() + " only prison:escape");
@@ -846,7 +762,9 @@ public class PlayerInteractListener implements Listener {
                         orangeleg.setItemMeta(orangelegItemMeta);
 
 
-                        g.sendMessage(ChatColor.LIGHT_PURPLE + "Reclick the sign to get armor; it will override any current armor~");
+                        g.getInventory().setHelmet(new ItemStack(Material.CHAINMAIL_HELMET));
+                        g.getInventory().setChestplate(orangechest);
+                        g.getInventory().setLeggings(orangeleg);
 
                         ItemStack wardenSword = new ItemStack(Material.STONE_SWORD);
                         wardenSword.addEnchantment(Enchantment.DAMAGE_ALL, 2);
@@ -926,6 +844,7 @@ public class PlayerInteractListener implements Listener {
                                     openable.setOpen(false);
                                     state.setBlockData(openable);
                                     state.update();
+
                                 }
                             } else {
                                 event.setCancelled(true);
