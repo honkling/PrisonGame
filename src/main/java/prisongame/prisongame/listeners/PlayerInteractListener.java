@@ -101,7 +101,7 @@ public class PlayerInteractListener implements Listener {
                             justUnpowered = true;
                         }
                         PrisonGame.BBpower -= new Random().nextInt(1, 3);
-                        if (PrisonGame.BBpower < 0) {
+                        if (PrisonGame.BBpower <= 0) {
                             PrisonGame.BBpower = 0;
                             if (justUnpowered) {
                                 Bukkit.getWorld("world").getBlockAt(new Location(Bukkit.getWorld("world"),-1023,-57,-994)).setType(Material.AIR);
@@ -113,7 +113,7 @@ public class PlayerInteractListener implements Listener {
                         if (PrisonGame.BBpower < 100) {
                             justUnpowered = true;
                         }
-                        PrisonGame.BBpower -= new Random().nextInt(2, 4);
+                        PrisonGame.BBpower += new Random().nextInt(2, 4);
                         if (PrisonGame.BBpower >= 100) {
                             PrisonGame.BBpower = 100;
                             if (justUnpowered) {
