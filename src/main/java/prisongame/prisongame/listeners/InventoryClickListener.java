@@ -340,6 +340,9 @@ public class InventoryClickListener implements Listener {
         Bukkit.getWorld("world").getBlockAt(new Location(Bukkit.getWorld("world"),-1023,-57,-994)).setType(Material.REDSTONE_BLOCK);
 
         for (Player player : Bukkit.getOnlinePlayers()) {
+            if (player.isSleeping())
+                player.wakeup(false);
+
             if (player.isInsideVehicle()) {
                 player.removePotionEffect(PotionEffectType.DOLPHINS_GRACE);
                 player.removePotionEffect(PotionEffectType.WEAKNESS);
