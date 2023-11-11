@@ -36,6 +36,10 @@ public class Config {
     }
 
     public static class Warden {
+        public static class Prefix {
+            public static List<String> bannedContainers = new ArrayList<>();
+        }
+
         public static final Map<String, HelpSubcommand> help = new HashMap<>();
     }
 
@@ -64,6 +68,7 @@ public class Config {
         General.discordInvite = config.getString("general.discord-invite");
         General.rules = arrayToList(config.getArray("general.rules"));
 
+        Warden.Prefix.bannedContainers = arrayToList(config.getArray("warden.prefix.banned-containers"));
         var help = config.getTable("warden.help");
 
         for (var key : help.keySet()) {
