@@ -32,8 +32,6 @@ public class IntercomCommand implements CommandExecutor {
             }
         }
 
-        lastUse = now;
-
         StringBuilder b = new StringBuilder(ChatColor.BLUE + "INTERCOM >> " + ChatColor.RED);
         for (String a : args) {
             if (a.contains("&k")) {
@@ -46,6 +44,9 @@ public class IntercomCommand implements CommandExecutor {
         if (!FilteredWords.isClean(b.toString())) {
             return true;
         }
+
+        lastUse = now;
+
         String be = ChatColor.translateAlternateColorCodes('&', b.toString());
         for (Player p : Bukkit.getOnlinePlayers()) {
             p.playSound(p, Sound.ENTITY_BEE_LOOP_AGGRESSIVE, 1, 0.75f);
