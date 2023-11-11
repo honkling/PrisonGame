@@ -299,7 +299,7 @@ public class PlayerInteractListener implements Listener {
                             //inv.addItem(PrisonGame.createGuiItem(Material.NETHERRACK, ChatColor.RED + "Nether"));
                             event.getPlayer().openInventory(inv);
                         } else {
-                            event.getPlayer().sendMessage(ChatColor.RED + "That's on cooldown!" + ChatColor.YELLOW + PrisonGame.swapcool / 20 + " seconds left.");
+                            event.getPlayer().sendMessage(ChatColor.RED + "That's on cooldown! " + ChatColor.YELLOW + PrisonGame.swapcool / 20 + " seconds left.");
                         }
 
                     }
