@@ -140,7 +140,7 @@ public final class PrisonGame extends JavaPlugin {
         else if (ping > 200) color = NamedTextColor.YELLOW;
 
         return PrisonGame.mm.deserialize(
-                "<gray>[<ping>ms</gray>]",
+                "<gray>[<ping>ms]</gray>",
                 Placeholder.component("ping", Component.text(ping).color(color))
         );
     }
