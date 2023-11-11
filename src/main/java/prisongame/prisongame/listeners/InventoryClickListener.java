@@ -324,7 +324,7 @@ public class InventoryClickListener implements Listener {
         }
     }
 
-    private void switchMap(Prison prison) {
+    public static void switchMap(Prison prison) {
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (player.getDisplayName().contains("ASCENDING"))
                 continue;

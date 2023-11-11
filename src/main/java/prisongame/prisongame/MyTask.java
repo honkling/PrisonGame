@@ -29,6 +29,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import prisongame.prisongame.commands.staff.VanishCommand;
 import prisongame.prisongame.lib.Config;
 import prisongame.prisongame.lib.Role;
+import prisongame.prisongame.listeners.InventoryClickListener;
 
 import java.text.DecimalFormat;
 
@@ -806,25 +807,7 @@ public class MyTask extends BukkitRunnable {
         for (Player p : Bukkit.getOnlinePlayers()) {
             if (PrisonGame.isInside(p, new Location(Bukkit.getWorld("world"), -2011, -53, -1929), new Location(Bukkit.getWorld("world"), -2009, -57, -1931))) {
                 if (PrisonGame.warden.equals(p)) {
-                    for (Player pe : Bukkit.getOnlinePlayers()) {
-                        pe.teleport(new Location(Bukkit.getWorld("world"), -2062, -50, 1945));
-                    }
-                    PrisonGame.active = Config.prisons.get("nether");
-                    PrisonGame.swapcool = (20 * 60) * 5;
-                    MyListener.reloadBert();
-                    for (Player pe : Bukkit.getOnlinePlayers()) {
-                        if (PrisonGame.roles.get(pe) != Role.WARDEN) {
-                            MyListener.playerJoin(pe, true);
-                            pe.sendTitle("New prison!", "NETHER");
-                        } else {
-                            pe.teleport(PrisonGame.active.getWardenspawn());
-                            Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
-                                pe.teleport(PrisonGame.active.getWardenspawn());
-                            }, 5);
-                            if (!pe.getDisplayName().contains("ASCENDING"))
-                                pe.sendTitle("New prison!", "NETHER");
-                        }
-                    }
+                    InventoryClickListener.switchMap(Config.prisons.get("nether"));
                 } else {
                     p.sendTitle("", ChatColor.RED + "YOU MUST BE WARDEN!", 0, 50, 0);
                 }

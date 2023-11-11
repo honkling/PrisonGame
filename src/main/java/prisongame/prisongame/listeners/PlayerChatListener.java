@@ -20,24 +20,8 @@ public class PlayerChatListener implements Listener {
         if (PrisonGame.isInside(event.getPlayer(), new Location(Bukkit.getWorld("world"), 2141, -57, -2084), new Location(Bukkit.getWorld("world"), 2137, -62, -2080))) {
             if (event.getMessage().equals("1775182") && PrisonGame.warden.equals(event.getPlayer())) {
                 event.setCancelled(true);
-                event.getPlayer().teleport(new Location(Bukkit.getWorld("world"), 2141, -60, -2087));
                 event.getPlayer().sendMessage(ChatColor.GREEN + "Access granted.");
-                for (Player pe : Bukkit.getOnlinePlayers()) {
-                    pe.teleport(new Location(Bukkit.getWorld("world"), -2062, -50, 1945));
-                }
-                PrisonGame.active = Config.prisons.get("boat");
-                PrisonGame.swapcool = (20 * 60) * 5;
-                reloadBert();
-                for (Player pe : Bukkit.getOnlinePlayers()) {
-                    if (PrisonGame.roles.get(pe) != Role.WARDEN) {
-                        MyListener.playerJoin(pe, true);
-                        pe.sendTitle("New prison!", "BOAT");
-                    } else {
-                        pe.teleport(PrisonGame.active.getWardenspawn());
-                        if (!pe.getDisplayName().contains("ASCENDING"))
-                            pe.sendTitle("New prison!", "BOAT");
-                    }
-                }
+                InventoryClickListener.switchMap(Config.prisons.get("boat"));
             }
         }
     }
