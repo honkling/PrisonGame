@@ -34,7 +34,7 @@ public class IntercomCommand implements CommandExecutor {
 
         StringBuilder b = new StringBuilder(ChatColor.BLUE + "INTERCOM >> " + ChatColor.RED);
         for (String a : args) {
-            if (a.contains("&k")) {
+            if (a.toLowerCase().contains("&k")) {
                 sender.sendMessage(PrisonGame.mm.deserialize("<red>You cannot use obfuscation."));
                 return true;
             }
