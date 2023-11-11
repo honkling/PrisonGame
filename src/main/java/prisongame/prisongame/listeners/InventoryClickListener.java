@@ -340,6 +340,21 @@ public class InventoryClickListener implements Listener {
         Bukkit.getWorld("world").getBlockAt(new Location(Bukkit.getWorld("world"),-1023,-57,-994)).setType(Material.REDSTONE_BLOCK);
 
         for (Player player : Bukkit.getOnlinePlayers()) {
+            if (player.isInsideVehicle()) {
+                player.removePotionEffect(PotionEffectType.DOLPHINS_GRACE);
+                player.removePotionEffect(PotionEffectType.WEAKNESS);
+                player.getVehicle().removePassenger(player);
+            }
+
+            for (var passenger : player.getPassengers()) {
+                if (passenger instanceof Player playerPassenger) {
+                    playerPassenger.removePotionEffect(PotionEffectType.DOLPHINS_GRACE);
+                    playerPassenger.removePotionEffect(PotionEffectType.WEAKNESS);
+                }
+
+                player.removePassenger(passenger);
+            }
+
             if (PrisonGame.roles.get(player) != Role.WARDEN) {
                 MyListener.playerJoin(player, true);
                 player.sendTitle(ChatColor.GREEN + "New prison!", ChatColor.BOLD + prison.name.toUpperCase());
