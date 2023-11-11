@@ -2,7 +2,11 @@ package prisongame.prisongame;
 
 import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.disguisetypes.PlayerDisguise;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
 import org.bukkit.*;
@@ -127,6 +131,20 @@ public final class PrisonGame extends JavaPlugin {
     public static void tptoBed(Player p) {
         p.teleport(PrisonGame.active.getNursebedOutTP());
     }
+
+    public static Component getPingDisplay(Player player) {
+        var ping = player.getPing();
+
+        var color = NamedTextColor.GREEN;
+        if (ping > 400) color = NamedTextColor.RED;
+        else if (ping > 200) color = NamedTextColor.YELLOW;
+
+        return PrisonGame.mm.deserialize(
+                "<gray>[<ping>ms</gray>]",
+                Placeholder.component("ping", Component.text(ping).color(color))
+        );
+    }
+
     public static Location move(Location loc, Vector offset) {
         // Convert rotation to radians
         float ryaw = -loc.getYaw() / 180f * (float) Math.PI;

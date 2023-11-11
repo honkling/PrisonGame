@@ -11,6 +11,13 @@ rules = [
     "No advertising."
 ]
 
+[warden.prefix]
+banned-containers = [
+    "SOLITARY",
+    "BOOSTER",
+    "ASCENDING"
+]
+
 [warden.help]
 help = { args = [""], description = "Shows you this menu." }
 solitary = { args = ["name"], description = "Sends a player to solitary, later to torture them. <red>[PLAYER MUST BE DEAD]" }
