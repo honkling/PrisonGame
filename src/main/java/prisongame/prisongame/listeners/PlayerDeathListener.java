@@ -1,5 +1,6 @@
 package prisongame.prisongame.listeners;
 
+import net.minecraft.network.chat.ChatClickable;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -34,22 +35,28 @@ public class PlayerDeathListener implements Listener {
 
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
-        if (event.getEntity().getKiller() != null) {
-            if (!event.getEntity().getKiller().equals(event.getEntity()) ) {
-                event.getEntity().getKiller().getInventory().getItemInMainHand();
-                if (event.getEntity().getKiller().getInventory().getItemInMainHand().getItemMeta() != null) {
-                    if (event.getEntity().getKiller().getInventory().getItemInMainHand().getItemMeta().getDisplayName().equals(ChatColor.BLUE + "Handcuffs " + ChatColor.RED + "[CONTRABAND]")) {
-                        if (!event.getEntity().getKiller().hasCooldown(Material.IRON_SHOVEL)) {
-                            event.setCancelled(true);
-                            event.getEntity().addPotionEffect(PotionEffectType.WEAKNESS.createEffect(20 * 30, 255));
-                            event.getEntity().addPotionEffect(PotionEffectType.DOLPHINS_GRACE.createEffect(20 * 30, 255));
-                            event.getEntity().sendTitle(ChatColor.RED + "HANDCUFFED!", "", 20, 160, 20);
-                            Player p = event.getEntity();
-                            p.getKiller().addPassenger(p);
-                            event.getEntity().getKiller().sendMessage(ChatColor.GREEN + "Shift to drop players.");
-                            return;
-                        }
-                    }
+        var player = event.getEntity();
+        var killer = player.getKiller();
+
+        if (killer != null) {
+            if (!killer.equals(player) ) {
+                var inventory = killer.getInventory();
+                var mainHand = inventory.getItemInMainHand();
+                var meta = mainHand.getItemMeta();
+                if (
+                        meta != null &&
+                        meta.getDisplayName().equals(ChatColor.BLUE + "Handcuffs " + ChatColor.RED + "[CONTRABAND]") &&
+                        !killer.hasCooldown(Material.IRON_SHOVEL) &&
+                        !killer.hasPotionEffect(PotionEffectType.UNLUCK)
+                ) {
+                    event.setCancelled(true);
+                    event.getEntity().addPotionEffect(PotionEffectType.WEAKNESS.createEffect(20 * 30, 255));
+                    event.getEntity().addPotionEffect(PotionEffectType.DOLPHINS_GRACE.createEffect(20 * 30, 255));
+                    event.getEntity().sendTitle(ChatColor.RED + "HANDCUFFED!", "", 20, 160, 20);
+                    Player p = event.getEntity();
+                    p.getKiller().addPassenger(p);
+                    event.getEntity().getKiller().sendMessage(ChatColor.GREEN + "Shift to drop players.");
+                    return;
                 }
             }
             PrisonGame.killior.put(event.getEntity(), event.getEntity().getKiller());
