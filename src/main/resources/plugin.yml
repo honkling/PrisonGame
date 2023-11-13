@@ -9,6 +9,8 @@ main: prisongame.prisongame.PrisonGame
 api-version: "1.20"
 
 commands:
+  debug:
+    description: Debug command
   season:
     description: Begin a new season.
     usage: /season
