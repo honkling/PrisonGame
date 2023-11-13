@@ -103,6 +103,8 @@ public class DefaultCommand implements CommandExecutor {
         if (nw.getInventory().getBoots() != null)
             nw.getInventory().getBoots().addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
 
+        nw.setHealth(20);
+
         return true;
     }
 }

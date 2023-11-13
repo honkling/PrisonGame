@@ -4,7 +4,6 @@ import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.disguisetypes.PlayerDisguise;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.luckperms.api.LuckPerms;
@@ -32,10 +31,7 @@ import prisongame.prisongame.commands.economy.PayCommand;
 import prisongame.prisongame.commands.economy.staff.NerdCheatCommand;
 import prisongame.prisongame.commands.economy.staff.ResetMoneyCommand;
 import prisongame.prisongame.commands.economy.staff.SetMoneyCommand;
-import prisongame.prisongame.commands.staff.BuilderCommand;
-import prisongame.prisongame.commands.staff.EnderChestCommand;
-import prisongame.prisongame.commands.staff.PBBReloadCommand;
-import prisongame.prisongame.commands.staff.VanishCommand;
+import prisongame.prisongame.commands.staff.*;
 import prisongame.prisongame.lib.Config;
 import prisongame.prisongame.lib.Role;
 import prisongame.prisongame.listeners.*;
@@ -92,6 +88,8 @@ public final class PrisonGame extends JavaPlugin {
     public static Boolean wardenenabled = false;
 
     public static NamespacedKey mny;
+    public static NamespacedKey previousMoney;
+    public static NamespacedKey season;
     static HashMap<Player, Integer> respect = new HashMap<>();
     public static HashMap<Player, Integer> solittime = new HashMap<>();
     static HashMap<Material, Double> moneyore = new HashMap<>();
@@ -234,6 +232,8 @@ public final class PrisonGame extends JavaPlugin {
     public void setupKeys() {
         nightvis = new NamespacedKey(PrisonGame.getPlugin(PrisonGame.class), "night");
         mny = new NamespacedKey(PrisonGame.getPlugin(PrisonGame.class), "money");
+        previousMoney = new NamespacedKey(PrisonGame.instance, "prevmoney");
+        season = new NamespacedKey(PrisonGame.instance, "season");
         whiff = new NamespacedKey(PrisonGame.getPlugin(PrisonGame.class), "whiff");
         muted = new NamespacedKey(PrisonGame.getPlugin(PrisonGame.class), "mutedd");
         coarsemined = new NamespacedKey(PrisonGame.getPlugin(PrisonGame.class), "coarsemined");
@@ -262,6 +262,7 @@ public final class PrisonGame extends JavaPlugin {
     }
 
     public void registerCommands() {
+        this.getCommand("season").setExecutor(new SeasonCommand());
         this.getCommand("vanish").setExecutor(new VanishCommand());
         this.getCommand("enderchest").setExecutor(new EnderChestCommand());
         this.getCommand("rules").setExecutor(new RulesCommand());
@@ -665,7 +666,6 @@ public final class PrisonGame extends JavaPlugin {
 
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + g.getName() + " only prison:guard");
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + PrisonGame.warden.getName() + " only prison:support");
-        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + g.getName() + " only prison:swat");
         Player nw = (Player) g;
         if (nw.getPersistentDataContainer().has(PrisonGame.protspawn, PersistentDataType.INTEGER)) {
             if (nw.getInventory().getHelmet() != null)

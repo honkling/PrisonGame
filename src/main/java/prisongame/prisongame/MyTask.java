@@ -84,9 +84,10 @@ public class MyTask extends BukkitRunnable {
             }
             if (PrisonGame.warden == p) {
                 PrisonGame.wardentime.put(p, PrisonGame.wardentime.get(p) + 1);
-                if (PrisonGame.wardentime.get(p) / 20 / 60 >= 120) {
+                var advancement = Bukkit.getAdvancement(new NamespacedKey("prison", "dictatorship"));
+                if (PrisonGame.wardentime.get(p) / 20 / 60 >= 120 && !p.getAdvancementProgress(advancement).isDone()) {
                     Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + p.getName() + " only prison:dictatorship");
-                    PrisonGame.wardentime.put(p, Integer.MIN_VALUE);
+//                    PrisonGame.wardentime.put(p, Integer.MIN_VALUE);
                 }
             }
             if (!PrisonGame.saidcycle.containsKey(p)) {
