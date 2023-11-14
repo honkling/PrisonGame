@@ -2,20 +2,16 @@ package prisongame.prisongame.listeners;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.AsyncPlayerChatPreviewEvent;
 import org.bukkit.persistence.PersistentDataType;
 import prisongame.prisongame.FilteredWords;
-import prisongame.prisongame.MyListener;
 import prisongame.prisongame.PrisonGame;
+import prisongame.prisongame.lib.Keys;
 import prisongame.prisongame.lib.Role;
-
-import static prisongame.prisongame.MyListener.reloadBert;
 
 public class AsyncPlayerChatListener implements Listener {
     @EventHandler
@@ -28,7 +24,7 @@ public class AsyncPlayerChatListener implements Listener {
             if (!PrisonGame.word.get(event.getPlayer()).equals(event.getMessage())) {
                 Bukkit.getLogger().info(event.getPlayer().getDisplayName() + ChatColor.RED + ": " + FilteredWords.filtermsg(event.getMessage()));
                 for (Player p : Bukkit.getOnlinePlayers()) {
-                    if (!p.getPersistentDataContainer().has(PrisonGame.whiff, PersistentDataType.INTEGER)) {
+                    if (!Keys.NO_WARDEN_SPACES.has(p)) {
                         p.playSound(p, Sound.BLOCK_NOTE_BLOCK_BIT, 1, 1);
                     }
 

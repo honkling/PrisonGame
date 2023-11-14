@@ -13,7 +13,7 @@ import java.util.Collections;
 import java.util.List;
 
 public abstract class SubcommandCompleter implements TabCompleter {
-    private String name;
+    protected String name;
     private String[] commands;
 
     public SubcommandCompleter(String name, String[] commands) {
@@ -26,8 +26,12 @@ public abstract class SubcommandCompleter implements TabCompleter {
         if (args.length != 1 || !command.getName().equalsIgnoreCase(name))
             return null;
 
+        return complete(args[0], commands);
+    }
+
+    protected List<String> complete(String arg, String[] commands) {
         var completions = new ArrayList<String>();
-        StringUtil.copyPartialMatches(args[0], List.of(commands), completions);
+        StringUtil.copyPartialMatches(arg, List.of(commands), completions);
         Collections.sort(completions);
         return completions;
     }
