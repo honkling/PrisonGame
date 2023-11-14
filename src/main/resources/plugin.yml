@@ -11,6 +11,8 @@ api-version: "1.20"
 commands:
   debug:
     description: Debug command
+    usage: /debug
+    permission: pbb.debug
   season:
     description: Begin a new season.
     usage: /season

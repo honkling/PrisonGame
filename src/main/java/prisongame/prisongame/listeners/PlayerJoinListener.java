@@ -13,6 +13,7 @@ import org.bukkit.potion.PotionEffectType;
 import prisongame.prisongame.PrisonGame;
 import prisongame.prisongame.commands.staff.SeasonCommand;
 import prisongame.prisongame.commands.staff.VanishCommand;
+import prisongame.prisongame.lib.Keys;
 
 import java.io.IOException;
 
@@ -26,13 +27,13 @@ public class PlayerJoinListener implements Listener {
 
         try {
             var currentSeason = SeasonCommand.getCurrentSeason();
-            var playerSeason = container.getOrDefault(PrisonGame.season, PersistentDataType.INTEGER, 0);
-            var money = container.getOrDefault(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0);
+            var playerSeason = container.getOrDefault(Keys.SEASON.key(), PersistentDataType.INTEGER, 0);
+            var money = container.getOrDefault(Keys.MONEY.key(), PersistentDataType.DOUBLE, 0.0);
 
             if (currentSeason != playerSeason && money > 0) {
-                container.set(PrisonGame.season, PersistentDataType.INTEGER, currentSeason);
-                container.set(PrisonGame.previousMoney, PersistentDataType.DOUBLE, money);
-                container.set(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0);
+                container.set(Keys.SEASON.key(), PersistentDataType.INTEGER, currentSeason);
+                container.set(Keys.PREVIOUS_MONEY.key(), PersistentDataType.DOUBLE, money);
+                container.set(Keys.MONEY.key(), PersistentDataType.DOUBLE, 0.0);
                 player.sendMessage(PrisonGame.mm.deserialize("\n<red>Your money has been reset due to the start of a new season!\n"));
             }
         } catch (IOException e) {

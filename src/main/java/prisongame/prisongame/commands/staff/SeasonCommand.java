@@ -7,8 +7,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
-import prisongame.prisongame.Prison;
 import prisongame.prisongame.PrisonGame;
+import prisongame.prisongame.lib.Keys;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,10 +35,10 @@ public class SeasonCommand implements CommandExecutor {
 
             for (var player : Bukkit.getOnlinePlayers()) {
                 var pdc = player.getPersistentDataContainer();
-                var money = pdc.get(PrisonGame.mny, PersistentDataType.DOUBLE);
-                pdc.set(PrisonGame.previousMoney, PersistentDataType.DOUBLE, money);
-                pdc.set(PrisonGame.mny, PersistentDataType.DOUBLE, 0.0);
-                pdc.set(PrisonGame.season, PersistentDataType.INTEGER, season);
+                var money = Keys.MONEY.get(player);
+                Keys.PREVIOUS_MONEY.set(player, money);
+                Keys.MONEY.set(player, 0.0);
+                Keys.SEASON.set(player, season);
                 player.sendMessage(PrisonGame.mm.deserialize("\n<red>Your money has been reset due to the start of a new season!\n"));
             }
         } catch (IOException exception) {

@@ -6,7 +6,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;
-import prisongame.prisongame.PrisonGame;
+import prisongame.prisongame.lib.Keys;
 
 public class SetMoneyCommand implements CommandExecutor {
 
@@ -14,7 +14,7 @@ public class SetMoneyCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         Player p = Bukkit.getPlayer(args[0]);
-        p.getPersistentDataContainer().set(PrisonGame.mny, PersistentDataType.DOUBLE ,Double.valueOf(args[1]));
+        Keys.MONEY.set(p, Double.valueOf(args[1]));
         return true;
     }
 }
