@@ -81,6 +81,7 @@ public final class PrisonGame extends JavaPlugin {
     public static HashMap<Player, Boolean> gotcafefood = new HashMap<>();
     public static HashMap<Player, Boolean> hardmode = new HashMap<>();
     public static HashMap<Player, Player> killior = new HashMap<>();
+    public static HashMap<Player, Boolean> builder = new HashMap<>();
 
     public static HashMap<UUID, HashMap<UUID, Integer>> savedPlayerGuards = new HashMap<>();
 

@@ -192,7 +192,7 @@ public class MyTask extends BukkitRunnable {
             bossbar.setTitle("ROLL CALL");
             hasAlerted = false;
         }
-        if (MyTask.bossbar.getTitle().equals("ROLL CALL") || MyTask.bossbar.getTitle().equals("EVENING ROLL CALL")) {
+        if (MyTask.bossbar.getTitle().contains("ROLL CALL")) {
             Boolean allat = true;
             PrisonGame.gotcafefood.clear();
             for (Player p : Bukkit.getOnlinePlayers()) {

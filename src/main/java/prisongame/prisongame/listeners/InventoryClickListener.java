@@ -325,7 +325,7 @@ public class InventoryClickListener implements Listener {
 
     public static void switchMap(Prison prison) {
         for (Player player : Bukkit.getOnlinePlayers()) {
-            if (player.getDisplayName().contains("ASCENDING"))
+            if (player.getDisplayName().contains("ASCENDING") || PrisonGame.builder.get(player))
                 continue;
 
             player.teleport(prison.mapSwitch);
@@ -339,6 +339,9 @@ public class InventoryClickListener implements Listener {
         Bukkit.getWorld("world").getBlockAt(new Location(Bukkit.getWorld("world"),-1023,-57,-994)).setType(Material.REDSTONE_BLOCK);
 
         for (Player player : Bukkit.getOnlinePlayers()) {
+            if (PrisonGame.builder.get(player))
+                continue;
+
             if (player.isSleeping())
                 player.wakeup(false);
 

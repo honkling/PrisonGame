@@ -63,7 +63,7 @@ public class EntityDamageByEntityListener implements Listener {
                 event.setCancelled(true);
             }
         }
-        if (MyTask.bossbar.getTitle().equals("ROLL CALL") || MyTask.bossbar.getTitle().equals("EVENING ROLL CALL")) {
+        if (MyTask.bossbar.getTitle().contains("ROLL CALL")) {
             if (event.getEntity() instanceof Player) {
                 Player p = (Player) event.getEntity();
                 if (new Location(p.getWorld(), p.getLocation().getX(), p.getLocation().getY() - 1, p.getLocation().getZ()).getBlock().getType().equals(Material.RED_SAND)) {
