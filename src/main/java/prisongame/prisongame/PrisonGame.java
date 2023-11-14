@@ -22,6 +22,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 import prisongame.prisongame.commands.*;
+import prisongame.prisongame.commands.completers.DebugComplete;
 import prisongame.prisongame.commands.completers.EnderChestComplete;
 import prisongame.prisongame.commands.completers.WardenComplete;
 import prisongame.prisongame.commands.danger.HardCommand;
@@ -33,6 +34,7 @@ import prisongame.prisongame.commands.economy.staff.ResetMoneyCommand;
 import prisongame.prisongame.commands.economy.staff.SetMoneyCommand;
 import prisongame.prisongame.commands.staff.*;
 import prisongame.prisongame.lib.Config;
+import prisongame.prisongame.lib.Keys;
 import prisongame.prisongame.lib.Role;
 import prisongame.prisongame.listeners.*;
 
@@ -66,30 +68,10 @@ public final class PrisonGame extends JavaPlugin {
     public static Boolean givepig = false;
     public static Integer solitcooldown = 0;
     public static Prison active = null;
-    public static NamespacedKey nightvis;
-    static NamespacedKey rank;
-    static NamespacedKey coarsemined;
-    public static NamespacedKey hg;
-    public static NamespacedKey ascendcoins;
-    public static NamespacedKey guardelo;
-    public static NamespacedKey doubincome;
-    public static NamespacedKey taxevasion;
-    static NamespacedKey rankprefix;
-    public static NamespacedKey semicloak;
-    public static NamespacedKey reinforcement;
-    public static NamespacedKey bckupmny;
-    public static NamespacedKey protspawn;
-    public static NamespacedKey tab;
-    public static NamespacedKey randomz;
     public static Integer swapcool = 0;
     public static Integer wardenCooldown = 20;
     public static Integer lockdowncool = 0;
-    public static NamespacedKey whiff;
     public static Boolean wardenenabled = false;
-
-    public static NamespacedKey mny;
-    public static NamespacedKey previousMoney;
-    public static NamespacedKey season;
     static HashMap<Player, Integer> respect = new HashMap<>();
     public static HashMap<Player, Integer> solittime = new HashMap<>();
     static HashMap<Material, Double> moneyore = new HashMap<>();
@@ -97,10 +79,8 @@ public final class PrisonGame extends JavaPlugin {
     public static HashMap<Player, Integer> trustlevel = new HashMap<>();
     public static HashMap<Player, Integer> prisonerlevel = new HashMap<>();
     public static HashMap<Player, Boolean> gotcafefood = new HashMap<>();
-    static NamespacedKey trust;
     public static HashMap<Player, Boolean> hardmode = new HashMap<>();
     public static HashMap<Player, Player> killior = new HashMap<>();
-    public static NamespacedKey muted;
 
     public static HashMap<UUID, HashMap<UUID, Integer>> savedPlayerGuards = new HashMap<>();
 
@@ -204,7 +184,6 @@ public final class PrisonGame extends JavaPlugin {
         Config.register();
         setupLuckPerms();
         loadGuardData();
-        setupKeys();
         setupOres();
         registerCommands();
         restorePlayerRoles();
@@ -229,30 +208,6 @@ public final class PrisonGame extends JavaPlugin {
         }
     }
 
-    public void setupKeys() {
-        nightvis = new NamespacedKey(PrisonGame.getPlugin(PrisonGame.class), "night");
-        mny = new NamespacedKey(PrisonGame.getPlugin(PrisonGame.class), "money");
-        previousMoney = new NamespacedKey(PrisonGame.instance, "prevmoney");
-        season = new NamespacedKey(PrisonGame.instance, "season");
-        whiff = new NamespacedKey(PrisonGame.getPlugin(PrisonGame.class), "whiff");
-        muted = new NamespacedKey(PrisonGame.getPlugin(PrisonGame.class), "mutedd");
-        coarsemined = new NamespacedKey(PrisonGame.getPlugin(PrisonGame.class), "coarsemined");
-        ascendcoins = new NamespacedKey(PrisonGame.getPlugin(PrisonGame.class), "ascendcoins");
-        bckupmny = new NamespacedKey(PrisonGame.getPlugin(PrisonGame.class), "bckupmny");
-        hg = new NamespacedKey(PrisonGame.getPlugin(PrisonGame.class), "headguard");
-        tab = new NamespacedKey(PrisonGame.getPlugin(PrisonGame.class), "oldtab");
-        doubincome = new NamespacedKey(PrisonGame.getPlugin(PrisonGame.class), "doubleinc");
-        taxevasion = new NamespacedKey(PrisonGame.getPlugin(PrisonGame.class), "taxev");
-        semicloak = new NamespacedKey(PrisonGame.getPlugin(PrisonGame.class), "scloak");
-        reinforcement = new NamespacedKey(PrisonGame.getPlugin(PrisonGame.class), "reinf");
-        protspawn = new NamespacedKey(PrisonGame.getPlugin(PrisonGame.class), "prots");
-        randomz = new NamespacedKey(PrisonGame.getPlugin(PrisonGame.class), "rand");
-        rankprefix = new NamespacedKey(PrisonGame.getPlugin(PrisonGame.class), "rankprefix");
-        trust = new NamespacedKey(PrisonGame.getPlugin(PrisonGame.class), "trust");
-        guardelo = new NamespacedKey(PrisonGame.getPlugin(PrisonGame.class), "elo");
-        Bukkit.broadcastMessage("RELOAD: Loaded NameSpacedKeys");
-    }
-
     public void setupOres() {
         moneyore.put(Material.DEEPSLATE_COPPER_ORE, 7.5);
         moneyore.put(Material.DEEPSLATE_EMERALD_ORE, 45.0);
@@ -262,27 +217,29 @@ public final class PrisonGame extends JavaPlugin {
     }
 
     public void registerCommands() {
+        this.getCommand("pay").setExecutor(new PayCommand());
+        this.getCommand("hard").setExecutor(new HardCommand());
+        this.getCommand("debug").setExecutor(new DebugCommand());
+        this.getCommand("rules").setExecutor(new RulesCommand());
+        this.getCommand("tc").setExecutor(new TeamChatCommand());
+        this.getCommand("hello").setExecutor(new HelloCommand());
+        this.getCommand("disc").setExecutor(new DiscordCommand());
         this.getCommand("season").setExecutor(new SeasonCommand());
         this.getCommand("vanish").setExecutor(new VanishCommand());
-        this.getCommand("enderchest").setExecutor(new EnderChestCommand());
-        this.getCommand("rules").setExecutor(new RulesCommand());
-        this.getCommand("pbbreload").setExecutor(new PBBReloadCommand());
         this.getCommand("warden").setExecutor(new WardenCommand());
         this.getCommand("resign").setExecutor(new ResignCommand());
-        this.getCommand("tc").setExecutor(new TeamChatCommand());
-        this.getCommand("disc").setExecutor(new DiscordCommand());
         this.getCommand("accept").setExecutor(new AcceptCommand());
-        this.getCommand("hello").setExecutor(new HelloCommand());
-        this.getCommand("nerdcheatcommand").setExecutor(new NerdCheatCommand());
-        this.getCommand("rstmoney").setExecutor(new ResetMoneyCommand());
-        this.getCommand("pay").setExecutor(new PayCommand());
-        this.getCommand("builder").setExecutor(new BuilderCommand());
-        this.getCommand("rstascen").setExecutor(new ResetAscensionCommand());
-        this.getCommand("hard").setExecutor(new HardCommand());
         this.getCommand("normal").setExecutor(new NormalCommand());
+        this.getCommand("builder").setExecutor(new BuilderCommand());
         this.getCommand("setmoney").setExecutor(new SetMoneyCommand());
+        this.getCommand("pbbreload").setExecutor(new PBBReloadCommand());
+        this.getCommand("rstmoney").setExecutor(new ResetMoneyCommand());
+        this.getCommand("enderchest").setExecutor(new EnderChestCommand());
         this.getCommand("pbsettings").setExecutor(new PBSettingsCommand());
+        this.getCommand("rstascen").setExecutor(new ResetAscensionCommand());
+        this.getCommand("nerdcheatcommand").setExecutor(new NerdCheatCommand());
 
+        this.getCommand("debug").setTabCompleter(new DebugComplete());
         this.getCommand("warden").setTabCompleter(new WardenComplete());
         this.getCommand("enderchest").setTabCompleter(new EnderChestComplete());
         Bukkit.broadcastMessage("RELOAD: Loaded Commands");
@@ -451,7 +408,7 @@ public final class PrisonGame extends JavaPlugin {
         g.getInventory().setChestplate(orangechest);
         g.getInventory().setLeggings(orangeleg);
         g.getInventory().setBoots(orangeboot);
-        if (g.getPersistentDataContainer().has(PrisonGame.hg, PersistentDataType.INTEGER)) {
+        if (Keys.HEAD_GUARD.has(g)) {
             g.getInventory().setBoots(new ItemStack(Material.NETHERITE_BOOTS));
         }
 
@@ -500,7 +457,7 @@ public final class PrisonGame extends JavaPlugin {
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + PrisonGame.warden.getName() + " only prison:support");
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + g.getName() + " only prison:swat");
         Player nw = (Player) g;
-        if (nw.getPersistentDataContainer().has(PrisonGame.protspawn, PersistentDataType.INTEGER)) {
+        if (Keys.SPAWN_PROTECTION.has(nw)) {
             if (nw.getInventory().getHelmet() != null)
                 nw.getInventory().getHelmet().addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
             if (nw.getInventory().getChestplate() != null)
@@ -538,7 +495,7 @@ public final class PrisonGame extends JavaPlugin {
         g.getInventory().setLeggings(orangeleg);
         g.getInventory().setBoots(orangeboot);
 
-        if (g.getPersistentDataContainer().has(PrisonGame.hg, PersistentDataType.INTEGER)) {
+        if (Keys.HEAD_GUARD.has(g)) {
             g.getInventory().setBoots(new ItemStack(Material.NETHERITE_BOOTS));
         }
 
@@ -579,7 +536,7 @@ public final class PrisonGame extends JavaPlugin {
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + PrisonGame.warden.getName() + " only prison:support");
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + g.getName() + " only prison:swat");
         Player nw = (Player) g;
-        if (nw.getPersistentDataContainer().has(PrisonGame.protspawn, PersistentDataType.INTEGER)) {
+        if (Keys.SPAWN_PROTECTION.has(nw)) {
             if (nw.getInventory().getHelmet() != null)
                 nw.getInventory().getHelmet().addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
             if (nw.getInventory().getChestplate() != null)
@@ -625,7 +582,7 @@ public final class PrisonGame extends JavaPlugin {
         g.getInventory().setLeggings(orangeleg);
         g.getInventory().setBoots(orangeboot);
 
-        if (g.getPersistentDataContainer().has(PrisonGame.hg, PersistentDataType.INTEGER)) {
+        if (Keys.HEAD_GUARD.has(g)) {
             g.getInventory().setBoots(new ItemStack(Material.NETHERITE_BOOTS));
         }
 
@@ -667,7 +624,7 @@ public final class PrisonGame extends JavaPlugin {
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + g.getName() + " only prison:guard");
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + PrisonGame.warden.getName() + " only prison:support");
         Player nw = (Player) g;
-        if (nw.getPersistentDataContainer().has(PrisonGame.protspawn, PersistentDataType.INTEGER)) {
+        if (Keys.SPAWN_PROTECTION.has(nw)) {
             if (nw.getInventory().getHelmet() != null)
                 nw.getInventory().getHelmet().addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
             if (nw.getInventory().getChestplate() != null)

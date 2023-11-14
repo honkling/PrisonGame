@@ -6,9 +6,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.persistence.PersistentDataContainer;
-import org.bukkit.persistence.PersistentDataType;
-import prisongame.prisongame.PrisonGame;
+import prisongame.prisongame.lib.Keys;
 
 import java.text.NumberFormat;
 
@@ -42,16 +40,13 @@ public class PayCommand implements CommandExecutor {
                 return true;
             }
 
-            PersistentDataContainer targetContainer = target.getPersistentDataContainer();
-            PersistentDataContainer playerContainer = player.getPersistentDataContainer();
-
-            if (!playerContainer.has(PrisonGame.mny)) {
+            if (!Keys.MONEY.has(player)) {
                 player.sendMessage(ChatColor.RED + "You don't have enough money. (no pdc error)");
                 return true;
             }
 
-            double playerAmount = playerContainer.get(PrisonGame.mny, PersistentDataType.DOUBLE);
-            double targetAmount = targetContainer.has(PrisonGame.mny) ? targetContainer.get(PrisonGame.mny, PersistentDataType.DOUBLE) : 0;
+            double playerAmount = Keys.MONEY.get(player);
+            double targetAmount = Keys.MONEY.get(target, 0.0);
 
             if (playerAmount < value) {
                 player.sendMessage(ChatColor.RED + "You don't have enough money.");
@@ -60,8 +55,8 @@ public class PayCommand implements CommandExecutor {
 
             playerAmount -= value;
             targetAmount += value;
-            playerContainer.set(PrisonGame.mny, PersistentDataType.DOUBLE, playerAmount);
-            targetContainer.set(PrisonGame.mny, PersistentDataType.DOUBLE, targetAmount);
+            Keys.MONEY.set(player, playerAmount);
+            Keys.MONEY.set(target, targetAmount);
 
             player.sendMessage(String.format("%sPaid $%s to %s.", ChatColor.GREEN, formatDouble(value), target.getName()));
             target.sendMessage(String.format("%s%s paid you $%s.", ChatColor.GREEN, player.getName(), formatDouble(value)));
