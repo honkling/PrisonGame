@@ -21,10 +21,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 import prisongame.prisongame.commands.*;
-import prisongame.prisongame.commands.completers.DebugCompleter;
-import prisongame.prisongame.commands.completers.EnderChestCompleter;
-import prisongame.prisongame.commands.completers.SeasonCompleter;
-import prisongame.prisongame.commands.completers.WardenCompleter;
+import prisongame.prisongame.commands.completers.*;
 import prisongame.prisongame.commands.danger.HardCommand;
 import prisongame.prisongame.commands.danger.NormalCommand;
 import prisongame.prisongame.commands.danger.ResetAscensionCommand;
@@ -240,6 +237,7 @@ public final class PrisonGame extends JavaPlugin {
         this.getCommand("rstascen").setExecutor(new ResetAscensionCommand());
         this.getCommand("nerdcheatcommand").setExecutor(new NerdCheatCommand());
 
+        this.getCommand("builder").setTabCompleter(new BuilderCompleter());
         this.getCommand("debug").setTabCompleter(new DebugCompleter());
         this.getCommand("warden").setTabCompleter(new WardenCompleter());
         this.getCommand("season").setTabCompleter(new SeasonCompleter());
