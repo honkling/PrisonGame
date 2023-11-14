@@ -24,6 +24,7 @@ import org.bukkit.util.Vector;
 import prisongame.prisongame.commands.*;
 import prisongame.prisongame.commands.completers.DebugComplete;
 import prisongame.prisongame.commands.completers.EnderChestComplete;
+import prisongame.prisongame.commands.completers.SeasonCompleter;
 import prisongame.prisongame.commands.completers.WardenComplete;
 import prisongame.prisongame.commands.danger.HardCommand;
 import prisongame.prisongame.commands.danger.NormalCommand;
@@ -241,6 +242,7 @@ public final class PrisonGame extends JavaPlugin {
 
         this.getCommand("debug").setTabCompleter(new DebugComplete());
         this.getCommand("warden").setTabCompleter(new WardenComplete());
+        this.getCommand("season").setTabCompleter(new SeasonCompleter());
         this.getCommand("enderchest").setTabCompleter(new EnderChestComplete());
         Bukkit.broadcastMessage("RELOAD: Loaded Commands");
     }
