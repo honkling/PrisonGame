@@ -1,5 +1,9 @@
 package prisongame.prisongame.commands.warden;
 
+import me.coralise.spigot.API.CBPAPI;
+import me.coralise.spigot.CustomBansPlus;
+import me.coralise.spigot.players.CBPlayer;
+import me.coralise.spigot.players.PlayerManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
@@ -19,6 +23,24 @@ public class IntercomCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        if (!(sender instanceof Player player)) {
+            sender.sendMessage(PrisonGame.mm.deserialize("<red>You aren't a player."));
+            return true;
+        }
+
+        var api = CBPAPI.getApi();
+
+        if (api != null) {
+            var cbp = CustomBansPlus.getInstance();
+            var playerManager = cbp.plm;
+            var cbpPlayer = playerManager.getCBPlayer(player.getUniqueId());
+
+            if (api.isPlayerMuted(cbpPlayer)) {
+                player.sendMessage(ChatColor.RED + "You cannot use the intercom while you are muted.");
+                return true;
+            }
+        }
+
         var now = Instant.now();
 
         if (lastUse != null) {
