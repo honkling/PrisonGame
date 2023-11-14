@@ -47,7 +47,8 @@ public class PlayerDeathListener implements Listener {
                         meta != null &&
                         meta.getDisplayName().equals(ChatColor.BLUE + "Handcuffs " + ChatColor.RED + "[CONTRABAND]") &&
                         !killer.hasCooldown(Material.IRON_SHOVEL) &&
-                        !killer.hasPotionEffect(PotionEffectType.UNLUCK)
+                        !killer.hasPotionEffect(PotionEffectType.UNLUCK) &&
+                        player.getPassengers().isEmpty()
                 ) {
                     event.setCancelled(true);
                     event.getEntity().addPotionEffect(PotionEffectType.WEAKNESS.createEffect(20 * 30, 255));
