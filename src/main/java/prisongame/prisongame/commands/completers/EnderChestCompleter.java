@@ -1,7 +1,7 @@
 package prisongame.prisongame.commands.completers;
 
-public class EnderChestComplete extends SubcommandCompleter {
-    public EnderChestComplete() {
+public class EnderChestCompleter extends SubcommandCompleter {
+    public EnderChestCompleter() {
         super("enderchest", new String[] {
                 "inspect",
                 "clear"

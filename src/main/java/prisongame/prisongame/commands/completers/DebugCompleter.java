@@ -6,15 +6,14 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import prisongame.prisongame.commands.staff.debug.PDCCommand;
-import prisongame.prisongame.lib.Key;
 import prisongame.prisongame.lib.Keys;
 import prisongame.prisongame.lib.Role;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class DebugComplete extends SubcommandCompleter {
-    public DebugComplete() {
+public class DebugCompleter extends SubcommandCompleter {
+    public DebugCompleter() {
         super("debug", new String[] {
                 "pdc",
                 "force"
