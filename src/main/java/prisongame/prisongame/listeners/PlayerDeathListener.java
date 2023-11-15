@@ -36,6 +36,13 @@ public class PlayerDeathListener implements Listener {
         var player = event.getEntity();
         var killer = player.getKiller();
 
+        for (var passenger : player.getPassengers()) {
+            if (!(passenger instanceof Player playerPassenger))
+                continue;
+
+            playerPassenger.removePotionEffect(PotionEffectType.DOLPHINS_GRACE);
+        }
+
         if (killer != null) {
             if (!killer.equals(player) ) {
                 var inventory = killer.getInventory();
