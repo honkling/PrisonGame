@@ -329,6 +329,9 @@ public class InventoryClickListener implements Listener {
                 continue;
 
             player.teleport(prison.spwn);
+            if (PrisonGame.roles.get(player) != Role.PRISONER) {
+                player.teleport(prison.wardenspawn);
+            }
         }
 
         PrisonGame.BBpower = 100;
