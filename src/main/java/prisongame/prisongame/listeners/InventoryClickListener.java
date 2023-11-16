@@ -325,10 +325,10 @@ public class InventoryClickListener implements Listener {
 
     public static void switchMap(Prison prison) {
         for (Player player : Bukkit.getOnlinePlayers()) {
-            if (player.getDisplayName().contains("ASCENDING") || PrisonGame.builder.get(player))
+            if (player.getDisplayName().contains("ASCENDING") || PrisonGame.builder.getOrDefault(player, false))
                 continue;
 
-            player.teleport(prison.mapSwitch);
+            player.teleport(prison.spwn);
         }
 
         PrisonGame.BBpower = 100;
@@ -381,11 +381,10 @@ public class InventoryClickListener implements Listener {
     public void onInventoryClick4(InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
 
-
-        if (PrisonGame.roles.get(player) != Role.WARDEN || event.isCancelled() || player.getOpenInventory().getType() == InventoryType.CRAFTING)
-            return;
-
-        if (player.getGameMode().equals(GameMode.ADVENTURE) && !player.getOpenInventory().getTitle().equals("Map Switch")) {
+        if (!player.getOpenInventory().getTitle().equals("Map Switch")) {
+            if (player.getGameMode().equals(GameMode.ADVENTURE) || PrisonGame.roles.get(player) != Role.WARDEN || event.isCancelled() || player.getOpenInventory().getType() == InventoryType.CRAFTING) {
+                return;
+            }
             player.sendMessage(ChatColor.RED + "Wardens cannot interact with containers.");
             event.setCancelled(true);
         }
