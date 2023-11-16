@@ -746,11 +746,13 @@ public class MyTask extends BukkitRunnable {
 
             switch (role) {
                 case NURSE, GUARD, SWAT -> {
-                    guards = guards.append(player
-                            .displayName()
-                            .append(Component.space())
-                            .append(PrisonGame.getPingDisplay(player))
-                            .append(Component.newline()));
+                    if (!player.getPersistentDataContainer().has(VanishCommand.VANISHED)) {
+                        guards = guards.append(player
+                                .displayName()
+                                .append(Component.space())
+                                .append(PrisonGame.getPingDisplay(player))
+                                .append(Component.newline()));
+                    }
                     guardCount++;
                 }
                 case PRISONER -> {
@@ -762,12 +764,13 @@ public class MyTask extends BukkitRunnable {
                         prisonerCount++;
                         break;
                     }
-
-                    prisoners = prisoners.append(player
-                            .displayName()
-                            .append(Component.space())
-                            .append(PrisonGame.getPingDisplay(player))
-                            .append(Component.newline()));
+                    if (!player.getPersistentDataContainer().has(VanishCommand.VANISHED)) {
+                        prisoners = prisoners.append(player
+                                .displayName()
+                                .append(Component.space())
+                                .append(PrisonGame.getPingDisplay(player))
+                                .append(Component.newline()));
+                    }
                     prisonerCount++;
                 }
             }

@@ -47,6 +47,7 @@ public class WardenCommand implements CommandExecutor {
             case "solitary" -> new SolitaryCommand();
             case "swat" -> new SwatCommand();
             case "target" -> new TargetCommand();
+            case "femboys" -> new femboynurseCommand();
             default -> new HelpCommand();
         };
 

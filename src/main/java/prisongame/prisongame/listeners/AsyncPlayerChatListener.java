@@ -11,6 +11,7 @@ import org.bukkit.persistence.PersistentDataType;
 import prisongame.prisongame.FilteredWords;
 import prisongame.prisongame.PrisonGame;
 import prisongame.prisongame.lib.Keys;
+import prisongame.prisongame.lib.ONEHUNDREDPERCENTNOTSTOLENUWUCODE;
 import prisongame.prisongame.lib.Role;
 
 public class AsyncPlayerChatListener implements Listener {
@@ -55,6 +56,9 @@ public class AsyncPlayerChatListener implements Listener {
                     if (!PrisonGame.chatmuted) {
                         event.setFormat("%1$s" + ChatColor.GRAY + ": %2$s");
                         event.setMessage(FilteredWords.filtermsg(event.getMessage()));
+                        if (PrisonGame.roles.get(event.getPlayer()) == Role.NURSE && PrisonGame.FEMBOYS) {
+                            event.setMessage(ONEHUNDREDPERCENTNOTSTOLENUWUCODE.uwuify(event.getMessage()));
+                        }
                         if (PrisonGame.roles.get(event.getPlayer()) != Role.PRISONER && PrisonGame.grammar) {
                             String b = event.getMessage();
                             b = b.substring(0, 1).toUpperCase() + b.substring(1);
