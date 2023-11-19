@@ -5,36 +5,33 @@ import java.util.Random;
 public class UwUtils {
 
     public static String uwuify(String text) {
-
-        text = text.replaceAll("\\.", "~ ");
-        text = text.replaceAll(",", "~ ");
-        text = text.replaceAll("-", "~ ");
-        text = text.replaceAll("\\?", "~ ");
-        text = text.replaceAll("hurt", "hUWUrt");
-        text = text.replaceAll("kill", "hwuwrt");
-        text = text.replaceAll("you", "you<3");
-        text = text.replaceAll("r", "w");
-        text = text.replaceAll("l", "w");
-        text = text.replaceAll("uwu", "UWU");
-        text = text.replaceAll("owo", "OWO");
-        text = text.replaceAll(";-;", "(-_-)");
-        text = text.replaceAll("-_-", "(-_-)");
-        text = text.replaceAll(":o", "※(^o^)/※");
-        text = text.replaceAll(":0", "※(^o^)/※");
-        text = text.replaceAll(":\\)", "(｡◕‿‿◕｡)");
-        text = text.replaceAll(":>", "(｡◕‿‿◕｡)");
-        text = text.replaceAll(":\\(", "(︶︹︶)");
-        text = text.replaceAll(":<", "(︶︹︶)");
-        text = text.replaceAll(":3", "(・3・)");
-        text = text.replaceAll(":D", "(ﾉ◕ヮ◕)ﾉ*:・ﾟ✧");
-        text = text.replaceAll("\\._\\.", "(っ´ω`c)");
-        text = text.replaceAll("fuck", "fwick");
-        text = text.replaceAll("shit", "*poops*");
-        text = text.replaceAll("wtf", "whawt the fwick");
-        text = text.replaceAll("wth", "whawt the hecc");
-
-
-        return text + getRandomUwUSuffix();
+        return text
+                .replaceAll("\\.", "~ ")
+                .replaceAll(",", "~ ")
+                .replaceAll("-", "~ ")
+                .replaceAll("\\?", "~ ")
+                .replaceAll("hurt", "hUWUrt")
+                .replaceAll("kill", "hwuwrt")
+                .replaceAll("you", "you<3")
+                .replaceAll("r", "w")
+                .replaceAll("l", "w")
+                .replaceAll("uwu", "UWU")
+                .replaceAll("owo", "OWO")
+                .replaceAll(";-;", "(-_-)")
+                .replaceAll("-_-", "(-_-)")
+                .replaceAll(":o", "※(^o^)/※")
+                .replaceAll(":0", "※(^o^)/※")
+                .replaceAll(":\\)", "(｡◕‿‿◕｡)")
+                .replaceAll(":>", "(｡◕‿‿◕｡)")
+                .replaceAll(":\\(", "(︶︹︶)")
+                .replaceAll(":<", "(︶︹︶)")
+                .replaceAll(":3", "(・3・)")
+                .replaceAll(":D", "(ﾉ◕ヮ◕)ﾉ*:・ﾟ✧")
+                .replaceAll("\\._\\.", "(っ´ω`c)")
+                .replaceAll("fuck", "fwick")
+                .replaceAll("shit", "*poops*")
+                .replaceAll("wtf", "whawt the fwick")
+                .replaceAll("wth", "whawt the hecc") + getRandomUwUSuffix();
     }
 
     static String getRandomUwUSuffix() {
