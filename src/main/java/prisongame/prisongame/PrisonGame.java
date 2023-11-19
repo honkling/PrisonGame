@@ -35,6 +35,7 @@ import prisongame.prisongame.lib.Keys;
 import prisongame.prisongame.lib.Role;
 import prisongame.prisongame.listeners.*;
 
+import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
@@ -238,10 +239,11 @@ public final class PrisonGame extends JavaPlugin {
         this.getCommand("rstascen").setExecutor(new ResetAscensionCommand());
         this.getCommand("nerdcheatcommand").setExecutor(new NerdCheatCommand());
 
-        this.getCommand("builder").setTabCompleter(new BuilderCompleter());
         this.getCommand("debug").setTabCompleter(new DebugCompleter());
         this.getCommand("warden").setTabCompleter(new WardenCompleter());
         this.getCommand("season").setTabCompleter(new SeasonCompleter());
+        this.getCommand("builder").setTabCompleter(new BuilderCompleter());
+        this.getCommand("setmoney").setTabCompleter(new SetMoneyCompleter());
         this.getCommand("enderchest").setTabCompleter(new EnderChestCompleter());
         Bukkit.broadcastMessage("RELOAD: Loaded Commands");
     }
@@ -655,6 +657,18 @@ public final class PrisonGame extends JavaPlugin {
 
 
         return true;
+    }
+
+    public static String formatBalance(double balance) {
+        var format = new DecimalFormat("#0.0");
+
+        if (Double.isInfinite(balance)) {
+            var isPositive = balance > 0;
+
+            return (isPositive ? "" : "-") + "∞";
+        }
+
+        return format.format(balance);
     }
 
     public static ItemStack createGuiItem(final Material material, final String name, final String... lore) {

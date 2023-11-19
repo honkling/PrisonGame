@@ -1065,7 +1065,7 @@ public class MyTask extends BukkitRunnable {
             }
             for (Player p : Bukkit.getOnlinePlayers()) {
                 if (!p.getDisplayName().contains("ASCENDING")) {
-                    p.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GREEN + numberFormat.format(p.getPersistentDataContainer().getOrDefault(Keys.MONEY.key(), PersistentDataType.DOUBLE, 0.0)) + "$" + ChatColor.GRAY + " || " + ChatColor.GRAY + "Current Warden: " + wardentime));
+                    p.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GREEN + PrisonGame.formatBalance(Keys.MONEY.get(p, 0.0)) + "$" + ChatColor.GRAY + " || " + ChatColor.GRAY + "Current Warden: " + wardentime));
                 } else {
                     p.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent((ChatColor.AQUA + whole.format(p.getPersistentDataContainer().getOrDefault(Keys.ASCENSION_COINS.key(), PersistentDataType.DOUBLE, 0.0)) + " ascension coins.")));
                 }
