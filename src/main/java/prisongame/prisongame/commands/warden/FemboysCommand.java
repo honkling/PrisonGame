@@ -8,7 +8,7 @@ import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import prisongame.prisongame.PrisonGame;
 
-public class femboynurseCommand implements CommandExecutor {
+public class FemboysCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         PrisonGame.FEMBOYS = !PrisonGame.FEMBOYS;
