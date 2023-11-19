@@ -208,7 +208,7 @@ public class MyTask extends BukkitRunnable {
                         p.removePotionEffect(PotionEffectType.JUMP);
                     } else {
                         p.setFoodLevel(6);
-                        if (p.hasPotionEffect(PotionEffectType.GLOWING)) {
+                        if (p.hasPotionEffect(PotionEffectType.GLOWING) && p.getGameMode() != GameMode.SPECTATOR) {
                             p.sendMessage(ChatColor.GREEN + "You came to roll call!");
                             p.playSound(p, Sound.BLOCK_NOTE_BLOCK_BIT, 1, 1);
                         }
@@ -234,7 +234,7 @@ public class MyTask extends BukkitRunnable {
                         }
                         p.setHealth(p.getMaxHealth());
                         p.setFoodLevel(6);
-                        if (p.hasPotionEffect(PotionEffectType.GLOWING)) {
+                        if (p.hasPotionEffect(PotionEffectType.GLOWING) && p.getGameMode() != GameMode.SPECTATOR) {
                             p.sendMessage(ChatColor.GREEN + "You came to roll call!");
                             p.playSound(p, Sound.BLOCK_NOTE_BLOCK_BIT, 1, 1);
                         }
