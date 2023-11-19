@@ -91,6 +91,7 @@ public class PlayerDeathListener implements Listener {
                 i.getType() == Material.BOWL ||
                 i.getType() == Material.GLASS_BOTTLE ||
                 i.getType() == Material.IRON_SHOVEL ||
+                i.getType() == Material.BUCKET ||
                 (i.getItemMeta() != null && i.getItemMeta().getDisplayName().contains("Prisoner Uniform")));
         if (Bukkit.getWorld("world").getTime() > 16000 && Bukkit.getWorld("world").getTime() < 24000) {
             if (event.getPlayer().getKiller() != null) {

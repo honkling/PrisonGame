@@ -24,6 +24,9 @@ public class PlayerDropItemListener implements Listener {
                 type == Material.BOWL ||
                 type == Material.STONE_BUTTON ||
                 type == Material.WOODEN_SWORD ||
+                type == Material.GLASS_BOTTLE ||
+                type == Material.IRON_SHOVEL ||
+                type == Material.BUCKET ||
                 (meta != null && meta.getDisplayName().contains("Prisoner Uniform")))
             pseudoCancel(player, drop);
 
