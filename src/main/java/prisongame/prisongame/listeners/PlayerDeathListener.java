@@ -81,11 +81,15 @@ public class PlayerDeathListener implements Listener {
             }
             PrisonGame.killior.put(event.getEntity(), event.getEntity().getKiller());
         }
-        event.getDrops().removeIf(i -> i.getType() == Material.TRIPWIRE_HOOK);
-        event.getDrops().removeIf(i -> i.getType() == Material.WOODEN_AXE);
-        event.getDrops().removeIf(i -> i.getType() == Material.WOODEN_SWORD);
-        event.getDrops().removeIf(i -> i.getType() == Material.CARROT_ON_A_STICK);
-        event.getDrops().removeIf(i -> i.getType() == Material.IRON_DOOR);
+        event.getDrops().removeIf(i ->
+                i.getType() == Material.TRIPWIRE_HOOK ||
+                i.getType() == Material.WOODEN_AXE ||
+                i.getType() == Material.WOODEN_SWORD ||
+                i.getType() == Material.CARROT_ON_A_STICK ||
+                i.getType() == Material.IRON_DOOR ||
+                i.getType() == Material.STONE_BUTTON ||
+                i.getType() == Material.BOWL ||
+                (i.getItemMeta() != null && i.getItemMeta().getDisplayName().contains("Prisoner Uniform")));
         if (Bukkit.getWorld("world").getTime() > 16000 && Bukkit.getWorld("world").getTime() < 24000) {
             if (event.getPlayer().getKiller() != null) {
                 if (event.getPlayer().getKiller().getInventory().getItemInMainHand().getType().equals(Material.TORCH)) {
