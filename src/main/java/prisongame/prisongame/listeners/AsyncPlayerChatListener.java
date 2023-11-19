@@ -7,11 +7,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.persistence.PersistentDataType;
 import prisongame.prisongame.FilteredWords;
 import prisongame.prisongame.PrisonGame;
 import prisongame.prisongame.lib.Keys;
-import prisongame.prisongame.lib.ONEHUNDREDPERCENTNOTSTOLENUWUCODE;
+import prisongame.prisongame.lib.UwUtils;
 import prisongame.prisongame.lib.Role;
 
 public class AsyncPlayerChatListener implements Listener {
@@ -57,7 +56,7 @@ public class AsyncPlayerChatListener implements Listener {
                         event.setFormat("%1$s" + ChatColor.GRAY + ": %2$s");
                         event.setMessage(FilteredWords.filtermsg(event.getMessage()));
                         if (PrisonGame.roles.get(event.getPlayer()) == Role.NURSE && PrisonGame.FEMBOYS) {
-                            event.setMessage(ONEHUNDREDPERCENTNOTSTOLENUWUCODE.uwuify(event.getMessage()));
+                            event.setMessage(UwUtils.uwuify(event.getMessage()));
                         }
                         if (PrisonGame.roles.get(event.getPlayer()) != Role.PRISONER && PrisonGame.grammar) {
                             String b = event.getMessage();

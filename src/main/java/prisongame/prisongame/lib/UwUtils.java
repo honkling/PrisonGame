@@ -2,7 +2,7 @@ package prisongame.prisongame.lib;
 
 import java.util.Random;
 
-public class ONEHUNDREDPERCENTNOTSTOLENUWUCODE {
+public class UwUtils {
 
     public static String uwuify(String text) {
 
