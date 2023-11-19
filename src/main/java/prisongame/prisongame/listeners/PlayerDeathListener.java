@@ -17,7 +17,21 @@ public class PlayerDeathListener implements Listener {
     public void onPlayerDeath2(PlayerDeathEvent event) {
         Player p = event.getEntity();
         if(p.isDead()) {
-            if (p.getKiller() != null) {
+            var killer = p.getKiller();
+
+            if (killer == null)
+                return;
+
+            var inventory = killer.getInventory();
+            var mainHand = inventory.getItemInMainHand();
+            var meta = mainHand.getItemMeta();
+
+            if (
+                    !meta.getDisplayName().equals(ChatColor.BLUE + "Handcuffs " + ChatColor.RED + "[CONTRABAND]") ||
+                    killer.hasCooldown(Material.IRON_SHOVEL) ||
+                    killer.hasPotionEffect(PotionEffectType.UNLUCK) ||
+                    !p.getPassengers().isEmpty()
+            ) {
                 p.getKiller().playSound(p.getKiller(), Sound.BLOCK_NOTE_BLOCK_BASS, 1, 2);
                 if (p.hasPotionEffect(PotionEffectType.GLOWING)) {
                     p.getKiller().sendMessage(ChatColor.GREEN + "You gained a little bit of money for killing a criminal.");
