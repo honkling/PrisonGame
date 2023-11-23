@@ -9,6 +9,7 @@ import org.bukkit.potion.PotionEffectType;
 import prisongame.prisongame.MyTask;
 import prisongame.prisongame.PrisonGame;
 import prisongame.prisongame.lib.Keys;
+import prisongame.prisongame.lib.ProfileKt;
 import prisongame.prisongame.lib.Role;
 
 import java.util.Arrays;
@@ -17,6 +18,7 @@ import java.util.Random;
 public class BlockBreakListener implements Listener {
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
+        var profile = ProfileKt.getProfile(event.getPlayer());
         if (event.getPlayer().getGameMode().equals(GameMode.SURVIVAL)) {
             event.getPlayer().sendMessage("Wow! You managed to break a block in survival mode! This means the server is completely fucking broken, or it's reloading. Please tell agmass. Please.");
             event.setCancelled(true);
@@ -24,7 +26,7 @@ public class BlockBreakListener implements Listener {
             event.setCancelled(true);
             if (event.getBlock().getType().equals(Material.IRON_BARS)) {
                 event.setCancelled(false);
-                if (PrisonGame.roles.get(event.getPlayer()) == Role.PRISONER) {
+                if (profile.getRole() == Role.PRISONER) {
                     Boolean yesdothat = true;
                     if (event.getPlayer().getInventory().getChestplate() != null) {
                         if (event.getPlayer().getInventory().getChestplate().getItemMeta() != null) {
@@ -36,7 +38,8 @@ public class BlockBreakListener implements Listener {
                     if (yesdothat && !event.getPlayer().hasPotionEffect(PotionEffectType.GLOWING) && !Keys.SEMICLOAK.has(event.getPlayer())) {
                         event.getPlayer().sendMessage(ChatColor.RED + "You were caught breaking bars! Get a cloak next time!");
                         for (Player g : Bukkit.getOnlinePlayers()) {
-                            if (PrisonGame.roles.get(g) != Role.PRISONER) {
+                            var profile2 = ProfileKt.getProfile(g);
+                            if (profile2.getRole() != Role.PRISONER) {
                                 g.playSound(g, Sound.ENTITY_SILVERFISH_DEATH, 1, 0.5f);
                                 g.addPotionEffect(PotionEffectType.GLOWING.createEffect(20 * 30, 0));
                                 g.sendMessage(ChatColor.RED + event.getPlayer().getName() + ChatColor.DARK_RED + " was caught breaking bars!");

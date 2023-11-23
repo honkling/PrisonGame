@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import prisongame.prisongame.PrisonGame;
 import prisongame.prisongame.commands.warden.*;
 import prisongame.prisongame.commands.warden.ResignCommand;
+import prisongame.prisongame.lib.ProfileKt;
 
 import java.util.Arrays;
 
@@ -17,8 +18,9 @@ public class WardenCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         Player player = (Player) sender;
+        var profile = ProfileKt.getProfile(player);
 
-        if (!PrisonGame.wardenenabled || PrisonGame.hardmode.get(sender)) {
+        if (!PrisonGame.wardenenabled || profile.getHardMode()) {
             player.kickPlayer(ChatColor.RED + "Do not /warden during a reload.");
             player.sendMessage(ChatColor.RED + sender.getName() + " was kicked for doing /warden during a reload");
             return true;

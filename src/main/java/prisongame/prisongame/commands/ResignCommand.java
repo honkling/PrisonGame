@@ -32,7 +32,7 @@ public class ResignCommand implements CommandExecutor {
                 }
                 if (PrisonGame.warden != null) {
                     if (PrisonGame.savedPlayerGuards.containsKey(PrisonGame.warden.getUniqueId())) {
-                        HashMap<UUID, Integer> roleHashMap = PrisonGame.savedPlayerGuards.get(PrisonGame.warden.getUniqueId());
+                        HashMap<UUID, Role> roleHashMap = PrisonGame.savedPlayerGuards.get(PrisonGame.warden.getUniqueId());
                         if (PrisonGame.savedPlayerGuards.get(PrisonGame.warden.getUniqueId()).containsKey(((Player) sender).getUniqueId())) {
                             roleHashMap.remove(((Player) sender).getUniqueId());
                         }

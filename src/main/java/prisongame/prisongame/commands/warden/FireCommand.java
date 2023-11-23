@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import prisongame.prisongame.MyListener;
 import prisongame.prisongame.PrisonGame;
+import prisongame.prisongame.lib.ProfileKt;
 import prisongame.prisongame.lib.Role;
 
 import java.util.HashMap;
@@ -20,14 +21,15 @@ public class FireCommand implements CommandExecutor {
         if (args.length >= 1) {
             if (Bukkit.getPlayer(args[0]) != null) {
                 Player g = Bukkit.getPlayer(args[0]);
-                if (g.isOnline() && g != sender && PrisonGame.roles.get(g) != Role.PRISONER) {
+                var profile = ProfileKt.getProfile(g);
+                if (g.isOnline() && g != sender && profile.getRole() != Role.PRISONER) {
                     Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + sender.getName() + " only prison:strike");
                     Bukkit.broadcastMessage(ChatColor.GOLD + g.getName() + " was fired.");
                     MyListener.playerJoin(g, false);
                     g.sendTitle(ChatColor.RED + "you were fired.", "", 20, 60, 20);
                     if (PrisonGame.savedPlayerGuards.containsKey(PrisonGame.warden.getUniqueId())) {
                         Bukkit.broadcastMessage(ChatColor.AQUA + "Saving warden save file...");
-                        HashMap<UUID, Integer> roleHashMap = PrisonGame.savedPlayerGuards.get(PrisonGame.warden.getUniqueId());
+                        HashMap<UUID, Role> roleHashMap = PrisonGame.savedPlayerGuards.get(PrisonGame.warden.getUniqueId());
                         if (PrisonGame.savedPlayerGuards.get(PrisonGame.warden.getUniqueId()).containsKey((g.getUniqueId()))) {
                             roleHashMap.remove(g.getUniqueId());
                         }

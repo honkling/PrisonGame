@@ -20,6 +20,7 @@ import prisongame.prisongame.Prison;
 import prisongame.prisongame.PrisonGame;
 import prisongame.prisongame.lib.Config;
 import prisongame.prisongame.lib.Keys;
+import prisongame.prisongame.lib.ProfileKt;
 import prisongame.prisongame.lib.Role;
 
 import java.util.Arrays;
@@ -55,6 +56,7 @@ public class PlayerInteractListener implements Listener {
 
     @EventHandler
     public void onPlayerInteract2(PlayerInteractEvent event) {
+        var profile = ProfileKt.getProfile(event.getPlayer());
         if (event.getPlayer().getActivePotionEffects().contains(PotionEffectType.CONFUSION)) {
             event.setCancelled(true);
             return;
@@ -81,7 +83,7 @@ public class PlayerInteractListener implements Listener {
             }
             if (event.getClickedBlock().getType().equals(Material.BELL)) {
                 if (PrisonGame.active.getName().equals("Barreled")) {
-                    if (PrisonGame.roles.get(event.getPlayer()).equals(Role.PRISONER)) {
+                    if (profile.getRole().equals(Role.PRISONER)) {
                         event.getPlayer().sendMessage(ChatColor.YELLOW + "Bell.");
                         event.getPlayer().setMaxHealth(10);
                         event.getPlayer().getInventory().clear();
@@ -93,7 +95,7 @@ public class PlayerInteractListener implements Listener {
             }
             if (event.getClickedBlock().getType().equals(Material.BAMBOO_BUTTON)) {
                 if (PrisonGame.active.getName().equals("Barreled")) {
-                    if (PrisonGame.roles.get(event.getPlayer()).equals(Role.PRISONER)) {
+                    if (profile.getRole().equals(Role.PRISONER)) {
                         Boolean justUnpowered = false;
                         if (PrisonGame.BBpower > 0) {
                             justUnpowered = true;
@@ -153,12 +155,8 @@ public class PlayerInteractListener implements Listener {
                 event.setCancelled(true);
             }
             if (event.getClickedBlock().getType().equals(Material.TRAPPED_CHEST)) {
-                if (PrisonGame.prisonerlevel.getOrDefault(event.getPlayer(), 0) != 1) {
-                    event.getPlayer().getInventory().addItem(new ItemStack(Material.COD));
-                    event.setCancelled(true);
-                } else {
-                    event.getPlayer().sendMessage(ChatColor.GOLD + "As an F-CLASS, You can only mine!");
-                }
+                event.getPlayer().getInventory().addItem(new ItemStack(Material.COD));
+                event.setCancelled(true);
             }
             if (event.getClickedBlock().getType().equals(Material.BLAST_FURNACE)) {
                 event.setCancelled(true);
@@ -177,11 +175,11 @@ public class PlayerInteractListener implements Listener {
                 }
             }
             if (event.getClickedBlock().getType().equals(Material.ENDER_CHEST) || event.getClickedBlock().getType().equals(Material.SMOKER) || event.getClickedBlock().getType().equals(Material.FURNACE) || event.getClickedBlock().getType().equals(Material.BARREL) || event.getClickedBlock().getType().equals(Material.CHEST) || event.getClickedBlock().getType().equals(Material.HOPPER) || event.getClickedBlock().getType().equals(Material.DROPPER) || event.getClickedBlock().getType().equals(Material.DISPENSER)) {
-                if (PrisonGame.roles.get(event.getPlayer()) != Role.PRISONER || PrisonGame.hardmode.get(event.getPlayer())) {
+                if (profile.getRole() != Role.PRISONER || profile.getHardMode()) {
                     event.getPlayer().sendMessage(ChatColor.RED + "You can't access this!");
                     event.setCancelled(true);
                 } else {
-                    PrisonGame.worryachieve.put(event.getPlayer(), -1);
+                    profile.setTimeSinceGuardKill(-1);
                 }
             }
             if (event.getClickedBlock().getType().equals(Material.COBBLESTONE) || event.getClickedBlock().getType().equals(Material.STONE) || event.getClickedBlock().getType().equals(Material.ANDESITE)) {
@@ -192,17 +190,6 @@ public class PlayerInteractListener implements Listener {
             }
             if (event.getClickedBlock().getType().equals(Material.OAK_WALL_SIGN)) {
                 org.bukkit.block.Sign sign = (org.bukkit.block.Sign) event.getClickedBlock().getState();
-                if (MyTask.bossbar.getTitle().equals("Breakfast") || MyTask.bossbar.getTitle().equals("Lunch")) {
-                    if (sign.getLine(1).equals("Get Cafe")) {
-                        if (PrisonGame.gotcafefood.getOrDefault(event.getPlayer(), false)) {
-                            PrisonGame.gotcafefood.put(event.getPlayer(), true);
-                            event.getPlayer().getInventory().addItem(new ItemStack(Material.BEETROOT_SOUP));
-                            event.getPlayer().getInventory().addItem(new ItemStack(Material.BEETROOT_SOUP));
-                            event.getPlayer().getInventory().addItem(new ItemStack(Material.BEETROOT_SOUP));
-                            event.getPlayer().sendMessage(ChatColor.RED + "You recieved your meal.");
-                        }
-                    }
-                }
                 if (sign.getLine(1).equals("Leave")) {
                     event.getPlayer().stopAllSounds();
                     playerJoinignoreAsc(event.getPlayer(), false);
@@ -248,7 +235,7 @@ public class PlayerInteractListener implements Listener {
             if (event.getClickedBlock().getType().equals(Material.BIRCH_WALL_SIGN)) {
                 org.bukkit.block.Sign sign = (org.bukkit.block.Sign) event.getClickedBlock().getState();
                 if (sign.getLine(1).equals("TP To Island")) {
-                    if (PrisonGame.roles.get(event.getPlayer()) != Role.PRISONER && PrisonGame.roles.get(event.getPlayer()) != Role.WARDEN && PrisonGame.warden != event.getPlayer()) {
+                    if (profile.getRole() != Role.PRISONER && profile.getRole() != Role.WARDEN && PrisonGame.warden != event.getPlayer()) {
                         event.getPlayer().teleport(new Location(Bukkit.getWorld("world"), 1924, -60, -2027));
                     } else {
                         event.getPlayer().sendMessage(ChatColor.RED + "You're not a guard/You can't come here as warden");
@@ -418,7 +405,8 @@ public class PlayerInteractListener implements Listener {
                     }
                 }
                 if (sign.getLine(1).equals("Restore Kit")) {
-                    if (PrisonGame.roles.get(event.getPlayer()) == Role.WARDEN) {
+                    var profile2 = ProfileKt.getProfile(event.getPlayer());
+                    if (profile2.getRole() == Role.WARDEN) {
                         Player nw = event.getPlayer();
                         nw.getInventory().setHelmet(new ItemStack(Material.CHAINMAIL_HELMET));
                         nw.getInventory().setChestplate(new ItemStack(Material.IRON_CHESTPLATE));
@@ -450,7 +438,7 @@ public class PlayerInteractListener implements Listener {
                             nw.getInventory().addItem(card);
                         }
                     }
-                    if (PrisonGame.roles.get(event.getPlayer()) == Role.SWAT) {
+                    if (profile.getRole() == Role.SWAT) {
                         Player g = event.getPlayer();
                         ItemStack orangechest = new ItemStack(Material.NETHERITE_CHESTPLATE);
 
@@ -489,7 +477,7 @@ public class PlayerInteractListener implements Listener {
                         card.setItemMeta(cardm);
                         g.getInventory().addItem(card);
                     }
-                    if (PrisonGame.roles.get(event.getPlayer()) == Role.NURSE) {
+                    if (profile.getRole() == Role.NURSE) {
                         Player g = event.getPlayer();
 
                         ItemStack card2 = new ItemStack(Material.IRON_SHOVEL);
@@ -546,7 +534,7 @@ public class PlayerInteractListener implements Listener {
                         g.getInventory().addItem(card);
 
                     }
-                    if (PrisonGame.roles.get(event.getPlayer()) == Role.GUARD) {
+                    if (profile.getRole() == Role.GUARD) {
                         Player g = event.getPlayer();
 
                         ItemStack card2 = new ItemStack(Material.IRON_SHOVEL);
@@ -724,67 +712,63 @@ public class PlayerInteractListener implements Listener {
                         event.getPlayer().sendMessage(ChatColor.RED + "You already have a pickaxe!");
                     }
                 }
-                if (PrisonGame.prisonerlevel.getOrDefault(event.getPlayer(), 0) != 1) {
-                    if (sign.getLine(2).equals("Lumberjack")) {
-                        if (!event.getPlayer().getInventory().contains(Material.WOODEN_AXE)) {
-                            event.getPlayer().playSound(event.getPlayer(), Sound.BLOCK_NOTE_BLOCK_BASS, 1, 1);
-                            ItemStack card = new ItemStack(Material.WOODEN_AXE);
-                            ItemMeta cardm = card.getItemMeta();
-                            cardm.setDisplayName(ChatColor.GOLD + "Lumber's Axe");
-                            card.setItemMeta(cardm);
-                            event.getPlayer().getInventory().addItem(card);
-                            event.getPlayer().sendMessage(ChatColor.GOLD + "Go right click the spruce logs in the Lumberjack Station.");
-                        } else {
-                            event.getPlayer().sendMessage(ChatColor.RED + "You already have an axe!");
-                        }
+                if (sign.getLine(2).equals("Lumberjack")) {
+                    if (!event.getPlayer().getInventory().contains(Material.WOODEN_AXE)) {
+                        event.getPlayer().playSound(event.getPlayer(), Sound.BLOCK_NOTE_BLOCK_BASS, 1, 1);
+                        ItemStack card = new ItemStack(Material.WOODEN_AXE);
+                        ItemMeta cardm = card.getItemMeta();
+                        cardm.setDisplayName(ChatColor.GOLD + "Lumber's Axe");
+                        card.setItemMeta(cardm);
+                        event.getPlayer().getInventory().addItem(card);
+                        event.getPlayer().sendMessage(ChatColor.GOLD + "Go right click the spruce logs in the Lumberjack Station.");
+                    } else {
+                        event.getPlayer().sendMessage(ChatColor.RED + "You already have an axe!");
                     }
-                    if (sign.getLine(2).equals("Shovelling")) {
-                        if (!event.getPlayer().getInventory().contains(Material.WOODEN_SHOVEL)) {
-                            event.getPlayer().playSound(event.getPlayer(), Sound.BLOCK_NOTE_BLOCK_COW_BELL, 1, 1);
-                            ItemStack card = new ItemStack(Material.WOODEN_SHOVEL);
-                            ItemMeta cardm = card.getItemMeta();
-                            cardm.setDisplayName(ChatColor.LIGHT_PURPLE + "Shovel");
-                            card.setItemMeta(cardm);
-                            event.getPlayer().getInventory().addItem(card);
-                            event.getPlayer().sendMessage(ChatColor.GRAY + "Right click on coarse dirt with the shovel.");
-                        } else {
-                            event.getPlayer().sendMessage(ChatColor.RED + "You already have a shovel!");
-                        }
+                }
+                if (sign.getLine(2).equals("Shovelling")) {
+                    if (!event.getPlayer().getInventory().contains(Material.WOODEN_SHOVEL)) {
+                        event.getPlayer().playSound(event.getPlayer(), Sound.BLOCK_NOTE_BLOCK_COW_BELL, 1, 1);
+                        ItemStack card = new ItemStack(Material.WOODEN_SHOVEL);
+                        ItemMeta cardm = card.getItemMeta();
+                        cardm.setDisplayName(ChatColor.LIGHT_PURPLE + "Shovel");
+                        card.setItemMeta(cardm);
+                        event.getPlayer().getInventory().addItem(card);
+                        event.getPlayer().sendMessage(ChatColor.GRAY + "Right click on coarse dirt with the shovel.");
+                    } else {
+                        event.getPlayer().sendMessage(ChatColor.RED + "You already have a shovel!");
                     }
-                    if (sign.getLine(2).equals("Plumber")) {
-                        if (!event.getPlayer().getInventory().contains(Material.CARROT_ON_A_STICK)) {
-                            event.getPlayer().playSound(event.getPlayer(), Sound.BLOCK_NOTE_BLOCK_BASEDRUM, 1, 1);
-                            ItemStack card = new ItemStack(Material.CARROT_ON_A_STICK);
-                            ItemMeta cardm = card.getItemMeta();
-                            sign.setLine(1, "$0.5/click");
-                            cardm.setDisplayName(ChatColor.LIGHT_PURPLE + "Plumber");
-                            card.setItemMeta(cardm);
-                            event.getPlayer().getInventory().addItem(card);
-                            event.getPlayer().sendMessage(ChatColor.BLUE + "Click on iron trapdoors with the plumber.");
-                        } else {
-                            event.getPlayer().sendMessage(ChatColor.RED + "You already have a plumber!");
-                        }
+                }
+                if (sign.getLine(2).equals("Plumber")) {
+                    if (!event.getPlayer().getInventory().contains(Material.CARROT_ON_A_STICK)) {
+                        event.getPlayer().playSound(event.getPlayer(), Sound.BLOCK_NOTE_BLOCK_BASEDRUM, 1, 1);
+                        ItemStack card = new ItemStack(Material.CARROT_ON_A_STICK);
+                        ItemMeta cardm = card.getItemMeta();
+                        sign.setLine(1, "$0.5/click");
+                        cardm.setDisplayName(ChatColor.LIGHT_PURPLE + "Plumber");
+                        card.setItemMeta(cardm);
+                        event.getPlayer().getInventory().addItem(card);
+                        event.getPlayer().sendMessage(ChatColor.BLUE + "Click on iron trapdoors with the plumber.");
+                    } else {
+                        event.getPlayer().sendMessage(ChatColor.RED + "You already have a plumber!");
                     }
-                    if (sign.getLine(2).equals("Bounty Hunter")) {
-                        if (!event.getPlayer().getInventory().contains(Material.WOODEN_SWORD)) {
-                            event.getPlayer().playSound(event.getPlayer(), Sound.BLOCK_NOTE_BLOCK_BANJO, 1, 1);
-                            ItemStack card = new ItemStack(Material.WOODEN_SWORD);
-                            ItemMeta cardm = card.getItemMeta();
-                            cardm.setDisplayName(ChatColor.RED + "Bounty Hunter's Knife");
-                            card.setItemMeta(cardm);
-                            event.getPlayer().getInventory().addItem(card);
-                            event.getPlayer().sendMessage(ChatColor.RED + "Kill criminals (Glowing people).");
-                        } else {
-                            event.getPlayer().sendMessage(ChatColor.RED + "You already have a sword!");
-                        }
+                }
+                if (sign.getLine(2).equals("Bounty Hunter")) {
+                    if (!event.getPlayer().getInventory().contains(Material.WOODEN_SWORD)) {
+                        event.getPlayer().playSound(event.getPlayer(), Sound.BLOCK_NOTE_BLOCK_BANJO, 1, 1);
+                        ItemStack card = new ItemStack(Material.WOODEN_SWORD);
+                        ItemMeta cardm = card.getItemMeta();
+                        cardm.setDisplayName(ChatColor.RED + "Bounty Hunter's Knife");
+                        card.setItemMeta(cardm);
+                        event.getPlayer().getInventory().addItem(card);
+                        event.getPlayer().sendMessage(ChatColor.RED + "Kill criminals (Glowing people).");
+                    } else {
+                        event.getPlayer().sendMessage(ChatColor.RED + "You already have a sword!");
                     }
-                    if (sign.getLine(2).equals("Cafe Worker")) {
-                        event.getPlayer().playSound(event.getPlayer(), Sound.BLOCK_NOTE_BLOCK_BELL, 1, 1);
-                        sign.setLine(1, "$2/fish");
-                        event.getPlayer().sendMessage(ChatColor.WHITE + "Click on the trapped chest to get food, cook it in the blast furnace.");
-                    }
-                } else {
-                    event.getPlayer().sendMessage(ChatColor.GOLD + "As an F-CLASS, You can only mine!");
+                }
+                if (sign.getLine(2).equals("Cafe Worker")) {
+                    event.getPlayer().playSound(event.getPlayer(), Sound.BLOCK_NOTE_BLOCK_BELL, 1, 1);
+                    sign.setLine(1, "$2/fish");
+                    event.getPlayer().sendMessage(ChatColor.WHITE + "Click on the trapped chest to get food, cook it in the blast furnace.");
                 }
             }
             if (event.getClickedBlock().getType().equals(Material.JUNGLE_WALL_SIGN)) {
@@ -796,7 +780,7 @@ public class PlayerInteractListener implements Listener {
                     event.getPlayer().removePotionEffect(PotionEffectType.UNLUCK);
                 }
                 if (sign.getLine(1).equals("Get Gear")) {
-                    if (PrisonGame.roles.get(event.getPlayer()) == Role.PRISONER && PrisonGame.escaped.get(event.getPlayer())) {
+                    if (profile.getRole() == Role.PRISONER && profile.getEscaped()) {
                         Player g = event.getPlayer();
                         ItemStack orangechest = new ItemStack(Material.LEATHER_CHESTPLATE);
                         orangechest.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
@@ -817,7 +801,7 @@ public class PlayerInteractListener implements Listener {
                         g.getInventory().setChestplate(orangechest);
                         g.getInventory().setLeggings(orangeleg);
                     }
-                    if (PrisonGame.roles.get(event.getPlayer()) == Role.PRISONER && !PrisonGame.escaped.get(event.getPlayer())) {
+                    if (profile.getRole() == Role.PRISONER && !profile.getEscaped()) {
                         PrisonGame.setCriminal(event.getPlayer());
                     }
                 }
@@ -844,7 +828,7 @@ public class PlayerInteractListener implements Listener {
             if (event.getClickedBlock().getType().equals(Material.CAULDRON)) {
                 event.setCancelled(true);
                 if (!event.getPlayer().hasCooldown(Material.IRON_DOOR)) {
-                    if (PrisonGame.roles.get(event.getPlayer()) != Role.GUARD && PrisonGame.roles.get(event.getPlayer()) != Role.NURSE && PrisonGame.roles.get(event.getPlayer()) != Role.SWAT) {
+                    if (profile.getRole() != Role.GUARD && profile.getRole() != Role.NURSE && profile.getRole() != Role.SWAT) {
                         event.getPlayer().teleport(PrisonGame.active.getBm());
                         event.getPlayer().sendTitle("", ChatColor.GRAY + "-= Black Market =-");
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + event.getPlayer().getName() + " only prison:market");
@@ -859,7 +843,7 @@ public class PlayerInteractListener implements Listener {
                 }
             }
             if (event.getClickedBlock().getType().equals(Material.JUNGLE_DOOR)) {
-                if (PrisonGame.roles.get(event.getPlayer()) != Role.WARDEN) {
+                if (profile.getRole() != Role.WARDEN) {
                     event.setCancelled(true);
                     event.getPlayer().playSound(event.getPlayer(), Sound.ENTITY_VILLAGER_NO, 1, 1);
                     event.getPlayer().sendMessage(ChatColor.RED + "This door can only be opened by the warden!");
@@ -919,11 +903,12 @@ public class PlayerInteractListener implements Listener {
                                     }
                                 }
                                 if (yesdothat && !event.getPlayer().hasPotionEffect(PotionEffectType.GLOWING) && !Keys.SEMICLOAK.has(event.getPlayer())) {
-                                    if (PrisonGame.roles.get(event.getPlayer()) == Role.PRISONER && !PrisonGame.escaped.get(event.getPlayer())) {
+                                    if (profile.getRole() == Role.PRISONER && !profile.getEscaped()) {
                                         event.getPlayer().sendMessage(ChatColor.RED + "You were caught opening a door! Get a cloak next time!");
                                         event.getPlayer().addPotionEffect(PotionEffectType.GLOWING.createEffect(20 * 30, 0));
                                         for (Player g : Bukkit.getOnlinePlayers()) {
-                                            if (PrisonGame.roles.get(g) != Role.PRISONER) {
+                                            var profile2 = ProfileKt.getProfile(g);
+                                            if (profile2.getRole() != Role.PRISONER) {
                                                 g.playSound(g, Sound.ENTITY_SILVERFISH_DEATH, 1, 0.5f);
                                                 g.sendMessage(ChatColor.RED + event.getPlayer().getName() + ChatColor.DARK_RED + " was caught opening a door!");
                                             }

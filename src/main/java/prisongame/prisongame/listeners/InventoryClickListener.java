@@ -386,9 +386,10 @@ public class InventoryClickListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onInventoryClick4(InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
+        var profile = ProfileKt.getProfile(player);
 
         if (!player.getOpenInventory().getTitle().equals("Map Switch")) {
-            if (player.getGameMode().equals(GameMode.ADVENTURE) || PrisonGame.roles.get(player) != Role.WARDEN || event.isCancelled() || player.getOpenInventory().getType() == InventoryType.CRAFTING) {
+            if (player.getGameMode().equals(GameMode.ADVENTURE) || profile.getRole() != Role.WARDEN || event.isCancelled() || player.getOpenInventory().getType() == InventoryType.CRAFTING) {
                 return;
             }
             player.sendMessage(ChatColor.RED + "Wardens cannot interact with containers.");

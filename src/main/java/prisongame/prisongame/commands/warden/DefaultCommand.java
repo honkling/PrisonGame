@@ -12,6 +12,7 @@ import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import prisongame.prisongame.MyListener;
 import prisongame.prisongame.PrisonGame;
+import prisongame.prisongame.lib.ProfileKt;
 import prisongame.prisongame.lib.Role;
 
 public class DefaultCommand implements CommandExecutor {
@@ -32,11 +33,12 @@ public class DefaultCommand implements CommandExecutor {
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + sender.getName() + " only prison:mprison");
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + sender.getName() + " only prison:guard");
         for (Player p : Bukkit.getOnlinePlayers()) {
-            if (PrisonGame.roles.get(p) != Role.PRISONER) {
+            var profile = ProfileKt.getProfile(p);
+            if (profile.getRole() != Role.PRISONER) {
                 MyListener.playerJoin(p, false);
             }
-            PrisonGame.roles.put(p, Role.PRISONER);
-            PrisonGame.askType.put(p, 0);
+            profile.setRole(Role.PRISONER);
+            profile.setInvitation(null);
             p.playSound(p, Sound.BLOCK_END_PORTAL_SPAWN, 1, 1);
             p.sendTitle("", ChatColor.RED + nw.getName() + ChatColor.GREEN + " is the new warden!");
             PrisonGame.wardenCooldown = 20 * 6;
@@ -47,16 +49,17 @@ public class DefaultCommand implements CommandExecutor {
             for (Player pe : Bukkit.getOnlinePlayers()) {
                 if (PrisonGame.savedPlayerGuards.get(PrisonGame.warden.getUniqueId()).containsKey(pe.getUniqueId())) {
                     switch (PrisonGame.savedPlayerGuards.get(PrisonGame.warden.getUniqueId()).get(pe.getUniqueId())) {
-                        case 2 -> PrisonGame.setNurse((Player) pe);
-                        case 1 -> PrisonGame.setGuard((Player) pe);
-                        case 3 -> PrisonGame.setSwat((Player) pe);
+                        case NURSE -> PrisonGame.setNurse((Player) pe);
+                        case GUARD -> PrisonGame.setGuard((Player) pe);
+                        case SWAT -> PrisonGame.setSwat((Player) pe);
                         default -> ((Player) pe).sendMessage("An error has occured.");
                     }
                 }
             }
         }
 
-        PrisonGame.roles.put(nw, Role.WARDEN);
+        var profile = ProfileKt.getProfile(nw);
+        profile.setRole(Role.WARDEN);
         PrisonGame.swat = false;
         PrisonGame.chatmuted = false;
         PrisonGame.grammar = false;

@@ -9,12 +9,14 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.inventory.ItemStack;
 import prisongame.prisongame.PrisonGame;
+import prisongame.prisongame.lib.ProfileKt;
 import prisongame.prisongame.lib.Role;
 
 public class PlayerDropItemListener implements Listener {
     @EventHandler
     public void onPlayerDropItem(PlayerDropItemEvent event) {
         var player = event.getPlayer();
+        var profile = ProfileKt.getProfile(player);
         var drop = event.getItemDrop();
         var item = drop.getItemStack();
         var meta = item.getItemMeta();
@@ -30,7 +32,7 @@ public class PlayerDropItemListener implements Listener {
                 (meta != null && meta.getDisplayName().contains("Prisoner Uniform")))
             pseudoCancel(player, drop);
 
-        if (PrisonGame.roles.get(player) != Role.PRISONER) {
+        if (profile.getRole() != Role.PRISONER) {
             if (!type.equals(Material.TRIPWIRE_HOOK)) {
                 pseudoCancel(player, drop);
             } else {

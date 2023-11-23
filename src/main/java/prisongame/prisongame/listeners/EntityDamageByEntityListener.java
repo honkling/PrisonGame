@@ -13,6 +13,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.potion.PotionEffectType;
 import prisongame.prisongame.MyTask;
 import prisongame.prisongame.PrisonGame;
+import prisongame.prisongame.lib.ProfileKt;
 import prisongame.prisongame.lib.Role;
 
 public class EntityDamageByEntityListener implements Listener {
@@ -26,6 +27,7 @@ public class EntityDamageByEntityListener implements Listener {
     public void onEntityDamageByEntity2(EntityDamageByEntityEvent event) {
         if (event.getDamager() instanceof Player) {
             Player a = (Player) event.getDamager();
+            var profile = ProfileKt.getProfile(a);
             if (a.getInventory().getHelmet() != null) {
                 if (a.getInventory().getHelmet().getType().equals(Material.YELLOW_WOOL)) {
                     event.setDamage(0);
@@ -40,14 +42,15 @@ public class EntityDamageByEntityListener implements Listener {
                     p.setNoDamageTicks(0);
                 }
             }
-            if (PrisonGame.roles.get(a) == Role.PRISONER) {
+            if (profile.getRole() == Role.PRISONER) {
                 if (a.getInventory().getItemInMainHand().getType().equals(Material.WOODEN_AXE)) {
                     a.sendMessage(ChatColor.GREEN + "You cannot use prison work tools to fight!");
                     event.setCancelled(true);
                     return;
                 }
                 Player d = (Player) event.getEntity();
-                if (PrisonGame.roles.get(d) != Role.PRISONER) {
+                var profile2 = ProfileKt.getProfile(d);
+                if (profile2.getRole() != Role.PRISONER) {
                     a.addPotionEffect(PotionEffectType.GLOWING.createEffect(20 * 5, 0));
                 }
             }

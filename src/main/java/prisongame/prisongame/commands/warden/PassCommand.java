@@ -8,6 +8,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import prisongame.prisongame.PrisonGame;
+import prisongame.prisongame.lib.ProfileKt;
 import prisongame.prisongame.lib.Role;
 
 public class PassCommand implements CommandExecutor {
@@ -30,13 +31,14 @@ public class PassCommand implements CommandExecutor {
             }
 
             Player g = Bukkit.getPlayer(args[0]);
+            var profile = ProfileKt.getProfile(g);
 
             if (g == null || !g.isOnline()) {
                 sender.sendMessage(ChatColor.BLUE + "We had troubles promoting this player.");
                 return true;
             }
 
-            PrisonGame.askType.put(g, -1);
+            profile.setInvitation(Role.WARDEN);
             sender.sendMessage(ChatColor.AQUA + "Succesfully asked player to be the warden!");
             g.sendMessage(ChatColor.RED + "The wardens wants you to be the warden! use '/accept'");
         }

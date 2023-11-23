@@ -8,6 +8,7 @@ import kotlin.random.Random
 private val profiles = mutableMapOf<Player, Profile>()
 
 data class Profile(val player: Player) {
+    var track = 0.0
     var wardenTime = -1
     var solitaryTimer = -1
     var builderMode = false
@@ -17,7 +18,6 @@ data class Profile(val player: Player) {
     var invitation: Role? = null
     var attendedRollCall = false
     var attendedLightsOut = false
-    val saveFile = mutableMapOf<UUID, Role>()
     val hardModeIdentifier = Random.nextInt(100, 999)
 
     var hardMode = false

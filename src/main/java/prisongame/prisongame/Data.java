@@ -2,6 +2,7 @@ package prisongame.prisongame;
 
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
+import prisongame.prisongame.lib.Role;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -19,8 +20,18 @@ public class Data implements Serializable {
 
 
     // Can be used for saving
-    public Data(HashMap<UUID, HashMap<UUID, Integer>> playerguards) {
-        this.playerguards = playerguards;
+    public Data(HashMap<UUID, HashMap<UUID, Role>> playerguards) {
+        var playerGuards = new HashMap<UUID, HashMap<UUID, Integer>>();
+
+        playerguards.forEach((warden, save) -> {
+           playerGuards.put(warden, new HashMap<>());
+
+           save.forEach((uuid, role) -> {
+               playerGuards.get(warden).put(uuid, role == Role.WARDEN ? -1 : role.ordinal());
+           });
+        });
+
+        this.playerguards = playerGuards;
 
     }
     // Can be used for loading

@@ -15,6 +15,7 @@ import prisongame.prisongame.commands.danger.staff.SeasonCommand;
 import prisongame.prisongame.commands.staff.VanishCommand;
 import prisongame.prisongame.lib.Keys;
 import prisongame.prisongame.lib.ProfileKt;
+import prisongame.prisongame.lib.Role;
 
 import java.io.IOException;
 
@@ -97,9 +98,9 @@ public class PlayerJoinListener implements Listener {
         Player pe = (Player) event.getPlayer();
         if (PrisonGame.warden != null && PrisonGame.savedPlayerGuards.get(PrisonGame.warden.getUniqueId()).containsKey(pe.getUniqueId())) {
             switch (PrisonGame.savedPlayerGuards.get(PrisonGame.warden.getUniqueId()).get(pe.getUniqueId())) {
-                case 2 -> PrisonGame.setNurse((Player) pe);
-                case 1 -> PrisonGame.setGuard((Player) pe);
-                case 3 -> PrisonGame.setSwat((Player) pe);
+                case NURSE -> PrisonGame.setNurse((Player) pe);
+                case GUARD -> PrisonGame.setGuard((Player) pe);
+                case SWAT -> PrisonGame.setSwat((Player) pe);
                 default -> ((Player) pe).sendMessage("An error has occured.");
             }
         }

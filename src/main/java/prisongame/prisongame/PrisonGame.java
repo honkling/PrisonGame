@@ -55,7 +55,7 @@ public final class PrisonGame extends JavaPlugin {
     public static Boolean wardenenabled = false;
     static HashMap<Material, Double> moneyore = new HashMap<>();
 
-    public static HashMap<UUID, HashMap<UUID, Integer>> savedPlayerGuards = new HashMap<>();
+    public static HashMap<UUID, HashMap<UUID, Role>> savedPlayerGuards = new HashMap<>();
 
     public static Material[] oretypes = {
             Material.DEEPSLATE_COPPER_ORE,
@@ -172,7 +172,14 @@ public final class PrisonGame extends JavaPlugin {
     public void loadGuardData() {
         if (Data.loadData("saveguard.data") != null) {
             Data data = new Data(Data.loadData("saveguard.data"));
-            savedPlayerGuards = data.playerguards;
+            data.playerguards.forEach((warden, save) -> {
+                savedPlayerGuards.put(warden, new HashMap<>());
+
+                save.forEach((uuid, value) -> {
+                    var role = value == -1 ? Role.WARDEN : Role.values()[value];
+                    savedPlayerGuards.get(warden).put(uuid, role);
+                });
+            });
             Bukkit.broadcastMessage("LOADED PLAYER'S GUARDS");
         }
     }
@@ -442,7 +449,7 @@ public final class PrisonGame extends JavaPlugin {
 
         for (Player player : Bukkit.getOnlinePlayers()) {
             var profile = ProfileKt.getProfile(player);
-            profile.setInvitation(Role.PRISONER);
+            profile.setInvitation(null);
         }
     }
 
