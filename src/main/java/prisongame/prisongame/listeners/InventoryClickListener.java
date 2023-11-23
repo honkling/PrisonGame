@@ -17,6 +17,7 @@ import prisongame.prisongame.Prison;
 import prisongame.prisongame.PrisonGame;
 import prisongame.prisongame.lib.Config;
 import prisongame.prisongame.lib.Keys;
+import prisongame.prisongame.lib.ProfileKt;
 import prisongame.prisongame.lib.Role;
 
 import static prisongame.prisongame.MyListener.reloadBert;
@@ -325,11 +326,12 @@ public class InventoryClickListener implements Listener {
 
     public static void switchMap(Prison prison) {
         for (Player player : Bukkit.getOnlinePlayers()) {
-            if (player.getDisplayName().contains("ASCENDING") || PrisonGame.builder.getOrDefault(player, false))
+            var profile = ProfileKt.getProfile(player);
+            if (player.getDisplayName().contains("ASCENDING") || profile.getBuilderMode())
                 continue;
 
             player.teleport(prison.spwn);
-            if (PrisonGame.roles.get(player) != Role.PRISONER) {
+            if (profile.getRole() != Role.PRISONER) {
                 player.teleport(prison.wardenspawn);
             }
         }
@@ -342,7 +344,8 @@ public class InventoryClickListener implements Listener {
         Bukkit.getWorld("world").getBlockAt(new Location(Bukkit.getWorld("world"),-1023,-57,-994)).setType(Material.REDSTONE_BLOCK);
 
         for (Player player : Bukkit.getOnlinePlayers()) {
-            if (PrisonGame.builder.get(player))
+            var profile = ProfileKt.getProfile(player);
+            if (profile.getBuilderMode())
                 continue;
 
             if (player.isSleeping())
@@ -363,7 +366,7 @@ public class InventoryClickListener implements Listener {
                 player.removePassenger(passenger);
             }
 
-            if (PrisonGame.roles.get(player) != Role.WARDEN) {
+            if (profile.getRole() != Role.WARDEN) {
                 MyListener.playerJoin(player, true);
                 player.sendTitle(ChatColor.GREEN + "New prison!", ChatColor.BOLD + prison.name.toUpperCase());
                 continue;

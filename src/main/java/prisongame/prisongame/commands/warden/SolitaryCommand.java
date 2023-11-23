@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import prisongame.prisongame.PrisonGame;
+import prisongame.prisongame.lib.ProfileKt;
 import prisongame.prisongame.lib.Role;
 
 public class SolitaryCommand implements CommandExecutor {
@@ -18,6 +19,7 @@ public class SolitaryCommand implements CommandExecutor {
         if (args.length >= 1) {
             if (Bukkit.getPlayer(args[0]) != null) {
                 Player g = Bukkit.getPlayer(args[0]);
+                var profile = ProfileKt.getProfile(g);
                 Integer solitcount = 0;
                 for (Player p : Bukkit.getOnlinePlayers()) {
                     if (p.getDisplayName().contains("SOLITARY")) {
@@ -26,14 +28,13 @@ public class SolitaryCommand implements CommandExecutor {
                 }
                 if (solitcount < 3) {
                     if (PrisonGame.solitcooldown <= 0) {
-                        if (g.isOnline() && g != sender && PrisonGame.roles.get(g) == Role.PRISONER) {
+                        if (g.isOnline() && g != sender && profile.getRole() == Role.PRISONER) {
                             if (g.getGameMode() == GameMode.SPECTATOR) {
                                 PrisonGame.solitcooldown = (20 * 60) * 2;
                                 Bukkit.broadcastMessage(ChatColor.GRAY + g.getName() + " was sent to solitary!");
                                 g.setGameMode(GameMode.ADVENTURE);
                                 g.removePotionEffect(PotionEffectType.LUCK);
-                                PrisonGame.escaped.put(g, true);
-                                PrisonGame.solittime.put(g, 20 * 120);
+                                profile.setSolitaryTimer(20 * 120);
                                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + g.getName() + " only prison:solit");
                                 Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
                                     g.teleport(PrisonGame.active.getSolit());

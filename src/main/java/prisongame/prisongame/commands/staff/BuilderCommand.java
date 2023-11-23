@@ -11,6 +11,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import prisongame.prisongame.PrisonGame;
+import prisongame.prisongame.lib.ProfileKt;
 
 public class BuilderCommand implements CommandExecutor {
 
@@ -22,9 +23,11 @@ public class BuilderCommand implements CommandExecutor {
             return true;
         }
 
+        var profile = ProfileKt.getProfile(player);
+
         if (args.length > 0 && args[0].equalsIgnoreCase("toggle")) {
-            var enabled = !PrisonGame.builder.getOrDefault(player, false);
-            PrisonGame.builder.put(player, enabled);
+            var enabled = !profile.getBuilderMode();
+            profile.setBuilderMode(enabled);
             player.sendMessage(PrisonGame.mm.deserialize(
                     "<gray><verb> builder mode.",
                     Placeholder.component("verb", Component.text(enabled ? "Enabled" : "Disabled"))

@@ -25,14 +25,7 @@ public class AcceptCommand implements CommandExecutor {
             case 1 -> PrisonGame.setGuard((Player) sender);
             case 3 -> PrisonGame.setSwat((Player) sender);
             case -1 -> {
-                MyListener.playerJoin(PrisonGame.warden, false);
-                PrisonGame.warden = null;
-                ((Player) sender).performCommand("warden");
-
-                PrisonGame.askType.entrySet().forEach((entry) -> {
-                   if (entry.getValue() == -1)
-                       PrisonGame.askType.put(entry.getKey(), 0);
-                });
+                PrisonGame.setWarden((Player) sender);
             }
             default -> sender.sendMessage("You haven't been invited!");
         }

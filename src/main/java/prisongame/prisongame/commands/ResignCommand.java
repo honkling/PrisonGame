@@ -9,6 +9,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import prisongame.prisongame.MyListener;
 import prisongame.prisongame.PrisonGame;
+import prisongame.prisongame.lib.ProfileKt;
 import prisongame.prisongame.lib.Role;
 
 import java.util.HashMap;
@@ -21,6 +22,7 @@ public class ResignCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!((Player) sender).hasCooldown(Material.IRON_DOOR)) {
             Player p = (Player) sender;
+            var profile = ProfileKt.getProfile(p);
             if (!((Player) sender).getDisplayName().contains("SOLITARY") && !new Location(p.getWorld(), p.getLocation().getX(), p.getLocation().getY() - 1, p.getLocation().getZ()).getBlock().getType().equals(Material.RED_SAND)) {
                 if (PrisonGame.warden != null) {
                     if (PrisonGame.warden.equals(sender)) {
@@ -37,8 +39,7 @@ public class ResignCommand implements CommandExecutor {
                         PrisonGame.savedPlayerGuards.put(PrisonGame.warden.getUniqueId(), roleHashMap);
                     }
                 }
-                PrisonGame.roles.put((Player) sender, Role.PRISONER);
-                MyListener.playerJoin((Player) sender, false);
+                profile.setRole(Role.PRISONER);
             }
         } else {
             sender.sendMessage(ChatColor.RED + "You're in combat!");

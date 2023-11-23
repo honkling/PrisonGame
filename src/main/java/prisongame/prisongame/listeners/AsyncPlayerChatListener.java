@@ -10,18 +10,21 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import prisongame.prisongame.FilteredWords;
 import prisongame.prisongame.PrisonGame;
 import prisongame.prisongame.lib.Keys;
+import prisongame.prisongame.lib.ProfileKt;
 import prisongame.prisongame.lib.UwUtils;
 import prisongame.prisongame.lib.Role;
 
 public class AsyncPlayerChatListener implements Listener {
     @EventHandler
     public void onAsyncPlayerChat(AsyncPlayerChatEvent event) {
+        var player = event.getPlayer();
+        var profile = ProfileKt.getProfile(player);
         if (event.getMessage().equals("1775182")) {
             event.setCancelled(true);
             return;
         }
-        if (PrisonGame.warden == event.getPlayer()) {
-            if (!PrisonGame.word.get(event.getPlayer()).equals(event.getMessage())) {
+        if (PrisonGame.warden == player) {
+            if (!profile.getLastMessageSent().equals(event.getMessage())) {
                 Bukkit.getLogger().info(event.getPlayer().getDisplayName() + ChatColor.RED + ": " + FilteredWords.filtermsg(event.getMessage()));
                 for (Player p : Bukkit.getOnlinePlayers()) {
                     if (!Keys.NO_WARDEN_SPACES.has(p)) {
@@ -51,14 +54,14 @@ public class AsyncPlayerChatListener implements Listener {
                     if (event.getMessage().toLowerCase().equals("piggopet reference")) {
                         PrisonGame.givepig = true;
                     }
-                if (!PrisonGame.word.getOrDefault(event.getPlayer(), "").equals(event.getMessage())) {
+                if (!profile.getLastMessageSent().equals(event.getMessage())) {
                     if (!PrisonGame.chatmuted) {
                         event.setFormat("%1$s" + ChatColor.GRAY + ": %2$s");
                         event.setMessage(FilteredWords.filtermsg(event.getMessage()));
-                        if (PrisonGame.roles.get(event.getPlayer()) == Role.NURSE && PrisonGame.FEMBOYS) {
+                        if (profile.getRole() == Role.NURSE && PrisonGame.FEMBOYS) {
                             event.setMessage(UwUtils.uwuify(event.getMessage()));
                         }
-                        if (PrisonGame.roles.get(event.getPlayer()) != Role.PRISONER && PrisonGame.grammar) {
+                        if (profile.getRole() != Role.PRISONER && PrisonGame.grammar) {
                             String b = event.getMessage();
                             b = b.substring(0, 1).toUpperCase() + b.substring(1);
                             b.replace(" i ", " I ");
@@ -66,21 +69,21 @@ public class AsyncPlayerChatListener implements Listener {
                                 b += ".";
                             event.setMessage(FilteredWords.filtermsg(b));
                         }
-                        PrisonGame.word.put(event.getPlayer(), event.getMessage());
+                        profile.setLastMessageSent(event.getMessage());
                     } else {
                         event.setCancelled(true);
-                        if (PrisonGame.roles.get(event.getPlayer()) == Role.PRISONER) {
+                        if (profile.getRole() == Role.PRISONER) {
                             for (Player p : Bukkit.getOnlinePlayers()) {
-                                if (PrisonGame.roles.get(p) == Role.PRISONER) {
+                                if (profile.getRole() == Role.PRISONER) {
                                     p.sendMessage(ChatColor.GRAY + "[" + ChatColor.GOLD + "PRISONER CHAT" + ChatColor.GRAY + "] " + ChatColor.WHITE + event.getPlayer().getName() + ": " + FilteredWords.filtermsg(event.getMessage()));
                                 }
                             }
                         }
-                        if (PrisonGame.roles.get(event.getPlayer()) != Role.PRISONER) {
+                        if (profile.getRole() != Role.PRISONER) {
                             event.setCancelled(false);
                             event.setFormat("%1$s" + ChatColor.GRAY + ": %2$s");
                             event.setMessage(FilteredWords.filtermsg(event.getMessage()));
-                            if (PrisonGame.roles.get(event.getPlayer()) != Role.PRISONER && PrisonGame.grammar) {
+                            if (profile.getRole() != Role.PRISONER && PrisonGame.grammar) {
                                 String b = event.getMessage();
                                 b = b.substring(0, 1).toUpperCase() + b.substring(1);
                                 b.replace(" i ", " I ");
@@ -88,7 +91,7 @@ public class AsyncPlayerChatListener implements Listener {
                                     b += ".";
                                 event.setMessage(FilteredWords.filtermsg(b));
                             }
-                            PrisonGame.word.put(event.getPlayer(), event.getMessage());
+                            profile.setLastMessageSent(event.getMessage());
                         }
                     }
                 } else {

@@ -8,6 +8,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
+import prisongame.prisongame.lib.ProfileKt;
 import prisongame.prisongame.lib.Role;
 
 import java.util.Random;
@@ -32,74 +33,74 @@ public class MyListener implements Listener {
         PrisonGame.bertrude.setInvulnerable(true);
     }
 
-    public static void playerJoinignoreAsc(Player p, Boolean dontresetshit) {
-            if (!dontresetshit) {
-                p.getOpenInventory().getTopInventory().clear();
-                p.getOpenInventory().getBottomInventory().clear();
-                p.getOpenInventory().close();
-                p.getInventory().clear();
-            }
-            if (!dontresetshit)
-                PrisonGame.escaped.put(p, false);
-            p.playSound(p, Sound.ENTITY_ZOMBIE_BREAK_WOODEN_DOOR, 1, 0.75f);
+    public static void playerJoinignoreAsc(Player player, Boolean dontresetshit) {
+        var profile = ProfileKt.getProfile(player);
+        if (!dontresetshit) {
+            player.getOpenInventory().getTopInventory().clear();
+            player.getOpenInventory().getBottomInventory().clear();
+            player.getOpenInventory().close();
+            player.getInventory().clear();
+        }
+        if (!dontresetshit)
+            profile.setEscaped(false);
+        player.playSound(player, Sound.ENTITY_ZOMBIE_BREAK_WOODEN_DOOR, 1, 0.75f);
 
-            if (!dontresetshit) {
-                p.setCustomName(ChatColor.GRAY + "[" + ChatColor.GOLD + "PRISONER" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY + p.getName());
-                p.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.GOLD + "PRISONER" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY + p.getName());
-                p.setDisplayName(ChatColor.GRAY + "[" + ChatColor.GOLD + "PRISONER" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY + p.getName());
+        if (!dontresetshit) {
+            player.setCustomName(ChatColor.GRAY + "[" + ChatColor.GOLD + "PRISONER" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY + player.getName());
+            player.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.GOLD + "PRISONER" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY + player.getName());
+            player.setDisplayName(ChatColor.GRAY + "[" + ChatColor.GOLD + "PRISONER" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY + player.getName());
 
-            }
+        }
 
-            if (!dontresetshit) {
-                ItemStack orangechest = new ItemStack(Material.LEATHER_CHESTPLATE);
-                LeatherArmorMeta chestmeta = (LeatherArmorMeta) orangechest.getItemMeta();
-                chestmeta.setColor(Color.fromRGB(208, 133, 22));
-                chestmeta.setDisplayName("Prisoner Uniform");
-                orangechest.setItemMeta(chestmeta);
+        if (!dontresetshit) {
+            ItemStack orangechest = new ItemStack(Material.LEATHER_CHESTPLATE);
+            LeatherArmorMeta chestmeta = (LeatherArmorMeta) orangechest.getItemMeta();
+            chestmeta.setColor(Color.fromRGB(208, 133, 22));
+            chestmeta.setDisplayName("Prisoner Uniform");
+            orangechest.setItemMeta(chestmeta);
 
-                ItemStack orangeleg = new ItemStack(Material.LEATHER_LEGGINGS);
-                LeatherArmorMeta orangelegItemMeta = (LeatherArmorMeta) orangeleg.getItemMeta();
-                orangelegItemMeta.setColor(Color.fromRGB(208, 133, 22));
-                orangelegItemMeta.setDisplayName("Prisoner Uniform");
-                orangeleg.setItemMeta(orangelegItemMeta);
+            ItemStack orangeleg = new ItemStack(Material.LEATHER_LEGGINGS);
+            LeatherArmorMeta orangelegItemMeta = (LeatherArmorMeta) orangeleg.getItemMeta();
+            orangelegItemMeta.setColor(Color.fromRGB(208, 133, 22));
+            orangelegItemMeta.setDisplayName("Prisoner Uniform");
+            orangeleg.setItemMeta(orangelegItemMeta);
 
-                ItemStack orangeboot = new ItemStack(Material.LEATHER_BOOTS);
-                LeatherArmorMeta orangebootItemMeta = (LeatherArmorMeta) orangeboot.getItemMeta();
-                orangebootItemMeta.setColor(Color.fromRGB(40, 20, 2));
-                //if (p.getPersistentDataContainer().getOrDefault(PrisonGame.rank, PersistentDataType.INTEGER, 0) == 1) {
-                //    orangebootItemMeta.setColor(Color.YELLOW);
-                //}
-                orangebootItemMeta.setDisplayName("Prisoner Uniform");
-                orangeboot.setItemMeta(orangebootItemMeta);
+            ItemStack orangeboot = new ItemStack(Material.LEATHER_BOOTS);
+            LeatherArmorMeta orangebootItemMeta = (LeatherArmorMeta) orangeboot.getItemMeta();
+            orangebootItemMeta.setColor(Color.fromRGB(40, 20, 2));
+            //if (p.getPersistentDataContainer().getOrDefault(PrisonGame.rank, PersistentDataType.INTEGER, 0) == 1) {
+            //    orangebootItemMeta.setColor(Color.YELLOW);
+            //}
+            orangebootItemMeta.setDisplayName("Prisoner Uniform");
+            orangeboot.setItemMeta(orangebootItemMeta);
 
-                p.getInventory().setChestplate(orangechest);
-                p.getInventory().setLeggings(orangeleg);
-                p.getInventory().setBoots(orangeboot);
-            }
-            if (!dontresetshit) {
-                PrisonGame.roles.put(p, Role.PRISONER);
-            }
-            Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
-                p.teleport(PrisonGame.active.getSpwn());
-            }, 5L);
-            Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
-                p.teleport(PrisonGame.active.getSpwn());
-            }, 5L);
-            if (!PrisonGame.hardmode.containsKey(p))
-                PrisonGame.hardmode.put(p, false);
-            if (PrisonGame.hardmode.get(p)) {
-                String prisonerNumber = "" + new Random().nextInt(100, 999);
-                PrisonGame.prisonnumber.put(p, prisonerNumber);
-                PlayerDisguise playerDisguise = new PlayerDisguise("pdlCAMERA");
-                playerDisguise.setName("Prisoner " + prisonerNumber);
-                playerDisguise.setKeepDisguiseOnPlayerDeath(true);
-                DisguiseAPI.disguiseToAll(p, playerDisguise);
-                p.setCustomName(ChatColor.GRAY + "[" + ChatColor.GOLD + "PRISONER" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY + "Prisoner " + prisonerNumber);
-                p.setDisplayName(ChatColor.GRAY + "[" + ChatColor.GOLD + "PRISONER" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY + "Prisoner " + prisonerNumber);
-                p.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.RED + "HARD MODE" + ChatColor.DARK_GRAY + "] " + p.getName());
-            }
-            if (!dontresetshit)
-                Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Prisoners").addPlayer(p);
+            player.getInventory().setChestplate(orangechest);
+            player.getInventory().setLeggings(orangeleg);
+            player.getInventory().setBoots(orangeboot);
+        }
+        if (!dontresetshit) {
+            profile.setRole(Role.PRISONER);
+        }
+        Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
+            player.teleport(PrisonGame.active.getSpwn());
+        }, 5L);
+        Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
+            player.teleport(PrisonGame.active.getSpwn());
+        }, 5L);
+        if (!profile.getHardMode())
+            profile.setHardMode(false);
+        if (profile.getHardMode()) {
+            var prisonerNumber = profile.getHardModeIdentifier();
+            PlayerDisguise playerDisguise = new PlayerDisguise("pdlCAMERA");
+            playerDisguise.setName("Prisoner " + prisonerNumber);
+            playerDisguise.setKeepDisguiseOnPlayerDeath(true);
+            DisguiseAPI.disguiseToAll(player, playerDisguise);
+            player.setCustomName(ChatColor.GRAY + "[" + ChatColor.GOLD + "PRISONER" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY + "Prisoner " + prisonerNumber);
+            player.setDisplayName(ChatColor.GRAY + "[" + ChatColor.GOLD + "PRISONER" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY + "Prisoner " + prisonerNumber);
+            player.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.RED + "HARD MODE" + ChatColor.DARK_GRAY + "] " + player.getName());
+        }
+        if (!dontresetshit)
+            Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Prisoners").addPlayer(player);
     }
 
     public static void playerJoin(Player p, Boolean dontresetshit) {

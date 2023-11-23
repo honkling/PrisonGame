@@ -10,6 +10,7 @@ import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import prisongame.prisongame.MyListener;
 import prisongame.prisongame.PrisonGame;
+import prisongame.prisongame.lib.ProfileKt;
 import prisongame.prisongame.lib.Role;
 
 public class ForceCommand implements CommandExecutor {
@@ -27,6 +28,8 @@ public class ForceCommand implements CommandExecutor {
             return true;
         }
 
+        var profile = ProfileKt.getProfile(player);
+
         if (args.length == 1) {
             sender.sendMessage(PrisonGame.mm.deserialize("<red>Please provide a role."));
             return true;
@@ -34,7 +37,7 @@ public class ForceCommand implements CommandExecutor {
 
         try {
             var role = Role.valueOf(args[1].toUpperCase());
-            PrisonGame.roles.put(player, role);
+            profile.setRole(role);
 
             if (role == Role.WARDEN) {
                 if (PrisonGame.warden != null)

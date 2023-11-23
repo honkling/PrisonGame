@@ -818,49 +818,7 @@ public class PlayerInteractListener implements Listener {
                         g.getInventory().setLeggings(orangeleg);
                     }
                     if (PrisonGame.roles.get(event.getPlayer()) == Role.PRISONER && !PrisonGame.escaped.get(event.getPlayer())) {
-                        Player g = event.getPlayer();
-                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + event.getPlayer().getName() + " only prison:escape");
-                        g.playSound(g, Sound.ITEM_GOAT_HORN_SOUND_1, 1, 1);
-                        PrisonGame.escaped.put(event.getPlayer(), true);
-                        Bukkit.broadcastMessage(ChatColor.RED + g.getName() + " escaped...");
-                        event.getPlayer().addPotionEffect(PotionEffectType.GLOWING.createEffect(999999999, 0));
-
-                        g.setCustomName(ChatColor.GRAY + "[" + ChatColor.RED + "CRIMINAL" + ChatColor.GRAY + "] " + ChatColor.GRAY + g.getName());
-                        g.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.RED + "CRIMINAL" + ChatColor.GRAY + "] " + ChatColor.GRAY + g.getName());
-                        g.setDisplayName(ChatColor.GRAY + "[" + ChatColor.RED + "CRIMINAL" + ChatColor.GRAY + "] " + ChatColor.GRAY + g.getName());
-
-
-                        ItemStack orangechest = new ItemStack(Material.LEATHER_CHESTPLATE);
-                        orangechest.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
-                        LeatherArmorMeta chestmeta = (LeatherArmorMeta) orangechest.getItemMeta();
-                        chestmeta.setColor(Color.RED);
-                        chestmeta.setDisplayName("Armor " + ChatColor.RED + "[CONTRABAND]");
-                        orangechest.setItemMeta(chestmeta);
-
-                        ItemStack orangeleg = new ItemStack(Material.CHAINMAIL_LEGGINGS);
-                        orangechest.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
-                        ItemMeta orangelegItemMeta = orangeleg.getItemMeta();
-                        orangelegItemMeta.setDisplayName("Armor " + ChatColor.RED + "[CONTRABAND]");
-                        orangeleg.setItemMeta(orangelegItemMeta);
-
-
-                        g.sendMessage(ChatColor.LIGHT_PURPLE + "Reclick the sign to get armor; it will override any current armor!");
-
-                        ItemStack wardenSword = new ItemStack(Material.STONE_SWORD);
-                        wardenSword.addEnchantment(Enchantment.DAMAGE_ALL, 2);
-                        wardenSword.addEnchantment(Enchantment.DURABILITY, 1);
-
-                        g.getInventory().addItem(wardenSword);
-
-                        g.getInventory().addItem(new ItemStack(Material.GOLDEN_APPLE, 4));
-
-
-                        if (PrisonGame.hardmode.get(g)) {
-                            g.setCustomName(ChatColor.GRAY + "[" + ChatColor.DARK_RED + "CRIMINAL" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY  + "Criminal " + PrisonGame.prisonnumber.get(g));
-                            g.setDisplayName(ChatColor.GRAY + "[" + ChatColor.DARK_RED + "CRIMINAL" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY  + "Criminal " + PrisonGame.prisonnumber.get(g));
-                            g.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.RED + "HARD MODE" + ChatColor.DARK_GRAY + "] " + g.getName());
-                        }
-
+                        PrisonGame.setCriminal(event.getPlayer());
                     }
                 }
             }
