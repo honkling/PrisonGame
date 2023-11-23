@@ -25,6 +25,7 @@ class OfflinePlayerHolder(val player: OfflinePlayer) : PersistentDataHolder {
             reader = NBTReader(GZIPInputStream(FileInputStream(file)))
             compound = reader!!.readTag() as CompoundTag
             values = (compound.value["BukkitValues"] ?: empty) as CompoundTag
+            reader!!.stream.close()
         }
     }
 
