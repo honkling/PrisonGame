@@ -25,6 +25,7 @@ import prisongame.prisongame.commands.completers.*;
 import prisongame.prisongame.commands.danger.HardCommand;
 import prisongame.prisongame.commands.danger.NormalCommand;
 import prisongame.prisongame.commands.danger.ResetAscensionCommand;
+import prisongame.prisongame.commands.danger.staff.SeasonCommand;
 import prisongame.prisongame.commands.economy.BalanceCommand;
 import prisongame.prisongame.commands.economy.PayCommand;
 import prisongame.prisongame.commands.economy.staff.NerdCheatCommand;

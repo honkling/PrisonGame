@@ -1,4 +1,4 @@
-package prisongame.prisongame.commands.staff;
+package prisongame.prisongame.commands.danger.staff;
 
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Bukkit;
