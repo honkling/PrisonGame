@@ -7,8 +7,12 @@ depend:
   - LibsDisguises
 main: prisongame.prisongame.PrisonGame
 api-version: "1.20"
-
+libraries:
+  - org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.20
 commands:
+  balance:
+    description: View balance and leaderboard.
+    usage: /balance (leaderboard/view) [player]
   debug:
     description: Debug command
     usage: /debug

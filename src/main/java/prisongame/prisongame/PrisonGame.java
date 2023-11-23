@@ -25,6 +25,7 @@ import prisongame.prisongame.commands.completers.*;
 import prisongame.prisongame.commands.danger.HardCommand;
 import prisongame.prisongame.commands.danger.NormalCommand;
 import prisongame.prisongame.commands.danger.ResetAscensionCommand;
+import prisongame.prisongame.commands.economy.BalanceCommand;
 import prisongame.prisongame.commands.economy.PayCommand;
 import prisongame.prisongame.commands.economy.staff.NerdCheatCommand;
 import prisongame.prisongame.commands.economy.staff.ResetMoneyCommand;
@@ -230,6 +231,7 @@ public final class PrisonGame extends JavaPlugin {
         this.getCommand("resign").setExecutor(new ResignCommand());
         this.getCommand("accept").setExecutor(new AcceptCommand());
         this.getCommand("normal").setExecutor(new NormalCommand());
+        this.getCommand("balance").setExecutor(new BalanceCommand());
         this.getCommand("builder").setExecutor(new BuilderCommand());
         this.getCommand("setmoney").setExecutor(new SetMoneyCommand());
         this.getCommand("pbbreload").setExecutor(new PBBReloadCommand());
@@ -242,6 +244,7 @@ public final class PrisonGame extends JavaPlugin {
         this.getCommand("debug").setTabCompleter(new DebugCompleter());
         this.getCommand("warden").setTabCompleter(new WardenCompleter());
         this.getCommand("season").setTabCompleter(new SeasonCompleter());
+        this.getCommand("balance").setTabCompleter(new BalanceCompleter());
         this.getCommand("builder").setTabCompleter(new BuilderCompleter());
         this.getCommand("setmoney").setTabCompleter(new SetMoneyCompleter());
         this.getCommand("enderchest").setTabCompleter(new EnderChestCompleter());
