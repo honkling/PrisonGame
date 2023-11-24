@@ -39,7 +39,8 @@ public class ResignCommand implements CommandExecutor {
                         PrisonGame.savedPlayerGuards.put(PrisonGame.warden.getUniqueId(), roleHashMap);
                     }
                 }
-                profile.setRole(Role.PRISONER);
+                profile.setRole(Role.PRISONER, false);
+                MyListener.playerJoin(p, false);
             }
         } else {
             sender.sendMessage(ChatColor.RED + "You're in combat!");

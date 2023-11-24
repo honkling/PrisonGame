@@ -42,7 +42,7 @@ public class MyListener implements Listener {
             player.getInventory().clear();
         }
         if (!dontresetshit)
-            profile.setEscaped(false);
+            profile.setEscaped(false, false);
         player.playSound(player, Sound.ENTITY_ZOMBIE_BREAK_WOODEN_DOOR, 1, 0.75f);
 
         if (!dontresetshit) {
@@ -79,7 +79,7 @@ public class MyListener implements Listener {
             player.getInventory().setBoots(orangeboot);
         }
         if (!dontresetshit) {
-            profile.setRole(Role.PRISONER);
+            profile.setRole(Role.PRISONER, false);
         }
         Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
             player.teleport(PrisonGame.active.getSpwn());
@@ -87,8 +87,6 @@ public class MyListener implements Listener {
         Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
             player.teleport(PrisonGame.active.getSpwn());
         }, 5L);
-        if (!profile.getHardMode())
-            profile.setHardMode(false);
         if (profile.getHardMode()) {
             var prisonerNumber = profile.getHardModeIdentifier();
             PlayerDisguise playerDisguise = new PlayerDisguise("pdlCAMERA");

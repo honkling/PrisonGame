@@ -30,20 +30,30 @@ data class Profile(val player: Player) {
             }
         }
 
-    var escaped = false
-        set(value) {
-            field = value
+    private var escaped = false
+    private var role = Role.PRISONER
 
+    fun isEscaped() = escaped
+    fun setEscaped(value: Boolean) = setEscaped(value, true)
+    fun setEscaped(value: Boolean, action: Boolean) {
+        escaped = value
+
+        if (action)
             if (!value)
                 player.performCommand("resign")
             else
                 PrisonGame.setCriminal(player)
-        }
+    }
 
-    var role = Role.PRISONER
-        set(value) {
-            field = value
+    fun getRole() = role
+    fun setRole(value: Role) = setRole(value, true)
+    fun setRole(value: Role, action: Boolean) {
+        if (value == Role.PRISONER)
+            Exception().printStackTrace()
 
+        role = value
+
+        if (action)
             when (value) {
                 Role.WARDEN -> PrisonGame.setWarden(player)
                 Role.SWAT -> PrisonGame.setSwat(player)
@@ -51,11 +61,13 @@ data class Profile(val player: Player) {
                 Role.NURSE -> PrisonGame.setNurse(player)
                 Role.PRISONER -> player.performCommand("resign")
             }
-        }
+    }
 }
 
 fun Player.getProfile(): Profile {
-    return profiles[this] ?: Profile(this)
+    val profile = profiles[this] ?: Profile(this)
+    profiles[this] = profile
+    return profile
 }
 
 fun Player.resetProfile() {

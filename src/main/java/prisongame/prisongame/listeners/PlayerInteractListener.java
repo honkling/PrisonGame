@@ -780,7 +780,7 @@ public class PlayerInteractListener implements Listener {
                     event.getPlayer().removePotionEffect(PotionEffectType.UNLUCK);
                 }
                 if (sign.getLine(1).equals("Get Gear")) {
-                    if (profile.getRole() == Role.PRISONER && profile.getEscaped()) {
+                    if (profile.getRole() == Role.PRISONER && profile.isEscaped()) {
                         Player g = event.getPlayer();
                         ItemStack orangechest = new ItemStack(Material.LEATHER_CHESTPLATE);
                         orangechest.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
@@ -801,7 +801,7 @@ public class PlayerInteractListener implements Listener {
                         g.getInventory().setChestplate(orangechest);
                         g.getInventory().setLeggings(orangeleg);
                     }
-                    if (profile.getRole() == Role.PRISONER && !profile.getEscaped()) {
+                    if (profile.getRole() == Role.PRISONER && !profile.isEscaped()) {
                         PrisonGame.setCriminal(event.getPlayer());
                     }
                 }
@@ -903,7 +903,7 @@ public class PlayerInteractListener implements Listener {
                                     }
                                 }
                                 if (yesdothat && !event.getPlayer().hasPotionEffect(PotionEffectType.GLOWING) && !Keys.SEMICLOAK.has(event.getPlayer())) {
-                                    if (profile.getRole() == Role.PRISONER && !profile.getEscaped()) {
+                                    if (profile.getRole() == Role.PRISONER && !profile.isEscaped()) {
                                         event.getPlayer().sendMessage(ChatColor.RED + "You were caught opening a door! Get a cloak next time!");
                                         event.getPlayer().addPotionEffect(PotionEffectType.GLOWING.createEffect(20 * 30, 0));
                                         for (Player g : Bukkit.getOnlinePlayers()) {

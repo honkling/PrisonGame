@@ -29,84 +29,8 @@ public class DefaultCommand implements CommandExecutor {
         if (player.getGameMode() == GameMode.SPECTATOR)
             return true;
 
-        Player nw = (Player) sender;
-        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + sender.getName() + " only prison:mprison");
-        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + sender.getName() + " only prison:guard");
-        for (Player p : Bukkit.getOnlinePlayers()) {
-            var profile = ProfileKt.getProfile(p);
-            if (profile.getRole() != Role.PRISONER) {
-                MyListener.playerJoin(p, false);
-            }
-            profile.setRole(Role.PRISONER);
-            profile.setInvitation(null);
-            p.playSound(p, Sound.BLOCK_END_PORTAL_SPAWN, 1, 1);
-            p.sendTitle("", ChatColor.RED + nw.getName() + ChatColor.GREEN + " is the new warden!");
-            PrisonGame.wardenCooldown = 20 * 6;
-        }
-        PrisonGame.warden = nw;
-        Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Warden").addPlayer(nw);
-        if (PrisonGame.savedPlayerGuards.containsKey(PrisonGame.warden)) {
-            for (Player pe : Bukkit.getOnlinePlayers()) {
-                if (PrisonGame.savedPlayerGuards.get(PrisonGame.warden.getUniqueId()).containsKey(pe.getUniqueId())) {
-                    switch (PrisonGame.savedPlayerGuards.get(PrisonGame.warden.getUniqueId()).get(pe.getUniqueId())) {
-                        case NURSE -> PrisonGame.setNurse((Player) pe);
-                        case GUARD -> PrisonGame.setGuard((Player) pe);
-                        case SWAT -> PrisonGame.setSwat((Player) pe);
-                        default -> ((Player) pe).sendMessage("An error has occured.");
-                    }
-                }
-            }
-        }
-
-        var profile = ProfileKt.getProfile(nw);
+        var profile = ProfileKt.getProfile(player);
         profile.setRole(Role.WARDEN);
-        PrisonGame.swat = false;
-        PrisonGame.chatmuted = false;
-        PrisonGame.grammar = false;
-        nw.teleport(PrisonGame.active.getWardenspawn());
-        nw.setCustomName(ChatColor.GRAY + "[" + ChatColor.RED + "WARDEN" + ChatColor.GRAY + "] " + ChatColor.WHITE + nw.getName());
-        nw.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.RED + "WARDEN" + ChatColor.GRAY + "] " + ChatColor.WHITE + nw.getName());
-        nw.setDisplayName(ChatColor.GRAY + "[" + ChatColor.RED + "WARDEN" + ChatColor.GRAY + "] " + ChatColor.WHITE + nw.getName());
-
-        nw.setNoDamageTicks(20 * 45);
-        ItemStack card2 = new ItemStack(Material.IRON_SHOVEL);
-        ItemMeta cardm2 = card2.getItemMeta();
-        cardm2.setDisplayName(ChatColor.BLUE + "Handcuffs " + ChatColor.RED + "[CONTRABAND]");
-        cardm2.addEnchant(Enchantment.KNOCKBACK, 1, true);
-        card2.setItemMeta(cardm2);
-        nw.getInventory().addItem(card2);
-
-        nw.getInventory().setHelmet(new ItemStack(Material.CHAINMAIL_HELMET));
-        nw.getInventory().setChestplate(new ItemStack(Material.IRON_CHESTPLATE));
-        nw.getInventory().setLeggings(new ItemStack(Material.IRON_LEGGINGS));
-        nw.getInventory().setBoots(new ItemStack(Material.NETHERITE_BOOTS));
-
-        ItemStack wardenSword = new ItemStack(Material.DIAMOND_SWORD);
-        wardenSword.addEnchantment(Enchantment.DAMAGE_ALL, 2);
-        wardenSword.addEnchantment(Enchantment.DURABILITY, 2);
-
-
-        nw.getInventory().addItem(wardenSword);
-        nw.getInventory().addItem(new ItemStack(Material.BOW));
-        nw.getInventory().addItem(new ItemStack(Material.ARROW, 64));
-        nw.getInventory().addItem(new ItemStack(Material.COOKED_BEEF, 64));
-
-        ItemStack card = new ItemStack(Material.TRIPWIRE_HOOK);
-        ItemMeta cardm = card.getItemMeta();
-        cardm.setDisplayName(ChatColor.BLUE + "Keycard " + ChatColor.RED + "[CONTRABAND]");
-        card.setItemMeta(cardm);
-        nw.getInventory().addItem(card);
-
-        if (nw.getInventory().getHelmet() != null)
-            nw.getInventory().getHelmet().addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
-        if (nw.getInventory().getChestplate() != null)
-            nw.getInventory().getChestplate().addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
-        if (nw.getInventory().getLeggings() != null)
-            nw.getInventory().getLeggings().addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
-        if (nw.getInventory().getBoots() != null)
-            nw.getInventory().getBoots().addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
-
-        nw.setHealth(20);
 
         return true;
     }

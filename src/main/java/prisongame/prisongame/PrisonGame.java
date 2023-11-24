@@ -441,16 +441,82 @@ public final class PrisonGame extends JavaPlugin {
     }
 
     public static void setWarden(Player warden) {
-        if (PrisonGame.warden != null)
-            MyListener.playerJoin(PrisonGame.warden, false);
-
-        PrisonGame.warden = null;
-        warden.performCommand("warden");
-
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            var profile = ProfileKt.getProfile(player);
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + warden.getName() + " only prison:mprison");
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + warden.getName() + " only prison:guard");
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            var profile = ProfileKt.getProfile(p);
+            if (profile.getRole() != Role.PRISONER && profile.getRole() != Role.WARDEN) {
+                MyListener.playerJoin(p, false);
+            }
+            if (profile.getRole() != Role.WARDEN)
+                profile.setRole(Role.PRISONER, false);
             profile.setInvitation(null);
+            p.playSound(p, Sound.BLOCK_END_PORTAL_SPAWN, 1, 1);
+            p.sendTitle("", ChatColor.RED + warden.getName() + ChatColor.GREEN + " is the new warden!");
+            PrisonGame.wardenCooldown = 20 * 6;
         }
+        PrisonGame.warden = warden;
+        Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Warden").addPlayer(warden);
+        if (PrisonGame.savedPlayerGuards.containsKey(PrisonGame.warden)) {
+            for (Player pe : Bukkit.getOnlinePlayers()) {
+                if (PrisonGame.savedPlayerGuards.get(PrisonGame.warden.getUniqueId()).containsKey(pe.getUniqueId())) {
+                    switch (PrisonGame.savedPlayerGuards.get(PrisonGame.warden.getUniqueId()).get(pe.getUniqueId())) {
+                        case NURSE -> PrisonGame.setNurse((Player) pe);
+                        case GUARD -> PrisonGame.setGuard((Player) pe);
+                        case SWAT -> PrisonGame.setSwat((Player) pe);
+                        default -> ((Player) pe).sendMessage("An error has occured.");
+                    }
+                }
+            }
+        }
+
+        PrisonGame.swat = false;
+        PrisonGame.chatmuted = false;
+        PrisonGame.grammar = false;
+        warden.teleport(PrisonGame.active.getWardenspawn());
+        warden.setCustomName(ChatColor.GRAY + "[" + ChatColor.RED + "WARDEN" + ChatColor.GRAY + "] " + ChatColor.WHITE + warden.getName());
+        warden.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.RED + "WARDEN" + ChatColor.GRAY + "] " + ChatColor.WHITE + warden.getName());
+        warden.setDisplayName(ChatColor.GRAY + "[" + ChatColor.RED + "WARDEN" + ChatColor.GRAY + "] " + ChatColor.WHITE + warden.getName());
+
+        warden.setNoDamageTicks(20 * 45);
+        ItemStack card2 = new ItemStack(Material.IRON_SHOVEL);
+        ItemMeta cardm2 = card2.getItemMeta();
+        cardm2.setDisplayName(ChatColor.BLUE + "Handcuffs " + ChatColor.RED + "[CONTRABAND]");
+        cardm2.addEnchant(Enchantment.KNOCKBACK, 1, true);
+        card2.setItemMeta(cardm2);
+        warden.getInventory().addItem(card2);
+
+        warden.getInventory().setHelmet(new ItemStack(Material.CHAINMAIL_HELMET));
+        warden.getInventory().setChestplate(new ItemStack(Material.IRON_CHESTPLATE));
+        warden.getInventory().setLeggings(new ItemStack(Material.IRON_LEGGINGS));
+        warden.getInventory().setBoots(new ItemStack(Material.NETHERITE_BOOTS));
+
+        ItemStack wardenSword = new ItemStack(Material.DIAMOND_SWORD);
+        wardenSword.addEnchantment(Enchantment.DAMAGE_ALL, 2);
+        wardenSword.addEnchantment(Enchantment.DURABILITY, 2);
+
+
+        warden.getInventory().addItem(wardenSword);
+        warden.getInventory().addItem(new ItemStack(Material.BOW));
+        warden.getInventory().addItem(new ItemStack(Material.ARROW, 64));
+        warden.getInventory().addItem(new ItemStack(Material.COOKED_BEEF, 64));
+
+        ItemStack card = new ItemStack(Material.TRIPWIRE_HOOK);
+        ItemMeta cardm = card.getItemMeta();
+        cardm.setDisplayName(ChatColor.BLUE + "Keycard " + ChatColor.RED + "[CONTRABAND]");
+        card.setItemMeta(cardm);
+        warden.getInventory().addItem(card);
+
+        if (warden.getInventory().getHelmet() != null)
+            warden.getInventory().getHelmet().addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+        if (warden.getInventory().getChestplate() != null)
+            warden.getInventory().getChestplate().addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+        if (warden.getInventory().getLeggings() != null)
+            warden.getInventory().getLeggings().addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+        if (warden.getInventory().getBoots() != null)
+            warden.getInventory().getBoots().addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+
+        warden.setHealth(20);
     }
 
     public static void setNurse(Player player) {

@@ -148,7 +148,7 @@ public class PlayerDeathListener implements Listener {
                 PrisonGame.wardenCooldown = 40;
                 event.getDrops().clear();
                 PrisonGame.warden = null;
-                profile.setRole(Role.PRISONER);
+                profile.setRole(Role.PRISONER, false);
                 MyListener.playerJoin(event.getEntity(), false);
             }
         }
@@ -158,7 +158,7 @@ public class PlayerDeathListener implements Listener {
                 if (killerProfile.getRole() == Role.WARDEN && event.getEntity().hasPotionEffect(PotionEffectType.UNLUCK)) {
                     Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + event.getEntity().getName() + " only prison:badluck");
                 }
-                if (killerProfile.getEscaped()) {
+                if (killerProfile.isEscaped()) {
                     Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + event.getEntity().getKiller().getName() + " only prison:nmng");
                 }
             }

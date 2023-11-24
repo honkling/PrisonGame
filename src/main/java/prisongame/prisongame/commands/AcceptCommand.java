@@ -22,17 +22,26 @@ public class AcceptCommand implements CommandExecutor {
     // This method is called, when somebody uses our command
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        var profile = ProfileKt.getProfile((Player) sender);
-        switch (profile.getInvitation()) {
-            case NURSE -> PrisonGame.setNurse((Player) sender);
-            case GUARD -> PrisonGame.setGuard((Player) sender);
-            case SWAT -> PrisonGame.setSwat((Player) sender);
-            case WARDEN -> {
-                PrisonGame.setWarden((Player) sender);
-            }
-            default -> sender.sendMessage("You haven't been invited!");
+        if (!(sender instanceof Player player)) {
+            sender.sendMessage(PrisonGame.mm.deserialize("<red>You aren't a player."));
+            return true;
         }
-        if (profile.getInvitation() != Role.WARDEN) {
+
+        var profile = ProfileKt.getProfile(player);
+        var invitation = profile.getInvitation();
+
+        if (invitation == null || invitation == Role.PRISONER) {
+            sender.sendMessage(PrisonGame.mm.deserialize("<red>You haven't been invited."));
+            return true;
+        }
+
+        if (invitation == Role.WARDEN && PrisonGame.warden != null)
+            MyListener.playerJoinignoreAsc(PrisonGame.warden, false);
+
+        profile.setRole(invitation);
+        profile.setInvitation(null);
+
+        if (invitation != Role.WARDEN) {
             if (!PrisonGame.savedPlayerGuards.containsKey(PrisonGame.warden.getUniqueId())) {
                 Bukkit.broadcastMessage(ChatColor.AQUA + "Creating warden save file...");
                 HashMap<UUID, Role> roleHashMap = new HashMap<>();
@@ -48,8 +57,6 @@ public class AcceptCommand implements CommandExecutor {
                 PrisonGame.savedPlayerGuards.put(PrisonGame.warden.getUniqueId(), roleHashMap);
             }
         }
-
-        profile.setInvitation(null);
 
         return true;
     }

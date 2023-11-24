@@ -167,7 +167,7 @@ public class MyTask extends BukkitRunnable {
 
                     }
                 }
-                if (profile.getRole() == Role.PRISONER && !profile.getEscaped()) {
+                if (profile.getRole() == Role.PRISONER && !profile.isEscaped()) {
                     if (!new Location(p.getWorld(), p.getLocation().getX(), p.getLocation().getY() - 1, p.getLocation().getZ()).getBlock().getType().equals(Material.RED_SAND)) {
                         p.sendTitle("", ChatColor.RED + "GET ONTO THE RED SAND OR YOU'LL BE KILLED!", 0, 5, 0);
                         p.addPotionEffect(PotionEffectType.HUNGER.createEffect(200, 0));
@@ -227,7 +227,7 @@ public class MyTask extends BukkitRunnable {
                 DecimalFormat numberFormat = new DecimalFormat("#0.0");
                 for (Player p : Bukkit.getOnlinePlayers()) {
                     var profile = ProfileKt.getProfile(p);
-                    if (p.hasPotionEffect(PotionEffectType.GLOWING) && !profile.getEscaped()) {
+                    if (p.hasPotionEffect(PotionEffectType.GLOWING) && !profile.isEscaped()) {
                         Bukkit.broadcastMessage(ChatColor.RED + p.getName() + ChatColor.GOLD + " didn't come to roll call! " + ChatColor.RED + "Kill them for 100 dollars!");
                         p.sendTitle("", ChatColor.RED + "COME TO ROLL CALL NEXT TIME!", 0, 60, 0);
                         if (profile.getHardMode()) {
@@ -243,7 +243,7 @@ public class MyTask extends BukkitRunnable {
                         }
                         p.playSound(p, Sound.ENTITY_SILVERFISH_AMBIENT, 1, 0.25f);
                     }
-                    if (!p.hasPotionEffect(PotionEffectType.GLOWING) && !profile.getEscaped() && profile.getAttendedLightsOut() == true) {
+                    if (!p.hasPotionEffect(PotionEffectType.GLOWING) && !profile.isEscaped() && profile.getAttendedLightsOut() == true) {
                         profile.setAttendedLightsOut(false);
                         profile.setAttendedRollCall(true);
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + p.getName() + " only prison:respect");
@@ -257,7 +257,7 @@ public class MyTask extends BukkitRunnable {
             bossbar.setTitle("Breakfast");
             for (Player p : Bukkit.getOnlinePlayers()) {
                 var profile = ProfileKt.getProfile(p);
-                if (!profile.getHardMode() && !profile.getEscaped() && profile.getRole() == Role.PRISONER)
+                if (!profile.getHardMode() && !profile.isEscaped() && profile.getRole() == Role.PRISONER)
                     p.addPotionEffect(PotionEffectType.SATURATION.createEffect(120, 0));
             }
         }
@@ -280,7 +280,7 @@ public class MyTask extends BukkitRunnable {
             jobm = 1;
             for (Player p : Bukkit.getOnlinePlayers()) {
                 var profile = ProfileKt.getProfile(p);
-                if (!profile.getHardMode() && !profile.getEscaped() && profile.getRole() == Role.PRISONER)
+                if (!profile.getHardMode() && !profile.isEscaped() && profile.getRole() == Role.PRISONER)
                     p.addPotionEffect(PotionEffectType.SATURATION.createEffect(120, 0));
             }
         }
@@ -300,7 +300,7 @@ public class MyTask extends BukkitRunnable {
                     var profile = ProfileKt.getProfile(p);
                     if (profile.getSolitaryTimer() != -1)
                         continue;
-                    if (p.hasPotionEffect(PotionEffectType.GLOWING) && !profile.getEscaped()) {
+                    if (p.hasPotionEffect(PotionEffectType.GLOWING) && !profile.isEscaped()) {
                         Bukkit.broadcastMessage(ChatColor.RED + p.getName() + ChatColor.GOLD + " didn't come to roll call! " + ChatColor.RED + "Kill them for 100 dollars!");
                         p.sendTitle("", ChatColor.RED + "COME TO ROLL CALL NEXT TIME!", 0, 60, 0);
                         if (profile.getHardMode()) {
@@ -316,7 +316,7 @@ public class MyTask extends BukkitRunnable {
                         }
                         p.playSound(p, Sound.ENTITY_SILVERFISH_AMBIENT, 1, 0.25f);
                     }
-                    if (!p.hasPotionEffect(PotionEffectType.GLOWING) && !profile.getEscaped() && profile.getAttendedLightsOut()) {
+                    if (!p.hasPotionEffect(PotionEffectType.GLOWING) && !profile.isEscaped() && profile.getAttendedLightsOut()) {
                         profile.setAttendedLightsOut(false);
                         profile.setAttendedRollCall(true);
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + p.getName() + " only prison:respect");
@@ -565,7 +565,7 @@ public class MyTask extends BukkitRunnable {
                         p.sendTitle("", ChatColor.RED + "You will be respawned at roll call!", 0, 20 * 3, 0);
                     }
                 }
-                if (profile.getRole() == Role.PRISONER && !profile.getEscaped()) {
+                if (profile.getRole() == Role.PRISONER && !profile.isEscaped()) {
                     p.getWorld().getWorldBorder().setWarningDistance(Integer.MAX_VALUE);
                     if (p.getWorld().getName().equals("endprison")) {
                         if (!new Location(p.getWorld(), p.getLocation().getX(), p.getLocation().getY() - 1, p.getLocation().getZ()).getBlock().getType().equals(Material.JIGSAW)) {
@@ -658,11 +658,10 @@ public class MyTask extends BukkitRunnable {
             }
         }
 
-        var wardenProfile = ProfileKt.getProfile(PrisonGame.warden);
         var format = new DecimalFormat("#0.0");
         var timer = PrisonGame.mm.deserialize(PrisonGame.warden == null
                 ? "(No Warden!)"
-                : wardenProfile.getWardenTime() / (20 * 60) + "m");
+                : ProfileKt.getProfile(PrisonGame.warden).getWardenTime() / (20 * 60) + "m");
 
         var wardenDisplay = PrisonGame.warden == null
                 ? PrisonGame.mm.deserialize("No warden!")
@@ -816,7 +815,7 @@ public class MyTask extends BukkitRunnable {
                 p.setDisplayName(ChatColor.GRAY + "[" + ChatColor.GOLD + "SUPPORTER" + ChatColor.GRAY + "] " + p.getDisplayName());
             }*/
             if (profile.getHardMode()) {
-                if (p.isSprinting() && !profile.getEscaped() && profile.getRole() == Role.PRISONER) {
+                if (p.isSprinting() && !profile.isEscaped() && profile.getRole() == Role.PRISONER) {
                     p.setFoodLevel(p.getFoodLevel() - 1);
                     p.sendTitle("", ChatColor.RED + "You can only sprint when you've escaped! [HARD MODE]", 0, 5, 0);
                 }
