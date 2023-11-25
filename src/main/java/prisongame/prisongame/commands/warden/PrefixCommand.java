@@ -1,5 +1,6 @@
 package prisongame.prisongame.commands.warden;
 
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -20,9 +21,11 @@ public class PrefixCommand implements CommandExecutor {
                     prefixlength = 32;
                 }*/
 
-
+        var plainText = prefix.replaceAll("(?i)&+[a-f0-9kl-or]+", "").toLowerCase();
+        System.out.println(plainText);
         for (String container : Config.Warden.Prefix.bannedContainers) {
-            if (prefix.toLowerCase().contains(container.toLowerCase())) {
+            System.out.println(plainText.toLowerCase());
+            if (plainText.contains(container.toLowerCase())) {
                 sender.sendMessage(PrisonGame.mm.deserialize("<red>You cannot set that prefix."));
                 return true;
             }
