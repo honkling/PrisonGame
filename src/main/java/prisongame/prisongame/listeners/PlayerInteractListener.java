@@ -269,22 +269,23 @@ public class PlayerInteractListener implements Listener {
                     event.getPlayer().openInventory(inv);
                 }
                 if (sign.getLine(1).equals("Switch Maps")) {
-                    if (event.getPlayer() == PrisonGame.warden && event.getPlayer().getPassengers().size() == 0) {
-                        if (PrisonGame.swapcool <= 0) {
-                            Inventory inv = Bukkit.createInventory(null, 9 * 2, "Map Switch");
+                    if (!event.getPlayer().hasCooldown(Material.IRON_DOOR)) {
+                        if (event.getPlayer() == PrisonGame.warden && event.getPlayer().getPassengers().size() == 0) {
+                            if (PrisonGame.swapcool <= 0) {
+                                Inventory inv = Bukkit.createInventory(null, 9 * 2, "Map Switch");
 
-                            for (Prison prison : Config.prisons.values().stream().sorted(Comparator.comparingInt((p) -> p.priority)).toList()) {
-                                if (!prison.displayInSelector)
-                                    continue;
+                                for (Prison prison : Config.prisons.values().stream().sorted(Comparator.comparingInt((p) -> p.priority)).toList()) {
+                                    if (!prison.displayInSelector)
+                                        continue;
 
-                                var displayName = ChatColor.translateAlternateColorCodes('&', prison.displayName);
-                                inv.addItem(PrisonGame.createGuiItem(prison.material, displayName));
-                            }
+                                    var displayName = ChatColor.translateAlternateColorCodes('&', prison.displayName);
+                                    inv.addItem(PrisonGame.createGuiItem(prison.material, displayName));
+                                }
 //                            inv.addItem(PrisonGame.createGuiItem(Material.COBBLESTONE, ChatColor.GRAY + "Fortress Of Gaeae"));
 //                            inv.addItem(PrisonGame.createGuiItem(Material.QUARTZ_BLOCK, ChatColor.WHITE + "Hypertech"));
-                            //inv.addItem(PrisonGame.createGuiItem(Material.END_CRYSTAL, ChatColor.DARK_PURPLE + "The End?"));
+                                //inv.addItem(PrisonGame.createGuiItem(Material.END_CRYSTAL, ChatColor.DARK_PURPLE + "The End?"));
 //                            inv.addItem(PrisonGame.createGuiItem(Material.CRIMSON_PLANKS, ChatColor.YELLOW + "Train"));
-                            //inv.addItem(PrisonGame.createGuiItem(Material.RED_STAINED_GLASS, ChatColor.RED + "MAP DISABLED"));
+                                //inv.addItem(PrisonGame.createGuiItem(Material.RED_STAINED_GLASS, ChatColor.RED + "MAP DISABLED"));
 //                            inv.addItem(PrisonGame.createGuiItem(Material.STONE_BRICK_SLAB, ChatColor.WHITE + "Gladiator"));
 //                            inv.addItem(PrisonGame.createGuiItem(Material.SAND, ChatColor.GOLD + "Island"));
 //                            inv.addItem(PrisonGame.createGuiItem(Material.SNOW_BLOCK, ChatColor.BOLD + "Santa's Workshop"));
@@ -293,13 +294,16 @@ public class PlayerInteractListener implements Listener {
 //                            inv.addItem(PrisonGame.createGuiItem(Material.DEEPSLATE_TILES, ChatColor.DARK_GRAY + "Maximum Security"));
 //                            inv.addItem(PrisonGame.createGuiItem(Material.DEEPSLATE_TILES, "§aRocksNGrass"));
 
-                            //inv.addItem(PrisonGame.createGuiItem(Material.QUARTZ, ChatColor.BLUE + "Boat"));
-                            //inv.addItem(PrisonGame.createGuiItem(Material.NETHERRACK, ChatColor.RED + "Nether"));
-                            event.getPlayer().openInventory(inv);
-                        } else {
-                            event.getPlayer().sendMessage(ChatColor.RED + "That's on cooldown! " + ChatColor.YELLOW + PrisonGame.swapcool / 20 + " seconds left.");
-                        }
+                                //inv.addItem(PrisonGame.createGuiItem(Material.QUARTZ, ChatColor.BLUE + "Boat"));
+                                //inv.addItem(PrisonGame.createGuiItem(Material.NETHERRACK, ChatColor.RED + "Nether"));
+                                event.getPlayer().openInventory(inv);
+                            } else {
+                                event.getPlayer().sendMessage(ChatColor.RED + "That's on cooldown! " + ChatColor.YELLOW + PrisonGame.swapcool / 20 + " seconds left.");
+                            }
 
+                        }
+                    } else {
+                        event.getPlayer().sendMessage(ChatColor.RED + "You're in combat!");
                     }
                 }
 
