@@ -8,7 +8,8 @@ rules = [
     "No mini knighting. (helping the warden as a prisoner)",
     "No bug abusing.",
     "No server lagging.",
-    "No advertising."
+    "No advertising.",
+    "No repetitively sending one person to solitary."
 ]
 
 [warden.prefix]
