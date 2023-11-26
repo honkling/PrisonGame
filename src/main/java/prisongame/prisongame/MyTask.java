@@ -807,10 +807,15 @@ public class MyTask extends BukkitRunnable {
         Integer pris = 0;
         Integer guard = 0;
 
+
         for (Player p : Bukkit.getOnlinePlayers()) {
             if (PrisonGame.isInside(p, new Location(Bukkit.getWorld("world"), -2011, -53, -1929), new Location(Bukkit.getWorld("world"), -2009, -57, -1931))) {
                 if (PrisonGame.warden.equals(p)) {
-                    InventoryClickListener.switchMap(Config.prisons.get("nether"));
+                    if (PrisonGame.swapcool <= 0)
+                        InventoryClickListener.switchMap(Config.prisons.get("nether"));
+                    else {
+                        p.sendTitle(ChatColor.YELLOW + ("" + PrisonGame.swapcool / 20) + " seconds left.", ChatColor.RED + "That's on cooldown! ", 0, 50, 0);
+                    }
                 } else {
                     p.sendTitle("", ChatColor.RED + "YOU MUST BE WARDEN!", 0, 50, 0);
                 }

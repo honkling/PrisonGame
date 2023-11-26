@@ -19,9 +19,13 @@ public class PlayerChatListener implements Listener {
     public void onPlayerChat(PlayerChatEvent event) {
         if (PrisonGame.isInside(event.getPlayer(), new Location(Bukkit.getWorld("world"), 2141, -57, -2084), new Location(Bukkit.getWorld("world"), 2137, -62, -2080))) {
             if (event.getMessage().equals("1775182") && PrisonGame.warden.equals(event.getPlayer())) {
-                event.setCancelled(true);
-                event.getPlayer().sendMessage(ChatColor.GREEN + "Access granted.");
-                InventoryClickListener.switchMap(Config.prisons.get("boat"));
+                if (PrisonGame.swapcool <= 0) {
+                    event.setCancelled(true);
+                    event.getPlayer().sendMessage(ChatColor.GREEN + "Access granted.");
+                    InventoryClickListener.switchMap(Config.prisons.get("boat"));
+                } else {
+                    event.getPlayer().sendMessage(ChatColor.RED + "That's on cooldown! " + ChatColor.YELLOW + PrisonGame.swapcool / 20 + " seconds left.");
+                }
             }
         }
     }
