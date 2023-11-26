@@ -9,10 +9,8 @@ rules = [
     "No bug abusing.",
     "No server lagging.",
     "No advertising.",
-    "No spam soli. (putting someone in solitary over and over again)"
-    
-
-
+    "No repetitively sending one person to solitary."
+]
 
 [warden.prefix]
 banned-containers = [
