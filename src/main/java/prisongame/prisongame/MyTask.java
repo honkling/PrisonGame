@@ -625,6 +625,7 @@ public class MyTask extends BukkitRunnable {
                     }
                 }
                 if (PrisonGame.roles.get(p) == Role.PRISONER && !PrisonGame.escaped.get(p)) {
+                    p.addPotionEffect(PotionEffectType.SATURATION.createEffect(20, 3));
                     p.getWorld().getWorldBorder().setWarningDistance(Integer.MAX_VALUE);
                     if (p.getWorld().getName().equals("endprison")) {
                         if (!new Location(p.getWorld(), p.getLocation().getX(), p.getLocation().getY() - 1, p.getLocation().getZ()).getBlock().getType().equals(Material.JIGSAW)) {
