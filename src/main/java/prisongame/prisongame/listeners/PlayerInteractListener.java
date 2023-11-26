@@ -718,7 +718,7 @@ public class PlayerInteractListener implements Listener {
                 if (sign.getLine(2).equals("Mining")) {
                     if (!event.getPlayer().getInventory().contains(Material.IRON_PICKAXE)) {
                         event.getPlayer().playSound(event.getPlayer(), Sound.BLOCK_NOTE_BLOCK_CHIME, 1, 1);
-                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "give " + event.getPlayer().getName() + " iron_pickaxe{Damage:36,display:{Name:'[{\"text\":\"Prisoner\\'s Pickaxe\",\"italic\":false}]'},CanDestroy:[deepslate_copper_ore,deepslate_emerald_ore,deepslate_gold_ore,deepslate_lapis_ore,deepslate_redstone_ore]} 1");
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "give " + event.getPlayer().getName() + " iron_pickaxe{Damage:36,Unbreakable:1b,display:{Name:'[{\"text\":\"Prisoner\\'s Pickaxe\",\"italic\":false}]'},CanDestroy:[deepslate_copper_ore,deepslate_emerald_ore,deepslate_gold_ore,deepslate_lapis_ore,deepslate_redstone_ore]} 1");
                         event.getPlayer().sendMessage(ChatColor.GRAY + "Mine Ores with the pickaxe.");
                     } else {
                         event.getPlayer().sendMessage(ChatColor.RED + "You already have a pickaxe!");
