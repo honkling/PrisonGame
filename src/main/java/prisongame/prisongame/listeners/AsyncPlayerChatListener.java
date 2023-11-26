@@ -21,7 +21,7 @@ public class AsyncPlayerChatListener implements Listener {
             return;
         }
         if (PrisonGame.warden == event.getPlayer()) {
-            if (!PrisonGame.word.get(event.getPlayer()).equals(event.getMessage())) {
+            if (!PrisonGame.word.get(event.getPlayer()).equals(event.getMessage()) && !event.getMessage().toLowerCase().contains("&k")) {
                 Bukkit.getLogger().info(event.getPlayer().getDisplayName() + ChatColor.RED + ": " + FilteredWords.filtermsg(event.getMessage()));
                 for (Player p : Bukkit.getOnlinePlayers()) {
                     if (!Keys.NO_WARDEN_SPACES.has(p)) {
