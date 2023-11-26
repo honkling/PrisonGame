@@ -8,8 +8,11 @@ rules = [
     "No mini knighting. (helping the warden as a prisoner)",
     "No bug abusing.",
     "No server lagging.",
-    "No advertising."
-]
+    "No advertising.",
+    "No spam soli. (putting someone in solitary over and over again)"
+    
+
+
 
 [warden.prefix]
 banned-containers = [
