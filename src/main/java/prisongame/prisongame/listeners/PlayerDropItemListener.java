@@ -27,7 +27,12 @@ public class PlayerDropItemListener implements Listener {
                 type == Material.GLASS_BOTTLE ||
                 type == Material.IRON_SHOVEL ||
                 type == Material.BUCKET ||
-                (meta != null && meta.getDisplayName().contains("Prisoner Uniform")))
+                (meta != null &&
+                        (meta.getDisplayName().contains("Prisoner Uniform") ||
+                         meta.getDisplayName().contains("Prisoner's Pickaxe") ||
+                         meta.getDisplayName().contains("Lumber's Axe") ||
+                         meta.getDisplayName().contains("Shovel") ||
+                         meta.getDisplayName().contains("Plumber"))))
             pseudoCancel(player, drop);
 
         if (PrisonGame.roles.get(player) != Role.PRISONER) {
