@@ -1,0 +1,27 @@
+package prisongame.prisongame.commands;
+
+import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+
+public class GuideCommand implements CommandExecutor {
+
+    // This method is called, when somebody uses our command
+    // omg why is this appearing
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        sender.sendMessage(ChatColor.GREEN + "Hi! Welcome to PrisonButBad. Here is a guide on how to play the server.");
+        sender.sendMessage(ChatColor.WHITE + "As a prisoner, you can work at the cafeteria or the work areas inside the prison to earn money. Money can be spent on shops such as signs with yellow text (found anywhere) and signs with purple text.");
+        sender.sendMessage(ChatColor.WHITE + "These items can be used for " + ChatColor.GREEN + "good " + ChatColor.WHITE + "or " + ChatColor.DARK_RED + "bad.");
+        sender.sendMessage(ChatColor.WHITE + "You can use sticks, scrap metal, coal, pebbles (found at right clicking stone or cobblestone) to craft various items at the crafting table in the black market.");
+        sender.sendMessage(ChatColor.WHITE + "To access the black market, you have to right click on cauldrons.");
+        sender.sendMessage(ChatColor.WHITE + "As a prisoner, you can escape by clicking on Get Gear signs outside the prison through a iron door which is only accessible for people with a Keycard or Fake Keycard.");
+        sender.sendMessage(ChatColor.WHITE + "As a criminal, your job is to kill the warden and type /warden to get warden and control the prison. ");
+        sender.sendMessage(ChatColor.LIGHT_PURPLE + "Nurses " + ChatColor.WHITE + "and " + ChatColor.DARK_BLUE + "Guards " + ChatColor.WHITE + "are obtainable by the warden hiring you. Your job as a " + ChatColor.LIGHT_PURPLE + "Nurse " + ChatColor.WHITE + "or " + ChatColor.DARK_BLUE + "Guard " + ChatColor.WHITE + "or " +ChatColor.GRAY + "SWAT " + ChatColor.WHITE + "is to protect the prison and kill criminals (also prisoners that are glowing).");
+        sender.sendMessage(ChatColor.WHITE + "To get warden, when the text next to Warden: None! Use '/warden' to become the prison warden!, which is on top of your health and hunger bars. When it appears, you must do /warden quickly as other people will take it if you don't do it quickly. ");
+        sender.sendMessage(ChatColor.WHITE + "As a warden, you can hire guards (commands also found /warden help) to keep you safe or enable some special modes such as grammar (make all guards speak in proper grammar");
+        sender.sendMessage(ChatColor.GOLD + "Finally, be sure to check /rules for the rules as you may not want to get a punishment.");
+        return true;
+    }
+}
