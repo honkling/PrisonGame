@@ -89,3 +89,6 @@ commands:
   hello:
     description: Hi!
     usage: /<command>
+  guide:
+    description: The Guide for the game.
+  usage: /<command>
