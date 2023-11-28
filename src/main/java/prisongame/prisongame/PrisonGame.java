@@ -37,6 +37,7 @@ import prisongame.prisongame.lib.Keys;
 import prisongame.prisongame.lib.Role;
 import prisongame.prisongame.listeners.*;
 
+
 import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -226,6 +227,7 @@ public final class PrisonGame extends JavaPlugin {
         this.getCommand("tc").setExecutor(new TeamChatCommand());
         this.getCommand("hello").setExecutor(new HelloCommand());
         this.getCommand("disc").setExecutor(new DiscordCommand());
+        this.getCommand("guide").setExecutor(new GuideCommand());
         this.getCommand("season").setExecutor(new SeasonCommand());
         this.getCommand("vanish").setExecutor(new VanishCommand());
         this.getCommand("warden").setExecutor(new WardenCommand());
