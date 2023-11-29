@@ -17,7 +17,6 @@ public class Data implements Serializable {
 
     public final HashMap<UUID, HashMap<UUID, Integer>> playerguards;
 
-
     // Can be used for saving
     public Data(HashMap<UUID, HashMap<UUID, Integer>> playerguards) {
         this.playerguards = playerguards;

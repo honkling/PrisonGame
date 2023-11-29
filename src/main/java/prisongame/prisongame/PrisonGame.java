@@ -35,8 +35,10 @@ import prisongame.prisongame.commands.staff.*;
 import prisongame.prisongame.lib.Config;
 import prisongame.prisongame.lib.Keys;
 import prisongame.prisongame.lib.Role;
+import prisongame.prisongame.lib.SQL;
 import prisongame.prisongame.listeners.*;
 
+import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -182,20 +184,30 @@ public final class PrisonGame extends JavaPlugin {
     public static LuckPerms api;
     @Override
     public void onEnable() {
-        instance = this;
-        Config.register();
-        setupLuckPerms();
-        loadGuardData();
-        setupOres();
-        registerCommands();
-        restorePlayerRoles();
-        beginReloadSafety();
-        registerRecipes();
-        removeEntities();
-        setupPrisons();
-        setupBertrude();
-        endReloadSafety();
-        registerEvents();
+        try {
+            instance = this;
+            Config.register();
+            setupDatabase();
+            setupLuckPerms();
+            loadGuardData();
+            setupOres();
+            registerCommands();
+            restorePlayerRoles();
+            beginReloadSafety();
+            registerRecipes();
+            removeEntities();
+            setupPrisons();
+            setupBertrude();
+            endReloadSafety();
+            registerEvents();
+        } catch (SQLException exception) {
+            //noinspection CallToPrintStackTrace
+            exception.printStackTrace();
+        }
+    }
+
+    public void setupDatabase() throws SQLException {
+        SQL.initialize();
     }
 
     public void setupLuckPerms() {
@@ -377,6 +389,7 @@ public final class PrisonGame extends JavaPlugin {
     public void onDisable() {
         // Plugin shutdown logic
         new Data(PrisonGame.savedPlayerGuards).saveData("saveguard.data");
+        SQL.close();
         bertrude.remove();
         MyTask.bossbar.removeAll();
     }
