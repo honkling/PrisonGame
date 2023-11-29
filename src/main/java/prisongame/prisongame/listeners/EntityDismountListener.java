@@ -3,6 +3,7 @@ package prisongame.prisongame.listeners;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.potion.PotionEffectType;
 import org.spigotmc.event.entity.EntityDismountEvent;
@@ -13,24 +14,33 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 public class EntityDismountListener implements Listener {
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onDismountHandcuffs(EntityDismountEvent event) {
         Entity vehicle = event.getDismounted();
         Entity passenger = event.getEntity();
 
-        if (!(passenger instanceof Player && vehicle instanceof Player))
+        System.out.println("Handcuff dismount! " + vehicle.getName() + " rode by " + passenger.getName());
+
+        if (!(passenger instanceof Player player && vehicle instanceof Player))
             return;
 
-        Player player = (Player) passenger;
+        System.out.println("we're all players.");
 
         if (!player.hasPotionEffect(PotionEffectType.DOLPHINS_GRACE))
             return;
 
+        System.out.println("passenger has dolphins grace");
+
         if (isDisconnected(player)) {
+            System.out.println("disconnected! removing & dismounting");
             player.removePotionEffect(PotionEffectType.DOLPHINS_GRACE);
             vehicle.removePassenger(player);
             return;
         }
+
+        new Exception().printStackTrace();
+
+        System.out.println("not disconnected, cancelling");
 
         event.setCancelled(true);
     }
@@ -43,8 +53,8 @@ public class EntityDismountListener implements Listener {
             Object handle = getHandle.invoke(player);
             Field connectionField = handle.getClass().getDeclaredField("b");
             Object connection = connectionField.get(handle);
-            Method isDisconnectedMethod = connection.getClass().getMethod("isDisconnected");
-            return (boolean) isDisconnectedMethod.invoke(connection);
+            Field disconnectField = connection.getClass().getField("processedDisconnect");
+            return (boolean) disconnectField.get(connection);
         } catch (NoSuchFieldException | InvocationTargetException | IllegalAccessException | NoSuchMethodException e) {
             return false;
         }
