@@ -1,4 +1,4 @@
-package prisongame.prisongame.lib;
+package prisongame.prisongame.lib.keys;
 
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.Nullable;

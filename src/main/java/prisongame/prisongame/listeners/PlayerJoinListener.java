@@ -13,7 +13,7 @@ import org.bukkit.potion.PotionEffectType;
 import prisongame.prisongame.PrisonGame;
 import prisongame.prisongame.commands.danger.staff.SeasonCommand;
 import prisongame.prisongame.commands.staff.VanishCommand;
-import prisongame.prisongame.lib.Keys;
+import prisongame.prisongame.lib.keys.Keys;
 
 import java.io.IOException;
 

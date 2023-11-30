@@ -26,7 +26,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import prisongame.prisongame.commands.staff.VanishCommand;
 import prisongame.prisongame.lib.Config;
-import prisongame.prisongame.lib.Keys;
+import prisongame.prisongame.lib.keys.Keys;
 import prisongame.prisongame.lib.Role;
 import prisongame.prisongame.listeners.InventoryClickListener;
 

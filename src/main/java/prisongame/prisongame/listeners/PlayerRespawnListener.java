@@ -17,7 +17,7 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffectType;
 import prisongame.prisongame.PrisonGame;
-import prisongame.prisongame.lib.Keys;
+import prisongame.prisongame.lib.keys.Keys;
 import prisongame.prisongame.lib.Role;
 
 import java.util.Random;

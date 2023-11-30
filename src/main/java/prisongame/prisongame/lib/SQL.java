@@ -13,6 +13,7 @@ public class SQL {
         var url = "jdbc:sqlite:" + path;
 
         connection = DriverManager.getConnection(url);
+        doInitialSetup();
     }
 
     public static void execute(String query, Object... values) throws SQLException {
@@ -50,7 +51,7 @@ public class SQL {
                     name TEXT NOT NULL PRIMARY KEY UNIQUE,
                     owner TEXT NOT NULL,
                     members TEXT NOT NULL,
-                    bank REAL NOT NULLww
+                    bank REAL NOT NULL
                 );
                 """);
     }

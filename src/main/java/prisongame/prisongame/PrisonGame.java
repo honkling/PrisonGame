@@ -33,7 +33,7 @@ import prisongame.prisongame.commands.economy.staff.ResetMoneyCommand;
 import prisongame.prisongame.commands.economy.staff.SetMoneyCommand;
 import prisongame.prisongame.commands.staff.*;
 import prisongame.prisongame.lib.Config;
-import prisongame.prisongame.lib.Keys;
+import prisongame.prisongame.lib.keys.Keys;
 import prisongame.prisongame.lib.Role;
 import prisongame.prisongame.lib.SQL;
 import prisongame.prisongame.listeners.*;

@@ -1,8 +1,6 @@
-package prisongame.prisongame.lib;
+package prisongame.prisongame.lib.keys;
 
 import org.bukkit.NamespacedKey;
-import org.bukkit.entity.Player;
-import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.Nullable;
 import prisongame.prisongame.PrisonGame;
 
