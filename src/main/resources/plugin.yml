@@ -1,5 +1,5 @@
 name: PrisonGame
-version: ${project.version}
+version: ${version}
 softdepend:
   - CustomBansPlus
 depend:

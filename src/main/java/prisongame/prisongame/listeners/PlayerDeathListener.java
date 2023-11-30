@@ -1,6 +1,5 @@
 package prisongame.prisongame.listeners;
 
-import net.minecraft.network.chat.ChatClickable;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
