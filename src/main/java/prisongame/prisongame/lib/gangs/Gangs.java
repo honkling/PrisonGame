@@ -16,6 +16,9 @@ public class Gangs {
                 SELECT * FROM gangs WHERE (lower(name)) = ?;
                 """, name.toLowerCase());
 
+        if (!rs.next())
+            return null;
+
         return getGangFromResultSet(rs);
     }
 
@@ -24,7 +27,14 @@ public class Gangs {
                 SELECT * FROM gangs WHERE members LIKE '%?%';
                 """, player.getUniqueId());
 
+        if (!rs.next())
+            return null;
+
         return getGangFromResultSet(rs);
+    }
+
+    public static boolean exists(String name) throws SQLException {
+        return get(name) != null;
     }
 
     public static Gang create(Player owner, String name) throws SQLException {
