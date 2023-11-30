@@ -1,5 +1,6 @@
 package prisongame.prisongame.listeners;
 
+import org.bukkit.craftbukkit.v1_20_R2.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -40,7 +41,7 @@ public class EntityDismountListener implements Listener {
 
         new Exception().printStackTrace();
 
-        System.out.println("not disconnected, cancelling");
+        System.out.println("not disconnected, cancellinga");
 
         event.setCancelled(true);
     }
@@ -48,15 +49,7 @@ public class EntityDismountListener implements Listener {
     private boolean isDisconnected(Player player) {
         // player.getHandle().connection.isDisconnected()
 
-        try {
-            Method getHandle = player.getClass().getDeclaredMethod("getHandle");
-            Object handle = getHandle.invoke(player);
-            Field connectionField = handle.getClass().getDeclaredField("b");
-            Object connection = connectionField.get(handle);
-            Field disconnectField = connection.getClass().getField("processedDisconnect");
-            return (boolean) disconnectField.get(connection);
-        } catch (NoSuchFieldException | InvocationTargetException | IllegalAccessException | NoSuchMethodException e) {
-            return false;
-        }
+        var craftPlayer = (CraftPlayer) player;
+        return craftPlayer.getHandle().connection.processedDisconnect;
     }
 }

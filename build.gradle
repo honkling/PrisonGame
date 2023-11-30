@@ -2,6 +2,7 @@ plugins {
     id "java"
     id "org.jetbrains.kotlin.jvm" version "1.9.20"
     id "com.github.johnrengelman.shadow" version "7.1.0"
+    id "io.papermc.paperweight.userdev" version "1.5.10"
 }
 
 group = "prisongame"
@@ -32,11 +33,13 @@ repositories {
 }
 
 dependencies {
+    paperweight.paperDevBundle("1.20.2-R0.1-SNAPSHOT")
     implementation "org.tomlj:tomlj:1.1.0"
 
-    compileOnly "io.papermc.paper:paper-api:1.20.2-R0.1-SNAPSHOT"
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-    compileOnly "LibsDisguises:LibsDisguises:10.0.31"
+    compileOnly("LibsDisguises:LibsDisguises:10.0.31") {
+        exclude group: "org.spigotmc"
+    }
     compileOnly files("libs/CustomBansPlus-3.6.jar")
     compileOnly "net.luckperms:api:5.4"
 }
@@ -55,6 +58,10 @@ tasks.withType(JavaCompile).configureEach {
     if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
         options.release = targetJavaVersion
     }
+}
+
+tasks.assemble {
+    dependsOn(reobfJar)
 }
 
 processResources {
