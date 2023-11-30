@@ -16,7 +16,7 @@ class OfflinePlayerPDC(val bukkitValues: CompoundTag) : PersistentDataContainer 
 
     override fun <T : Any?, Z : Any?> has(p0: NamespacedKey, p1: PersistentDataType<T, Z>): Boolean {
         val key = "${p0.namespace}:${p0.key}"
-        return key in bukkitValues.value && bukkitValues.value[key]!!.value!!.javaClass == p1.complexType
+        return has(p0) && bukkitValues.value[key]!!.value!!.javaClass == p1.complexType
     }
 
     override fun has(p0: NamespacedKey): Boolean {
