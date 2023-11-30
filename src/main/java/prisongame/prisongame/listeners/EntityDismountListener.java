@@ -20,28 +20,17 @@ public class EntityDismountListener implements Listener {
         Entity vehicle = event.getDismounted();
         Entity passenger = event.getEntity();
 
-        System.out.println("Handcuff dismount! " + vehicle.getName() + " rode by " + passenger.getName());
-
         if (!(passenger instanceof Player player && vehicle instanceof Player))
             return;
-
-        System.out.println("we're all players.");
 
         if (!player.hasPotionEffect(PotionEffectType.DOLPHINS_GRACE))
             return;
 
-        System.out.println("passenger has dolphins grace");
-
         if (isDisconnected(player)) {
-            System.out.println("disconnected! removing & dismounting");
             player.removePotionEffect(PotionEffectType.DOLPHINS_GRACE);
             vehicle.removePassenger(player);
             return;
         }
-
-        new Exception().printStackTrace();
-
-        System.out.println("not disconnected, cancellinga");
 
         event.setCancelled(true);
     }
