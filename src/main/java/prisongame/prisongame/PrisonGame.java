@@ -233,6 +233,7 @@ public final class PrisonGame extends JavaPlugin {
     public void registerCommands() {
         this.getCommand("pay").setExecutor(new PayCommand());
         this.getCommand("hard").setExecutor(new HardCommand());
+        this.getCommand("gangs").setExecutor(new GangsCommand());
         this.getCommand("debug").setExecutor(new DebugCommand());
         this.getCommand("rules").setExecutor(new RulesCommand());
         this.getCommand("tc").setExecutor(new TeamChatCommand());

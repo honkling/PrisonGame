@@ -49,15 +49,15 @@ public class MyTask extends BukkitRunnable {
     public void run() {
         PrisonGame.solitcooldown = PrisonGame.solitcooldown - 1;
         for (Player p : Bukkit.getOnlinePlayers()) {
-            if (p.getPersistentDataContainer().getOrDefault(Keys.TRUST.key(), PersistentDataType.DOUBLE, 0.0) > 0) {
-                p.getPersistentDataContainer().set(Keys.TRUST.key(), PersistentDataType.DOUBLE, 0.0);
+            if (Keys.TRUST.get(p, 0.0) > 0) {
+                Keys.TRUST.set(p, 0.0);
             }
             DisguiseAPI.setActionBarShown(p, false);
             if (p.isSleeping()) {
                 p.setNoDamageTicks(10);
             }
             if (!PrisonGame.wealthcycle.containsKey(p)) {
-                PrisonGame.wealthcycle.put(p, p.getPersistentDataContainer().get(Keys.MONEY.key(), PersistentDataType.DOUBLE));
+                PrisonGame.wealthcycle.put(p, Keys.MONEY.get(p));
             }
             if (!PrisonGame.wardentime.containsKey(p) || p != PrisonGame.warden) {
                 PrisonGame.wardentime.put(p, 0);
@@ -71,8 +71,8 @@ public class MyTask extends BukkitRunnable {
             if (!PrisonGame.prisonerlevel.containsKey(p)) {
                 PrisonGame.prisonerlevel.put(p, 0);
             }
-            if (p.getPersistentDataContainer().has(Keys.HEAD_GUARD.key()))
-                p.getPersistentDataContainer().remove(Keys.HEAD_GUARD.key());
+            if (Keys.HEAD_GUARD.has(p))
+                Keys.HEAD_GUARD.remove(p);
             PrisonGame.handcuff.put(p, null);
             if (PrisonGame.worryachieve.get(p) >= 0) {
                 PrisonGame.worryachieve.put(p, PrisonGame.worryachieve.get(p) + 1);
@@ -150,11 +150,11 @@ public class MyTask extends BukkitRunnable {
                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + PrisonGame.warden.getName() + " only prison:piggo");
                 PrisonGame.givepig = false;
             }
-            if (p.getPersistentDataContainer().has(Keys.MUTED.key(), PersistentDataType.INTEGER)) {
-                if (p.getPersistentDataContainer().get(Keys.MUTED.key(), PersistentDataType.INTEGER) <= 0) {
-                    p.getPersistentDataContainer().remove(Keys.MUTED.key());
+            if (Keys.MUTED.has(p)) {
+                if (Keys.MUTED.get(p) <= 0) {
+                    Keys.MUTED.remove(p);
                 } else {
-                    p.getPersistentDataContainer().set(Keys.MUTED.key(), PersistentDataType.INTEGER, p.getPersistentDataContainer().get(Keys.MUTED.key(), PersistentDataType.INTEGER) - 1);
+                    Keys.MUTED.set(p, Keys.MUTED.get(p) - 1);
                 }
 
             }
@@ -251,7 +251,7 @@ public class MyTask extends BukkitRunnable {
             }
             if (allat && PrisonGame.warden != null) {
                 PrisonGame.warden.sendMessage(ChatColor.GREEN + "All prisoners at roll call! +1k$!");
-                PrisonGame.warden.getPersistentDataContainer().set(Keys.MONEY.key(), PersistentDataType.DOUBLE, PrisonGame.warden.getPersistentDataContainer().get(Keys.MONEY.key(), PersistentDataType.DOUBLE) + 1000.0);
+                Keys.MONEY.set(PrisonGame.warden, Keys.MONEY.get(PrisonGame.warden) + 1000.0);
                 for (Player p : Bukkit.getOnlinePlayers()) {
                     Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
                         p.sendTitle("", ChatColor.BOLD + bossbar.getTitle(), 20, 40, 20);
@@ -275,12 +275,12 @@ public class MyTask extends BukkitRunnable {
         if (Bukkit.getWorld("world").getTime() == 2000) {
             if (!hasAlerted) {
                 for (Player p : Bukkit.getOnlinePlayers()) {
-                    if (p.getPersistentDataContainer().has(Keys.MONEY.key(), PersistentDataType.DOUBLE)) {
+                    if (Keys.MONEY.has(p)) {
                         try {
-                            if (p.getPersistentDataContainer().getOrDefault(Keys.MONEY.key(), PersistentDataType.DOUBLE, 0.0) - PrisonGame.wealthcycle.get(p) >= 3000) {
+                            if (Keys.MONEY.get(p, 0.0) - PrisonGame.wealthcycle.get(p) >= 3000) {
                                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + p.getName() + " only prison:wealthy");
                             }
-                            PrisonGame.wealthcycle.put(p, p.getPersistentDataContainer().get(Keys.MONEY.key(), PersistentDataType.DOUBLE));
+                            PrisonGame.wealthcycle.put(p, Keys.MONEY.get(p));
                         } catch (NullPointerException ignored) {
                             Bukkit.getLogger().info(p.getName() + " seems to not have a money container?");
                         }
@@ -853,7 +853,7 @@ public class MyTask extends BukkitRunnable {
             if (p.getLocation().getY() < 118 && p.getWorld().getName().equals("endprison")) {
                 p.damage(999);
             }
-            if (p.getPersistentDataContainer().has(Keys.NIGHT_VISION.key(), PersistentDataType.INTEGER)) {
+            if (Keys.NIGHT_VISION.has(p)) {
                 p.addPotionEffect(PotionEffectType.NIGHT_VISION.createEffect(99999, 255));
             } else {
                 p.removePotionEffect(PotionEffectType.NIGHT_VISION);
@@ -898,25 +898,25 @@ public class MyTask extends BukkitRunnable {
             }
 
 
-            if (p.getPersistentDataContainer().has(Keys.SEMICLOAK.key(), PersistentDataType.INTEGER)) {
-                p.getPersistentDataContainer().set(Keys.MONEY.key(), PersistentDataType.DOUBLE, p.getPersistentDataContainer().get(Keys.MONEY.key(), PersistentDataType.DOUBLE)+1000);
+            if (Keys.SEMICLOAK.has(p)) {
+                Keys.MONEY.set(p, Keys.MONEY.get(p, 0.0) + 1000);
                 p.sendMessage(ChatColor.RED + "Your semicloak ascension has been refunded and removed as ascensions have been removed!");
-                p.getPersistentDataContainer().remove(Keys.SEMICLOAK.key());
+                Keys.SEMICLOAK.remove(p);
             }
-            if (p.getPersistentDataContainer().has(Keys.REINFORCEMENT.key(), PersistentDataType.INTEGER)) {
-                p.getPersistentDataContainer().set(Keys.MONEY.key(), PersistentDataType.DOUBLE, p.getPersistentDataContainer().get(Keys.MONEY.key(), PersistentDataType.DOUBLE)+1000);
+            if (Keys.REINFORCEMENT.has(p)) {
+                Keys.MONEY.set(p, Keys.MONEY.get(p, 0.0) + 1000);
                 p.sendMessage(ChatColor.RED + "Your Reinforcement ascension has been refunded and removed as ascensions have been removed!");
-                p.getPersistentDataContainer().remove(Keys.REINFORCEMENT.key());
+                Keys.REINFORCEMENT.remove(p);
             }
-            if (p.getPersistentDataContainer().has(Keys.SPAWN_PROTECTION.key(), PersistentDataType.INTEGER)) {
-                p.getPersistentDataContainer().set(Keys.MONEY.key(), PersistentDataType.DOUBLE, p.getPersistentDataContainer().get(Keys.MONEY.key(), PersistentDataType.DOUBLE)+1000);
+            if (Keys.SPAWN_PROTECTION.has(p)) {
+                Keys.MONEY.set(p, Keys.MONEY.get(p, 0.0) + 1000);
                 p.sendMessage(ChatColor.RED + "Your protspawn ascension has been refunded and removed as ascensions have been removed!");
-                p.getPersistentDataContainer().remove(Keys.SPAWN_PROTECTION.key());
+                Keys.SPAWN_PROTECTION.remove(p);
             }
-            if (p.getPersistentDataContainer().has(Keys.RANDOM_ITEMS.key(), PersistentDataType.INTEGER)) {
+            if (Keys.RANDOM_ITEMS.has(p)) {
                 p.sendMessage(ChatColor.RED + "Your Random item ascension has been refunded and removed as ascensions have been removed!");
-                p.getPersistentDataContainer().set(Keys.MONEY.key(), PersistentDataType.DOUBLE, p.getPersistentDataContainer().get(Keys.MONEY.key(), PersistentDataType.DOUBLE)+1000);
-                p.getPersistentDataContainer().remove(Keys.RANDOM_ITEMS.key());
+                Keys.MONEY.set(p,Keys.MONEY.get(p, 0.0) + 1000);
+                Keys.RANDOM_ITEMS.remove(p);
             }
             if (p.getInventory().getItemInMainHand().getItemMeta() != null) {
                 var mainHand = p.getInventory().getItemInMainHand();
@@ -978,7 +978,7 @@ public class MyTask extends BukkitRunnable {
             } else {
                 p.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.RED + "HARD MODE" + ChatColor.GRAY + "] " + ChatColor.GRAY + p.getName());
             }
-            if (!p.getPersistentDataContainer().has(Keys.OLD_TAB.key())) {
+            if (!Keys.OLD_TAB.has(p)) {
                 p.sendPlayerListHeader(tab);
             } else {
                 p.sendPlayerListHeaderAndFooter(Component.empty(), PrisonGame.mm.deserialize("Imagine using old tab. Actual pussy move ngl"));
@@ -1073,7 +1073,7 @@ public class MyTask extends BukkitRunnable {
                 if (!p.getDisplayName().contains("ASCENDING")) {
                     p.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GREEN + PrisonGame.formatBalance(Keys.MONEY.get(p, 0.0)) + "$" + ChatColor.GRAY + " || " + ChatColor.GRAY + "Current Warden: " + wardentime));
                 } else {
-                    p.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent((ChatColor.AQUA + whole.format(p.getPersistentDataContainer().getOrDefault(Keys.ASCENSION_COINS.key(), PersistentDataType.DOUBLE, 0.0)) + " ascension coins.")));
+                    p.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent((ChatColor.AQUA + whole.format(Keys.ASCENSION_COINS.get(p, 0)) + " ascension coins.")));
                 }
             }
         } else {
@@ -1087,13 +1087,13 @@ public class MyTask extends BukkitRunnable {
                         String acbar = "";
                         if (p.getDisplayName().contains("SOLITARY"))
                             acbar = "||" + ChatColor.DARK_GRAY + " SOLITARY [ " + numberFormat.format(PrisonGame.solittime.get(p) / 20) + " seconds left. ]";
-                        p.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GREEN + numberFormat.format(p.getPersistentDataContainer().getOrDefault(Keys.MONEY.key(), PersistentDataType.DOUBLE, 0.0)) + "$" + ChatColor.GRAY + acbar + ChatColor.GRAY + " || Current Warden: " + ChatColor.DARK_RED + PrisonGame.warden.getName()));
+                        p.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GREEN + numberFormat.format(Keys.MONEY.get(p, 0.0)) + "$" + ChatColor.GRAY + acbar + ChatColor.GRAY + " || Current Warden: " + ChatColor.DARK_RED + PrisonGame.warden.getName()));
                     } else {
-                        p.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GREEN + numberFormat.format(p.getPersistentDataContainer().getOrDefault(Keys.MONEY.key(), PersistentDataType.DOUBLE, 0.0)) + "$" + ChatColor.GRAY + " || " + ChatColor.GRAY + "Current Warden: " + ChatColor.GREEN + "You! Use \"/warden help\"!"));
+                        p.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GREEN + numberFormat.format(Keys.MONEY.get(p, 0.0)) + "$" + ChatColor.GRAY + " || " + ChatColor.GRAY + "Current Warden: " + ChatColor.GREEN + "You! Use \"/warden help\"!"));
                     }
                 }
                 if (p.getDisplayName().contains("ASCENDING")) {
-                    p.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent((ChatColor.AQUA + "you have " + whole.format(p.getPersistentDataContainer().getOrDefault(Keys.ASCENSION_COINS.key(), PersistentDataType.DOUBLE, 0.0)) + " ascension coins.")));
+                    p.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent((ChatColor.AQUA + "you have " + whole.format(Keys.ASCENSION_COINS.get(p, 0)) + " ascension coins.")));
                 }
             }
         }

@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 public class Gangs {
     public static Gang get(String name) throws SQLException {
@@ -47,14 +48,19 @@ public class Gangs {
         return gangs;
     }
 
+    public static int count() throws SQLException {
+        return SQL.query("SELECT COUNT(*) FROM gangs;").getInt(1);
+    }
+
     public static boolean exists(String name) throws SQLException {
         return get(name) != null;
     }
 
     public static void create(Player owner, String name) throws SQLException {
-        var gang = new Gang(name, owner, new ArrayList<>(), new ArrayList<>(), 0.0);
-        gang.members.add(owner);
-        gang.officials.add(owner);
+        var uuid = owner.getUniqueId();
+        var gang = new Gang(name, uuid, owner.getName(), new ArrayList<>(), new ArrayList<>(), 0.0);
+        gang.members.add(uuid);
+        gang.officials.add(uuid);
         replace(gang);
     }
 
@@ -64,7 +70,8 @@ public class Gangs {
                 VALUES (?, ?, ?, ?, ?);
                 """,
                 gang.name,
-                gang.owner.getUniqueId().toString(),
+                gang.owner.toString(),
+                gang.ownerName,
                 serializeMembers(gang.members),
                 serializeMembers(gang.officials),
                 gang.bank);
@@ -73,22 +80,23 @@ public class Gangs {
     private static Gang getGangFromResultSet(ResultSet rs) throws SQLException {
         return new Gang(
                 rs.getString("name"),
-                Bukkit.getOfflinePlayer(rs.getString("owner")),
+                UUID.fromString(rs.getString("owner")),
+                rs.getString("ownerName"),
                 deserializeMembers(rs.getString("members")),
                 deserializeMembers(rs.getString("officials")),
                 rs.getDouble("bank")
         );
     }
 
-    private static List<OfflinePlayer> deserializeMembers(String data) {
+    private static List<UUID> deserializeMembers(String data) {
         return Arrays
                 .stream(data.split(","))
-                .map(Bukkit::getOfflinePlayer)
+                .map(UUID::fromString)
                 .toList();
     }
 
-    private static String serializeMembers(List<OfflinePlayer> members) {
-        var uuids = members.stream().map((p) -> p.getUniqueId().toString()).toArray(String[]::new);
+    private static String serializeMembers(List<UUID> members) {
+        var uuids = members.stream().map(UUID::toString).toArray(String[]::new);
         return String.join(" ", uuids);
     }
 }

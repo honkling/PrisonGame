@@ -50,7 +50,9 @@ public class SQL {
                 CREATE TABLE IF NOT EXISTS gangs(
                     name TEXT NOT NULL PRIMARY KEY UNIQUE,
                     owner TEXT NOT NULL,
+                    ownerName TEXT NOT NULL,
                     members TEXT NOT NULL,
+                    officials TEXT NOT NULL,
                     bank REAL NOT NULL
                 );
                 """);
