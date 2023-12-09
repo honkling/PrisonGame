@@ -35,6 +35,11 @@ public class CreateCommand implements IGangCommand {
             return true;
         }
 
+        if (!FilteredWords.isClean(name)) {
+            sender.sendMessage(PrisonGame.mm.deserialize("<red>That name isn't appropriate."));
+            return true;
+        }
+
         try {
             if (Keys.GANG.has(player)) {
                 sender.sendMessage(PrisonGame.mm.deserialize("<red>You're already in a gang."));
