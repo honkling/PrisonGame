@@ -97,6 +97,9 @@ public class Gangs {
     }
 
     private static ArrayList<UUID> deserializeMembers(String data) {
+        if (data.equals(""))
+            return new ArrayList<>();
+
         return Arrays
                 .stream(data.split(","))
                 .map(UUID::fromString)

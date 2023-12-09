@@ -30,6 +30,17 @@ import static prisongame.prisongame.MyListener.playerJoinignoreAsc;
 
 public class PlayerInteractListener implements Listener {
     @EventHandler
+    public void onSmokerAnvil(PlayerInteractEvent event) {
+        var block = event.getClickedBlock();
+        var type = block.getType();
+
+        if (type == Material.SMOKER || type == Material.ANVIL)
+            event.setCancelled(true);
+    }
+
+    
+
+    @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
         if (event.getPlayer().getGameMode().equals(GameMode.SURVIVAL)) {
             if (PrisonGame.active.getName().equals("The End?"))
