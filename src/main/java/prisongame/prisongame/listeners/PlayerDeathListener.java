@@ -8,7 +8,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.potion.PotionEffectType;
 import prisongame.prisongame.MyListener;
 import prisongame.prisongame.PrisonGame;
-import prisongame.prisongame.lib.keys.Keys;
+import prisongame.prisongame.keys.Keys;
 import prisongame.prisongame.lib.Role;
 
 public class PlayerDeathListener implements Listener {

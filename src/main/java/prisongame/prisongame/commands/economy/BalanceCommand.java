@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import prisongame.prisongame.PrisonGame;
 import prisongame.prisongame.commands.danger.staff.SeasonCommand;
-import prisongame.prisongame.lib.keys.Keys;
+import prisongame.prisongame.keys.Keys;
 import prisongame.prisongame.nbt.OfflinePlayerHolder;
 
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package prisongame.prisongame.lib.keys;
+package prisongame.prisongame.keys;
 
 import org.bukkit.NamespacedKey;
 import org.bukkit.persistence.PersistentDataHolder;

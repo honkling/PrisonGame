@@ -1,16 +1,15 @@
-package prisongame.prisongame.lib.gangs;
+package prisongame.prisongame.gangs;
 
-import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import prisongame.prisongame.keys.Keys;
 import prisongame.prisongame.lib.SQL;
+import prisongame.prisongame.nbt.OfflinePlayerHolder;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Gangs {
     public static Gang get(String name) throws SQLException {
@@ -25,14 +24,23 @@ public class Gangs {
     }
 
     public static Gang get(OfflinePlayer player) throws SQLException {
+        var pdc = new OfflinePlayerHolder(player);
+
+        if (!Keys.GANG.has(pdc))
+            return null;
+
         var rs = SQL.query("""
-                SELECT * FROM gangs WHERE members LIKE '%?%';
-                """, player.getUniqueId());
+                SELECT * FROM gangs WHERE name = ?;
+                """, Keys.GANG.get(pdc));
 
         if (!rs.next())
             return null;
 
         return getGangFromResultSet(rs);
+    }
+
+    public static void remove(Gang gang) throws SQLException {
+        SQL.execute("DELETE FROM gangs WHERE (lower(name)) = ?", gang.name.toLowerCase());
     }
 
     public static List<Gang> list() throws SQLException {
@@ -53,7 +61,7 @@ public class Gangs {
     }
 
     public static boolean exists(String name) throws SQLException {
-        return get(name) != null;
+        return SQL.query("SELECT name FROM gangs WHERE (lower(name)) = ?;", name.toLowerCase()).next();
     }
 
     public static void create(Player owner, String name) throws SQLException {
@@ -61,13 +69,13 @@ public class Gangs {
         var gang = new Gang(name, uuid, owner.getName(), new ArrayList<>(), new ArrayList<>(), 0.0);
         gang.members.add(uuid);
         gang.officials.add(uuid);
-        replace(gang);
+        update(gang);
     }
 
-    public static void replace(Gang gang) throws SQLException {
+    public static void update(Gang gang) throws SQLException {
         SQL.execute("""
-                INSERT OR REPLACE INTO gangs(name, owner, members, officials, bank)
-                VALUES (?, ?, ?, ?, ?);
+                INSERT OR REPLACE INTO gangs(name, owner, ownerName, members, officials, bank)
+                VALUES (?, ?, ?, ?, ?, ?);
                 """,
                 gang.name,
                 gang.owner.toString(),
@@ -88,15 +96,15 @@ public class Gangs {
         );
     }
 
-    private static List<UUID> deserializeMembers(String data) {
+    private static ArrayList<UUID> deserializeMembers(String data) {
         return Arrays
                 .stream(data.split(","))
                 .map(UUID::fromString)
-                .toList();
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     private static String serializeMembers(List<UUID> members) {
         var uuids = members.stream().map(UUID::toString).toArray(String[]::new);
-        return String.join(" ", uuids);
+        return String.join(",", uuids);
     }
 }

@@ -9,8 +9,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import prisongame.prisongame.PrisonGame;
-import prisongame.prisongame.lib.keys.Key;
-import prisongame.prisongame.lib.keys.Keys;
+import prisongame.prisongame.keys.Key;
+import prisongame.prisongame.keys.Keys;
 
 import java.util.Arrays;
 

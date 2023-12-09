@@ -1,6 +1,7 @@
 package prisongame.prisongame.commands.gangs;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.command.Command;
@@ -8,11 +9,12 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import prisongame.prisongame.PrisonGame;
-import prisongame.prisongame.lib.gangs.Gangs;
+import prisongame.prisongame.gangs.GangRole;
+import prisongame.prisongame.gangs.Gangs;
 
 import java.sql.SQLException;
 
-public class ListCommand implements CommandExecutor {
+public class ListCommand implements IGangCommand {
     public static final int PER_PAGE = 10;
 
     @Override
@@ -44,21 +46,22 @@ public class ListCommand implements CommandExecutor {
                 listing = listing.append(PrisonGame.mm.deserialize(
                         """
                         <gray>Gang <gang> owned by <owner>
-                        """,
+                        """.trim(),
                         Placeholder.component("gang", Component
                                 .text(gang.name)
                                 .color(NamedTextColor.WHITE)),
                         Placeholder.component("owner", Component
-                                .text(gang.owner.getName())
+                                .text(gang.ownerName)
                                 .color(NamedTextColor.WHITE))
                 ));
             }
 
             sender.sendMessage(PrisonGame.mm.deserialize(
                     """
-                    <dark_blue>-=- <gray>Page <page> of <max></gray> -=-<blue>
+                    
+                    <blue>-=<back> <gray>Page <page> of <max></gray> <next>=-
                     <listing>
-                    </blue>-=-=-=-=-=-=-=-</dark_blue>
+                    -=-=-=-=-=-=-=-=-</blue>
                     """,
                     Placeholder.component("page", Component
                             .text(page + 1)
@@ -66,7 +69,15 @@ public class ListCommand implements CommandExecutor {
                     Placeholder.component("max", Component
                             .text(pages)
                             .color(NamedTextColor.WHITE)),
-                    Placeholder.component("listing", listing)
+                    Placeholder.component("listing", listing),
+                    Placeholder.component("back", page == 0 ? Component.text("-") : Component
+                            .text("<")
+                            .color(NamedTextColor.DARK_GRAY)
+                            .clickEvent(ClickEvent.runCommand("/gangs list " + (page - 1)))),
+                    Placeholder.component("next", page + 1 == pages ? Component.text("-") : Component
+                            .text(">")
+                            .color(NamedTextColor.DARK_GRAY)
+                            .clickEvent(ClickEvent.runCommand("/gangs list " + (page + 1))))
             ));
         } catch (SQLException exception) {
             sender.sendMessage(PrisonGame.mm.deserialize("<red>An error occurred."));
@@ -74,5 +85,10 @@ public class ListCommand implements CommandExecutor {
         }
 
         return true;
+    }
+
+    @Override
+    public GangRole getRole() {
+        return GangRole.NONE;
     }
 }

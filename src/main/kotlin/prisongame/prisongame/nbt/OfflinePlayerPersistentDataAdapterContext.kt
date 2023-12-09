@@ -6,6 +6,6 @@ import prisongame.prisongame.nbt.tag.CompoundTag
 
 class OfflinePlayerPersistentDataAdapterContext : PersistentDataAdapterContext {
     override fun newPersistentDataContainer(): PersistentDataContainer {
-        return OfflinePlayerPDC(CompoundTag("BukkitValues", emptyMap()))
+        return OfflinePlayerPDC(CompoundTag("BukkitValues", mutableMapOf()).data)
     }
 }

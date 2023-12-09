@@ -5,10 +5,12 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import prisongame.prisongame.commands.gangs.HelpCommand;
+import prisongame.prisongame.commands.gangs.IGangCommand;
+import prisongame.prisongame.gangs.GangRole;
 
 import java.util.Arrays;
 
-public class BankCommand implements CommandExecutor {
+public class BankCommand implements IGangCommand {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (args.length == 0)
@@ -20,7 +22,14 @@ public class BankCommand implements CommandExecutor {
         return (switch (subcommand) {
             case "deposit" -> new DepositCommand();
             case "withdraw" -> new WithdrawCommand();
+            case "approve" -> new ApproveCommand();
+            case "deny" -> new DenyCommand();
             default -> new HelpCommand();
-        }).onCommand(sender, command, subcommand, args);
+        }).onCommand(sender, command, subcommand, rest);
+    }
+
+    @Override
+    public GangRole getRole() {
+        return GangRole.MEMBER;
     }
 }

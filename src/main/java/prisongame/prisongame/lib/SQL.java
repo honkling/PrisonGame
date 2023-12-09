@@ -19,6 +19,7 @@ public class SQL {
     public static void execute(String query, Object... values) throws SQLException {
         var statement = prepare(query, values);
         statement.execute();
+        statement.close();
     }
 
     public static ResultSet query(String query, Object... values) throws SQLException {

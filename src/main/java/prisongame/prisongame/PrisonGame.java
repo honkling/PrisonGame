@@ -1,5 +1,6 @@
 package prisongame.prisongame;
 
+import kotlin.Pair;
 import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.disguisetypes.PlayerDisguise;
 import net.kyori.adventure.text.Component;
@@ -21,6 +22,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 import prisongame.prisongame.commands.*;
+import prisongame.prisongame.commands.GangChatCommand;
 import prisongame.prisongame.commands.completers.*;
 import prisongame.prisongame.commands.danger.HardCommand;
 import prisongame.prisongame.commands.danger.NormalCommand;
@@ -32,18 +34,17 @@ import prisongame.prisongame.commands.economy.staff.NerdCheatCommand;
 import prisongame.prisongame.commands.economy.staff.ResetMoneyCommand;
 import prisongame.prisongame.commands.economy.staff.SetMoneyCommand;
 import prisongame.prisongame.commands.staff.*;
+import prisongame.prisongame.gangs.Gang;
+import prisongame.prisongame.gangs.GangRole;
 import prisongame.prisongame.lib.Config;
-import prisongame.prisongame.lib.keys.Keys;
+import prisongame.prisongame.keys.Keys;
 import prisongame.prisongame.lib.Role;
 import prisongame.prisongame.lib.SQL;
 import prisongame.prisongame.listeners.*;
 
 import java.sql.SQLException;
 import java.text.DecimalFormat;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 public final class PrisonGame extends JavaPlugin {
     public static PrisonGame instance;
@@ -84,7 +85,9 @@ public final class PrisonGame extends JavaPlugin {
     public static HashMap<Player, Boolean> hardmode = new HashMap<>();
     public static HashMap<Player, Player> killior = new HashMap<>();
     public static HashMap<Player, Boolean> builder = new HashMap<>();
-
+    public static HashMap<UUID, Double> gangWithdrawRequest = new HashMap<>();
+    public static HashMap<String, List<Player>> gangJoinRequest = new HashMap<>();
+    public static HashMap<Player, Pair<String, GangRole>> gangInvites = new HashMap<>();
     public static HashMap<UUID, HashMap<UUID, Integer>> savedPlayerGuards = new HashMap<>();
 
     public static Material[] oretypes = {
@@ -247,6 +250,7 @@ public final class PrisonGame extends JavaPlugin {
         this.getCommand("normal").setExecutor(new NormalCommand());
         this.getCommand("balance").setExecutor(new BalanceCommand());
         this.getCommand("builder").setExecutor(new BuilderCommand());
+        this.getCommand("gangchat").setExecutor(new GangChatCommand());
         this.getCommand("setmoney").setExecutor(new SetMoneyCommand());
         this.getCommand("pbbreload").setExecutor(new PBBReloadCommand());
         this.getCommand("rstmoney").setExecutor(new ResetMoneyCommand());
@@ -255,6 +259,7 @@ public final class PrisonGame extends JavaPlugin {
         this.getCommand("rstascen").setExecutor(new ResetAscensionCommand());
         this.getCommand("nerdcheatcommand").setExecutor(new NerdCheatCommand());
 
+        this.getCommand("gangs").setTabCompleter(new GangsCompleter());
         this.getCommand("debug").setTabCompleter(new DebugCompleter());
         this.getCommand("warden").setTabCompleter(new WardenCompleter());
         this.getCommand("season").setTabCompleter(new SeasonCompleter());

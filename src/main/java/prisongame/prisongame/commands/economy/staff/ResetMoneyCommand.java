@@ -4,7 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import prisongame.prisongame.lib.keys.Keys;
+import prisongame.prisongame.keys.Keys;
 
 public class ResetMoneyCommand implements CommandExecutor {
 

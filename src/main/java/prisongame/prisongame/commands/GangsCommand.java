@@ -1,16 +1,19 @@
 package prisongame.prisongame.commands;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import prisongame.prisongame.PrisonGame;
-import prisongame.prisongame.commands.gangs.CreateCommand;
-import prisongame.prisongame.commands.gangs.HelpCommand;
-import prisongame.prisongame.commands.gangs.LeaderboardCommand;
-import prisongame.prisongame.commands.gangs.ListCommand;
+import prisongame.prisongame.commands.gangs.*;
+import prisongame.prisongame.commands.gangs.AcceptCommand;
+import prisongame.prisongame.commands.gangs.ResignCommand;
 import prisongame.prisongame.commands.gangs.bank.BankCommand;
+import prisongame.prisongame.gangs.GangRole;
+import prisongame.prisongame.keys.Keys;
 
 import java.util.Arrays;
 
@@ -28,13 +31,33 @@ public class GangsCommand implements CommandExecutor {
         var subcommand = args[0];
         var rest = Arrays.stream(args).toList().subList(1, args.length).toArray(String[]::new);
 
-        return (switch (subcommand) {
+        var executor = switch (subcommand) {
             case "list" -> new ListCommand();
             case "leaderboard" -> new LeaderboardCommand();
             case "create" -> new CreateCommand();
             case "bank" -> new BankCommand();
+            case "disband" -> new DisbandCommand();
+            case "join" -> new JoinCommand();
+            case "invite" -> new InviteCommand();
+            case "accept" -> new AcceptCommand();
+            case "official" -> new OfficialCommand();
+            case "fire" -> new FireCommand();
+            case "kick" -> new KickCommand();
+            case "resign" -> new ResignCommand();
+            case "leave" -> new LeaveCommand();
+            case "info" -> new InfoCommand();
             default -> new HelpCommand();
-        }).onCommand(player, command, subcommand, rest);
+        };
+
+        if (!GangRole.values()[Keys.GANG_ROLE.get(player, 0)].isAtLeast(executor.getRole())) {
+            player.sendMessage(PrisonGame.mm.deserialize(
+                    "<red>You need to be a gang <role> to do that.",
+                    Placeholder.component("role", Component.text(executor.getRole().name().toLowerCase()))
+            ));
+            return true;
+        }
+
+        return executor.onCommand(player, command, subcommand, rest);
     }
 
     private boolean showHelp(Player player, Command command) {

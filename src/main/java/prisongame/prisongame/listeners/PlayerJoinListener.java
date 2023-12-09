@@ -8,12 +8,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffectType;
 import prisongame.prisongame.PrisonGame;
 import prisongame.prisongame.commands.danger.staff.SeasonCommand;
 import prisongame.prisongame.commands.staff.VanishCommand;
-import prisongame.prisongame.lib.keys.Keys;
+import prisongame.prisongame.keys.Keys;
 
 import java.io.IOException;
 

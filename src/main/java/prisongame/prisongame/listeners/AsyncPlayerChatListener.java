@@ -9,7 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import prisongame.prisongame.FilteredWords;
 import prisongame.prisongame.PrisonGame;
-import prisongame.prisongame.lib.keys.Keys;
+import prisongame.prisongame.keys.Keys;
 import prisongame.prisongame.lib.UwUtils;
 import prisongame.prisongame.lib.Role;
 

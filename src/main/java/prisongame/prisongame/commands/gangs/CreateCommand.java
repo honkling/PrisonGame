@@ -9,17 +9,16 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import prisongame.prisongame.PrisonGame;
-import prisongame.prisongame.lib.gangs.Gangs;
+import prisongame.prisongame.gangs.GangRole;
+import prisongame.prisongame.gangs.Gangs;
+import prisongame.prisongame.keys.Keys;
 
 import java.sql.SQLException;
 
-public class CreateCommand implements CommandExecutor {
+public class CreateCommand implements IGangCommand {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (!(sender instanceof Player player)) {
-            sender.sendMessage(PrisonGame.mm.deserialize("<red>You aren't a player."));
-            return true;
-        }
+        var player = (Player) sender;
 
         if (args.length < 1) {
             sender.sendMessage(PrisonGame.mm.deserialize("<red>Please provide a gang name."));
@@ -37,12 +36,20 @@ public class CreateCommand implements CommandExecutor {
         }
 
         try {
+            if (Keys.GANG.has(player)) {
+                sender.sendMessage(PrisonGame.mm.deserialize("<red>You're already in a gang."));
+                return true;
+            }
+
             if (Gangs.exists(name)) {
                 sender.sendMessage(PrisonGame.mm.deserialize("<red>That name is taken."));
                 return true;
             }
 
             Gangs.create(player, name);
+            Keys.GANG.set(player, name);
+            Keys.GANG_CONTRIBUTION.set(player, 0.0);
+            Keys.GANG_ROLE.set(player, GangRole.OWNER.ordinal());
             sender.sendMessage(PrisonGame.mm.deserialize(
                     "<gray>Created gang with name <name>.",
                     Placeholder.component("name", Component
@@ -55,5 +62,10 @@ public class CreateCommand implements CommandExecutor {
         }
 
         return true;
+    }
+
+    @Override
+    public GangRole getRole() {
+        return GangRole.NONE;
     }
 }

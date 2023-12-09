@@ -22,9 +22,7 @@ public class PrefixCommand implements CommandExecutor {
                 }*/
 
         var plainText = prefix.replaceAll("(?i)&+[a-f0-9kl-or]+", "").toLowerCase();
-        System.out.println(plainText);
         for (String container : Config.Warden.Prefix.bannedContainers) {
-            System.out.println(plainText.toLowerCase());
             if (plainText.contains(container.toLowerCase())) {
                 sender.sendMessage(PrisonGame.mm.deserialize("<red>You cannot set that prefix."));
                 return true;
