@@ -1,4 +1,4 @@
-package prisongame.prisongame.lib;
+package prisongame.prisongame.keys;
 
 import org.bukkit.persistence.PersistentDataType;
 

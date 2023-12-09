@@ -10,6 +10,14 @@ api-version: "1.20"
 libraries:
   - org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.20
 commands:
+  gangchat:
+    description: Talk to your gang.
+    aliases: gc
+    usage: /gc (message)
+  gangs:
+    description: Manage gangs.
+    aliases: gang
+    usage: /gangs help
   balance:
     description: View balance and leaderboard.
     usage: /balance (leaderboard/view) [player]

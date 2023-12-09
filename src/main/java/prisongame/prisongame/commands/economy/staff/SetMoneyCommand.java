@@ -6,10 +6,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.persistence.PersistentDataType;
 import prisongame.prisongame.PrisonGame;
-import prisongame.prisongame.lib.Keys;
+import prisongame.prisongame.keys.Keys;
 
 public class SetMoneyCommand implements CommandExecutor {
 

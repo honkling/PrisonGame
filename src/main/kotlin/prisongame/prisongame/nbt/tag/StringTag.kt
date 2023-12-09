@@ -1,6 +1,14 @@
 package prisongame.prisongame.nbt.tag
 
+import prisongame.prisongame.nbt.toByteArray
+import java.util.zip.GZIPOutputStream
+
 data class StringTag(
     override val name: String,
-    override val value: String
-) : Tag<String>(TagType.STRING, name, value)
+    override val data: String
+) : Tag<String>(TagType.STRING, name, data) {
+    override fun writePayload(stream: GZIPOutputStream) {
+        stream.write(data.length.toShort().toByteArray())
+        stream.write(data.map { it.code.toByte() }.toByteArray())
+    }
+}

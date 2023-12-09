@@ -1,8 +1,7 @@
-package prisongame.prisongame.lib;
+package prisongame.prisongame.keys;
 
 import org.bukkit.NamespacedKey;
 import org.bukkit.persistence.PersistentDataHolder;
-import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.Nullable;
 
 public record Key<Z>(String name, NamespacedKey key, KeyType<Z> type) {

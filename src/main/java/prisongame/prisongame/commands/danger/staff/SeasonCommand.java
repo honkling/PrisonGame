@@ -5,10 +5,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import prisongame.prisongame.PrisonGame;
-import prisongame.prisongame.lib.Keys;
+import prisongame.prisongame.keys.Keys;
 
 import java.io.File;
 import java.io.IOException;

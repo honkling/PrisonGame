@@ -16,7 +16,7 @@ import prisongame.prisongame.MyListener;
 import prisongame.prisongame.Prison;
 import prisongame.prisongame.PrisonGame;
 import prisongame.prisongame.lib.Config;
-import prisongame.prisongame.lib.Keys;
+import prisongame.prisongame.keys.Keys;
 import prisongame.prisongame.lib.Role;
 
 import static prisongame.prisongame.MyListener.reloadBert;

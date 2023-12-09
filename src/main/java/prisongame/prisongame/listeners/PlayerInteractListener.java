@@ -19,7 +19,7 @@ import prisongame.prisongame.MyTask;
 import prisongame.prisongame.Prison;
 import prisongame.prisongame.PrisonGame;
 import prisongame.prisongame.lib.Config;
-import prisongame.prisongame.lib.Keys;
+import prisongame.prisongame.keys.Keys;
 import prisongame.prisongame.lib.Role;
 
 import java.util.Arrays;
@@ -869,10 +869,11 @@ public class PlayerInteractListener implements Listener {
                 }
             }
             if (event.getClickedBlock().getType().equals(Material.IRON_TRAPDOOR)) {
-                if (event.getItem() != null) {
+                if (event.getItem() != null && event.getItem().getType().equals(Material.CARROT_ON_A_STICK)) {
                     if (!event.getPlayer().hasCooldown(Material.CARROT_ON_A_STICK)) {
                         event.getPlayer().playSound(event.getPlayer(), Sound.BLOCK_NOTE_BLOCK_BASEDRUM, 0.75f, 1.75f);
                         Keys.MONEY.set(event.getPlayer(), Keys.MONEY.get(event.getPlayer(), 0.0) + 0.5 * MyTask.jobm);
+                        event.getPlayer().setCooldown(Material.CARROT_ON_A_STICK, 10);
                     }
                 }
             }

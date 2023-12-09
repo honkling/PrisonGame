@@ -11,7 +11,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import prisongame.prisongame.MyListener;
 import prisongame.prisongame.PrisonGame;
-import prisongame.prisongame.lib.Keys;
+import prisongame.prisongame.keys.Keys;
 import prisongame.prisongame.lib.Role;
 
 import java.util.Random;

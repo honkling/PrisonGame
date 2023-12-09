@@ -1,6 +1,7 @@
 package prisongame.prisongame.nbt
 
 import prisongame.prisongame.nbt.tag.*
+import java.io.ByteArrayInputStream
 import java.nio.ByteBuffer
 import java.util.zip.GZIPInputStream
 

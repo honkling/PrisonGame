@@ -8,12 +8,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffectType;
 import prisongame.prisongame.PrisonGame;
 import prisongame.prisongame.commands.danger.staff.SeasonCommand;
 import prisongame.prisongame.commands.staff.VanishCommand;
-import prisongame.prisongame.lib.Keys;
+import prisongame.prisongame.keys.Keys;
 
 import java.io.IOException;
 
@@ -23,17 +22,16 @@ public class PlayerJoinListener implements Listener {
     @EventHandler
     public void onJoinSeason(PlayerJoinEvent event) {
         var player = event.getPlayer();
-        var container = player.getPersistentDataContainer();
 
         try {
             var currentSeason = SeasonCommand.getCurrentSeason();
-            var playerSeason = container.getOrDefault(Keys.SEASON.key(), PersistentDataType.INTEGER, 0);
-            var money = container.getOrDefault(Keys.MONEY.key(), PersistentDataType.DOUBLE, 0.0);
+            var playerSeason = Keys.SEASON.get(player, 0);
+            var money = Keys.MONEY.get(player, 0.0);
 
             if (currentSeason != playerSeason && money > 0) {
-                container.set(Keys.SEASON.key(), PersistentDataType.INTEGER, currentSeason);
-                container.set(Keys.PREVIOUS_MONEY.key(), PersistentDataType.DOUBLE, money);
-                container.set(Keys.MONEY.key(), PersistentDataType.DOUBLE, 0.0);
+                Keys.SEASON.set(player, currentSeason);
+                Keys.PREVIOUS_MONEY.set(player, money);
+                Keys.MONEY.set(player, 0.0);
                 player.sendMessage(PrisonGame.mm.deserialize("\n<red>Your money has been reset due to the start of a new season!\n"));
             }
         } catch (IOException e) {

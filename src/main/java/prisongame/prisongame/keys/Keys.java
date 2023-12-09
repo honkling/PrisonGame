@@ -1,14 +1,15 @@
-package prisongame.prisongame.lib;
+package prisongame.prisongame.keys;
 
 import org.bukkit.NamespacedKey;
-import org.bukkit.entity.Player;
-import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.Nullable;
 import prisongame.prisongame.PrisonGame;
 
 import java.util.Arrays;
 
 public interface Keys {
+    Key<String> GANG = new Key<>("GANG", new NamespacedKey(PrisonGame.instance, "gang"), KeyTypes.STRING);
+    Key<Integer> GANG_ROLE = new Key<>("GANG_ROLE", new NamespacedKey(PrisonGame.instance, "gang_role"), KeyTypes.INTEGER);
+    Key<Double> GANG_CONTRIBUTION = new Key<>("GANG_CONTRIBUTION", new NamespacedKey(PrisonGame.instance, "gang_contribution"), KeyTypes.DOUBLE);
     Key<Integer> NIGHT_VISION = new Key<>("NIGHT_VISION", new NamespacedKey(PrisonGame.instance, "night"), KeyTypes.INTEGER);
     Key<Double> MONEY = new Key<>("MONEY", new NamespacedKey(PrisonGame.instance, "money"), KeyTypes.DOUBLE);
     Key<Double> PREVIOUS_MONEY = new Key<>("PREVIOUS_MONEY", new NamespacedKey(PrisonGame.instance, "prevmoney"), KeyTypes.DOUBLE);
