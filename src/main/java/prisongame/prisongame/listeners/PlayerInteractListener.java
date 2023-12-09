@@ -873,7 +873,7 @@ public class PlayerInteractListener implements Listener {
                     if (!event.getPlayer().hasCooldown(Material.CARROT_ON_A_STICK)) {
                         event.getPlayer().playSound(event.getPlayer(), Sound.BLOCK_NOTE_BLOCK_BASEDRUM, 0.75f, 1.75f);
                         Keys.MONEY.set(event.getPlayer(), Keys.MONEY.get(event.getPlayer(), 0.0) + 0.5 * MyTask.jobm);
-                        event.getPlayer().setCooldown(Material.CARROT_ON_A_STICK, 10);
+                        event.getPlayer().setCooldown(Material.CARROT_ON_A_STICK, 5);
                     }
                 }
             }
