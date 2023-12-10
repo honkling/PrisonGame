@@ -365,29 +365,29 @@ public final class PrisonGame extends JavaPlugin {
 
     public void registerEvents() {
         PluginManager pm = Bukkit.getPluginManager();
-        pm.registerEvents(new AsyncPlayerChatListener(), this);
+        pm.registerEvents(new AsyncChatListener(), this);
         pm.registerEvents(new BlockBreakListener(), this);
         pm.registerEvents(new BlockPlaceListener(), this);
-        pm.registerEvents(new EntityDamageByEntityListener(), this);
-        pm.registerEvents(new EntityDamageListener(), this);
-        pm.registerEvents(new EntityDismountListener(), this);
         pm.registerEvents(new EntityMoveListener(), this);
-        pm.registerEvents(new InventoryClickListener(), this);
-        pm.registerEvents(new PlayerAdvancementDoneListener(), this);
-        pm.registerEvents(new PlayerBedLeaveListener(), this);
         pm.registerEvents(new PlayerChatListener(), this);
-        pm.registerEvents(new PlayerDeathListener(), this);
-        pm.registerEvents(new PlayerDropItemListener(), this);
-        pm.registerEvents(new PlayerInteractAtEntityListener(), this);
-        pm.registerEvents(new PlayerInteractListener(), this);
-        pm.registerEvents(new PlayerItemConsumeListener(), this);
         pm.registerEvents(new PlayerJoinListener(), this);
         pm.registerEvents(new PlayerMoveListener(), this);
         pm.registerEvents(new PlayerQuitListener(), this);
+        pm.registerEvents(new PlayerDeathListener(), this);
+        pm.registerEvents(new EntityDamageListener(), this);
         pm.registerEvents(new PlayerRespawnListener(), this);
+        pm.registerEvents(new EntityDismountListener(), this);
+        pm.registerEvents(new PlayerBedLeaveListener(), this);
+        pm.registerEvents(new InventoryClickListener(), this);
+        pm.registerEvents(new PlayerDropItemListener(), this);
+        pm.registerEvents(new PlayerInteractListener(), this);
         pm.registerEvents(new PlayerTeleportListener(), this);
-        pm.registerEvents(new PlayerToggleSneakListener(), this);
         pm.registerEvents(new PlayerBedEnterListener(), this);
+        pm.registerEvents(new PlayerItemConsumeListener(), this);
+        pm.registerEvents(new PlayerToggleSneakListener(), this);
+        pm.registerEvents(new EntityDamageByEntityListener(), this);
+        pm.registerEvents(new PlayerAdvancementDoneListener(), this);
+        pm.registerEvents(new PlayerInteractAtEntityListener(), this);
         pm.registerEvents(new PlayerCommandPreprocessListener(), this);
     }
 

@@ -124,6 +124,7 @@ public class MyTask extends BukkitRunnable {
             if (PrisonGame.solittime.get(p) <= 0 && p.getDisplayName().contains("SOLITARY")) {
                 PrisonGame.tptoBed(p);
                 MyListener.playerJoin(p, false);
+                p.removePotionEffect(PotionEffectType.WATER_BREATHING);
                 p.sendMessage( "You were released from solitary.");
             }
             if (!PrisonGame.word.containsKey(p)) {

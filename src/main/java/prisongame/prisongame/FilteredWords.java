@@ -41,7 +41,7 @@ public class FilteredWords {
         return msg;
     }
 
-    public static Boolean isClean(String msg) {
+    public static boolean isClean(String msg) {
         String sanitized = replaceConsecutiveDuplicates(msg
                 .replaceAll("\\s+", ""));
 
@@ -52,6 +52,4 @@ public class FilteredWords {
 
         return true;
     }
-
-
 }
