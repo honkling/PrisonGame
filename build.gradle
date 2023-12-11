@@ -1,5 +1,6 @@
 plugins {
     id "java"
+    id "maven-publish"
     id "org.jetbrains.kotlin.jvm" version "1.9.20"
     id "com.github.johnrengelman.shadow" version "7.1.0"
     id "io.papermc.paperweight.userdev" version "1.5.10"
@@ -62,6 +63,18 @@ tasks.withType(JavaCompile).configureEach {
 
 tasks.assemble {
     dependsOn(reobfJar)
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId = 'prisongame'
+            artifactId = 'prisongame'
+            version = '0.1.0'
+
+            from components.java
+        }
+    }
 }
 
 processResources {
