@@ -26,8 +26,8 @@ jobs:
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
         automatic_release_tag: "latest"
-        prerelease: true
-        title: "Development Build"
+        prerelease: false
+        title: "Latest Build"
         files: |
           build/libs/PrisonGame-0.1.0.jar
     - uses: actions/checkout@v3
