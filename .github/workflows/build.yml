@@ -1,0 +1,33 @@
+name: Publish Release
+on:
+  push:
+    branches:
+      - develop
+      - workflows
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+    - name: Validate Gradle Wrapper
+      uses: gradle/wrapper-validation-action@v1
+    - name: Setup Java
+      uses: actions/setup-java@v3
+      with:
+        distribution: temurin
+        java-version: 17
+    - name: Give permission for Gradle
+      run: chmod +x ./gradlew
+    - name: Run build with Gradle Wrapper
+      run: ./gradlew reobfJar
+    - name: Create a Release
+      uses: "marvinpinto/action-automatic-releases@latest"
+      with:
+        repo_token: "${{ secrets.GITHUB_TOKEN }}"
+        automatic_release_tag: "latest"
+        prerelease: false
+        title: "Latest Build"
+        files: |
+          build/libs/PrisonGame-0.1.0.jar
+    - uses: actions/checkout@v3
