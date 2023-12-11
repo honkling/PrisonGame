@@ -1,8 +1,9 @@
 name: Publish Release
 on:
   push:
-    tags:
-      - 'v*'
+    branches:
+      - develop
+      - workflows
 jobs:
   build:
     runs-on: ubuntu-latest
