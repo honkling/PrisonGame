@@ -12,8 +12,7 @@ public class FilteredWords {
             "noga",
             "noger",
             "retard",
-            "faggot",
-            "fagg",
+            "fagot",
             //"fag", this one's disabled as it disables things such as "of agmass"
     };
 
