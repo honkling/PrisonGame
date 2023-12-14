@@ -481,7 +481,6 @@ public final class PrisonGame extends JavaPlugin {
         }
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + g.getName() + " only prison:guard");
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + PrisonGame.warden.getName() + " only prison:support");
-        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + g.getName() + " only prison:swat");
         Player nw = (Player) g;
         if (Keys.SPAWN_PROTECTION.has(nw)) {
             if (nw.getInventory().getHelmet() != null)
