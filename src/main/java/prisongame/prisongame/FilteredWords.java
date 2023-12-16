@@ -16,6 +16,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class FilteredWords {
+    public static String filterMessage = "I FUCKING LOVE AMONG US!!! YESS!!! AMONGER!! SUSS!!! SUSSY!!! SUSSY BAKA!! SUSS!! WALTUH!! KINDA SUS WALTUH!!";
     static String[] filter = {
             "niga",
             "niger",
@@ -48,7 +49,7 @@ public class FilteredWords {
         for (String i : filter) {
             if (sanitized.toLowerCase().contains(i)) {
                 alert(player, msg, i, "team chat");
-                return "I FUCKING LOVE AMONG US!!! YESS!!! AMONGER!! SUSS!!! SUSSY!!! SUSSY BAKA!! SUSS!! WALTUH!! KINDA SUS WALTUH!!";
+                return filterMessage;
             }
         }
 

@@ -11,6 +11,7 @@ import prisongame.prisongame.FilteredWords;
 import prisongame.prisongame.PrisonGame;
 import prisongame.prisongame.discord.listeners.Messages;
 import prisongame.prisongame.lib.ChatFormat;
+import prisongame.prisongame.lib.Config;
 import prisongame.prisongame.lib.Role;
 
 public class AsyncChatListener implements Listener {
@@ -58,6 +59,9 @@ public class AsyncChatListener implements Listener {
         var filter = FilteredWords.isClean(legacyMessage);
         if (filter != null)
             FilteredWords.alert(player, legacyMessage, filter, "chat");
+
+        if (!Config.dev)
+            Messages.INSTANCE.onChat(player, filter == null ? legacyMessage : FilteredWords.filterMessage);
 
         PrisonGame.word.put(player, plainMessage);
         event.renderer(new ChatFormat());

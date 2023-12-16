@@ -70,11 +70,8 @@ public class ChatFormat implements ChatRenderer {
                 .color(isWarden ? NamedTextColor.RED : NamedTextColor.GRAY);
 
         var filter = FilteredWords.isClean(plainMessage);
-        var filtered = Component.text("I FUCKING LOVE AMONG US!!! YESS!!! AMONGER!! SUSS!!! SUSSY!!! SUSSY BAKA!! SUSS!! WALTUH!! KINDA SUS WALTUH!!");
+        var filtered = Component.text(FilteredWords.filterMessage);
         var cleanMessage = filter == null ? message : filtered;
-
-        if (!Config.dev)
-            Messages.INSTANCE.onChat(source, getLegacy(cleanMessage, false));
 
         return sourceDisplayName
                 .append(delimiter
