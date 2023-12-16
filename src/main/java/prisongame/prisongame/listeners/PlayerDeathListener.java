@@ -105,14 +105,12 @@ public class PlayerDeathListener implements Listener {
         if (PrisonGame.roles.get(event.getEntity()) != Role.PRISONER) {
             if (event.getEntity().getKiller() != null) {
 
-                if (event.getEntity().getKiller().getInventory().getItemInMainHand().getType().equals(Material.WOODEN_AXE)) {
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + event.getEntity().getKiller().getName() + " only prison:killstaff");
-                    PrisonGame.axekills.put(event.getEntity().getKiller(), PrisonGame.axekills.get(event.getEntity().getKiller()) + 1);
-                    PrisonGame.worryachieve.put(event.getEntity().getKiller(), 0);
-                    if (PrisonGame.axekills.get(event.getEntity().getKiller()) == 5) {
-                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + event.getEntity().getKiller().getName() + " only prison:oneman");
-                    }
-                }
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + event.getEntity().getKiller().getName() + " only prison:killstaff");
+//                PrisonGame.axekills.put(event.getEntity().getKiller(), PrisonGame.axekills.get(event.getEntity().getKiller()) + 1);
+                PrisonGame.worryachieve.put(event.getEntity().getKiller(), 0);
+//                if (PrisonGame.axekills.get(event.getEntity().getKiller()) == 5) {
+//                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + event.getEntity().getKiller().getName() + " only prison:oneman");
+//                }
             }
         }
         if (PrisonGame.roles.get(event.getEntity()) == Role.PRISONER) {
