@@ -29,7 +29,6 @@ fun ban(event: SlashCommandInteractionEvent) {
     val type = if (duration.startsWith("perm")) BanType.PERM_BAN else BanType.TEMP_BAN
     val punishment = Punishment.fromString(type.toString())
 
-
     if (cbp.u.getValueType(duration) == null) {
         event.reply("Please provide a valid duration.")
             .setEphemeral(true)

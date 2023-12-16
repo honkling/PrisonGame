@@ -32,6 +32,12 @@ fun mute(event: SlashCommandInteractionEvent) {
     val announcementType = if (duration.startsWith("perm")) AnnouncementType.PERM_MUTE else AnnouncementType.TEMP_MUTE
     val punishment = Punishment.fromString(type.toString())
 
+    if (cbp.u.getValueType(duration) == null) {
+        event.reply("Please provide a valid duration.")
+            .setEphemeral(true)
+            .queue()
+    }
+
     cbp.database.updateHistoryStatus(player.uniqueId, "Mute", "Overwritten", null)
     cbp.mm.setMute(
         player.uniqueId,
