@@ -14,6 +14,7 @@ import prisongame.prisongame.commands.danger.staff.SeasonCommand;
 import prisongame.prisongame.commands.staff.VanishCommand;
 import prisongame.prisongame.discord.listeners.Messages;
 import prisongame.prisongame.keys.Keys;
+import prisongame.prisongame.lib.Config;
 
 import java.io.IOException;
 
@@ -60,7 +61,8 @@ public class PlayerJoinListener implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        Messages.INSTANCE.onJoin(event.getPlayer());
+        if (!Config.dev)
+            Messages.INSTANCE.onJoin(event.getPlayer());
 
         if (PrisonGame.wardenenabled) {
             Player p = event.getPlayer();

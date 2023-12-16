@@ -82,7 +82,8 @@ public class ChatFormat implements ChatRenderer {
         }
 
         if (filter != null) {
-            Messages.INSTANCE.onChat(source, getLegacy(cleanMessage, false));
+            if (!Config.dev)
+                Messages.INSTANCE.onChat(source, getLegacy(cleanMessage, false));
             FilteredWords.alert(source, getLegacy(message, false), filter, "chat");
             stopDuplicates = false;
         }
