@@ -15,6 +15,7 @@ Run the following commands to solve this:
 - `/team add Prisoners`
 - `/team add Criminals`
 - `/team add Warden`
+- `/team add Guards`
 
 > How can I configure prisons?
 
