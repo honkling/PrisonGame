@@ -8,6 +8,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import prisongame.prisongame.PrisonGame;
+import prisongame.prisongame.discord.listeners.Messages;
 import prisongame.prisongame.lib.ChatFormat;
 import prisongame.prisongame.lib.Role;
 

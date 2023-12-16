@@ -36,3 +36,8 @@ intercom = { args = ["msg"], description = "Plays a loud message to all players.
 grammar = { args = [""], description = "Makes all guards type with proper grammar." }
 mutechat = { args = [""], description = "Forces all players to use team chat." }
 skip = { args = [""], description = "Skips roll call." }
+
+[discord]
+token = ""
+channel = ""
+filter = ""

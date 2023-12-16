@@ -6,11 +6,14 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 import prisongame.prisongame.PrisonGame;
+import prisongame.prisongame.discord.listeners.Messages;
 import prisongame.prisongame.keys.Keys;
 
 public class PlayerQuitListener implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerQuitEvent event) {
+        Messages.INSTANCE.onLeave(event.getPlayer());
+
         if (PrisonGame.hardmode.get(event.getPlayer())) {
             Keys.MONEY.set(event.getPlayer(), Keys.BACKUP_MONEY.get(event.getPlayer(), 0.0));
         }

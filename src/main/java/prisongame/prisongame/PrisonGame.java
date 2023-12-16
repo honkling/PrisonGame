@@ -34,6 +34,7 @@ import prisongame.prisongame.commands.economy.staff.NerdCheatCommand;
 import prisongame.prisongame.commands.economy.staff.ResetMoneyCommand;
 import prisongame.prisongame.commands.economy.staff.SetMoneyCommand;
 import prisongame.prisongame.commands.staff.*;
+import prisongame.prisongame.discord.DiscordKt;
 import prisongame.prisongame.gangs.Gang;
 import prisongame.prisongame.gangs.GangRole;
 import prisongame.prisongame.lib.Config;
@@ -202,6 +203,7 @@ public final class PrisonGame extends JavaPlugin {
             setupPrisons();
             setupBertrude();
             endReloadSafety();
+            DiscordKt.setup();
             registerEvents();
         } catch (SQLException exception) {
             //noinspection CallToPrintStackTrace
@@ -400,6 +402,7 @@ public final class PrisonGame extends JavaPlugin {
         SQL.close();
         bertrude.remove();
         MyTask.bossbar.removeAll();
+        DiscordKt.close();
     }
 
     public static Location nl(String world, Double X, Double Y, Double Z, Float yaw, Float pitch) {

@@ -1,5 +1,6 @@
 package prisongame.prisongame;
 
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -7,7 +8,10 @@ import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
+import prisongame.prisongame.discord.DiscordKt;
 
+import java.awt.*;
+import java.time.Instant;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -21,6 +25,7 @@ public class FilteredWords {
             "noger",
             "retard",
             "fagot",
+            "realybadword" // used for testing filter
             //"fag", this one's disabled as it disables things such as "of agmass"
     };
 
@@ -59,6 +64,23 @@ public class FilteredWords {
         }
 
         sendAlert(Audience.audience(Bukkit.getConsoleSender()), violator, message, word, context);
+
+        var now = Instant.now();
+        var embed = new EmbedBuilder();
+        embed.addField("Time", String.format(
+                "<t:%s> (<t:%s:R>)",
+                now.getEpochSecond(),
+                now.getEpochSecond()
+        ), true);
+        embed.setDescription(String.format(
+                "**%s** was filtered due to using the word **%s** (context: **%s**). Their message is below.\n**%s**",
+                violator.getName(),
+                word,
+                context,
+                message
+        ));
+        embed.setColor(new Color(0xFF5555));
+        DiscordKt.filter.sendMessageEmbeds(embed.build()).queue();
     }
 
     private static void sendAlert(Audience audience, Player violator, String message, String word, String context) {

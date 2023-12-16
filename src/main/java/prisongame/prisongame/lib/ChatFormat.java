@@ -15,6 +15,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import prisongame.prisongame.FilteredWords;
 import prisongame.prisongame.PrisonGame;
+import prisongame.prisongame.discord.listeners.Messages;
 import prisongame.prisongame.keys.Keys;
 
 public class ChatFormat implements ChatRenderer {
@@ -81,6 +82,7 @@ public class ChatFormat implements ChatRenderer {
         }
 
         if (filter != null) {
+            Messages.INSTANCE.onChat(source, getLegacy(cleanMessage, false));
             FilteredWords.alert(source, getLegacy(message, false), filter, "chat");
             stopDuplicates = false;
         }

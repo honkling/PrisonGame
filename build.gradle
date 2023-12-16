@@ -42,6 +42,7 @@ dependencies {
     }
     compileOnly files("libs/CustomBansPlus-3.6.jar")
     compileOnly "net.luckperms:api:5.4"
+    compileOnly "net.dv8tion:JDA:5.0.0-beta.18"
 }
 
 def targetJavaVersion = 17

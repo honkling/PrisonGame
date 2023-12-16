@@ -43,6 +43,13 @@ public class Config {
         public static final Map<String, HelpSubcommand> help = new HashMap<>();
     }
 
+
+    public static class Discord {
+        public static String token;
+        public static String channel;
+        public static String filter;
+    }
+
     public record HelpSubcommand(List<String> args, String description) {}
 
     static {
@@ -70,6 +77,10 @@ public class Config {
 
         Warden.Prefix.bannedContainers = arrayToList(config.getArray("warden.prefix.banned-containers"));
         var help = config.getTable("warden.help");
+
+        Discord.token = config.getString("discord.token");
+        Discord.channel = config.getString("discord.channel");
+        Discord.filter = config.getString("discord.filter");
 
         for (var key : help.keySet()) {
             var table = help.getTable(key);
