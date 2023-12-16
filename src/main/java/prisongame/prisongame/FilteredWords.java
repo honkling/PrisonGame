@@ -1,5 +1,6 @@
 package prisongame.prisongame;
 
+import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
@@ -54,20 +55,26 @@ public class FilteredWords {
             if (!player.hasPermission("pbb.staff"))
                 continue;
 
-            player.sendMessage(PrisonGame.mm.deserialize(
-                    "<gray><player> was filtered due to using the word '<word>' (context: <context>). Their message is below.\n<message>",
-                    Placeholder.component("player", violator.name().color(NamedTextColor.WHITE)),
-                    Placeholder.component("word", Component
-                            .text(word)
-                            .color(NamedTextColor.WHITE)),
-                    Placeholder.component("context", Component
-                            .text(context)
-                            .color(NamedTextColor.WHITE)),
-                    Placeholder.component("message", Component
-                            .text(message)
-                            .color(NamedTextColor.WHITE))
-            ));
+            sendAlert(Audience.audience(player), violator, message, word, context);
         }
+
+        sendAlert(Audience.audience(Bukkit.getConsoleSender()), violator, message, word, context);
+    }
+
+    private static void sendAlert(Audience audience, Player violator, String message, String word, String context) {
+        audience.sendMessage(PrisonGame.mm.deserialize(
+                "<gray><player> was filtered due to using the word '<word>' (context: <context>). Their message is below.\n<message>",
+                Placeholder.component("player", violator.name().color(NamedTextColor.WHITE)),
+                Placeholder.component("word", Component
+                        .text(word)
+                        .color(NamedTextColor.WHITE)),
+                Placeholder.component("context", Component
+                        .text(context)
+                        .color(NamedTextColor.WHITE)),
+                Placeholder.component("message", Component
+                        .text(message)
+                        .color(NamedTextColor.WHITE))
+        ));
     }
 
     public static @Nullable String isClean(String msg) {
