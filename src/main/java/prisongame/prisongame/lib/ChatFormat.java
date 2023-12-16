@@ -18,6 +18,8 @@ import prisongame.prisongame.PrisonGame;
 import prisongame.prisongame.keys.Keys;
 
 public class ChatFormat implements ChatRenderer {
+    private boolean stopDuplicates = false;
+
     @Override
     public @NotNull Component render(
             @NotNull Player source,
@@ -66,12 +68,24 @@ public class ChatFormat implements ChatRenderer {
                 .text(": ")
                 .color(isWarden ? NamedTextColor.RED : NamedTextColor.GRAY);
 
+        var filter = FilteredWords.isClean(plainMessage);
         var filtered = Component.text("I FUCKING LOVE AMONG US!!! YESS!!! AMONGER!! SUSS!!! SUSSY!!! SUSSY BAKA!! SUSS!! WALTUH!! KINDA SUS WALTUH!!");
-        var cleanMessage = FilteredWords.isClean(plainMessage) ? message : filtered;
-
-        return sourceDisplayName
+        var cleanMessage = filter == null ? message : filtered;
+        var render = sourceDisplayName
                 .append(delimiter
                         .append(cleanMessage));
+
+        if (!stopDuplicates) {
+            stopDuplicates = true;
+            return render;
+        }
+
+        if (filter != null) {
+            FilteredWords.alert(source, getLegacy(message, false), filter, "chat");
+            stopDuplicates = false;
+        }
+
+        return render;
     }
 
     private void cancel(AsyncChatEvent event) {

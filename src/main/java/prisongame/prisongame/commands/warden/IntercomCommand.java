@@ -63,7 +63,9 @@ public class IntercomCommand implements CommandExecutor {
 
             b.append(a + " ");
         }
-        if (!FilteredWords.isClean(b.toString())) {
+        var filter = FilteredWords.isClean(b.toString());
+        if (filter != null) {
+            FilteredWords.alert(player, b.toString().substring(16), filter, "intercom");
             return true;
         }
 

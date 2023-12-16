@@ -36,7 +36,9 @@ public class CreateCommand implements IGangCommand {
             return true;
         }
 
-        if (!FilteredWords.isClean(name)) {
+        var filter = FilteredWords.isClean(name);
+        if (filter != null) {
+            FilteredWords.alert(player, name, filter, "creating gang");
             sender.sendMessage(PrisonGame.mm.deserialize("<red>That name isn't appropriate."));
             return true;
         }
