@@ -27,6 +27,7 @@ public class Config {
     private static final World WORLD = Bukkit.getWorld("world");
     private static final Location PLACEHOLDER_LOCATION = new Location(WORLD, 0d, 0d, 0d, 0f, 0f);
 
+    public static boolean dev;
     public static Prison defaultPrison;
     public static final Map<String, Prison> prisons = new HashMap<>();
 
@@ -71,6 +72,8 @@ public class Config {
         var config = parseFile(CONFIG);
 
         Warden.help.clear();
+
+        dev = config.getBoolean("dev");
 
         General.discordInvite = config.getString("general.discord-invite");
         General.rules = arrayToList(config.getArray("general.rules"));

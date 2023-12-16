@@ -17,6 +17,9 @@ lateinit var channel: TextChannel
 lateinit var filter: TextChannel
 
 fun setup() {
+    if (Config.dev)
+        return
+
     jda = JDABuilder
         .createDefault(Config.Discord.token)
         .enableIntents(GatewayIntent.GUILD_MESSAGES)
@@ -50,5 +53,8 @@ fun setup() {
 }
 
 fun close() {
+    if (Config.dev)
+        return
+
     jda.shutdown()
 }

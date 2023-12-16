@@ -1,3 +1,5 @@
+dev = false
+
 [general]
 discord-invite = "fJBXvq28bx"
 rules = [
