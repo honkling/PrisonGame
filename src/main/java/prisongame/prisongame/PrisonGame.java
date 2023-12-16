@@ -365,6 +365,7 @@ public final class PrisonGame extends JavaPlugin {
 
     public void registerEvents() {
         PluginManager pm = Bukkit.getPluginManager();
+        pm.registerEvents(new CraftItemListener(), this);
         pm.registerEvents(new AsyncChatListener(), this);
         pm.registerEvents(new BlockBreakListener(), this);
         pm.registerEvents(new BlockPlaceListener(), this);
@@ -383,6 +384,7 @@ public final class PrisonGame extends JavaPlugin {
         pm.registerEvents(new PlayerInteractListener(), this);
         pm.registerEvents(new PlayerTeleportListener(), this);
         pm.registerEvents(new PlayerBedEnterListener(), this);
+        pm.registerEvents(new PrepareItemCraftListener(), this);
         pm.registerEvents(new PlayerItemConsumeListener(), this);
         pm.registerEvents(new PlayerToggleSneakListener(), this);
         pm.registerEvents(new EntityDamageByEntityListener(), this);
