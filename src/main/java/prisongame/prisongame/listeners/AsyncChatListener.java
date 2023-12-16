@@ -7,6 +7,7 @@ import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import prisongame.prisongame.FilteredWords;
 import prisongame.prisongame.PrisonGame;
 import prisongame.prisongame.discord.listeners.Messages;
 import prisongame.prisongame.lib.ChatFormat;
@@ -53,6 +54,10 @@ public class AsyncChatListener implements Listener {
             event.setCancelled(true);
             return;
         }
+
+        var filter = FilteredWords.isClean(legacyMessage);
+        if (filter != null)
+            FilteredWords.alert(player, legacyMessage, filter, "chat");
 
         PrisonGame.word.put(player, plainMessage);
         event.renderer(new ChatFormat());

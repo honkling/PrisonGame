@@ -72,23 +72,13 @@ public class ChatFormat implements ChatRenderer {
         var filter = FilteredWords.isClean(plainMessage);
         var filtered = Component.text("I FUCKING LOVE AMONG US!!! YESS!!! AMONGER!! SUSS!!! SUSSY!!! SUSSY BAKA!! SUSS!! WALTUH!! KINDA SUS WALTUH!!");
         var cleanMessage = filter == null ? message : filtered;
-        var render = sourceDisplayName
+
+        if (!Config.dev)
+            Messages.INSTANCE.onChat(source, getLegacy(cleanMessage, false));
+
+        return sourceDisplayName
                 .append(delimiter
                         .append(cleanMessage));
-
-        if (!stopDuplicates) {
-            stopDuplicates = true;
-            return render;
-        }
-
-        if (filter != null) {
-            if (!Config.dev)
-                Messages.INSTANCE.onChat(source, getLegacy(cleanMessage, false));
-            FilteredWords.alert(source, getLegacy(message, false), filter, "chat");
-            stopDuplicates = false;
-        }
-
-        return render;
     }
 
     private void cancel(AsyncChatEvent event) {
