@@ -140,7 +140,7 @@ public class PlayerDeathListener implements Listener {
                     }
                     Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + event.getEntity().getKiller().getName() + " only prison:killwarden");
                 }
-                if (PrisonGame.wardentime.get(event.getEntity()) < 0) {
+                if (PrisonGame.wardentime.get(event.getEntity()) / 20 / 60 >= 120) {
                     Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + event.getEntity().getName() + " only prison:afinishedstory");
                     for (Player p : Bukkit.getOnlinePlayers()) {
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + p.getName() + " only prison:pbb");
