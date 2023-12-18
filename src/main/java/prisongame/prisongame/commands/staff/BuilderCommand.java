@@ -47,6 +47,9 @@ public class BuilderCommand implements CommandExecutor {
         inv.addItem(PrisonGame.createGuiItem(Material.ENDER_PEARL, ChatColor.YELLOW + "Nether [CMD]", "tp 1000 0 1000"));
         inv.addItem(PrisonGame.createGuiItem(Material.ENDER_PEARL, ChatColor.YELLOW + "Boat [CMD]", "tp -1000 0 0"));
         inv.addItem(PrisonGame.createGuiItem(Material.ENDER_PEARL, ChatColor.YELLOW + "Maximum Security [CMD]", "tp 700 0 700"));
+        inv.addItem(PrisonGame.createGuiItem(Material.ENDER_PEARL, ChatColor.YELLOW + "what the fuck is going on [CMD]", "tp -1205 -59 -1235")); 
+        inv.addItem(PrisonGame.createGuiItem(Material.ENDER_PEARL, ChatColor.YELLOW + "Barreled [CMD]", "tp -1004 -60 -999")); 
+        inv.addItem(PrisonGame.createGuiItem(Material.ENDER_PEARL, ChatColor.YELLOW + "Desert [CMD]", "tp -1053 -60 -1556")); 
         inv.addItem(PrisonGame.createGuiItem(Material.PLAYER_HEAD, ChatColor.YELLOW + "Teleport All Creative [CMD]", "tp @a[gamemode=creative] @s"));
         inv.addItem(PrisonGame.createGuiItem(Material.PLAYER_HEAD, ChatColor.YELLOW + "Get Coords [CUSTOM]", "gets you the coords required for me to put in the plugin"));
 
