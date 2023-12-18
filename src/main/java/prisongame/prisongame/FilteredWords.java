@@ -42,13 +42,13 @@ public class FilteredWords {
         return sanitized.toString();
     }
 
-    public static String filtermsg(Player player, String msg) {
+    public static String filtermsg(Player player, String msg, String context) {
         String sanitized = replaceConsecutiveDuplicates(msg
                 .replaceAll("\\s+", ""));
 
         for (String i : filter) {
             if (sanitized.toLowerCase().contains(i)) {
-                alert(player, msg, i, "team chat");
+                alert(player, msg, i, context);
                 return filterMessage;
             }
         }

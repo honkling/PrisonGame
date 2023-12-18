@@ -53,7 +53,7 @@ public class TeamChatCommand implements CommandExecutor {
                     prefix,
                     ChatColor.GRAY,
                     player.getName(),
-                    FilteredWords.filtermsg(player, message)
+                    FilteredWords.filtermsg(player, message, "team chat")
             ));
         }
 

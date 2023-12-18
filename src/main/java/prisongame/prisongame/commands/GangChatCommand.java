@@ -1,12 +1,18 @@
 package prisongame.prisongame.commands;
 
+import me.coralise.spigot.API.CBPAPI;
+import me.coralise.spigot.CustomBansPlus;
+import me.coralise.spigot.players.CBPlayer;
+import me.coralise.spigot.players.PlayerManager;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import prisongame.prisongame.FilteredWords;
 import prisongame.prisongame.PrisonGame;
 import prisongame.prisongame.gangs.GangRole;
 import prisongame.prisongame.gangs.Gangs;
@@ -33,6 +39,20 @@ public class GangChatCommand implements CommandExecutor {
             return true;
         }
 
+        CBPAPI api = CBPAPI.getApi();
+
+        if (api != null) {
+            CustomBansPlus cbp = CustomBansPlus.getInstance();
+            PlayerManager playerManager = cbp.plm;
+
+            CBPlayer cbpPlayer = playerManager.getCBPlayer(player.getUniqueId());
+
+            if (api.isPlayerMuted(cbpPlayer)) {
+                player.sendMessage(ChatColor.RED + "You cannot use gang chat while you are muted.");
+                return true;
+            }
+        }
+
         var message = String.join(" ", args);
 
         try {
@@ -41,7 +61,7 @@ public class GangChatCommand implements CommandExecutor {
                 member.sendMessage(PrisonGame.mm.deserialize(
                         "<gray>[<red>GANG CHAT</red>] <player>: <message>",
                         Placeholder.component("player", Component.text(player.getName())),
-                        Placeholder.component("message", Component.text(message))
+                        Placeholder.component("message", Component.text(FilteredWords.filtermsg(player, message, "gang chat")))
                 ));
             });
         } catch (SQLException exception) {

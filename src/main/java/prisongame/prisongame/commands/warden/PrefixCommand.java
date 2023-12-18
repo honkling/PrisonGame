@@ -8,6 +8,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import prisongame.prisongame.FilteredWords;
 import prisongame.prisongame.PrisonGame;
 import prisongame.prisongame.lib.Config;
 import prisongame.prisongame.lib.Role;
@@ -15,6 +16,7 @@ import prisongame.prisongame.lib.Role;
 public class PrefixCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        var player = (Player) sender;
         String prefix = args[0].toUpperCase();
         Integer prefixlength = 16;
                 /*if (((Player) sender).getPersistentDataContainer().getOrDefault(PrisonGame.rank, PersistentDataType.INTEGER, 0) == 1) {
@@ -27,6 +29,12 @@ public class PrefixCommand implements CommandExecutor {
                 sender.sendMessage(PrisonGame.mm.deserialize("<red>You cannot set that prefix."));
                 return true;
             }
+        }
+
+        var filter = FilteredWords.isClean(plainText);
+        if (filter != null) {
+            FilteredWords.alert(player, plainText, filter, "prefix");
+            return true;
         }
 
         if (prefix.length() <= prefixlength) {
