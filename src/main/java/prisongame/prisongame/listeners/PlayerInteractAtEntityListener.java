@@ -27,6 +27,8 @@ public class PlayerInteractAtEntityListener implements Listener {
             inv.addItem(PrisonGame.createGuiItem(Material.PLAYER_HEAD, ChatColor.BLUE + "old tab", ChatColor.GRAY + "sets tab to the default minecraft one, if you're boring."));
             inv.addItem(PrisonGame.createGuiItem(Material.POTION, ChatColor.LIGHT_PURPLE + "epic bertude night vision", ChatColor.GRAY + "gives you night vision i think"));
             inv.addItem(PrisonGame.createGuiItem(Material.NETHERITE_SWORD, ChatColor.LIGHT_PURPLE + "-1 dollar", ChatColor.GRAY + "this is a robbery"));
+            inv.addItem(PrisonGame.createGuiItem(Material.GOLD_NUGGET, ChatColor.GOLD + "ping noises", ChatColor.GRAY + "toggles ping noises"));
+            inv.addItem(PrisonGame.createGuiItem(Material.SHULKER_BOX, ChatColor.DARK_PURPLE + "buy shulker box", ChatColor.GRAY + "buy a shulker box to expand your ender chest"));
             event.getPlayer().openInventory(inv);
         }
     }

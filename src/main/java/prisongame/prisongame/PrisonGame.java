@@ -12,6 +12,7 @@ import net.luckperms.api.LuckPermsProvider;
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -90,6 +91,7 @@ public final class PrisonGame extends JavaPlugin {
     public static HashMap<String, List<Player>> gangJoinRequest = new HashMap<>();
     public static HashMap<Player, Pair<String, GangRole>> gangInvites = new HashMap<>();
     public static HashMap<UUID, HashMap<UUID, Integer>> savedPlayerGuards = new HashMap<>();
+    public static HashMap<Player, Pair<InventoryClickEvent, ItemStack>> shulkers = new HashMap<>();
 
     public static Material[] oretypes = {
             Material.DEEPSLATE_COPPER_ORE,
@@ -381,6 +383,7 @@ public final class PrisonGame extends JavaPlugin {
         pm.registerEvents(new PlayerRespawnListener(), this);
         pm.registerEvents(new EntityDismountListener(), this);
         pm.registerEvents(new PlayerBedLeaveListener(), this);
+        pm.registerEvents(new InventoryCloseListener(), this);
         pm.registerEvents(new InventoryClickListener(), this);
         pm.registerEvents(new PlayerDropItemListener(), this);
         pm.registerEvents(new PlayerInteractListener(), this);

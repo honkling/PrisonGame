@@ -1,14 +1,20 @@
 package prisongame.prisongame.listeners;
 
+import kotlin.Pair;
 import org.bukkit.*;
+import org.bukkit.block.Block;
+import org.bukkit.block.ShulkerBox;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.potion.PotionEffectType;
@@ -16,141 +22,235 @@ import prisongame.prisongame.MyListener;
 import prisongame.prisongame.Prison;
 import prisongame.prisongame.PrisonGame;
 import prisongame.prisongame.lib.Config;
-import prisongame.prisongame.keys.Keys;
 import prisongame.prisongame.lib.Role;
+import prisongame.prisongame.keys.Keys;
 
 import static prisongame.prisongame.MyListener.reloadBert;
 
 public class InventoryClickListener implements Listener {
     @EventHandler
+    public void onShulkerBox(InventoryClickEvent event) {
+        var inventory = event.getClickedInventory();
+        var player = (Player) event.getWhoClicked();
+        var type = inventory.getType();
+        var action = event.getAction();
+
+        if (type != InventoryType.ENDER_CHEST)
+            return;
+
+        var item = event.getCurrentItem();
+
+        if (item == null || item.getType() != Material.SHULKER_BOX)
+            return;
+
+        if (action != InventoryAction.PICKUP_ALL && action != InventoryAction.SWAP_WITH_CURSOR) {
+            event.setCancelled(true);
+            return;
+        }
+
+        var meta = (BlockStateMeta) item.getItemMeta();
+        var blockState = (ShulkerBox) meta.getBlockState();
+        var shulkerInventory = blockState.getInventory();
+        event.setCancelled(true);
+
+        if (action == InventoryAction.SWAP_WITH_CURSOR) {
+            if (shulkerInventory.firstEmpty() == -1)
+                return;
+
+            shulkerInventory.addItem(event.getCursor());
+            meta.setBlockState(blockState);
+            item.setItemMeta(meta);
+            event.setCurrentItem(item);
+            player.setItemOnCursor(null);
+            return;
+        }
+
+        PrisonGame.shulkers.put(player, new Pair<>(event, item));
+        player.openInventory(shulkerInventory);
+    }
+
+    @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         if (!event.getInventory().getType().equals(InventoryType.PLAYER)) {
             if (event.getCurrentItem() != null) {
                 if (event.getCurrentItem().getItemMeta() != null) {
-                    if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.DARK_AQUA + "2x Income")) {
-                        if (Keys.ASCENSION_COINS.get(event.getWhoClicked()) >= 25) {
-                            Keys.DOUBLE_INCOME.set(event.getWhoClicked(), 1);
-                            Keys.ASCENSION_COINS.set(event.getWhoClicked(), Keys.ASCENSION_COINS.get(event.getWhoClicked()) - 25);
-                            event.getWhoClicked().closeInventory();
+                    var name = event.getCurrentItem().getItemMeta().getDisplayName();
+                    var player = (Player) event.getWhoClicked();
+                    
+                    if (name.equals(ChatColor.DARK_AQUA + "2x Income")) {
+                        if (Keys.ASCENSION_COINS.get(player) >= 25) {
+                            Keys.DOUBLE_INCOME.set(player, 1);
+                            Keys.ASCENSION_COINS.set(player, Keys.ASCENSION_COINS.get(player) - 25);
+                            player.closeInventory();
                         }
                         event.setCancelled(true);
                     }
-                    if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.DARK_AQUA + "Tax Evasion")) {
-                        if (Keys.ASCENSION_COINS.get(event.getWhoClicked()) >= 25) {
-                            Keys.TAX_EVASION.set(event.getWhoClicked(), 1);
-                            Keys.ASCENSION_COINS.set(event.getWhoClicked(), Keys.ASCENSION_COINS.get(event.getWhoClicked()) - 25);
+                    if (name.equals(ChatColor.DARK_AQUA + "Tax Evasion")) {
+                        if (Keys.ASCENSION_COINS.get(player) >= 25) {
+                            Keys.TAX_EVASION.set(player, 1);
+                            Keys.ASCENSION_COINS.set(player, Keys.ASCENSION_COINS.get(player) - 25);
                             event.setCancelled(true);
-                            event.getWhoClicked().closeInventory();
+                            player.closeInventory();
                         }
                         event.setCancelled(true);
                     }
-                    if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.DARK_AQUA + "Semi Cloak")) {
-                        if (Keys.ASCENSION_COINS.get(event.getWhoClicked()) >= 5) {
-                            Keys.SEMICLOAK.set(event.getWhoClicked(), 1);
-                            Keys.ASCENSION_COINS.set(event.getWhoClicked(), Keys.ASCENSION_COINS.get(event.getWhoClicked()) - 5);
+                    if (name.equals(ChatColor.DARK_AQUA + "Semi Cloak")) {
+                        if (Keys.ASCENSION_COINS.get(player) >= 5) {
+                            Keys.SEMICLOAK.set(player, 1);
+                            Keys.ASCENSION_COINS.set(player, Keys.ASCENSION_COINS.get(player) - 5);
                             event.setCancelled(true);
-                            event.getWhoClicked().closeInventory();
+                            player.closeInventory();
                         }
                         event.setCancelled(true);
                     }
-                    if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.DARK_AQUA + "Reinforcements")) {
-                        if (Keys.ASCENSION_COINS.get(event.getWhoClicked()) >= 30) {
-                            Keys.REINFORCEMENT.set(event.getWhoClicked(), 1);
-                            Keys.ASCENSION_COINS.set(event.getWhoClicked(), Keys.ASCENSION_COINS.get(event.getWhoClicked()) - 30);
+                    if (name.equals(ChatColor.DARK_AQUA + "Reinforcements")) {
+                        if (Keys.ASCENSION_COINS.get(player) >= 30) {
+                            Keys.REINFORCEMENT.set(player, 1);
+                            Keys.ASCENSION_COINS.set(player, Keys.ASCENSION_COINS.get(player) - 30);
                             event.setCancelled(true);
-                            event.getWhoClicked().closeInventory();
+                            player.closeInventory();
                         }
                         event.setCancelled(true);
                     }
-                    if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.DARK_AQUA + "ProtSpawn")) {
-                        if (Keys.ASCENSION_COINS.get(event.getWhoClicked()) >= 10) {
-                            Keys.SPAWN_PROTECTION.set(event.getWhoClicked(), 1);
-                            Keys.ASCENSION_COINS.set(event.getWhoClicked(), Keys.ASCENSION_COINS.get(event.getWhoClicked()) - 10);
+                    if (name.equals(ChatColor.DARK_AQUA + "ProtSpawn")) {
+                        if (Keys.ASCENSION_COINS.get(player) >= 10) {
+                            Keys.SPAWN_PROTECTION.set(player, 1);
+                            Keys.ASCENSION_COINS.set(player, Keys.ASCENSION_COINS.get(player) - 10);
                             event.setCancelled(true);
-                            event.getWhoClicked().closeInventory();
+                            player.closeInventory();
                         }
                         event.setCancelled(true);
                     }
-                    if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.DARK_AQUA + "Random Items")) {
-                        if (Keys.ASCENSION_COINS.get(event.getWhoClicked()) >= 3) {
-                            Keys.RANDOM_ITEMS.set(event.getWhoClicked(), 1);
-                            Keys.ASCENSION_COINS.set(event.getWhoClicked(), Keys.ASCENSION_COINS.get(event.getWhoClicked()) - 3);
+                    if (name.equals(ChatColor.DARK_AQUA + "Random Items")) {
+                        if (Keys.ASCENSION_COINS.get(player) >= 3) {
+                            Keys.RANDOM_ITEMS.set(player, 1);
+                            Keys.ASCENSION_COINS.set(player, Keys.ASCENSION_COINS.get(player) - 3);
                             event.setCancelled(true);
-                            event.getWhoClicked().closeInventory();
+                            player.closeInventory();
                         }
                         event.setCancelled(true);
                     }
-                    if (event.getCurrentItem().getItemMeta().getDisplayName().contains(ChatColor.YELLOW + "Get Coords [CUSTOM]")) {
+                    if (name.contains(ChatColor.YELLOW + "Get Coords [CUSTOM]")) {
                         event.setCancelled(true);
-                        event.getWhoClicked().sendMessage("nl(\"" + event.getWhoClicked().getWorld().getName() + "\", " + event.getWhoClicked().getLocation().getX() + "D," + event.getWhoClicked().getLocation().getY() + "D," + event.getWhoClicked().getLocation().getZ() + "D," + event.getWhoClicked().getLocation().getYaw() + "f," + event.getWhoClicked().getLocation().getPitch() + "f)");
+                        player.sendMessage("nl(\"" + player.getWorld().getName() + "\", " + player.getLocation().getX() + "D," + player.getLocation().getY() + "D," + player.getLocation().getZ() + "D," + player.getLocation().getYaw() + "f," + player.getLocation().getPitch() + "f)");
                     }
-                    if (event.getCurrentItem().getItemMeta().getDisplayName().contains("[CMD]")) {
-                        if (event.getWhoClicked().hasPermission("minecraft.command.gamemode")) {
+                    if (name.contains("[CMD]")) {
+                        if (player.hasPermission("minecraft.command.gamemode")) {
                             if (event.getCurrentItem().getItemMeta().getLore() != null) {
                                 event.setCancelled(true);
-                                Bukkit.dispatchCommand(event.getWhoClicked(), event.getCurrentItem().getItemMeta().getLore().get(0));
+                                Bukkit.dispatchCommand(player, event.getCurrentItem().getItemMeta().getLore().get(0));
                             }
                         }
                     }
-                    if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.LIGHT_PURPLE + "epic bertude night vision")) {
+                    if (name.equals(ChatColor.LIGHT_PURPLE + "epic bertude night vision")) {
                         event.setCancelled(true);
-                        if (!Keys.NIGHT_VISION.has(event.getWhoClicked())) {
-                            Keys.NIGHT_VISION.set(event.getWhoClicked(), 1);
-                            event.getWhoClicked().sendMessage("ok i changed that for u lol");
-                            Player p = (Player) event.getWhoClicked();
-                            p.playSound(p, Sound.BLOCK_NOTE_BLOCK_BASEDRUM, 1, 1);
+                        if (!Keys.NIGHT_VISION.has(player)) {
+                            Keys.NIGHT_VISION.set(player, 1);
+                            player.sendMessage("ok i changed that for u lol");
+                            player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASEDRUM, 1, 1);
                         } else {
-                            Keys.NIGHT_VISION.remove(event.getWhoClicked());
-                            event.getWhoClicked().sendMessage("ok i changed that for u lol");
-                            Player p = (Player) event.getWhoClicked();
-                            p.playSound(p, Sound.BLOCK_NOTE_BLOCK_BASEDRUM, 1, 1);
+                            Keys.NIGHT_VISION.remove(player);
+                            player.sendMessage("ok i changed that for u lol");
+                            player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASEDRUM, 1, 1);
                         }
                     }
-                    if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.BLUE + "old tab")) {
+                    if (name.equals(ChatColor.BLUE + "old tab")) {
                         event.setCancelled(true);
-                        if (!Keys.OLD_TAB.has(event.getWhoClicked())) {
-                            Keys.OLD_TAB.set(event.getWhoClicked(), 1);
-                            event.getWhoClicked().sendMessage("ok i changed that for u lol");
-                            Player p = (Player) event.getWhoClicked();
-                            p.playSound(p, Sound.BLOCK_NOTE_BLOCK_BASEDRUM, 1, 1);
+                        if (!Keys.OLD_TAB.has(player)) {
+                            Keys.OLD_TAB.set(player, 1);
+                            player.sendMessage("ok i changed that for u lol");
+                            player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASEDRUM, 1, 1);
                         } else {
-                            Keys.OLD_TAB.remove(event.getWhoClicked());
-                            event.getWhoClicked().sendMessage("ok i changed that for u lol");
-                            Player p = (Player) event.getWhoClicked();
-                            p.playSound(p, Sound.BLOCK_NOTE_BLOCK_BASEDRUM, 1, 1);
+                            Keys.OLD_TAB.remove(player);
+                            player.sendMessage("ok i changed that for u lol");
+                            player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASEDRUM, 1, 1);
                         }
                     }
 
-                    if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.LIGHT_PURPLE + "-1 dollar")) {
-                        if (!event.getWhoClicked().hasPotionEffect(PotionEffectType.DAMAGE_RESISTANCE)) {
+                    if (name.equals(ChatColor.LIGHT_PURPLE + "-1 dollar")) {
+                        if (!player.hasPotionEffect(PotionEffectType.DAMAGE_RESISTANCE)) {
                             event.setCancelled(true);
-                            event.getWhoClicked().damage(999999);
-                            Bukkit.broadcastMessage(event.getWhoClicked().getName() + " was robbed by bertrude (L)");
+                            player.damage(999999);
+                            Bukkit.broadcastMessage(player.getName() + " was robbed by bertrude (L)");
                         } else {
-                            event.getWhoClicked().sendMessage("Bertrude was nice today and decided not to rob you :D");
+                            player.sendMessage("Bertrude was nice today and decided not to rob you :D");
                         }
                     }
 
-                    if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.LIGHT_PURPLE + "no warden spaces")) {
+                    if (name.equals(ChatColor.LIGHT_PURPLE + "no warden spaces")) {
                         event.setCancelled(true);
-                        if (!Keys.NO_WARDEN_SPACES.has(event.getWhoClicked())) {
-                            Keys.NO_WARDEN_SPACES.set(event.getWhoClicked(), 1);
-                            event.getWhoClicked().sendMessage("ok i changed that for u lol");
-                            Player p = (Player) event.getWhoClicked();
-                            p.playSound(p, Sound.BLOCK_NOTE_BLOCK_BASEDRUM, 1, 1);
+                        if (!Keys.NO_WARDEN_SPACES.has(player)) {
+                            Keys.NO_WARDEN_SPACES.set(player, 1);
+                            player.sendMessage("ok i changed that for u lol");
+                            player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASEDRUM, 1, 1);
                         } else {
-                            Keys.NO_WARDEN_SPACES.remove(event.getWhoClicked());
-                            event.getWhoClicked().sendMessage("ok i changed that for u lol");
-                            Player p = (Player) event.getWhoClicked();
-                            p.playSound(p, Sound.BLOCK_NOTE_BLOCK_BASEDRUM, 1, 1);
+                            Keys.NO_WARDEN_SPACES.remove(player);
+                            player.sendMessage("ok i changed that for u lol");
+                            player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASEDRUM, 1, 1);
                         }
                     }
 
+                    if (name.equals(ChatColor.GOLD + "ping noises")) {
+                        event.setCancelled(true);
+
+                        var value = Keys.PING_NOISES.get(player, 0);
+                        Keys.PING_NOISES.get(player, value == 1 ? 0 : 1);
+
+                        player.sendMessage("ok i changed that for u lol");
+                        player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASEDRUM, 1, 1);
+                    }
+
+                    if (name.equals(ChatColor.DARK_PURPLE + "buy shulker box")) {
+                        event.setCancelled(true);
+                        var money = Keys.MONEY.get(player, 0.0);
+                        var inventory = player.getEnderChest();
+                        var cost = 4000;
+
+                        if (money < cost) {
+                            player.sendMessage("you don't got enough money");
+                            return;
+                        }
+
+                        if (inventory.firstEmpty() == -1) {
+                            player.sendMessage("you don't have any room in your ender chest for a shulker box");
+                            return;
+                        }
+
+                        Keys.MONEY.set(player, money - cost);
+
+                        int i = 0;
+
+                        while (isShulker(inventory, i)) {
+                            i += 9;
+                            i %= 26;
+                        }
+
+                        var item = inventory.getItem(i);
+
+                        if (item != null && !item.isEmpty()) {
+                            var emptySlot = inventory.firstEmpty();
+                            inventory.setItem(emptySlot, item);
+                            inventory.clear(i);
+                        }
+
+                        inventory.setItem(i, new ItemStack(Material.SHULKER_BOX));
+
+                        player.sendMessage("you now have a shulker box");
+                        player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASEDRUM, 1, 1);
+                    }
                 }
             }
         }
     }
-    
+
+    private boolean isShulker(Inventory inventory, int index) {
+        var item = inventory.getItem(index);
+
+        if (item == null)
+            return false;
+
+        return item.getType() == Material.SHULKER_BOX;
+    }
 
     @EventHandler
     public void onInventoryClick3(InventoryClickEvent event) {
@@ -158,98 +258,101 @@ public class InventoryClickListener implements Listener {
             if (event.getCurrentItem().getType().equals(Material.RED_STAINED_GLASS_PANE) || event.getCurrentItem().getType().equals(Material.GRAY_STAINED_GLASS_PANE)) {
                 event.setCancelled(true);
             }
+
             if (event.getCurrentItem().getItemMeta() != null) {
-                if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.YELLOW + "Not Drugs")) {
-                    if (Keys.MONEY.get(event.getWhoClicked(), 0.0) >= 30.0) {
-                        Keys.MONEY.set(event.getWhoClicked(), Keys.MONEY.get(event.getWhoClicked(), 0.0)  - 30.0);
-                        event.getWhoClicked().getInventory().addItem(new ItemStack(Material.GOLDEN_APPLE));
+                var name = event.getCurrentItem().getItemMeta().getDisplayName();
+                var player = (Player) event.getWhoClicked();
+                if (name.equals(ChatColor.YELLOW + "Not Drugs")) {
+                    if (Keys.MONEY.get(player, 0.0) >= 30.0) {
+                        Keys.MONEY.set(player, Keys.MONEY.get(player, 0.0)  - 30.0);
+                        player.getInventory().addItem(new ItemStack(Material.GOLDEN_APPLE));
                     }
                 }
 
-                if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.YELLOW + "Scrap Metal")) {
-                    if (Keys.MONEY.get(event.getWhoClicked(), 0.0) >= 150.0) {
-                        Keys.MONEY.set(event.getWhoClicked(), Keys.MONEY.get(event.getWhoClicked(), 0.0)  - 150.0);
-                        event.getWhoClicked().getInventory().addItem(new ItemStack(Material.RAW_IRON));
+                if (name.equals(ChatColor.YELLOW + "Scrap Metal")) {
+                    if (Keys.MONEY.get(player, 0.0) >= 150.0) {
+                        Keys.MONEY.set(player, Keys.MONEY.get(player, 0.0)  - 150.0);
+                        player.getInventory().addItem(new ItemStack(Material.RAW_IRON));
                     }
                 }
 
-                if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.YELLOW + "Dagger")) {
-                    if (Keys.MONEY.get(event.getWhoClicked(), 0.0) >= 1000.0) {
-                        Keys.MONEY.set(event.getWhoClicked(), Keys.MONEY.get(event.getWhoClicked(), 0.0)  - 1000.0);
-                        event.getWhoClicked().getInventory().addItem(new ItemStack(Material.IRON_SWORD));
+                if (name.equals(ChatColor.YELLOW + "Dagger")) {
+                    if (Keys.MONEY.get(player, 0.0) >= 1000.0) {
+                        Keys.MONEY.set(player, Keys.MONEY.get(player, 0.0)  - 1000.0);
+                        player.getInventory().addItem(new ItemStack(Material.IRON_SWORD));
                     }
                 }
 
-                if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.YELLOW + "Chainmail Helmet")) {
-                    if (Keys.MONEY.get(event.getWhoClicked(), 0.0) >= 300.0) {
-                        Keys.MONEY.set(event.getWhoClicked(), Keys.MONEY.get(event.getWhoClicked(), 0.0)  - 300.0);
-                        event.getWhoClicked().getInventory().addItem(new ItemStack(Material.CHAINMAIL_HELMET));
+                if (name.equals(ChatColor.YELLOW + "Chainmail Helmet")) {
+                    if (Keys.MONEY.get(player, 0.0) >= 300.0) {
+                        Keys.MONEY.set(player, Keys.MONEY.get(player, 0.0)  - 300.0);
+                        player.getInventory().addItem(new ItemStack(Material.CHAINMAIL_HELMET));
                     }
                 }
 
-                if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.YELLOW + "Soup")) {
-                    if (Keys.MONEY.get(event.getWhoClicked(), 0.0) >= 2.0) {
-                        Keys.MONEY.set(event.getWhoClicked(), Keys.MONEY.get(event.getWhoClicked(), 0.0)  - 2.0);
-                        event.getWhoClicked().getInventory().addItem(new ItemStack(Material.BEETROOT_SOUP));
+                if (name.equals(ChatColor.YELLOW + "Soup")) {
+                    if (Keys.MONEY.get(player, 0.0) >= 2.0) {
+                        Keys.MONEY.set(player, Keys.MONEY.get(player, 0.0)  - 2.0);
+                        player.getInventory().addItem(new ItemStack(Material.BEETROOT_SOUP));
                     }
                 }
-                if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.YELLOW + "Supreme Stick")) {
-                    if (Keys.MONEY.get(event.getWhoClicked(), 0.0) >= 50.0) {
-                        Keys.MONEY.set(event.getWhoClicked(), Keys.MONEY.get(event.getWhoClicked(), 0.0)  - 50.0);
-                        event.getWhoClicked().getInventory().addItem(new ItemStack(Material.STICK));
+                if (name.equals(ChatColor.YELLOW + "Supreme Stick")) {
+                    if (Keys.MONEY.get(player, 0.0) >= 50.0) {
+                        Keys.MONEY.set(player, Keys.MONEY.get(player, 0.0)  - 50.0);
+                        player.getInventory().addItem(new ItemStack(Material.STICK));
                     }
                 }
-                if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.YELLOW + "Coal")) {
-                    if (Keys.MONEY.get(event.getWhoClicked(), 0.0) >= 30.0) {
-                        Keys.MONEY.set(event.getWhoClicked(), Keys.MONEY.get(event.getWhoClicked(), 0.0)  - 30.0);
-                        event.getWhoClicked().getInventory().addItem(new ItemStack(Material.COAL));
+                if (name.equals(ChatColor.YELLOW + "Coal")) {
+                    if (Keys.MONEY.get(player, 0.0) >= 30.0) {
+                        Keys.MONEY.set(player, Keys.MONEY.get(player, 0.0)  - 30.0);
+                        player.getInventory().addItem(new ItemStack(Material.COAL));
                     }
                 }
 
-                if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.BLUE + "SWAT Guards")) {
-                    if (Keys.MONEY.get(event.getWhoClicked(), 0.0) >= 2500.0) {
-                        Keys.MONEY.set(event.getWhoClicked(), Keys.MONEY.get(event.getWhoClicked(), 0.0)  - 2.0);
+                if (name.equals(ChatColor.BLUE + "SWAT Guards")) {
+                    if (Keys.MONEY.get(player, 0.0) >= 2500.0) {
+                        Keys.MONEY.set(player, Keys.MONEY.get(player, 0.0)  - 2.0);
                         PrisonGame.swat = true;
-                        Bukkit.broadcastMessage(ChatColor.GREEN + event.getWhoClicked().getName() + " has enabled SWAT guards!");
+                        Bukkit.broadcastMessage(ChatColor.GREEN + player.getName() + " has enabled SWAT guards!");
                     }
                 }
-                if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.BLUE + "Prot 1")) {
-                    if (Keys.MONEY.get(event.getWhoClicked(), 0.0) >= 500.0) {
+                if (name.equals(ChatColor.BLUE + "Prot 1")) {
+                    if (Keys.MONEY.get(player, 0.0) >= 500.0) {
                         Boolean shouldpay = false;
-                        if (event.getWhoClicked().getInventory().getHelmet() != null) {
-                            if (event.getWhoClicked().getInventory().getHelmet().getItemMeta().hasEnchant(Enchantment.PROTECTION_ENVIRONMENTAL)) {
-                                event.getWhoClicked().getInventory().getHelmet().addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+                        if (player.getInventory().getHelmet() != null) {
+                            if (player.getInventory().getHelmet().getItemMeta().hasEnchant(Enchantment.PROTECTION_ENVIRONMENTAL)) {
+                                player.getInventory().getHelmet().addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
                                 shouldpay = true;
                             }
                         }
-                        if (event.getWhoClicked().getInventory().getChestplate() != null) {
-                            if (event.getWhoClicked().getInventory().getChestplate().getItemMeta().hasEnchant(Enchantment.PROTECTION_ENVIRONMENTAL)) {
-                                event.getWhoClicked().getInventory().getChestplate().addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+                        if (player.getInventory().getChestplate() != null) {
+                            if (player.getInventory().getChestplate().getItemMeta().hasEnchant(Enchantment.PROTECTION_ENVIRONMENTAL)) {
+                                player.getInventory().getChestplate().addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
                                 shouldpay = true;
                             }
                         }
-                        if (event.getWhoClicked().getInventory().getLeggings() != null) {
-                            if (event.getWhoClicked().getInventory().getLeggings().getItemMeta().hasEnchant(Enchantment.PROTECTION_ENVIRONMENTAL)) {
-                                event.getWhoClicked().getInventory().getLeggings().addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+                        if (player.getInventory().getLeggings() != null) {
+                            if (player.getInventory().getLeggings().getItemMeta().hasEnchant(Enchantment.PROTECTION_ENVIRONMENTAL)) {
+                                player.getInventory().getLeggings().addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
                                 shouldpay = true;
                             }
                         }
-                        if (event.getWhoClicked().getInventory().getBoots() != null) {
-                            if (event.getWhoClicked().getInventory().getBoots().getItemMeta().hasEnchant(Enchantment.PROTECTION_ENVIRONMENTAL)) {
-                                event.getWhoClicked().getInventory().getBoots().addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+                        if (player.getInventory().getBoots() != null) {
+                            if (player.getInventory().getBoots().getItemMeta().hasEnchant(Enchantment.PROTECTION_ENVIRONMENTAL)) {
+                                player.getInventory().getBoots().addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
                                 shouldpay = true;
                             }
                         }
                         if (shouldpay)
-                            Keys.MONEY.set(event.getWhoClicked(), Keys.MONEY.get(event.getWhoClicked(), 0.0)  - 30.0);
+                            Keys.MONEY.set(player, Keys.MONEY.get(player, 0.0)  - 30.0);
                     }
                 }
                 if (PrisonGame.warden != null) {
-                    if (PrisonGame.swapcool <= 0 && PrisonGame.warden.equals(event.getWhoClicked())) {
-                        var name = event.getCurrentItem().getItemMeta().getDisplayName().replace("§", "&");
+                    if (PrisonGame.swapcool <= 0 && PrisonGame.warden.equals(player)) {
+                        var prisonName = event.getCurrentItem().getItemMeta().getDisplayName().replace("§", "&");
 
                         for (var prison : Config.prisons.values()) {
-                            if (prison.displayName.equals(name)) {
+                            if (prison.displayName.equals(prisonName)) {
                                 switchMap(prison);
                                 event.setCancelled(true);
                                 break;
@@ -257,67 +360,67 @@ public class InventoryClickListener implements Listener {
                         }
                     }
                 }
-                if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.LIGHT_PURPLE + "Rock")) {
+                if (name.equals(ChatColor.LIGHT_PURPLE + "Rock")) {
                     event.setCancelled(true);
-                    if (event.getWhoClicked().getInventory().containsAtLeast(new ItemStack(Material.STONE_BUTTON), 9)) {
-                        event.getWhoClicked().getInventory().removeItem(new ItemStack(Material.STONE_BUTTON, 9));
-                        event.getWhoClicked().getInventory().addItem(new ItemStack(Material.COBBLESTONE));
+                    if (player.getInventory().containsAtLeast(new ItemStack(Material.STONE_BUTTON), 9)) {
+                        player.getInventory().removeItem(new ItemStack(Material.STONE_BUTTON, 9));
+                        player.getInventory().addItem(new ItemStack(Material.COBBLESTONE));
                     }
                 }
-                if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.WHITE + "Paper")) {
+                if (name.equals(ChatColor.WHITE + "Paper")) {
                     event.setCancelled(true);
-                    if (Keys.MONEY.get(event.getWhoClicked(), 0.0) >= 15.0) {
-                        if (event.getWhoClicked().getInventory().contains(Material.COAL) && event.getWhoClicked().getInventory().contains(Material.RAW_IRON)) {
-                            Keys.MONEY.set(event.getWhoClicked(), Keys.MONEY.get(event.getWhoClicked(), 0.0) - 15.0);
-                            event.getWhoClicked().getInventory().removeItem(new ItemStack(Material.COAL, 1));
-                            event.getWhoClicked().getInventory().removeItem(new ItemStack(Material.RAW_IRON, 1));
-                            event.getWhoClicked().getInventory().addItem(new ItemStack(Material.PAPER));
+                    if (Keys.MONEY.get(player, 0.0) >= 15.0) {
+                        if (player.getInventory().contains(Material.COAL) && player.getInventory().contains(Material.RAW_IRON)) {
+                            Keys.MONEY.set(player, Keys.MONEY.get(player, 0.0) - 15.0);
+                            player.getInventory().removeItem(new ItemStack(Material.COAL, 1));
+                            player.getInventory().removeItem(new ItemStack(Material.RAW_IRON, 1));
+                            player.getInventory().addItem(new ItemStack(Material.PAPER));
                         }
                     } else {
-                        event.getWhoClicked().sendMessage(ChatColor.RED + "Not enough money!");
+                        player.sendMessage(ChatColor.RED + "Not enough money!");
                     }
                 }
-                if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.LIGHT_PURPLE + "Fake Card")) {
+                if (name.equals(ChatColor.LIGHT_PURPLE + "Fake Card")) {
                     event.setCancelled(true);
-                    if (event.getWhoClicked().getInventory().containsAtLeast(new ItemStack(Material.PAPER), 3) && event.getWhoClicked().getInventory().containsAtLeast(new ItemStack(Material.STICK), 2)) {
-                        event.getWhoClicked().getInventory().removeItem(new ItemStack(Material.PAPER, 3));
-                        event.getWhoClicked().getInventory().removeItem(new ItemStack(Material.STICK, 2));
+                    if (player.getInventory().containsAtLeast(new ItemStack(Material.PAPER), 3) && player.getInventory().containsAtLeast(new ItemStack(Material.STICK), 2)) {
+                        player.getInventory().removeItem(new ItemStack(Material.PAPER, 3));
+                        player.getInventory().removeItem(new ItemStack(Material.STICK, 2));
                         ItemStack card = new ItemStack(Material.TRIPWIRE_HOOK);
                         ItemMeta cardm = card.getItemMeta();
                         cardm.setDisplayName(ChatColor.BLUE + "Keycard " + ChatColor.RED + "[CONTRABAND]");
                         card.setItemMeta(cardm);
-                        event.getWhoClicked().getInventory().addItem(card);
+                        player.getInventory().addItem(card);
                     }
                 }
-                if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.GRAY + "WireCutters")) {
+                if (name.equals(ChatColor.GRAY + "WireCutters")) {
                     event.setCancelled(true);
-                    if (event.getWhoClicked().getInventory().containsAtLeast(new ItemStack(Material.COBBLESTONE), 1) &&  event.getWhoClicked().getInventory().containsAtLeast(new ItemStack(Material.RAW_IRON), 4) && event.getWhoClicked().getInventory().containsAtLeast(new ItemStack(Material.STICK), 2)) {
-                        event.getWhoClicked().getInventory().removeItem(new ItemStack(Material.RAW_IRON, 4));
-                        event.getWhoClicked().getInventory().removeItem(new ItemStack(Material.STICK, 2));
-                        event.getWhoClicked().getInventory().removeItem(new ItemStack(Material.COBBLESTONE, 1));
-                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "give " + event.getWhoClicked().getName() + " iron_pickaxe{Damage:245,display:{Name:'[{\"text\":\"WireCutters\",\"italic\":false,\"color\":\"gray\"},{\"text\":\" \"},{\"text\":\"[CONTRABAND]\",\"color\":\"red\"}]'},Enchantments:[{id:efficiency,lvl:5}],HideFlags:1,CanDestroy:[iron_bars]} 1");
+                    if (player.getInventory().containsAtLeast(new ItemStack(Material.COBBLESTONE), 1) &&  player.getInventory().containsAtLeast(new ItemStack(Material.RAW_IRON), 4) && player.getInventory().containsAtLeast(new ItemStack(Material.STICK), 2)) {
+                        player.getInventory().removeItem(new ItemStack(Material.RAW_IRON, 4));
+                        player.getInventory().removeItem(new ItemStack(Material.STICK, 2));
+                        player.getInventory().removeItem(new ItemStack(Material.COBBLESTONE, 1));
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "give " + player.getName() + " iron_pickaxe{Damage:245,display:{Name:'[{\"text\":\"WireCutters\",\"italic\":false,\"color\":\"gray\"},{\"text\":\" \"},{\"text\":\"[CONTRABAND]\",\"color\":\"red\"}]'},Enchantments:[{id:efficiency,lvl:5}],HideFlags:1,CanDestroy:[iron_bars]} 1");
                     }
                 }
-                if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.DARK_GRAY + "Cloak")) {
+                if (name.equals(ChatColor.DARK_GRAY + "Cloak")) {
                     event.setCancelled(true);
-                    if (Keys.MONEY.get(event.getWhoClicked(), 0.0) >= 15.0) {
-                        if (event.getWhoClicked().getInventory().contains(Material.COAL)) {
-                            Keys.MONEY.set(event.getWhoClicked(), Keys.MONEY.get(event.getWhoClicked(), 0.0) - 15.0);
-                            event.getWhoClicked().getInventory().removeItem(new ItemStack(Material.COAL, 1));
+                    if (Keys.MONEY.get(player, 0.0) >= 15.0) {
+                        if (player.getInventory().contains(Material.COAL)) {
+                            Keys.MONEY.set(player, Keys.MONEY.get(player, 0.0) - 15.0);
+                            player.getInventory().removeItem(new ItemStack(Material.COAL, 1));
                             ItemStack orangeboot = new ItemStack(Material.LEATHER_CHESTPLATE);
 
                             LeatherArmorMeta orangelegItemMeta = (LeatherArmorMeta) orangeboot.getItemMeta();
                             orangelegItemMeta.setDisplayName(ChatColor.DARK_GRAY + "Cloak Chestplate");
                             orangelegItemMeta.setColor(Color.BLACK);
                             orangeboot.setItemMeta(orangelegItemMeta);
-                            event.getWhoClicked().getInventory().setChestplate(orangeboot);
+                            player.getInventory().setChestplate(orangeboot);
                         }
                     } else {
-                        event.getWhoClicked().sendMessage(ChatColor.RED + "Not enough money!");
+                        player.sendMessage(ChatColor.RED + "Not enough money!");
                     }
                 }
-                if (event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.LIGHT_PURPLE + "Normal Crafting")) {
-                    event.getWhoClicked().openWorkbench(null, true);
+                if (name.equals(ChatColor.LIGHT_PURPLE + "Normal Crafting")) {
+                    player.openWorkbench(null, true);
                 }
             }
         }

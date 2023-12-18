@@ -1,3 +1,4 @@
+
 package prisongame.prisongame.discord.commands
 
 import net.dv8tion.jda.api.EmbedBuilder

@@ -35,7 +35,7 @@ public class ChatFormat implements ChatRenderer {
         for (var player : Bukkit.getOnlinePlayers()) {
             var name = player.getName();
 
-            if (plainMessage.toLowerCase().contains(name.toLowerCase()))
+            if (plainMessage.toLowerCase().contains(name.toLowerCase()) && Keys.PING_NOISES.get(player, 0) == 0)
                 player.playSound(Sound.sound()
                         .type(Key.key("block.note_block.pling"))
                         .pitch(2f)
