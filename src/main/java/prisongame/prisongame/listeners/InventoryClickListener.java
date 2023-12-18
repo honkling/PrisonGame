@@ -216,6 +216,11 @@ public class InventoryClickListener implements Listener {
                             return;
                         }
 
+                        if (inventory.contains(Material.SHULKER_BOX, 3)) {
+                            player.sendMessage("you've hit a limit of 3 shulker boxes");
+                            return;
+                        }
+
                         Keys.MONEY.set(player, money - cost);
 
                         int i = 0;
