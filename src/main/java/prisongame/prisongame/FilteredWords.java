@@ -23,10 +23,11 @@ public class FilteredWords {
             "niger",
             "niba",
             "niber",
-            "noga",
             "noger",
             "retard",
             "fagot",
+            "rape",
+            "gangbang",
             "realybadword" // used for testing filter
             //"fag", this one's disabled as it disables things such as "of agmass"
     };
