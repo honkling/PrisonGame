@@ -76,7 +76,7 @@ public class FilteredWords {
 
 
         if (!Config.dev)
-            DiscordKt.filter.sendMessageEmbeds(embed.build()).queue();
+            DiscordKt.filterChannel.sendMessageEmbeds(embed.build()).queue();
     }
 
     private static void sendAlert(Audience audience, Player violator, String message, String word, String context) {

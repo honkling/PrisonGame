@@ -14,12 +14,10 @@ import prisongame.prisongame.PrisonGame;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 public class Config {
     private static final PrisonGame INSTANCE = PrisonGame.getPlugin(PrisonGame.class);
@@ -83,8 +81,11 @@ public class Config {
 
     public static class Discord {
         public static String token;
-        public static String channel;
-        public static String filter;
+        public static String guild;
+        public static String chatChannel;
+        public static String filterChannel;
+        public static String linkedRole;
+        public static String mutedRole;
     }
 
     public record HelpSubcommand(List<String> args, String description) {}
@@ -137,8 +138,11 @@ public class Config {
         var help = config.getTable("warden.help");
 
         Discord.token = config.getString("discord.token");
-        Discord.channel = config.getString("discord.channel");
-        Discord.filter = config.getString("discord.filter");
+        Discord.guild = config.getString("discord.guild");
+        Discord.chatChannel = config.getString("discord.chat-channel");
+        Discord.filterChannel = config.getString("discord.filter-channel");
+        Discord.linkedRole = config.getString("discord.linked-role");
+        Discord.mutedRole = config.getString("discord.muted-role");
 
         for (var key : help.keySet()) {
             var table = help.getTable(key);

@@ -12,6 +12,10 @@ libraries:
   - net.dv8tion:JDA:5.0.0-beta.18
   - org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.20
 commands:
+  link:
+    description: Link your Minecraft & Discord accounts.
+  unlink:
+    description: Unlink your Minecraft & Discord accounts.
   gangchat:
     description: Talk to your gang.
     aliases: gc

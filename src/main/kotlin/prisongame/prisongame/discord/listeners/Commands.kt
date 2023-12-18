@@ -16,6 +16,7 @@ object Commands : ListenerAdapter() {
             "mute" -> mute(event)
             "unban" -> unban(event)
             "unmute" -> unmute(event)
+            "link" -> link(event)
             else -> {}
         }
     }

@@ -12,7 +12,7 @@ import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
 import org.bukkit.potion.PotionEffectType
 import prisongame.prisongame.PrisonGame
-import prisongame.prisongame.discord.channel
+import prisongame.prisongame.discord.chatChannel
 import prisongame.prisongame.discord.jda
 import prisongame.prisongame.lib.Config
 
@@ -24,11 +24,11 @@ object Messages : ListenerAdapter() {
         if (attacker != null)
             message = message.replace(attacker.name, "**${attacker.name}**")
 
-        channel.sendMessage(message).queue();
+        chatChannel.sendMessage(message).queue();
     }
 
     fun onGrantAdvancement(player: Player, advancement: Advancement) {
-        channel.sendMessage(String.format(
+        chatChannel.sendMessage(String.format(
             "**%s** has made the advancement **%s**",
             player.name,
             PlainTextComponentSerializer.plainText().serialize(advancement.displayName())
@@ -38,7 +38,7 @@ object Messages : ListenerAdapter() {
     fun onJoin(player: Player) {
         val solitary = player.hasPotionEffect(PotionEffectType.WATER_BREATHING)
 
-        channel.sendMessage(String.format(
+        chatChannel.sendMessage(String.format(
             "**%s** was caught and sent %s!",
             player.name,
             if (solitary) "back to solitary"
@@ -47,14 +47,14 @@ object Messages : ListenerAdapter() {
     }
 
     fun onLeave(player: Player) {
-        channel.sendMessage(String.format(
+        chatChannel.sendMessage(String.format(
             "**%s** ran off somewhere else...",
             player.name
         )).queue();
     }
 
     fun onChat(player: Player, message: String) {
-        channel.sendMessage(String.format(
+        chatChannel.sendMessage(String.format(
             "**%s**: %s",
             PlainTextComponentSerializer.plainText().serialize(player.displayName()),
             message.replace("@", "`@`")
@@ -66,7 +66,7 @@ object Messages : ListenerAdapter() {
         val channel = event.channel
         val user = event.author
 
-        if (channel.id != Config.Discord.channel || user.id == jda.selfUser.id)
+        if (channel.id != Config.Discord.chatChannel || user.id == jda.selfUser.id)
             return
 
         Bukkit.getServer().sendMessage(PrisonGame.mm.deserialize(

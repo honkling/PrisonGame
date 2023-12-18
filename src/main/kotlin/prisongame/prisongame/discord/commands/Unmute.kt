@@ -1,11 +1,13 @@
 package prisongame.prisongame.discord.commands
 
+import me.coralise.spigot.API.events.UnmuteEvent
 import me.coralise.spigot.AbstractAnnouncer
 import me.coralise.spigot.CustomBansPlus
 import me.coralise.spigot.commands.AbstractCommand
 import me.coralise.spigot.enums.AnnouncementType
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import org.bukkit.Bukkit
+import org.bukkit.entity.Player
 
 fun unmute(event: SlashCommandInteractionEvent) {
     val playerName = event.getOption("player")!!.asString
@@ -26,6 +28,7 @@ fun unmute(event: SlashCommandInteractionEvent) {
 
     cbp.mm.removeMute(player.uniqueId, "Unmuted", null)
     AbstractAnnouncer.getAnnouncer(cbpPlayer, null, null, null, AnnouncementType.UNMUTE, false)
+    cbp.u.callEvent(UnmuteEvent(null, cbpPlayer, false))
 
     event.hook.sendMessage("Unmuted **${player.name}**.").queue()
 }

@@ -92,6 +92,7 @@ public final class PrisonGame extends JavaPlugin {
     public static HashMap<Player, Pair<String, GangRole>> gangInvites = new HashMap<>();
     public static HashMap<UUID, HashMap<UUID, Integer>> savedPlayerGuards = new HashMap<>();
     public static HashMap<Player, Pair<InventoryClickEvent, ItemStack>> shulkers = new HashMap<>();
+    public static HashMap<Integer, Player> linkCodes = new HashMap<>();
 
     public static Material[] oretypes = {
             Material.DEEPSLATE_COPPER_ORE,
@@ -240,12 +241,14 @@ public final class PrisonGame extends JavaPlugin {
     public void registerCommands() {
         this.getCommand("pay").setExecutor(new PayCommand());
         this.getCommand("hard").setExecutor(new HardCommand());
+        this.getCommand("link").setExecutor(new LinkCommand());
         this.getCommand("gangs").setExecutor(new GangsCommand());
         this.getCommand("debug").setExecutor(new DebugCommand());
         this.getCommand("rules").setExecutor(new RulesCommand());
         this.getCommand("tc").setExecutor(new TeamChatCommand());
         this.getCommand("hello").setExecutor(new HelloCommand());
         this.getCommand("disc").setExecutor(new DiscordCommand());
+        this.getCommand("unlink").setExecutor(new UnlinkCommand());
         this.getCommand("season").setExecutor(new SeasonCommand());
         this.getCommand("vanish").setExecutor(new VanishCommand());
         this.getCommand("warden").setExecutor(new WardenCommand());
@@ -369,6 +372,7 @@ public final class PrisonGame extends JavaPlugin {
 
     public void registerEvents() {
         PluginManager pm = Bukkit.getPluginManager();
+        pm.registerEvents(new CBPListener(), this);
         pm.registerEvents(new CraftItemListener(), this);
         pm.registerEvents(new AsyncChatListener(), this);
         pm.registerEvents(new BlockBreakListener(), this);

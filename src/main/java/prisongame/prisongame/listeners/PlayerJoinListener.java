@@ -1,5 +1,9 @@
 package prisongame.prisongame.listeners;
 
+import me.coralise.spigot.API.CBPAPI;
+import me.coralise.spigot.CustomBansPlus;
+import me.coralise.spigot.players.CBPlayer;
+import me.coralise.spigot.players.PlayerManager;
 import me.libraryaddict.disguise.DisguiseAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -19,8 +23,38 @@ import prisongame.prisongame.lib.Config;
 import java.io.IOException;
 
 import static prisongame.prisongame.MyListener.playerJoin;
+import static prisongame.prisongame.discord.DiscordKt.guild;
+import static prisongame.prisongame.discord.DiscordKt.removeMuted;
 
 public class PlayerJoinListener implements Listener {
+    @EventHandler
+    public void onJoinCBP(PlayerJoinEvent event) {
+        var player = event.getPlayer();
+
+        if (!Keys.LINK.has(player))
+            return;
+
+        var member = guild.getMemberById(Keys.LINK.get(player));
+
+        if (member == null)
+            return;
+
+        CBPAPI api = CBPAPI.getApi();
+
+        if (api == null)
+            return;
+
+        CustomBansPlus cbp = CustomBansPlus.getInstance();
+        PlayerManager playerManager = cbp.plm;
+
+        CBPlayer cbpPlayer = playerManager.getCBPlayer(player.getUniqueId());
+
+        if (api.isPlayerMuted(cbpPlayer))
+            return;
+
+        removeMuted(member);
+    }
+
     @EventHandler
     public void onJoinSeason(PlayerJoinEvent event) {
         var player = event.getPlayer();

@@ -7,6 +7,7 @@ import prisongame.prisongame.PrisonGame;
 import java.util.Arrays;
 
 public interface Keys {
+    Key<String> LINK = new Key<>("LINK", new NamespacedKey(PrisonGame.instance, "link"), KeyTypes.STRING);
     Key<Integer> PING_NOISES = new Key<>("PING_NOISES", new NamespacedKey(PrisonGame.instance, "ping_noises"), KeyTypes.INTEGER);
     Key<String> GANG = new Key<>("GANG", new NamespacedKey(PrisonGame.instance, "gang"), KeyTypes.STRING);
     Key<Integer> GANG_ROLE = new Key<>("GANG_ROLE", new NamespacedKey(PrisonGame.instance, "gang_role"), KeyTypes.INTEGER);

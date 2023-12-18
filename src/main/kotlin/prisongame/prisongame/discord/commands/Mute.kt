@@ -1,7 +1,10 @@
 package prisongame.prisongame.discord.commands
 
+import me.coralise.spigot.API.events.PostMuteEvent
+import me.coralise.spigot.API.events.PreMuteEvent
 import me.coralise.spigot.AbstractAnnouncer
 import me.coralise.spigot.CustomBansPlus
+import me.coralise.spigot.commands.AbstractCommand
 import me.coralise.spigot.enums.AnnouncementType
 import me.coralise.spigot.enums.MuteType
 import me.coralise.spigot.enums.Punishment
@@ -37,6 +40,14 @@ fun mute(event: SlashCommandInteractionEvent) {
             .setEphemeral(true)
             .queue()
     }
+    cbp.u.callEvent(PreMuteEvent(
+        cbpPlayer.getUuid(),
+        cbpPlayer.getName(),
+        cbp.getConfig().getString("console-name"),
+        reason,
+        duration,
+        false
+    ))
 
     cbp.database.updateHistoryStatus(player.uniqueId, "Mute", "Overwritten", null)
     cbp.mm.setMute(
@@ -49,6 +60,12 @@ fun mute(event: SlashCommandInteractionEvent) {
         true)
     cbp.database.addHistory(cbpPlayer, punishment, null, reason)
     AbstractAnnouncer.getAnnouncer(cbpPlayer, null, duration, reason, announcementType, false)
+
+    cbp.u.callEvent(PostMuteEvent(
+        cbp.mm.getMute(
+            cbpPlayer.getUuid()
+        ), false
+    ))
 
     event.hook.sendMessage("Muted **${player.name}** for **$reason**.").queue()
 }

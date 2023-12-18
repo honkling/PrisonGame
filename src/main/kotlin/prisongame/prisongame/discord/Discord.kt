@@ -3,6 +3,9 @@ package prisongame.prisongame.discord
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.Permission
+import net.dv8tion.jda.api.entities.Guild
+import net.dv8tion.jda.api.entities.Member
+import net.dv8tion.jda.api.entities.Role
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions
 import net.dv8tion.jda.api.interactions.commands.OptionType
@@ -13,8 +16,11 @@ import prisongame.prisongame.discord.listeners.Messages
 import prisongame.prisongame.lib.Config
 
 lateinit var jda: JDA
-lateinit var channel: TextChannel
-lateinit var filter: TextChannel
+lateinit var guild: Guild
+lateinit var chatChannel: TextChannel
+lateinit var filterChannel: TextChannel
+lateinit var linkedRole: Role
+lateinit var mutedRole: Role
 
 fun setup() {
     if (Config.dev)
@@ -28,11 +34,16 @@ fun setup() {
         .build();
 
     jda.awaitReady()
-    channel = jda.getTextChannelById(Config.Discord.channel)!!
-    filter = jda.getTextChannelById(Config.Discord.filter)!!
+    guild = jda.getGuildById(Config.Discord.guild)!!
+    chatChannel = jda.getTextChannelById(Config.Discord.chatChannel)!!
+    filterChannel = jda.getTextChannelById(Config.Discord.filterChannel)!!
+    linkedRole = jda.getRoleById(Config.Discord.linkedRole)!!
+    mutedRole = jda.getRoleById(Config.Discord.mutedRole)!!
 
-    channel.guild.updateCommands().addCommands(
+    chatChannel.guild.updateCommands().addCommands(
         Command.slash("players", "List online players."),
+        Command.slash("link", "Link your Minecraft and Discord accounts.")
+            .addOption(OptionType.INTEGER, "code", "The link code.", true),
         Command.slash("ban", "Ban players from PrisonButBad.")
             .addOption(OptionType.STRING, "player", "The player to ban.", true, true)
             .addOption(OptionType.STRING, "duration", "The ban duration.", true)
@@ -57,4 +68,12 @@ fun close() {
         return
 
     jda.shutdown()
+}
+
+fun addMuted(member: Member) {
+    guild.addRoleToMember(member, mutedRole).queue()
+}
+
+fun removeMuted(member: Member) {
+    guild.removeRoleFromMember(member, mutedRole).queue()
 }
