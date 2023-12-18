@@ -18,19 +18,6 @@ import java.util.regex.Pattern;
 
 public class FilteredWords {
     public static String filterMessage = "I FUCKING LOVE AMONG US!!! YESS!!! AMONGER!! SUSS!!! SUSSY!!! SUSSY BAKA!! SUSS!! WALTUH!! KINDA SUS WALTUH!!";
-    static String[] filter = {
-            "niga",
-            "niger",
-            "niba",
-            "niber",
-            "noger",
-            "retard",
-            "fagot",
-            "rape",
-            "gangbang",
-            "realybadword" // used for testing filter
-            //"fag", this one's disabled as it disables things such as "of agmass"
-    };
 
     private static String replaceConsecutiveDuplicates(String msg) {
         final Pattern pattern = Pattern.compile("(.)\\1*", Pattern.MULTILINE);
@@ -48,9 +35,12 @@ public class FilteredWords {
         String sanitized = replaceConsecutiveDuplicates(msg
                 .replaceAll("\\s+", ""));
 
-        for (String i : filter) {
-            if (sanitized.toLowerCase().contains(i)) {
-                alert(player, msg, i, context);
+        for (var entry : Config.filters.entrySet()) {
+            var name = entry.getKey();
+            var filter = entry.getValue();
+
+            if (filter.test(sanitized)) {
+                alert(player, msg, name, context);
                 return filterMessage;
             }
         }
@@ -109,9 +99,19 @@ public class FilteredWords {
         String sanitized = replaceConsecutiveDuplicates(msg
                 .replaceAll("\\s+", ""));
 
-        for (String i : filter) {
-            if (sanitized.toLowerCase().contains(i))
-                return i;
+        System.out.println(sanitized);
+
+        for (var entry : Config.filters.entrySet()) {
+            var name = entry.getKey();
+            var filter = entry.getValue();
+
+            System.out.println("Testing " + name);
+            System.out.println(filter.type);
+            System.out.println(filter.content);
+            System.out.println(filter.test(sanitized));
+
+            if (filter.test(sanitized))
+                return name;
         }
 
         return null;

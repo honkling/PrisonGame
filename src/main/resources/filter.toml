@@ -1,0 +1,49 @@
+[filters.nigga]
+action = "BLOCK_MESSAGE"
+type = "PLAIN_TEXT"
+value = "niga"
+
+[filters.nigger]
+action = "BLOCK_MESSAGE"
+type = "PLAIN_TEXT"
+value = "niger"
+
+[filters.nibba]
+action = "BLOCK_MESSAGE"
+type = "PLAIN_TEXT"
+value = "niba"
+
+[filters.nibber]
+action = "BLOCK_MESSAGE"
+type = "PLAIN_TEXT"
+value = "niber"
+
+[filters.nogger]
+action = "BLOCK_MESSAGE"
+type = "PLAIN_TEXT"
+value = "noger"
+
+[filters.retard]
+action = "BLOCK_MESSAGE"
+type = "REGEX"
+value = "(re)?tard"
+
+[filters.fag]
+action = "BLOCK_MESSAGE"
+type = "REGEX"
+value = "(?<!o(?=fagmas))fag"
+
+[filters.faggot]
+action = "BLOCK_MESSAGE"
+type = "PLAIN_TEXT"
+value = "fagot"
+
+[filters.rape]
+action = "BLOCK_MESSAGE"
+type = "REGEX"
+value = "(?<!t(?=raped))rape(?!(?<=trape)d)"
+
+[filters.gangbang]
+action = "BLOCK_MESSAGE"
+type = "PLAIN_TEXT"
+value = "gangbang"
