@@ -2,6 +2,7 @@ package prisongame.prisongame.listeners;
 
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -27,6 +28,7 @@ public class PlayerDropItemListener implements Listener {
                 type == Material.GLASS_BOTTLE ||
                 type == Material.IRON_SHOVEL ||
                 type == Material.BUCKET ||
+                item.getEnchantments().containsKey(Enchantment.VANISHING_CURSE) ||
                 (meta != null &&
                         (meta.getDisplayName().contains("Prisoner Uniform") ||
                          meta.getDisplayName().contains("Prisoner's Pickaxe") ||

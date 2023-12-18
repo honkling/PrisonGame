@@ -1,6 +1,7 @@
 package prisongame.prisongame.listeners;
 
 import org.bukkit.*;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -93,6 +94,7 @@ public class PlayerDeathListener implements Listener {
                 i.getType() == Material.GLASS_BOTTLE ||
                 i.getType() == Material.IRON_SHOVEL ||
                 i.getType() == Material.BUCKET ||
+                i.getEnchantments().containsKey(Enchantment.VANISHING_CURSE) ||
                 (i.getItemMeta() != null && i.getItemMeta().getDisplayName().contains("Prisoner Uniform")));
         if (Bukkit.getWorld("world").getTime() > 16000 && Bukkit.getWorld("world").getTime() < 24000) {
             if (event.getPlayer().getKiller() != null) {
