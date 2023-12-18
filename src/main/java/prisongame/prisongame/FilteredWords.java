@@ -9,6 +9,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 import prisongame.prisongame.discord.DiscordKt;
+import prisongame.prisongame.lib.Config;
 
 import java.awt.*;
 import java.time.Instant;
@@ -81,7 +82,10 @@ public class FilteredWords {
                 message
         ));
         embed.setColor(new Color(0xFF5555));
-        DiscordKt.filter.sendMessageEmbeds(embed.build()).queue();
+
+
+        if (!Config.dev)
+            DiscordKt.filter.sendMessageEmbeds(embed.build()).queue();
     }
 
     private static void sendAlert(Audience audience, Player violator, String message, String word, String context) {
