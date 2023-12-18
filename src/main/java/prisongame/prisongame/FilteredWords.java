@@ -99,16 +99,9 @@ public class FilteredWords {
         String sanitized = replaceConsecutiveDuplicates(msg
                 .replaceAll("\\s+", ""));
 
-        System.out.println(sanitized);
-
         for (var entry : Config.filters.entrySet()) {
             var name = entry.getKey();
             var filter = entry.getValue();
-
-            System.out.println("Testing " + name);
-            System.out.println(filter.type);
-            System.out.println(filter.content);
-            System.out.println(filter.test(sanitized));
 
             if (filter.test(sanitized))
                 return name;
