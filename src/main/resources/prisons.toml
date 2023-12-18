@@ -36,7 +36,7 @@ bertrude = { world = "world", x = 0.5, y = -59.0, z = -996.5 }
 
 [prisons.endmap]
 priority = 2
-selector-item = ""
+selector-item = "minecraft:ender_pearl"
 show-in-selector = false
 display-name = "&5The End?"
 name = "The End?"
@@ -138,7 +138,7 @@ bertrude = { world = "world", x = -2011.5, y = -60.0, z = -1965.5 }
 
 [prisons.boat]
 priority = 8
-selector-item = ""
+selector-item = "minecraft:oak_boat"
 show-in-selector = false
 display-name = "&1Boat"
 name = "Boat"
@@ -155,7 +155,7 @@ bertrude = { world = "world", x = -987.0, y = -49.0, z = 19.0 }
 
 [prisons.nether]
 priority = 9
-selector-item = ""
+selector-item = "minecraft:netherrack"
 show-in-selector = false
 display-name = "&cNether"
 name = "Nether"

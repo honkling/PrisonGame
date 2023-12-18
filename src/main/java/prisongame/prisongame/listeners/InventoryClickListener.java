@@ -1,6 +1,9 @@
 package prisongame.prisongame.listeners;
 
 import kotlin.Pair;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.ShulkerBox;
@@ -132,7 +135,30 @@ public class InventoryClickListener implements Listener {
                     }
                     if (name.contains(ChatColor.YELLOW + "Get Coords [CUSTOM]")) {
                         event.setCancelled(true);
-                        player.sendMessage("nl(\"" + player.getWorld().getName() + "\", " + player.getLocation().getX() + "D," + player.getLocation().getY() + "D," + player.getLocation().getZ() + "D," + player.getLocation().getYaw() + "f," + player.getLocation().getPitch() + "f)");
+                        var location = player.getLocation();
+                        player.sendMessage(PrisonGame.mm.deserialize(
+                                "<click> <gray>to copy the coordinates to your clipboard.",
+                                Placeholder.component("click", Component
+                                        .text("Click Here")
+                                        .clickEvent(ClickEvent.copyToClipboard(String.format(
+                                                "{ world = \"%s\", x = %s, y = %s, z = %s, yaw = %s, pitch = %s }",
+                                                location.getWorld().getName(),
+                                                location.getX(),
+                                                location.getY(),
+                                                location.getZ(),
+                                                location.getYaw(),
+                                                location.getPitch()
+                                        ))))
+                        ));
+                    } else if (name.contains("[CUSTOM]")) {
+                        if (player.hasPermission("minecraft.command.gamemode")) {
+                            event.setCancelled(true);
+                            var id = name.replace(" [CUSTOM]", "").substring(2);
+                            var prison = Config.prisons.get(id);
+
+                            if (prison != null)
+                                player.teleport(prison.spwn);
+                        }
                     }
                     if (name.contains("[CMD]")) {
                         if (player.hasPermission("minecraft.command.gamemode")) {
