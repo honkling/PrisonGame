@@ -71,7 +71,7 @@ commands:
     description: Removes all your ascension perks.
     usage: /<command>
   builder:
-    permission: penis.mute
+    permission: pbb.builder
     description: build menu
     usage: /<command>
   nerdcheatcommand:
@@ -86,7 +86,7 @@ commands:
     description: gib de monah
     usage: /<command> <player> <money>
   setmoney:
-    permission: pbb.set
+    permission: pbb.setmoney
     description: unmute de playah
     usage: /<command> <player>
   tc:
