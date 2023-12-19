@@ -56,7 +56,9 @@ object Messages : ListenerAdapter() {
     fun onChat(player: Player, message: String) {
         chatChannel.sendMessage(String.format(
             "**%s**: %s",
-            PlainTextComponentSerializer.plainText().serialize(player.displayName()),
+            PlainTextComponentSerializer.plainText()
+                .serialize(player.displayName())
+                .replace("_", "\\_"),
             message.replace("@", "`@`")
         )).queue();
     }
