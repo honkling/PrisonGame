@@ -61,7 +61,9 @@ public class AsyncChatListener implements Listener {
             FilteredWords.alert(player, legacyMessage, filter, "chat");
 
         if (!Config.dev)
-            Messages.INSTANCE.onChat(player, filter == null ? legacyMessage : FilteredWords.filterMessage);
+            Messages.INSTANCE.onChat(player, filter == null
+                    ? LegacyComponentSerializer.legacyAmpersand().serialize(message)
+                    : FilteredWords.filterMessage);
 
         PrisonGame.word.put(player, plainMessage);
         event.renderer(new ChatFormat());
