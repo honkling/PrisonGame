@@ -108,7 +108,6 @@ public final class PrisonGame extends JavaPlugin {
     };
     public static LivingEntity bertrude;
     static LivingEntity guardsh;
-
     static Villager bmsh1;
     static Villager bmsh2;
     static Villager shop;
