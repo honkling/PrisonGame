@@ -85,7 +85,7 @@ public class Config {
         public static String chatChannel;
         public static String filterChannel;
         public static String linkedRole;
-        public static String mutedRole;
+        public static String canSpeakRole;
     }
 
     public record HelpSubcommand(List<String> args, String description) {}
@@ -142,7 +142,7 @@ public class Config {
         Discord.chatChannel = config.getString("discord.chat-channel");
         Discord.filterChannel = config.getString("discord.filter-channel");
         Discord.linkedRole = config.getString("discord.linked-role");
-        Discord.mutedRole = config.getString("discord.muted-role");
+        Discord.canSpeakRole = config.getString("discord.can-speak-role");
 
         for (var key : help.keySet()) {
             var table = help.getTable(key);

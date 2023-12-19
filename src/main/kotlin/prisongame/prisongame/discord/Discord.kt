@@ -20,7 +20,7 @@ lateinit var guild: Guild
 lateinit var chatChannel: TextChannel
 lateinit var filterChannel: TextChannel
 lateinit var linkedRole: Role
-lateinit var mutedRole: Role
+lateinit var canSpeakRole: Role
 
 fun setup() {
     if (Config.dev)
@@ -38,7 +38,7 @@ fun setup() {
     chatChannel = jda.getTextChannelById(Config.Discord.chatChannel)!!
     filterChannel = jda.getTextChannelById(Config.Discord.filterChannel)!!
     linkedRole = jda.getRoleById(Config.Discord.linkedRole)!!
-    mutedRole = jda.getRoleById(Config.Discord.mutedRole)!!
+    canSpeakRole = jda.getRoleById(Config.Discord.canSpeakRole)!!
 
     chatChannel.guild.updateCommands().addCommands(
         Command.slash("players", "List online players."),
@@ -71,9 +71,9 @@ fun close() {
 }
 
 fun addMuted(member: Member) {
-    guild.addRoleToMember(member, mutedRole).queue()
+    guild.removeRoleFromMember(member, canSpeakRole).queue()
 }
 
 fun removeMuted(member: Member) {
-    guild.removeRoleFromMember(member, mutedRole).queue()
+    guild.addRoleToMember(member, canSpeakRole).queue()
 }

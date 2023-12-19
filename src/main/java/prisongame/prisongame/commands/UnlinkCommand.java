@@ -28,7 +28,7 @@ public class UnlinkCommand implements CommandExecutor {
 
         if (member != null) {
             guild.removeRoleFromMember(member, linkedRole).queue();
-            guild.removeRoleFromMember(member, mutedRole).queue();
+            guild.removeRoleFromMember(member, canSpeakRole).queue();
         }
 
         player.sendMessage(PrisonGame.mm.deserialize("<gray>You are no longer linked."));
