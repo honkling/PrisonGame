@@ -77,7 +77,7 @@ object Messages : ListenerAdapter() {
                 .text(user.name)
                 .color(TextColor.fromHexString("#b3b9fc"))),
             Placeholder.component("message", Component
-                .text(content)
+                .text(content.replace("\n", " ").ifEmpty { "(Image)" })
                 .color(TextColor.fromHexString("#d6daff")))
         ))
     }
