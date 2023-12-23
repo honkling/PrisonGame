@@ -18,6 +18,7 @@ import prisongame.prisongame.lib.Config
 lateinit var jda: JDA
 lateinit var guild: Guild
 lateinit var chatChannel: TextChannel
+lateinit var commandsChannel: TextChannel
 lateinit var filterChannel: TextChannel
 lateinit var linkedRole: Role
 lateinit var canSpeakRole: Role
@@ -36,6 +37,7 @@ fun setup() {
     jda.awaitReady()
     guild = jda.getGuildById(Config.Discord.guild)!!
     chatChannel = jda.getTextChannelById(Config.Discord.chatChannel)!!
+    commandsChannel = jda.getTextChannelById(Config.Discord.commandsChannel)!!
     filterChannel = jda.getTextChannelById(Config.Discord.filterChannel)!!
     linkedRole = jda.getRoleById(Config.Discord.linkedRole)!!
     canSpeakRole = jda.getRoleById(Config.Discord.canSpeakRole)!!

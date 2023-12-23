@@ -43,6 +43,7 @@ skip = { args = [""], description = "Skips roll call." }
 token = ""
 guild = ""
 chat-channel = ""
+commands-channel = ""
 filter-channel = ""
 linked-role = ""
 muted-role = ""

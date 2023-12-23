@@ -83,6 +83,7 @@ public class Config {
         public static String token;
         public static String guild;
         public static String chatChannel;
+        public static String commandsChannel;
         public static String filterChannel;
         public static String linkedRole;
         public static String canSpeakRole;
@@ -140,6 +141,7 @@ public class Config {
         Discord.token = config.getString("discord.token");
         Discord.guild = config.getString("discord.guild");
         Discord.chatChannel = config.getString("discord.chat-channel");
+        Discord.commandsChannel = config.getString("discord.commands-channel");
         Discord.filterChannel = config.getString("discord.filter-channel");
         Discord.linkedRole = config.getString("discord.linked-role");
         Discord.canSpeakRole = config.getString("discord.can-speak-role");
