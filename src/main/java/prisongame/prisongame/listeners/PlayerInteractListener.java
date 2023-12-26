@@ -32,13 +32,15 @@ public class PlayerInteractListener implements Listener {
     @EventHandler
     public void onSmokerAnvil(PlayerInteractEvent event) {
         var block = event.getClickedBlock();
+
+        if (block == null)
+            return;
+
         var type = block.getType();
 
         if (type == Material.SMOKER || type == Material.ANVIL)
             event.setCancelled(true);
     }
-
-    
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
