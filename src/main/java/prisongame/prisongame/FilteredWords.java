@@ -1,6 +1,8 @@
 package prisongame.prisongame;
 
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.interactions.components.ActionRow;
+import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -12,6 +14,11 @@ import prisongame.prisongame.discord.DiscordKt;
 import prisongame.prisongame.lib.Config;
 
 import java.awt.*;
+import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -74,9 +81,31 @@ public class FilteredWords {
         ));
         embed.setColor(new Color(0xFF5555));
 
+        var button = Button.link(String.format(
+                "https://support.minehut.com/hc/en-us/requests/new?ticket_form_id=5333154152723&tf_subject=%s&tf_%s=%s&tf_%s=%s&tf_%s=%s&tf_description=%s",
+                "User+using+slurs+on+server",
+                "5333187573779", // Report or Appeal dropdown
+                "report_user",
+                "360022850354", // Minehut Server Name,
+                "PrisonButBad",
+                "13297886460307", // Minehut Server ID
+                "652d32ec45e32f2364aab056",
+                URLEncoder.encode(String.format(
+                        """
+                        User '%s' was using slurs on PrisonButBad.
+                        They have already been punished on PrisonButBad.
+                                                
+                        Time: %s
+                        """.trim(),
+                        violator.getName(),
+                        now,
+                        now.toEpochMilli()), StandardCharsets.UTF_8)
+        ), "Report User");
 
         if (!Config.dev)
-            DiscordKt.filterChannel.sendMessageEmbeds(embed.build()).queue();
+            DiscordKt.filterChannel.sendMessageEmbeds(embed.build())
+                    .addActionRow(button)
+                    .queue();
     }
 
     private static void sendAlert(Audience audience, Player violator, String message, String word, String context) {
