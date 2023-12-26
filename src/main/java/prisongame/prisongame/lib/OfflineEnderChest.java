@@ -32,7 +32,6 @@ public class OfflineEnderChest extends PlayerEnderChestContainer {
         super.onClose(who);
 
         var tags = new ArrayList<CompoundTag>();
-        System.out.println(items.size());
 
         for (int i = 0; i < getContainerSize(); i++) {
             var item = items.get(i);

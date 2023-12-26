@@ -34,6 +34,10 @@ public class InventoryClickListener implements Listener {
     @EventHandler
     public void onShulkerBox(InventoryClickEvent event) {
         var inventory = event.getClickedInventory();
+
+        if (inventory == null)
+            return;
+
         var player = (Player) event.getWhoClicked();
         var type = inventory.getType();
         var action = event.getAction();
