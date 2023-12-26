@@ -5,6 +5,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -41,6 +43,10 @@ public class DefaultCommand implements CommandExecutor {
             p.sendTitle("", ChatColor.RED + nw.getName() + ChatColor.GREEN + " is the new warden!");
             PrisonGame.wardenCooldown = 20 * 6;
         }
+        nw.getInventory().clear();
+        nw.getWorld()
+                .getEntitiesByClass(Item.class)
+                .forEach(Entity::remove);
         PrisonGame.warden = nw;
         Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Warden").addPlayer(nw);
         if (PrisonGame.savedPlayerGuards.containsKey(PrisonGame.warden)) {
