@@ -1,5 +1,6 @@
 package prisongame.prisongame.nbt.tag
 
+import net.minecraft.nbt.Tag
 import prisongame.prisongame.nbt.toByteArray
 import java.util.zip.GZIPOutputStream
 
@@ -24,4 +25,5 @@ abstract class Tag<T>(
     }
 
     abstract fun writePayload(stream: GZIPOutputStream)
+    abstract fun convert(): Tag
 }

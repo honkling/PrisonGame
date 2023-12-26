@@ -5,9 +5,12 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.craftbukkit.v1_20_R1.inventory.CraftInventory;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 import prisongame.prisongame.PrisonGame;
+import prisongame.prisongame.lib.OfflineEnderChest;
 
 public class EnderChestCommand implements CommandExecutor {
     @Override
@@ -34,7 +37,7 @@ public class EnderChestCommand implements CommandExecutor {
         var target = offlineTarget.getPlayer();
 
         if (target == null) {
-            sender.sendMessage(PrisonGame.mm.deserialize("<red>The target isn't online."));
+            player.openInventory(new CraftInventory(new OfflineEnderChest(offlineTarget)));
             return true;
         }
 
