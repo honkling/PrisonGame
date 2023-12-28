@@ -69,7 +69,7 @@ public class ChatFormat implements ChatRenderer {
                 .text(": ")
                 .color(isWarden ? NamedTextColor.RED : NamedTextColor.GRAY);
 
-        var filter = FilteredWords.isClean(plainMessage);
+        var filter = FilteredWords.isClean(plainMessage.toLowerCase());
         var filtered = Component.text(FilteredWords.filterMessage);
         var cleanMessage = filter == null ? message : filtered;
 
