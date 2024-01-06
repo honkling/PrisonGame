@@ -1,6 +1,7 @@
 package prisongame.prisongame.listeners;
 
 import org.bukkit.*;
+import org.bukkit.advancement.Advancement;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.data.type.Door;
 import org.bukkit.enchantments.Enchantment;
@@ -967,6 +968,7 @@ public class PlayerInteractListener implements Listener {
                 if (event.getItem() != null) {
                     if (event.getItem().getItemMeta() != null) {
                         if (event.getItem().getItemMeta().getDisplayName().equals(ChatColor.BLUE + "Keycard " + ChatColor.RED + "[CONTRABAND]")) {
+                            grantRealGuardIfEligible(event.getPlayer());
                             event.setCancelled(true);
                             if (!openable.isOpen()) {
                                 event.getPlayer().playSound(event.getPlayer(), Sound.BLOCK_IRON_DOOR_OPEN, 1, 1);
@@ -1005,5 +1007,31 @@ public class PlayerInteractListener implements Listener {
                 }
             }
         }
+    }
+
+    private void grantRealGuardIfEligible(Player player) {
+        var inventory = player.getInventory();
+        var color = Color.fromRGB(126, 135, 245);
+        var advancement = Bukkit.getAdvancement(new NamespacedKey("prison", "real_guard"));
+
+        if (getColor(inventory.getBoots()).equals(color) &&
+            getColor(inventory.getLeggings()).equals(color) &&
+            getColor(inventory.getChestplate()).equals(color) &&
+            inventory.getHelmet().getType() == Material.IRON_HELMET
+        ) {
+            player.getAdvancementProgress(advancement).awardCriteria("no");
+        }
+    }
+
+    private Color getColor(ItemStack item) {
+        if (item == null)
+            return Color.BLACK;
+
+        var meta = item.getItemMeta();
+
+        if (!(meta instanceof LeatherArmorMeta leatherMeta))
+            return Color.BLACK;
+
+        return leatherMeta.getColor();
     }
 }

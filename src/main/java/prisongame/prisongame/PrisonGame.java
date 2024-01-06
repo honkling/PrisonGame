@@ -690,7 +690,7 @@ public final class PrisonGame extends JavaPlugin {
 
         var advancement = Bukkit.getAdvancement(new NamespacedKey("prison", "maximum_security"));
 
-        if (guardCount >= 1 && PrisonGame.warden != null)
+        if (guardCount >= 8 && PrisonGame.warden != null)
             PrisonGame.warden.getAdvancementProgress(advancement).awardCriteria("no");
     }
 
