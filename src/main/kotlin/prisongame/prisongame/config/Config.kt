@@ -3,6 +3,7 @@ package prisongame.prisongame.config
 import cc.ekblad.toml.decode
 import cc.ekblad.toml.model.TomlException
 import cc.ekblad.toml.tomlMapper
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
 import prisongame.prisongame.PrisonGame
 import prisongame.prisongame.config.filter.Filter
 import prisongame.prisongame.config.filter.reloadFilter
@@ -37,7 +38,10 @@ data class Config(
             private val rawPages: List<String>
         ) {
             val name = PrisonGame.mm.deserialize(rawName)
-            val pages = rawPages.map { PrisonGame.mm.deserialize(it) }
+            val pages = rawPages.map { PrisonGame.mm.deserialize(it, Placeholder.component(
+                "inclusion",
+                PrisonGame.mm.deserialize("This includes <b>but is not limited to</b>:")
+            )) }
         }
     }
 

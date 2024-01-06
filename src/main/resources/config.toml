@@ -8,10 +8,6 @@ name = "No spamming."
 pages = ["This is self explanatory.\n\nNo repetitive or large volume messaging."]
 
 [[general.rules]]
-name = "No spamming."
-pages = ["This is self explanatory.\n\nNo repetitive or large volume messaging."]
-
-[[general.rules]]
 name = "No disrespect."
 pages = ["<inclusion>:\n- Harassment.\n- Uncomfortable or triggering comments.\n- Misgendering."]
 
@@ -31,8 +27,7 @@ pages = ["<inclusion>\n- Using slurs or partaking in hate speech.\n- Discriminat
 name = "No behavior harmful to the server or other members."
 pages = [
         "<inclusion>\n- Abusing bugs or unintended behavior.\n- Lagging the server.\n- Advertising other servers.",
-        "- Advertising other servers.\n- Using modifications to gain a competitive edge over others.\n- Spawn killing members.\n- Repetitively sending a player to solitary.\n- Using alts.\n- Using macros.",
-        "- Assisting authorities (\"mini-knighting\")."
+        "- Using modifications to gain a competitive edge over others.\n- Spawn killing members.\n- Repetitively sending a player to solitary.\n- Using alts.\n- Using macros.\n- Assisting authorities (\"mini-knighting\").",
 ]
 
 [warden.prefix]
