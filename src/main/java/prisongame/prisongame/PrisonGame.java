@@ -506,6 +506,7 @@ public final class PrisonGame extends JavaPlugin {
                 nw.getInventory().getBoots().addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
         }
 
+        grantMaximumSecurityIfEligible();
     }
     public static void setSwat(Player g) {
         Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Guards").addPlayer(g);
@@ -585,6 +586,7 @@ public final class PrisonGame extends JavaPlugin {
                 nw.getInventory().getBoots().addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
         }
 
+        grantMaximumSecurityIfEligible();
     }
 
     public static void setGuard(Player g) {
@@ -672,6 +674,24 @@ public final class PrisonGame extends JavaPlugin {
             if (nw.getInventory().getBoots() != null)
                 nw.getInventory().getBoots().addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
         }
+
+        grantMaximumSecurityIfEligible();
+    }
+
+    private static void grantMaximumSecurityIfEligible() {
+        var guardCount = 0;
+
+        for (var player : Bukkit.getOnlinePlayers()) {
+            var role = PrisonGame.roles.get(player);
+
+            if (role != Role.PRISONER && role != Role.WARDEN)
+                guardCount++;
+        }
+
+        var advancement = Bukkit.getAdvancement(new NamespacedKey("prison", "maximum_security"));
+
+        if (guardCount >= 1 && PrisonGame.warden != null)
+            PrisonGame.warden.getAdvancementProgress(advancement).awardCriteria("no");
     }
 
     public static boolean isInside(Player player, Location loc1, Location loc2)
