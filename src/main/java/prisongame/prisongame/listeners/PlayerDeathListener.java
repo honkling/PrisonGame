@@ -11,8 +11,9 @@ import prisongame.prisongame.MyListener;
 import prisongame.prisongame.PrisonGame;
 import prisongame.prisongame.discord.listeners.Messages;
 import prisongame.prisongame.keys.Keys;
-import prisongame.prisongame.lib.Config;
 import prisongame.prisongame.lib.Role;
+
+import static prisongame.prisongame.config.ConfigKt.getConfig;
 
 public class PlayerDeathListener implements Listener {
     @EventHandler
@@ -155,7 +156,7 @@ public class PlayerDeathListener implements Listener {
                 MyListener.playerJoin(event.getEntity(), false);
             }
         }
-        if (!Config.dev)
+        if (!getConfig().getDev())
             Messages.INSTANCE.onDeath(player, killer, event.getDeathMessage());
         if (PrisonGame.roles.get(event.getEntity()) == Role.PRISONER) {
             event.setDeathMessage(ChatColor.GRAY + event.getDeathMessage());

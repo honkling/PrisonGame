@@ -5,7 +5,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerAdvancementDoneEvent;
 import prisongame.prisongame.discord.listeners.Messages;
-import prisongame.prisongame.lib.Config;
+
+import static prisongame.prisongame.config.ConfigKt.getConfig;
 
 public class PlayerAdvancementDoneListener implements Listener {
     @EventHandler
@@ -13,7 +14,7 @@ public class PlayerAdvancementDoneListener implements Listener {
         if (!event.getAdvancement().getRoot().getKey().toString().equals("prison:root")) {
             event.message(null);
         } else {
-            if (!Config.dev)
+            if (!getConfig().getDev())
                 Messages.INSTANCE.onGrantAdvancement(event.getPlayer(), event.getAdvancement());
             event.message(event.message().color(TextColor.color(0, 200, 0)));
         }

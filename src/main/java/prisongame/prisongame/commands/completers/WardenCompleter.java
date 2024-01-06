@@ -1,9 +1,9 @@
 package prisongame.prisongame.commands.completers;
 
-import prisongame.prisongame.lib.Config;
+import static prisongame.prisongame.config.ConfigKt.getConfig;
 
 public class WardenCompleter extends SubcommandCompleter {
     public WardenCompleter() {
-        super("warden", Config.Warden.help.keySet().toArray(new String[0]));
+        super("warden", getConfig().getWarden().getHelp().keySet().toArray(new String[0]));
     }
 }

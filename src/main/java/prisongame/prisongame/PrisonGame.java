@@ -35,10 +35,11 @@ import prisongame.prisongame.commands.economy.staff.NerdCheatCommand;
 import prisongame.prisongame.commands.economy.staff.ResetMoneyCommand;
 import prisongame.prisongame.commands.economy.staff.SetMoneyCommand;
 import prisongame.prisongame.commands.staff.*;
+import prisongame.prisongame.config.ConfigKt;
+import prisongame.prisongame.config.FallbackConfigKt;
+import prisongame.prisongame.config.Prison;
 import prisongame.prisongame.discord.DiscordKt;
-import prisongame.prisongame.gangs.Gang;
 import prisongame.prisongame.gangs.GangRole;
-import prisongame.prisongame.lib.Config;
 import prisongame.prisongame.keys.Keys;
 import prisongame.prisongame.lib.Role;
 import prisongame.prisongame.lib.SQL;
@@ -117,7 +118,7 @@ public final class PrisonGame extends JavaPlugin {
     public static Boolean swat = false;
 
     public static void tptoBed(Player p) {
-        p.teleport(PrisonGame.active.getNursebedOutTP());
+        p.teleport(PrisonGame.active.getNurse().getLocation());
     }
 
     public static Component getPingDisplay(Player player) {
@@ -192,7 +193,8 @@ public final class PrisonGame extends JavaPlugin {
     public void onEnable() {
         try {
             instance = this;
-            Config.register();
+            FallbackConfigKt.getFallbackConfig();
+            ConfigKt.getConfig();
             setupDatabase();
             setupLuckPerms();
             loadGuardData();
@@ -337,7 +339,7 @@ public final class PrisonGame extends JavaPlugin {
     }
 
     public void setupPrisons() {
-        active = Config.defaultPrison;
+        active = ConfigKt.getConfig().getDefaultPrison();
         Bukkit.broadcastMessage("RELOAD: Loaded Maps");
     }
 
@@ -361,7 +363,7 @@ public final class PrisonGame extends JavaPlugin {
             }
 
             if (PrisonGame.warden != null) {
-                PrisonGame.warden.teleport(active.wardenspawn);
+                PrisonGame.warden.teleport(active.getWarden().getLocation());
             }
         }
 

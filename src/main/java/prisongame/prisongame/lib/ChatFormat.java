@@ -19,8 +19,6 @@ import prisongame.prisongame.discord.listeners.Messages;
 import prisongame.prisongame.keys.Keys;
 
 public class ChatFormat implements ChatRenderer {
-    private boolean stopDuplicates = false;
-
     @Override
     public @NotNull Component render(
             @NotNull Player source,
@@ -76,10 +74,6 @@ public class ChatFormat implements ChatRenderer {
         return sourceDisplayName
                 .append(delimiter
                         .append(cleanMessage));
-    }
-
-    private void cancel(AsyncChatEvent event) {
-        event.renderer();
     }
 
     private String getLegacy(Component message, boolean section) {

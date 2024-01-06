@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import prisongame.prisongame.FilteredWords;
 import prisongame.prisongame.PrisonGame;
+import prisongame.prisongame.config.filter.FilterAction;
 import prisongame.prisongame.gangs.GangRole;
 import prisongame.prisongame.gangs.Gangs;
 import prisongame.prisongame.keys.Keys;
@@ -57,11 +58,21 @@ public class GangChatCommand implements CommandExecutor {
 
         try {
             var gang = Gangs.get(player);
+
+            var filter = FilteredWords.takeActionIfNotClean(player, message, "gang chat");
+
+            if (filter != null && filter.getAction() == FilterAction.BLOCK_MESSAGE) {
+                sender.sendMessage(PrisonGame.mm.deserialize("<red>Gangs are currently disabled."));
+                return true;
+            }
+
             gang.broadcast(GangRole.MEMBER, (member) -> {
                 member.sendMessage(PrisonGame.mm.deserialize(
                         "<gray>[<red>GANG CHAT</red>] <player>: <message>",
                         Placeholder.component("player", Component.text(player.getName())),
-                        Placeholder.component("message", Component.text(FilteredWords.filtermsg(player, message, "gang chat")))
+                        Placeholder.component("message", Component.text(filter != null
+                            ? FilteredWords.filterMessage
+                            : message))
                 ));
             });
         } catch (SQLException exception) {

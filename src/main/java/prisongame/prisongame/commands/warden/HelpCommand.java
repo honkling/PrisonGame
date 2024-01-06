@@ -7,7 +7,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import prisongame.prisongame.PrisonGame;
-import prisongame.prisongame.lib.Config;
+
+import static prisongame.prisongame.config.ConfigKt.getConfig;
 
 public class HelpCommand implements CommandExecutor {
     @Override
@@ -15,15 +16,15 @@ public class HelpCommand implements CommandExecutor {
         Player p = (Player) sender;
         p.sendMessage(ChatColor.DARK_GRAY + "-=-=-=-=-=-=-=-");
 
-        for (var entry : Config.Warden.help.entrySet()) {
+        for (var entry : getConfig().getWarden().getHelp().entrySet()) {
             var key = entry.getKey();
             var value = entry.getValue();
 
             p.sendMessage(PrisonGame.mm.deserialize(String.format(
                     "<blue>/warden %s %s<dark_gray>- <white>%s",
                     key,
-                    !value.args().isEmpty() && !value.args().get(0).isEmpty() ? "[" + String.join("] [", value.args()) + "] " : "",
-                    value.description()
+                    !value.getArgs().isEmpty() && !value.getArgs().get(0).isEmpty() ? "[" + String.join("] [", value.getArgs()) + "] " : "",
+                    value.getDescription()
             )));
         }
 //        p.sendMessage(ChatColor.BLUE + "/warden help" + ChatColor.DARK_GRAY + " - " + ChatColor.WHITE + "Shows you this menu.");

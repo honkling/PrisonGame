@@ -16,9 +16,8 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffectType;
 import prisongame.prisongame.MyTask;
-import prisongame.prisongame.Prison;
 import prisongame.prisongame.PrisonGame;
-import prisongame.prisongame.lib.Config;
+import prisongame.prisongame.config.Prison;
 import prisongame.prisongame.keys.Keys;
 import prisongame.prisongame.lib.Role;
 
@@ -27,6 +26,7 @@ import java.util.Comparator;
 import java.util.Random;
 
 import static prisongame.prisongame.MyListener.playerJoinignoreAsc;
+import static prisongame.prisongame.config.ConfigKt.getConfig;
 
 public class PlayerInteractListener implements Listener {
     @EventHandler
@@ -287,12 +287,12 @@ public class PlayerInteractListener implements Listener {
                             if (PrisonGame.swapcool <= 0) {
                                 Inventory inv = Bukkit.createInventory(null, 9 * 2, "Map Switch");
 
-                                for (Prison prison : Config.prisons.values().stream().sorted(Comparator.comparingInt((p) -> p.priority)).toList()) {
-                                    if (!prison.displayInSelector)
+                                for (Prison prison : getConfig().getPrisons().values().stream().sorted(Comparator.comparingInt((p) -> p.getPriority())).toList()) {
+                                    if (!prison.getShowInSelector())
                                         continue;
 
-                                    var displayName = ChatColor.translateAlternateColorCodes('&', prison.displayName);
-                                    inv.addItem(PrisonGame.createGuiItem(prison.material, displayName));
+                                    var displayName = prison.getDisplayName();
+                                    inv.addItem(PrisonGame.createGuiItem(prison.getMaterial(), displayName));
                                 }
 //                            inv.addItem(PrisonGame.createGuiItem(Material.COBBLESTONE, ChatColor.GRAY + "Fortress Of Gaeae"));
 //                            inv.addItem(PrisonGame.createGuiItem(Material.QUARTZ_BLOCK, ChatColor.WHITE + "Hypertech"));
@@ -398,7 +398,7 @@ public class PlayerInteractListener implements Listener {
                 if (sign.getLine(1).equals("TP To Prison")) {
                     if (!MyTask.bossbar.getTitle().equals("LIGHTS OUT")) {
                         event.getPlayer().setCooldown(Material.IRON_DOOR, 20);
-                        event.getPlayer().teleport(PrisonGame.active.spwn);
+                        event.getPlayer().teleport(PrisonGame.active.getPrisoner().getLocation());
                     }
                 }
                 if (sign.getLine(1).equals("Shop")) {
@@ -669,7 +669,7 @@ public class PlayerInteractListener implements Listener {
                 }
                 if (sign.getLine(1).equals("Cafeteria")) {
                     if (Keys.MONEY.get(event.getPlayer(), 0.0) >= 1000.0) {
-                        if (PrisonGame.active.cafedoor2.getBlock().getType().equals(Material.MUD_BRICKS)) {
+                        /*if (PrisonGame.active.cafedoor2.getBlock().getType().equals(Material.MUD_BRICKS)) {
                             Keys.MONEY.set(event.getPlayer(), Keys.MONEY.get(event.getPlayer(), 0.0) - 1000.0);
                             Bukkit.broadcastMessage(ChatColor.GREEN + event.getPlayer().getName() + " Bought the cafeteria!");
                             if (!PrisonGame.active.equals(Config.prisons.get("hyper"))) {
@@ -688,9 +688,9 @@ public class PlayerInteractListener implements Listener {
                                     }
                                 }
                             }
-                        }
+                        }*/
                         if (new Location(Bukkit.getWorld("world"), 3, -58, -1008).getBlock().getType().equals(Material.MUD_BRICKS)) {
-                            if (PrisonGame.active.equals(Config.prisons.get("hyper"))) {
+                            if (PrisonGame.active.equals(getConfig().getPrisons().get("hyper"))) {
                                 Bukkit.getWorld("world").getBlockAt(1, -58, -1008).setType(Material.AIR);
                                 Bukkit.getWorld("world").getBlockAt(2, -58, -1008).setType(Material.AIR);
                                 Bukkit.getWorld("world").getBlockAt(3, -58, -1008).setType(Material.AIR);
@@ -807,7 +807,7 @@ public class PlayerInteractListener implements Listener {
             if (event.getClickedBlock().getType().equals(Material.JUNGLE_WALL_SIGN)) {
                 org.bukkit.block.Sign sign = (org.bukkit.block.Sign) event.getClickedBlock().getState();
                 if (sign.getLine(1).equals("Leave Market")) {
-                    event.getPlayer().teleport(PrisonGame.active.getBmout());
+                    event.getPlayer().teleport(PrisonGame.active.getBlackMarketOut().getLocation());
                     event.getPlayer().playSound(event.getPlayer(), Sound.ENTITY_ENDER_PEARL_THROW, 1, 1);
                     event.getPlayer().addPotionEffect(PotionEffectType.GLOWING.createEffect(20 * 3, 0));
                     event.getPlayer().removePotionEffect(PotionEffectType.UNLUCK);
@@ -905,7 +905,7 @@ public class PlayerInteractListener implements Listener {
                 event.setCancelled(true);
                 if (!event.getPlayer().hasCooldown(Material.IRON_DOOR)) {
                     if (PrisonGame.roles.get(event.getPlayer()) != Role.GUARD && PrisonGame.roles.get(event.getPlayer()) != Role.NURSE && PrisonGame.roles.get(event.getPlayer()) != Role.SWAT) {
-                        event.getPlayer().teleport(PrisonGame.active.getBm());
+                        event.getPlayer().teleport(PrisonGame.active.getBlackMarketIn().getLocation());
                         event.getPlayer().sendTitle("", ChatColor.GRAY + "-= Black Market =-");
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + event.getPlayer().getName() + " only prison:market");
                         event.getPlayer().playSound(event.getPlayer(), Sound.AMBIENT_UNDERWATER_ENTER, 1, 0.75f);

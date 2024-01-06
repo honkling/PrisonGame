@@ -10,8 +10,9 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import prisongame.prisongame.FilteredWords;
 import prisongame.prisongame.PrisonGame;
-import prisongame.prisongame.lib.Config;
 import prisongame.prisongame.lib.Role;
+
+import static prisongame.prisongame.config.ConfigKt.getConfig;
 
 public class PrefixCommand implements CommandExecutor {
     @Override
@@ -24,7 +25,7 @@ public class PrefixCommand implements CommandExecutor {
                 }*/
 
         var plainText = prefix.replaceAll("(?i)&+[a-f0-9kl-or]+", "").toLowerCase();
-        for (String container : Config.Warden.Prefix.bannedContainers) {
+        for (String container : getConfig().getWarden().getPrefix().getBannedContainers()) {
             if (plainText.contains(container.toLowerCase())) {
                 sender.sendMessage(PrisonGame.mm.deserialize("<red>You cannot set that prefix."));
                 return true;
@@ -33,7 +34,7 @@ public class PrefixCommand implements CommandExecutor {
 
         var filter = FilteredWords.isClean(plainText);
         if (filter != null) {
-            FilteredWords.alert(player, plainText, filter, "prefix");
+            FilteredWords.alert(player, plainText, filter.getFirst(), "prefix");
             return true;
         }
 

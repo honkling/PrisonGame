@@ -2,16 +2,37 @@ dev = false
 
 [general]
 discord-invite = "fJBXvq28bx"
-rules = [
-    ["No spamming.", ["This is self explanatory.\n\nNo repetitive or large volume messaging."]],
-    ["No disrespect.", ["<inclusion>:\n- Harassment.\n- Uncomfortable or triggering comments.\n- Misgendering."]],
-    ["No inappropriacy.", ["<inclusion>\n- NSFW discussion.\n- Jokes about terrorism or other triggering topics.\n- Heated political discussions."]],
-    ["No illegal activities.", ["<inclusion>\n- Drugs or bomb/weapon making.\n- Threatening/wishing harm upon members.\n- Threatening to or releasing personal info about members.\n- Predatory behavior."]],
-    ["No offensive behavior.", ["<inclusion>\n- Using slurs or partaking in hate speech.\n- Discrimination towards certain groups or minorities."]],
-    ["No behavior harmful to the server or other members.", [
+
+[[general.rules]]
+name = "No spamming."
+pages = ["This is self explanatory.\n\nNo repetitive or large volume messaging."]
+
+[[general.rules]]
+name = "No spamming."
+pages = ["This is self explanatory.\n\nNo repetitive or large volume messaging."]
+
+[[general.rules]]
+name = "No disrespect."
+pages = ["<inclusion>:\n- Harassment.\n- Uncomfortable or triggering comments.\n- Misgendering."]
+
+[[general.rules]]
+name = "No inappropriacy."
+pages = ["<inclusion>\n- NSFW discussion.\n- Jokes about terrorism or other triggering topics.\n- Heated political discussions."]
+
+[[general.rules]]
+name = "No illegal activities."
+pages = ["<inclusion>\n- Drugs or bomb/weapon making.\n- Threatening/wishing harm upon members.\n- Threatening to or releasing personal info about members.\n- Predatory behavior."]
+
+[[general.rules]]
+name = "No offensive behavior."
+pages = ["<inclusion>\n- Using slurs or partaking in hate speech.\n- Discrimination towards certain groups or minorities."]
+
+[[general.rules]]
+name = "No behavior harmful to the server or other members."
+pages = [
         "<inclusion>\n- Abusing bugs or unintended behavior.\n- Lagging the server.\n- Advertising other servers.",
         "- Advertising other servers.\n- Using modifications to gain a competitive edge over others.\n- Spawn killing members.\n- Repetitively sending a player to solitary.\n- Using alts.\n- Using macros.",
-        "- Assisting authorities (\"mini-knighting\")."]]
+        "- Assisting authorities (\"mini-knighting\")."
 ]
 
 [warden.prefix]

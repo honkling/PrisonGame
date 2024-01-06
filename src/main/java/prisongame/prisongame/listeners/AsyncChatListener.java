@@ -9,10 +9,12 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import prisongame.prisongame.FilteredWords;
 import prisongame.prisongame.PrisonGame;
+import prisongame.prisongame.config.filter.FilterAction;
 import prisongame.prisongame.discord.listeners.Messages;
 import prisongame.prisongame.lib.ChatFormat;
-import prisongame.prisongame.lib.Config;
 import prisongame.prisongame.lib.Role;
+
+import static prisongame.prisongame.config.ConfigKt.getConfig;
 
 public class AsyncChatListener implements Listener {
     @EventHandler
@@ -56,12 +58,22 @@ public class AsyncChatListener implements Listener {
             return;
         }
 
-        var filter = FilteredWords.isClean(legacyMessage);
-        if (filter != null)
-            FilteredWords.alert(player, legacyMessage, filter, "chat");
+        var result = FilteredWords.isClean(legacyMessage);
+        if (result != null) {
+            var name = result.getFirst();
+            var filter = result.getSecond();
 
-        if (!Config.dev)
-            Messages.INSTANCE.onChat(player, filter == null
+            FilteredWords.alert(player, legacyMessage, name, "chat");
+
+            if (filter.getAction() == FilterAction.BLOCK_MESSAGE) {
+                player.sendMessage(PrisonGame.mm.deserialize("<red>Chat is currently disabled."));
+                event.setCancelled(true);
+                return;
+            }
+        }
+
+        if (!getConfig().getDev())
+            Messages.INSTANCE.onChat(player, result == null
                     ? LegacyComponentSerializer.legacyAmpersand().serialize(message)
                     : FilteredWords.filterMessage);
 

@@ -7,12 +7,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChatEvent;
-import prisongame.prisongame.MyListener;
 import prisongame.prisongame.PrisonGame;
-import prisongame.prisongame.lib.Config;
-import prisongame.prisongame.lib.Role;
 
-import static prisongame.prisongame.MyListener.reloadBert;
+import static prisongame.prisongame.config.ConfigKt.getConfig;
 
 public class PlayerChatListener implements Listener {
     @EventHandler
@@ -22,7 +19,7 @@ public class PlayerChatListener implements Listener {
                 if (PrisonGame.swapcool <= 0) {
                     event.setCancelled(true);
                     event.getPlayer().sendMessage(ChatColor.GREEN + "Access granted.");
-                    InventoryClickListener.switchMap(Config.prisons.get("boat"));
+                    InventoryClickListener.switchMap(getConfig().getPrisons().get("boat"));
                 } else {
                     event.getPlayer().sendMessage(ChatColor.RED + "That's on cooldown! " + ChatColor.YELLOW + PrisonGame.swapcool / 20 + " seconds left.");
                 }

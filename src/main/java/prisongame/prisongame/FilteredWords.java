@@ -1,5 +1,6 @@
 package prisongame.prisongame;
 
+import kotlin.Pair;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.interactions.components.ActionRow;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
@@ -10,18 +11,18 @@ import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
+import prisongame.prisongame.config.filter.Filter;
+import prisongame.prisongame.config.filter.FilterAction;
 import prisongame.prisongame.discord.DiscordKt;
-import prisongame.prisongame.lib.Config;
 
 import java.awt.*;
-import java.io.UnsupportedEncodingException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static prisongame.prisongame.config.ConfigKt.getConfig;
 
 public class FilteredWords {
     public static String filterMessage = "I FUCKING LOVE AMONG US!!! YESS!!! AMONGER!! SUSS!!! SUSSY!!! SUSSY BAKA!! SUSS!! WALTUH!! KINDA SUS WALTUH!!";
@@ -36,23 +37,6 @@ public class FilteredWords {
             sanitized.append(matcher.group(1));
 
         return sanitized.toString();
-    }
-
-    public static String filtermsg(Player player, String msg, String context) {
-        String sanitized = replaceConsecutiveDuplicates(msg
-                .replaceAll("\\s+", ""));
-
-        for (var entry : Config.filters.entrySet()) {
-            var name = entry.getKey();
-            var filter = entry.getValue();
-
-            if (filter.test(sanitized)) {
-                alert(player, msg, name, context);
-                return filterMessage;
-            }
-        }
-
-        return msg;
     }
 
     public static void alert(Player violator, String message, String word, String context) {
@@ -102,7 +86,7 @@ public class FilteredWords {
                         now.toEpochMilli()), StandardCharsets.UTF_8)
         ), "Report User");
 
-        if (!Config.dev)
+        if (!getConfig().getDev())
             DiscordKt.filterChannel.sendMessageEmbeds(embed.build())
                     .addActionRow(button)
                     .queue();
@@ -124,16 +108,30 @@ public class FilteredWords {
         ));
     }
 
-    public static @Nullable String isClean(String msg) {
+    public static @Nullable Filter takeActionIfNotClean(Player player, String message, String context) {
+        var result = isClean(message);
+
+        if (result != null) {
+            var name = result.getFirst();
+            var filter = result.getSecond();
+
+            alert(player, message, name, context);
+            return filter;
+        }
+
+        return null;
+    }
+
+    public static @Nullable Pair<String, Filter> isClean(String msg) {
         String sanitized = replaceConsecutiveDuplicates(msg
                 .replaceAll("\\s+", ""));
 
-        for (var entry : Config.filters.entrySet()) {
+        for (var entry : getConfig().getFilter().entrySet()) {
             var name = entry.getKey();
             var filter = entry.getValue();
 
             if (filter.test(sanitized))
-                return name;
+                return new Pair<>(name, filter);
         }
 
         return null;

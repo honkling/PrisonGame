@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import prisongame.prisongame.FilteredWords;
 import prisongame.prisongame.PrisonGame;
+import prisongame.prisongame.config.filter.FilterAction;
 import prisongame.prisongame.gangs.GangRole;
 import prisongame.prisongame.gangs.Gangs;
 import prisongame.prisongame.keys.Keys;
@@ -38,7 +39,12 @@ public class CreateCommand implements IGangCommand {
 
         var filter = FilteredWords.isClean(name);
         if (filter != null) {
-            FilteredWords.alert(player, name, filter, "creating gang");
+            if (filter.getSecond().getAction() == FilterAction.BLOCK_MESSAGE) {
+                sender.sendMessage(PrisonGame.mm.deserialize("<red>Gangs are currently disabled."));
+                return true;
+            }
+
+            FilteredWords.alert(player, name, filter.getFirst(), "creating gang");
             sender.sendMessage(PrisonGame.mm.deserialize("<red>That name isn't appropriate."));
             return true;
         }

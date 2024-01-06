@@ -38,7 +38,7 @@ public class SolitaryCommand implements CommandExecutor {
                                 PrisonGame.solittime.put(g, 20 * 120);
                                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + g.getName() + " only prison:solit");
                                 Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
-                                    g.teleport(PrisonGame.active.getSolit());
+                                    g.teleport(PrisonGame.active.getSolitary().getLocation());
                                 }, 3);
                                 g.sendTitle("", "You're in solitary.", 10, 0, 10);
                                 g.addPotionEffect(PotionEffectType.WATER_BREATHING.createEffect(Integer.MAX_VALUE, 1));

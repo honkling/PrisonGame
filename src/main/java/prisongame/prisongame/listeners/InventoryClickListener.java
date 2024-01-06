@@ -22,13 +22,13 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.potion.PotionEffectType;
 import prisongame.prisongame.MyListener;
-import prisongame.prisongame.Prison;
 import prisongame.prisongame.PrisonGame;
-import prisongame.prisongame.lib.Config;
+import prisongame.prisongame.config.Prison;
 import prisongame.prisongame.lib.Role;
 import prisongame.prisongame.keys.Keys;
 
 import static prisongame.prisongame.MyListener.reloadBert;
+import static prisongame.prisongame.config.ConfigKt.getConfig;
 
 public class InventoryClickListener implements Listener {
     @EventHandler
@@ -158,10 +158,10 @@ public class InventoryClickListener implements Listener {
                         if (player.hasPermission("minecraft.command.gamemode")) {
                             event.setCancelled(true);
                             var id = name.replace(" [CUSTOM]", "").substring(2);
-                            var prison = Config.prisons.get(id);
+                            var prison = getConfig().getPrisons().get(id);
 
                             if (prison != null)
-                                player.teleport(prison.spwn);
+                                player.teleport(prison.getPrisoner().getLocation());
                         }
                     }
                     if (name.contains("[CMD]")) {
@@ -386,8 +386,8 @@ public class InventoryClickListener implements Listener {
                     if (PrisonGame.swapcool <= 0 && PrisonGame.warden.equals(player)) {
                         var prisonName = event.getCurrentItem().getItemMeta().getDisplayName().replace("§", "&");
 
-                        for (var prison : Config.prisons.values()) {
-                            if (prison.displayName.equals(prisonName)) {
+                        for (var prison : getConfig().getPrisons().values()) {
+                            if (prison.getDisplayName().equals(prisonName)) {
                                 switchMap(prison);
                                 event.setCancelled(true);
                                 break;
@@ -466,9 +466,9 @@ public class InventoryClickListener implements Listener {
             if (player.getDisplayName().contains("ASCENDING") || PrisonGame.builder.getOrDefault(player, false))
                 continue;
 
-            player.teleport(prison.spwn);
+            player.teleport(prison.getPrisoner().getLocation());
             if (PrisonGame.roles.get(player) != Role.PRISONER) {
-                player.teleport(prison.wardenspawn);
+                player.teleport(prison.getWarden().getLocation());
             }
         }
 
@@ -503,18 +503,18 @@ public class InventoryClickListener implements Listener {
 
             if (PrisonGame.roles.get(player) != Role.WARDEN) {
                 MyListener.playerJoin(player, true);
-                player.sendTitle(ChatColor.GREEN + "New prison!", ChatColor.BOLD + prison.name.toUpperCase());
+                player.sendTitle(ChatColor.GREEN + "New prison!", ChatColor.BOLD + prison.getName().toUpperCase());
                 continue;
             }
 
-            player.teleport(prison.getWardenspawn());
+            player.teleport(prison.getWarden().getLocation());
 
             Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
-                player.teleport(prison.getWardenspawn());
+                player.teleport(prison.getWarden().getLocation());
             }, 5);
 
             if (!player.getDisplayName().contains("ASCENDING"))
-                player.sendTitle("New prison!", prison.name.toUpperCase());
+                player.sendTitle("New prison!", prison.getName().toUpperCase());
         }
     }
 

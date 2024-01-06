@@ -66,7 +66,7 @@ public class DefaultCommand implements CommandExecutor {
         PrisonGame.swat = false;
         PrisonGame.chatmuted = false;
         PrisonGame.grammar = false;
-        nw.teleport(PrisonGame.active.getWardenspawn());
+        nw.teleport(PrisonGame.active.getWarden().getLocation());
         nw.setCustomName(ChatColor.GRAY + "[" + ChatColor.RED + "WARDEN" + ChatColor.GRAY + "] " + ChatColor.WHITE + nw.getName());
         nw.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.RED + "WARDEN" + ChatColor.GRAY + "] " + ChatColor.WHITE + nw.getName());
         nw.setDisplayName(ChatColor.GRAY + "[" + ChatColor.RED + "WARDEN" + ChatColor.GRAY + "] " + ChatColor.WHITE + nw.getName());

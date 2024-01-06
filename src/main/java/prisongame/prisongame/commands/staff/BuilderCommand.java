@@ -12,7 +12,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import prisongame.prisongame.PrisonGame;
-import prisongame.prisongame.lib.Config;
+
+import static prisongame.prisongame.config.ConfigKt.getConfig;
 
 public class BuilderCommand implements CommandExecutor {
 
@@ -36,13 +37,13 @@ public class BuilderCommand implements CommandExecutor {
 
         Inventory inv = Bukkit.createInventory(null, 9 * 6, "BUILDER ZONE");
 
-        for (var key : Config.prisons.keySet()) {
-            var prison = Config.prisons.get(key);
-            System.out.println(prison.material);
+        var prisons = getConfig().getPrisons();
+        for (var key : prisons.keySet()) {
+            var prison = prisons.get(key);
             inv.addItem(PrisonGame.createGuiItem(
-                    prison.material,
+                    prison.getMaterial(),
                     ChatColor.YELLOW + key + " [CUSTOM]",
-                    "Teleports you to " + ChatColor.translateAlternateColorCodes('&', prison.displayName)
+                    "Teleports you to " + ChatColor.translateAlternateColorCodes('&', prison.getDisplayName())
             ));
         }
 

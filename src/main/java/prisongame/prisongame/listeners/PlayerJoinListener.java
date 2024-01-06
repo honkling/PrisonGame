@@ -18,11 +18,11 @@ import prisongame.prisongame.commands.danger.staff.SeasonCommand;
 import prisongame.prisongame.commands.staff.VanishCommand;
 import prisongame.prisongame.discord.listeners.Messages;
 import prisongame.prisongame.keys.Keys;
-import prisongame.prisongame.lib.Config;
 
 import java.io.IOException;
 
 import static prisongame.prisongame.MyListener.playerJoin;
+import static prisongame.prisongame.config.ConfigKt.getConfig;
 import static prisongame.prisongame.discord.DiscordKt.guild;
 import static prisongame.prisongame.discord.DiscordKt.removeMuted;
 
@@ -95,7 +95,7 @@ public class PlayerJoinListener implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        if (!Config.dev)
+        if (!getConfig().getDev())
             Messages.INSTANCE.onJoin(event.getPlayer());
 
         if (PrisonGame.wardenenabled) {
@@ -118,7 +118,7 @@ public class PlayerJoinListener implements Listener {
                 PrisonGame.escaped.put(g, true);
                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + g.getName() + " only prison:solit");
                 Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
-                    g.teleport(PrisonGame.active.getSolit());
+                    g.teleport(PrisonGame.active.getSolitary().getLocation());
                 }, 10);
                 g.sendTitle("", "You're in solitary.", 10, 0, 10);
                 g.addPotionEffect(PotionEffectType.WATER_BREATHING.createEffect(Integer.MAX_VALUE, 1));

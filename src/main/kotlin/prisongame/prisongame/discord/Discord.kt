@@ -11,9 +11,9 @@ import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions
 import net.dv8tion.jda.api.interactions.commands.OptionType
 import net.dv8tion.jda.api.interactions.commands.build.Commands as Command
 import net.dv8tion.jda.api.requests.GatewayIntent
+import prisongame.prisongame.config.config
 import prisongame.prisongame.discord.listeners.Commands
 import prisongame.prisongame.discord.listeners.Messages
-import prisongame.prisongame.lib.Config
 
 lateinit var jda: JDA
 lateinit var guild: Guild
@@ -24,23 +24,23 @@ lateinit var linkedRole: Role
 lateinit var canSpeakRole: Role
 
 fun setup() {
-    if (Config.dev)
+    if (config.dev)
         return
 
     jda = JDABuilder
-        .createDefault(Config.Discord.token)
+        .createDefault(config.discord.token)
         .enableIntents(GatewayIntent.GUILD_MESSAGES)
         .enableIntents(GatewayIntent.MESSAGE_CONTENT)
         .addEventListeners(Messages, Commands)
         .build();
 
     jda.awaitReady()
-    guild = jda.getGuildById(Config.Discord.guild)!!
-    chatChannel = jda.getTextChannelById(Config.Discord.chatChannel)!!
-    commandsChannel = jda.getTextChannelById(Config.Discord.commandsChannel)!!
-    filterChannel = jda.getTextChannelById(Config.Discord.filterChannel)!!
-    linkedRole = jda.getRoleById(Config.Discord.linkedRole)!!
-    canSpeakRole = jda.getRoleById(Config.Discord.canSpeakRole)!!
+    guild = jda.getGuildById(config.discord.guild)!!
+    chatChannel = jda.getTextChannelById(config.discord.chatChannel)!!
+    commandsChannel = jda.getTextChannelById(config.discord.commandsChannel)!!
+    filterChannel = jda.getTextChannelById(config.discord.filterChannel)!!
+    linkedRole = jda.getRoleById(config.discord.linkedRole)!!
+    canSpeakRole = jda.getRoleById(config.discord.canSpeakRole)!!
 
     chatChannel.guild.updateCommands().addCommands(
         Command.slash("players", "List online players."),
@@ -66,7 +66,7 @@ fun setup() {
 }
 
 fun close() {
-    if (Config.dev)
+    if (config.dev)
         return
 
     jda.shutdown()

@@ -5,10 +5,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import prisongame.prisongame.PrisonGame;
-import prisongame.prisongame.lib.Config;
 
 import java.awt.*;
 
+import static prisongame.prisongame.config.ConfigKt.getConfig;
 import static prisongame.prisongame.discord.DiscordKt.commandsChannel;
 
 public class PlayerCommandPreprocessListener implements Listener {
@@ -17,7 +17,7 @@ public class PlayerCommandPreprocessListener implements Listener {
         var player = event.getPlayer();
         var command = event.getMessage().toLowerCase();
 
-        if (!Config.dev) {
+        if (!getConfig().getDev()) {
             var embed = new EmbedBuilder()
                     .addField("Player", player.getName(), true)
                     .addField("Command", command, true);

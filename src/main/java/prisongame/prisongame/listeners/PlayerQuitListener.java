@@ -8,12 +8,13 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import prisongame.prisongame.PrisonGame;
 import prisongame.prisongame.discord.listeners.Messages;
 import prisongame.prisongame.keys.Keys;
-import prisongame.prisongame.lib.Config;
+
+import static prisongame.prisongame.config.ConfigKt.getConfig;
 
 public class PlayerQuitListener implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerQuitEvent event) {
-        if (!Config.dev)
+        if (!getConfig().getDev())
             Messages.INSTANCE.onLeave(event.getPlayer());
 
         if (PrisonGame.hardmode.get(event.getPlayer())) {

@@ -8,9 +8,9 @@ depend:
 main: prisongame.prisongame.PrisonGame
 api-version: "1.20"
 libraries:
-  - cc.ekblad:4koma:1.2.0
   - net.dv8tion:JDA:5.0.0-beta.18
   - org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.20
+  - org.jetbrains.kotlin:kotlin-reflect:1.9.20
 commands:
   link:
     description: Link your Minecraft & Discord accounts.

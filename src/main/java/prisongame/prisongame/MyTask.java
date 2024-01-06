@@ -24,12 +24,13 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import prisongame.prisongame.commands.staff.VanishCommand;
-import prisongame.prisongame.lib.Config;
 import prisongame.prisongame.keys.Keys;
 import prisongame.prisongame.lib.Role;
 import prisongame.prisongame.listeners.InventoryClickListener;
 
 import java.text.DecimalFormat;
+
+import static prisongame.prisongame.config.ConfigKt.getConfig;
 
 public class MyTask extends BukkitRunnable {
 
@@ -176,7 +177,7 @@ public class MyTask extends BukkitRunnable {
                     p.playSound(p, Sound.ENTITY_PILLAGER_AMBIENT, 1.5f, 0.75f);
                     p.damage(6);
                     p.removePotionEffect(PotionEffectType.UNLUCK);
-                    p.teleport(PrisonGame.active.getBmout());
+                    p.teleport(PrisonGame.active.getBlackMarketOut().getLocation());
                 }
             }
         }
@@ -813,7 +814,7 @@ public class MyTask extends BukkitRunnable {
             if (PrisonGame.isInside(p, new Location(Bukkit.getWorld("world"), 1453, -41, 1533), new Location(Bukkit.getWorld("world"), 1455, -41, 1535))) {
                 if (PrisonGame.warden.equals(p)) {
                     if (PrisonGame.swapcool <= 0) {
-                        InventoryClickListener.switchMap(Config.prisons.get("polus"));
+                        InventoryClickListener.switchMap(getConfig().getPrisons().get("polus"));
                     } else {
                         p.sendTitle(ChatColor.YELLOW + ("" + PrisonGame.swapcool / 20) + " seconds left.", ChatColor.RED + "That's on cooldown! ", 0, 50, 0);
                     }
@@ -825,7 +826,7 @@ public class MyTask extends BukkitRunnable {
             if (PrisonGame.isInside(p, new Location(Bukkit.getWorld("world"), -2011, -53, -1929), new Location(Bukkit.getWorld("world"), -2009, -57, -1931))) {
                 if (PrisonGame.warden.equals(p)) {
                     if (PrisonGame.swapcool <= 0)
-                        InventoryClickListener.switchMap(Config.prisons.get("nether"));
+                        InventoryClickListener.switchMap(getConfig().getPrisons().get("nether"));
                     else {
                         p.sendTitle(ChatColor.YELLOW + ("" + PrisonGame.swapcool / 20) + " seconds left.", ChatColor.RED + "That's on cooldown! ", 0, 50, 0);
                     }

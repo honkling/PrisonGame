@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;
 import prisongame.prisongame.FilteredWords;
 import prisongame.prisongame.PrisonGame;
+import prisongame.prisongame.config.filter.FilterAction;
 import prisongame.prisongame.lib.Role;
 
 public class TeamChatCommand implements CommandExecutor {
@@ -46,6 +47,13 @@ public class TeamChatCommand implements CommandExecutor {
             if (getGenericRole(recipient) != genericRole)
                 continue;
 
+            var result = FilteredWords.takeActionIfNotClean(player, message, "team chat");
+
+            if (result != null && result.getAction() == FilterAction.BLOCK_MESSAGE) {
+                player.sendMessage(PrisonGame.mm.deserialize("<red>Chat is currently disabled."));
+                return true;
+            }
+
             recipient.sendMessage(String.format(
                     "%s[%s%s CHAT%s] %s: %s",
                     ChatColor.GRAY,
@@ -53,7 +61,7 @@ public class TeamChatCommand implements CommandExecutor {
                     prefix,
                     ChatColor.GRAY,
                     player.getName(),
-                    FilteredWords.filtermsg(player, message, "team chat")
+                    result == null ? message : FilteredWords.filterMessage
             ));
         }
 

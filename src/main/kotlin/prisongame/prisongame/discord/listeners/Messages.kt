@@ -12,9 +12,9 @@ import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
 import org.bukkit.potion.PotionEffectType
 import prisongame.prisongame.PrisonGame
+import prisongame.prisongame.config.config
 import prisongame.prisongame.discord.chatChannel
 import prisongame.prisongame.discord.jda
-import prisongame.prisongame.lib.Config
 
 object Messages : ListenerAdapter() {
     @Suppress("NAME_SHADOWING")
@@ -68,7 +68,7 @@ object Messages : ListenerAdapter() {
         val channel = event.channel
         val user = event.author
 
-        if (channel.id != Config.Discord.chatChannel || user.id == jda.selfUser.id)
+        if (channel.id != config.discord.chatChannel || user.id == jda.selfUser.id)
             return
 
         Bukkit.getServer().sendMessage(PrisonGame.mm.deserialize(

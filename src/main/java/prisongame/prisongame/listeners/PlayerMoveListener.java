@@ -10,7 +10,7 @@ import prisongame.prisongame.PrisonGame;
 public class PlayerMoveListener implements Listener {
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
-        if (PrisonGame.isInside(event.getPlayer(), PrisonGame.active.getRunpoint1(), PrisonGame.active.getRunpoint2()) && PrisonGame.active.getRunpoint1().getY() > event.getPlayer().getLocation().getY()) {
+        if (PrisonGame.isInside(event.getPlayer(), PrisonGame.active.getFirstTrack().getLocation(), PrisonGame.active.getSecondTrack().getLocation()) && PrisonGame.active.getFirstTrack().getY() > event.getPlayer().getLocation().getY()) {
             PrisonGame.sp.put(event.getPlayer(), PrisonGame.sp.getOrDefault(event.getPlayer(), 0.0) + 0.5);
             event.getPlayer().sendTitle("", ChatColor.GREEN + PrisonGame.sp.get(event.getPlayer()).toString() + "/120", 0, 10, 10);
             if (PrisonGame.sp.get(event.getPlayer()) >= 120) {

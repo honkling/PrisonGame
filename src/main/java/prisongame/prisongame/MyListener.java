@@ -25,7 +25,7 @@ public class MyListener implements Listener {
             PrisonGame.bertrude.remove();
             PrisonGame.bertrude = null;
         }
-        PrisonGame.bertrude = (LivingEntity) Bukkit.getWorld("world").spawnEntity(PrisonGame.active.bert, EntityType.VILLAGER);
+        PrisonGame.bertrude = (LivingEntity) Bukkit.getWorld("world").spawnEntity(PrisonGame.active.getBertrude().getLocation(), EntityType.VILLAGER);
         PrisonGame.bertrude.setAI(false);
         PrisonGame.bertrude.setGravity(false);
         PrisonGame.bertrude.setCustomName("bertrude (real settings)");
@@ -80,10 +80,10 @@ public class MyListener implements Listener {
                 PrisonGame.roles.put(p, Role.PRISONER);
             }
             Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
-                p.teleport(PrisonGame.active.getSpwn());
+                p.teleport(PrisonGame.active.getPrisoner().getLocation());
             }, 5L);
             Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
-                p.teleport(PrisonGame.active.getSpwn());
+                p.teleport(PrisonGame.active.getPrisoner().getLocation());
             }, 5L);
             if (!PrisonGame.hardmode.containsKey(p))
                 PrisonGame.hardmode.put(p, false);
