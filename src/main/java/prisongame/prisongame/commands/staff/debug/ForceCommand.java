@@ -12,12 +12,23 @@ import prisongame.prisongame.MyListener;
 import prisongame.prisongame.PrisonGame;
 import prisongame.prisongame.lib.Role;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 public class ForceCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (args.length == 0) {
             sender.sendMessage(PrisonGame.mm.deserialize("<red>Please provide a player."));
             return true;
+        }
+
+        var takeAction = false;
+        var list = Arrays.stream(args).collect(Collectors.toList());
+        if (list.contains("--action") || list.contains("-a")) {
+            list.remove("--action");
+            list.remove("-a");
+            takeAction = true;
         }
 
         var player = Bukkit.getPlayer(args[0]);
@@ -36,13 +47,18 @@ public class ForceCommand implements CommandExecutor {
             var role = Role.valueOf(args[1].toUpperCase());
             PrisonGame.roles.put(player, role);
 
-            if (role == Role.WARDEN) {
-                if (PrisonGame.warden != null)
-                    MyListener.playerJoin(PrisonGame.warden, false);
+            if (takeAction)
+                switch (role) {
+                    case WARDEN -> {
+                        if (PrisonGame.warden != null)
+                            MyListener.playerJoin(PrisonGame.warden, false);
 
-                PrisonGame.wardenCooldown = 60;
-                PrisonGame.warden = player;
-            }
+                        player.performCommand("warden");
+                    }
+                    case SWAT -> PrisonGame.setSwat(player);
+                    case GUARD -> PrisonGame.setGuard(player);
+                    case NURSE -> PrisonGame.setNurse(player);
+                }
 
             sender.sendMessage(PrisonGame.mm.deserialize(
                     "<gray>Forced <white><player></white> to be <white><role></white>.",

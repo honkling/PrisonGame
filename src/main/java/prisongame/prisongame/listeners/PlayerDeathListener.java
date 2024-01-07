@@ -21,8 +21,6 @@ public class PlayerDeathListener implements Listener {
     public void onWardenDeath(PlayerDeathEvent event) {
         var player = event.getPlayer();
 
-        System.out.println(PrisonGame.roles.get(player));
-
         if (PrisonGame.roles.get(player) != Role.WARDEN || player.getLastDamageCause().getCause() != EntityDamageEvent.DamageCause.FALL)
             return;
 

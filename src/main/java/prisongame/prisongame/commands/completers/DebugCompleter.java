@@ -16,7 +16,8 @@ public class DebugCompleter extends SubcommandCompleter {
     public DebugCompleter() {
         super("debug", new String[] {
                 "pdc",
-                "force"
+                "force",
+                "protection"
         });
     }
 

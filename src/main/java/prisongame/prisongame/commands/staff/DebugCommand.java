@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import prisongame.prisongame.commands.staff.debug.ForceCommand;
 import prisongame.prisongame.commands.staff.debug.HelpCommand;
 import prisongame.prisongame.commands.staff.debug.PDCCommand;
+import prisongame.prisongame.commands.staff.debug.ProtectionCommand;
 
 import java.util.Arrays;
 
@@ -20,6 +21,7 @@ public class DebugCommand implements CommandExecutor {
         var subcommand = switch (args[0]) {
             case "pdc" -> new PDCCommand();
             case "force" -> new ForceCommand();
+            case "protection" -> new ProtectionCommand();
             default -> new HelpCommand();
         };
         subcommand.onCommand(sender, command, args[0], rest);
