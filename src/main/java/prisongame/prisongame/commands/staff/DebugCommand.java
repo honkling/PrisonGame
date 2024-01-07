@@ -4,10 +4,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
-import prisongame.prisongame.commands.staff.debug.ForceCommand;
-import prisongame.prisongame.commands.staff.debug.HelpCommand;
-import prisongame.prisongame.commands.staff.debug.PDCCommand;
-import prisongame.prisongame.commands.staff.debug.ProtectionCommand;
+import prisongame.prisongame.commands.staff.debug.*;
 
 import java.util.Arrays;
 
@@ -22,6 +19,7 @@ public class DebugCommand implements CommandExecutor {
             case "pdc" -> new PDCCommand();
             case "force" -> new ForceCommand();
             case "protection" -> new ProtectionCommand();
+            case "timer" -> new TimerCommand();
             default -> new HelpCommand();
         };
         subcommand.onCommand(sender, command, args[0], rest);

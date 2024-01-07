@@ -9,7 +9,7 @@ import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import prisongame.prisongame.PrisonGame;
 
-public class ProtectionCommand implements CommandExecutor {
+public class TimerCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (PrisonGame.warden == null || PrisonGame.warden.isDead()) {
@@ -27,19 +27,19 @@ public class ProtectionCommand implements CommandExecutor {
             return true;
         }
 
-        var timer = Integer.parseInt(args[0]) * 20;
+        var timer = Integer.parseInt(args[0]) * 60 * 20;
 
         if (timer < 0) {
-            sender.sendMessage(PrisonGame.mm.deserialize("<red>The timer cannot be below 0 seconds."));
+            sender.sendMessage(PrisonGame.mm.deserialize("<red>The timer cannot be below 0 minutes."));
             return true;
         }
 
-        PrisonGame.warden.setNoDamageTicks(timer);
+        PrisonGame.wardentime.put(PrisonGame.warden, timer);
 
         sender.sendMessage(PrisonGame.mm.deserialize(
-                "<gray>Set the warden protection timer to <timer>.",
+                "<gray>Set the warden timer to <timer>.",
                 Placeholder.component("timer", Component
-                        .text(timer / 20 + " seconds")
+                        .text(timer / (20 * 60) + " minutes")
                         .color(NamedTextColor.WHITE))
         ));
 

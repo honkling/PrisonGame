@@ -9,6 +9,7 @@ import prisongame.prisongame.commands.staff.debug.PDCCommand;
 import prisongame.prisongame.keys.Keys;
 import prisongame.prisongame.lib.Role;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -17,7 +18,8 @@ public class DebugCompleter extends SubcommandCompleter {
         super("debug", new String[] {
                 "pdc",
                 "force",
-                "protection"
+                "protection",
+                "timer"
         });
     }
 
@@ -53,6 +55,7 @@ public class DebugCompleter extends SubcommandCompleter {
 
                 yield switch (subcommand) {
                     case "pdc" -> complete(args[3], Arrays.stream(Keys.values()).map((k) -> k.name().toLowerCase()).toArray(String[]::new));
+                    case "force" -> complete(args[3], new String[] {"-a", "--action"});
                     default -> null;
                 };
             }
