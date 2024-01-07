@@ -5,6 +5,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.potion.PotionEffectType;
 import prisongame.prisongame.MyListener;
@@ -16,6 +17,19 @@ import prisongame.prisongame.lib.Role;
 import static prisongame.prisongame.config.ConfigKt.getConfig;
 
 public class PlayerDeathListener implements Listener {
+    @EventHandler
+    public void onWardenDeath(PlayerDeathEvent event) {
+        var player = event.getPlayer();
+
+        System.out.println(PrisonGame.roles.get(player));
+
+        if (PrisonGame.roles.get(player) != Role.WARDEN || player.getLastDamageCause().getCause() != EntityDamageEvent.DamageCause.FALL)
+            return;
+
+        var advancement = Bukkit.getAdvancement(new NamespacedKey("prison", "light_as_a_feather"));
+        player.getAdvancementProgress(advancement).awardCriteria("no");
+    }
+
     @EventHandler
     public void onPlayerDeath2(PlayerDeathEvent event) {
         Player p = event.getEntity();

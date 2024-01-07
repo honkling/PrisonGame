@@ -384,7 +384,7 @@ public class InventoryClickListener implements Listener {
                 }
                 if (PrisonGame.warden != null) {
                     if (PrisonGame.swapcool <= 0 && PrisonGame.warden.equals(player)) {
-                        var prisonName = event.getCurrentItem().getItemMeta().getDisplayName().replace("§", "&");
+                        var prisonName = event.getCurrentItem().getItemMeta().getDisplayName();
 
                         for (var prison : getConfig().getPrisons().values()) {
                             if (prison.getDisplayName().equals(prisonName)) {

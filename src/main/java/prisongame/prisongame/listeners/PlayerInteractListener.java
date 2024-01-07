@@ -1010,6 +1010,9 @@ public class PlayerInteractListener implements Listener {
     }
 
     private void grantRealGuardIfEligible(Player player) {
+        if (PrisonGame.roles.get(player) != Role.PRISONER)
+            return;
+
         var inventory = player.getInventory();
         var color = Color.fromRGB(126, 135, 245);
         var advancement = Bukkit.getAdvancement(new NamespacedKey("prison", "real_guard"));
