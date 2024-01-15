@@ -20,12 +20,21 @@ public class PlayerDeathListener implements Listener {
     @EventHandler
     public void onWardenDeath(PlayerDeathEvent event) {
         var player = event.getPlayer();
+        var killer = player.getKiller();
 
-        if (PrisonGame.roles.get(player) != Role.WARDEN || player.getLastDamageCause().getCause() != EntityDamageEvent.DamageCause.FALL)
+        if (PrisonGame.roles.get(player) != Role.WARDEN)
             return;
 
-        var advancement = Bukkit.getAdvancement(new NamespacedKey("prison", "light_as_a_feather"));
-        player.getAdvancementProgress(advancement).awardCriteria("no");
+        if (killer != null && killer.getInventory().getItemInMainHand().isEmpty()) {
+            var advancement = Bukkit.getAdvancement(new NamespacedKey("prison", "disrespect_at_its_limit"));
+            player.getAdvancementProgress(advancement).awardCriteria("no");
+        }
+
+        var lastDamageCause = player.getLastDamageCause();
+        if (lastDamageCause != null && lastDamageCause.getCause() == EntityDamageEvent.DamageCause.FALL) {
+            var advancement = Bukkit.getAdvancement(new NamespacedKey("prison", "light_as_a_feather"));
+            player.getAdvancementProgress(advancement).awardCriteria("no");
+        }
     }
 
     @EventHandler
