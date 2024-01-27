@@ -70,9 +70,7 @@ public class AsyncChatListener implements Listener {
                 event.setCancelled(true);
                 return;
             }
-        }
-
-        if (!getConfig().getDev())
+        } else if (!getConfig().getDev())
             Messages.INSTANCE.onChat(player, result == null
                     ? LegacyComponentSerializer.legacyAmpersand().serialize(message)
                     : FilteredWords.filterMessage);
