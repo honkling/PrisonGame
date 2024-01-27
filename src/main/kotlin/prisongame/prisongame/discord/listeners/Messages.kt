@@ -40,7 +40,7 @@ object Messages : ListenerAdapter() {
 
         chatChannel.sendMessage(String.format(
             "**%s** was caught and sent %s!",
-            player.name,
+            player.name.replace("_", "\\_"),
             if (solitary) "back to solitary"
             else "to prison"
         )).queue();
@@ -49,7 +49,7 @@ object Messages : ListenerAdapter() {
     fun onLeave(player: Player) {
         chatChannel.sendMessage(String.format(
             "**%s** ran off somewhere else...",
-            player.name
+            player.name.replace("_", "\\_")
         )).queue();
     }
 
@@ -59,7 +59,9 @@ object Messages : ListenerAdapter() {
             PlainTextComponentSerializer.plainText()
                 .serialize(player.displayName())
                 .replace("_", "\\_"),
-            message.replace("@", "`@`")
+            message
+                .replace("@", "`@`")
+                .replace("_", "\\_")
         )).queue();
     }
 
