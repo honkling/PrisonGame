@@ -35,7 +35,9 @@ public class EntityDamageByEntityListener implements Listener {
                 }
             }
             var main = a.getInventory().getItemInMainHand();
-            if (main.getItemMeta().getDisplayName().equals(ChatColor.BLUE + "Handcuffs " + ChatColor.RED + "[CONTRABAND]")) {
+            var meta = main.getItemMeta();
+
+            if (meta != null && meta.getDisplayName().equals(ChatColor.BLUE + "Handcuffs " + ChatColor.RED + "[CONTRABAND]")) {
                 if (event.getEntity() instanceof Player p) {
                     p.setNoDamageTicks(0);
                 }
