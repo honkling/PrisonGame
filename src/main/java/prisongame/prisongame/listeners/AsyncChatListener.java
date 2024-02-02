@@ -75,6 +75,12 @@ public class AsyncChatListener implements Listener {
                     ? LegacyComponentSerializer.legacyAmpersand().serialize(message)
                     : FilteredWords.filterMessage);
 
+        PrisonGame.instance.getLogger().info(String.format(
+                "%s: %s",
+                player.getName(),
+                plainMessage
+        ));
+
         PrisonGame.word.put(player, plainMessage);
         event.renderer(new ChatFormat());
     }

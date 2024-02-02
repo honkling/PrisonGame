@@ -57,12 +57,6 @@ public class ChatFormat implements ChatRenderer {
                     .type(Key.key("block.note_block.bit"))
                     .build());
 
-        Bukkit.getLogger().info(String.format(
-                "%s: %s",
-                LegacyComponentSerializer.legacySection().serialize(sourceDisplayName),
-                getLegacy(message, false)
-        ));
-
         var delimiter = Component
                 .text(": ")
                 .color(isWarden ? NamedTextColor.RED : NamedTextColor.GRAY);
