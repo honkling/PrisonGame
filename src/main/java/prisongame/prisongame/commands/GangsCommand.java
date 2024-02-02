@@ -32,20 +32,21 @@ public class GangsCommand implements CommandExecutor {
         var rest = Arrays.stream(args).toList().subList(1, args.length).toArray(String[]::new);
 
         var executor = switch (subcommand) {
-            case "list" -> new ListCommand();
             case "leaderboard" -> new LeaderboardCommand();
-            case "create" -> new CreateCommand();
-            case "bank" -> new BankCommand();
+            case "official" -> new OfficialCommand();
             case "disband" -> new DisbandCommand();
-            case "join" -> new JoinCommand();
+            case "create" -> new CreateCommand();
             case "invite" -> new InviteCommand();
             case "accept" -> new AcceptCommand();
-            case "official" -> new OfficialCommand();
-            case "fire" -> new FireCommand();
-            case "kick" -> new KickCommand();
             case "resign" -> new ResignCommand();
             case "leave" -> new LeaveCommand();
+            case "list" -> new ListCommand();
+            case "bank" -> new BankCommand();
+            case "join" -> new JoinCommand();
+            case "fire" -> new FireCommand();
+            case "kick" -> new KickCommand();
             case "info" -> new InfoCommand();
+            case "view" -> new ViewCommand();
             default -> new HelpCommand();
         };
 

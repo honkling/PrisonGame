@@ -13,20 +13,21 @@ import java.util.List;
 public class GangsCompleter extends SubcommandCompleter {
     public GangsCompleter() {
         super("gangs", new String[] {
-                "list",
-                "create",
-                "bank",
                 "leaderboard",
-                "info",
-                "invite",
                 "official",
-                "fire",
-                "kick",
+                "disband",
+                "create",
+                "invite",
                 "resign",
                 "leave",
+                "list",
+                "bank",
+                "info",
+                "fire",
+                "kick",
                 "join",
-                "disband",
-                "help"
+                "help",
+                "view"
         });
     }
 
