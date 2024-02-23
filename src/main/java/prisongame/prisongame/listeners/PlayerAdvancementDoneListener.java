@@ -16,6 +16,10 @@ public class PlayerAdvancementDoneListener implements Listener {
         } else {
             if (!getConfig().getDev())
                 Messages.INSTANCE.onGrantAdvancement(event.getPlayer(), event.getAdvancement());
+
+            if (event.message() == null)
+                return;
+
             event.message(event.message().color(TextColor.color(0, 200, 0)));
         }
     }
