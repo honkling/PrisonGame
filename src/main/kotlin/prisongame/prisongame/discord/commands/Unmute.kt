@@ -8,6 +8,7 @@ import me.coralise.spigot.enums.AnnouncementType
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
+import prisongame.prisongame.cbp.issueUnmute
 
 fun unmute(event: SlashCommandInteractionEvent) {
     val playerName = event.getOption("player")!!.asString
@@ -20,15 +21,8 @@ fun unmute(event: SlashCommandInteractionEvent) {
     }
 
     event.deferReply().queue()
-
     val player = Bukkit.getOfflinePlayer(playerName)
-    val cbp = CustomBansPlus.getInstance()
-    val playerManager = cbp.plm
-    val cbpPlayer = playerManager.getCBPlayer(player.uniqueId)
 
-    cbp.mm.removeMute(player.uniqueId, "Unmuted", null)
-    AbstractAnnouncer.getAnnouncer(cbpPlayer, null, null, null, AnnouncementType.UNMUTE, false)
-    cbp.u.callEvent(UnmuteEvent(null, cbpPlayer, false))
-
+    issueUnmute(player)
     event.hook.sendMessage("Unmuted **${player.name}**.").queue()
 }

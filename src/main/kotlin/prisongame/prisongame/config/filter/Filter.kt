@@ -14,6 +14,7 @@ data class Filters(
 )
 
 data class Filter(
+    val contentMatch: ContentMatch = ContentMatch.SANITIZED,
     val action: FilterAction,
     val type: FilterType,
     val value: String
@@ -29,7 +30,9 @@ data class Filter(
 }
 
 fun reloadFilter(): Map<String, Filter> {
-    val mapper = tomlMapper {}
+    val mapper = tomlMapper {
+        mapping<Filter>("content-match" to "contentMatch")
+    }
 
     if (!file.exists())
         instance.saveResource(file.name, false)

@@ -11,6 +11,7 @@ import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
+import prisongame.prisongame.config.filter.ContentMatch;
 import prisongame.prisongame.config.filter.Filter;
 import prisongame.prisongame.config.filter.FilterAction;
 import prisongame.prisongame.discord.DiscordKt;
@@ -129,8 +130,9 @@ public class FilteredWords {
         for (var entry : getConfig().getFilter().entrySet()) {
             var name = entry.getKey();
             var filter = entry.getValue();
+            var input = filter.getContentMatch() == ContentMatch.ORIGINAL ? msg : sanitized;
 
-            if (filter.test(sanitized))
+            if (filter.test(input))
                 return new Pair<>(name, filter);
         }
 

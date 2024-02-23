@@ -8,6 +8,7 @@ import me.coralise.spigot.enums.AnnouncementType
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
+import prisongame.prisongame.cbp.issueUnban
 
 fun unban(event: SlashCommandInteractionEvent) {
     val playerName = event.getOption("player")!!.asString
@@ -20,18 +21,8 @@ fun unban(event: SlashCommandInteractionEvent) {
     }
 
     event.deferReply().queue()
-
     val player = Bukkit.getOfflinePlayer(playerName)
-    val cbp = CustomBansPlus.getInstance()
-    val playerManager = cbp.plm
-    val cbpPlayer = playerManager.getCBPlayer(player.uniqueId)
 
-    cbp.database.updateHistoryStatus(player.uniqueId, "Ban", "Unbanned", null)
-    cbp.bm.removeBan(cbp.bm.getBan(player.uniqueId), "Unbanned", null)
-    cbp.u.removeOci(player.uniqueId)
-    AbstractAnnouncer.getAnnouncer(cbpPlayer, null, null, null, AnnouncementType.UNBAN, false)
-
-    cbp.u.callEvent(UnbanEvent(null, cbpPlayer, false))
-
+    issueUnban(player)
     event.hook.sendMessage("Unbanned **${player.name}**.").queue()
 }

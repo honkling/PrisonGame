@@ -9,6 +9,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import prisongame.prisongame.FilteredWords;
 import prisongame.prisongame.PrisonGame;
+import prisongame.prisongame.cbp.PunishmentKt;
 import prisongame.prisongame.config.filter.FilterAction;
 import prisongame.prisongame.discord.listeners.Messages;
 import prisongame.prisongame.lib.ChatFormat;
@@ -65,15 +66,20 @@ public class AsyncChatListener implements Listener {
 
             FilteredWords.alert(player, legacyMessage, name, "chat");
 
-            if (filter.getAction() == FilterAction.BLOCK_MESSAGE) {
-                player.sendMessage(PrisonGame.mm.deserialize("<red>Chat is currently disabled."));
-                event.setCancelled(true);
-                return;
+            switch (filter.getAction()) {
+                case BAN -> {
+                    PunishmentKt.issueBan(player, "perm", "(Auto ban) Filter");
+                    event.setCancelled(true);
+                    return;
+                }
+                case BLOCK_MESSAGE -> {
+                    player.sendMessage(PrisonGame.mm.deserialize("<red>Chat is currently disabled."));
+                    event.setCancelled(true);
+                    return;
+                }
             }
         } else if (!getConfig().getDev())
-            Messages.INSTANCE.onChat(player, result == null
-                    ? LegacyComponentSerializer.legacyAmpersand().serialize(message)
-                    : FilteredWords.filterMessage);
+            Messages.INSTANCE.onChat(player, LegacyComponentSerializer.legacyAmpersand().serialize(message));
 
         PrisonGame.instance.getLogger().info(String.format(
                 "%s: %s",
