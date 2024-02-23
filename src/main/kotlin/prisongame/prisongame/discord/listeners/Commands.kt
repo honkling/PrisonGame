@@ -2,11 +2,14 @@ package prisongame.prisongame.discord.listeners
 
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
+import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import net.dv8tion.jda.api.interactions.commands.Command
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
+import prisongame.prisongame.cbp.issueBan
 import prisongame.prisongame.discord.commands.*
+import java.util.*
 
 object Commands : ListenerAdapter() {
     override fun onSlashCommandInteraction(event: SlashCommandInteractionEvent) {
@@ -19,6 +22,19 @@ object Commands : ListenerAdapter() {
             "link" -> link(event)
             else -> {}
         }
+    }
+
+    override fun onButtonInteraction(event: ButtonInteractionEvent) {
+        val id = event.button.id ?: ""
+
+        if (!id.startsWith("ban_"))
+            return
+
+        val uuid = UUID.fromString(id.substring(4))
+        val player = Bukkit.getOfflinePlayer(uuid) ?: return
+
+        issueBan(player, "perm", "slurs")
+        event.reply("Banned **${player.name}** for **slurs**.").queue()
     }
 
     override fun onCommandAutoCompleteInteraction(event: CommandAutoCompleteInteractionEvent) {

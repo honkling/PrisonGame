@@ -66,7 +66,7 @@ public class FilteredWords {
         ));
         embed.setColor(new Color(0xFF5555));
 
-        var button = Button.link(String.format(
+        var reportButton = Button.link(String.format(
                 "https://support.minehut.com/hc/en-us/requests/new?ticket_form_id=5333154152723&tf_subject=%s&tf_%s=%s&tf_%s=%s&tf_%s=%s&tf_description=%s",
                 "User+using+slurs+on+server",
                 "5333187573779", // Report or Appeal dropdown
@@ -87,9 +87,11 @@ public class FilteredWords {
                         now.toEpochMilli()), StandardCharsets.UTF_8)
         ), "Report User");
 
+        var banButton = Button.danger(String.format("ban_%s", violator.getUniqueId()), "Ban (for slurs)");
+
         if (!getConfig().getDev())
             DiscordKt.filterChannel.sendMessageEmbeds(embed.build())
-                    .addActionRow(button)
+                    .addActionRow(reportButton, banButton)
                     .queue();
     }
 
