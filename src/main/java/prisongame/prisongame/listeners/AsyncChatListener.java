@@ -81,12 +81,6 @@ public class AsyncChatListener implements Listener {
         } else if (!getConfig().getDev())
             Messages.INSTANCE.onChat(player, LegacyComponentSerializer.legacyAmpersand().serialize(message));
 
-        PrisonGame.instance.getLogger().info(String.format(
-                "%s: %s",
-                player.getName(),
-                plainMessage
-        ));
-
         PrisonGame.word.put(player, plainMessage);
         event.renderer(new ChatFormat());
     }
