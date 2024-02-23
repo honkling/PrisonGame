@@ -851,7 +851,7 @@ public class MyTask extends BukkitRunnable {
                 p.setDisplayName(p.getDisplayName().replace("VISITOR", "i wish he was a prisoner"));
                 p.setDisplayName(p.getDisplayName().replace("CRIMINAL", "*snore* mimimimimi"));
             }
-            if (p.getLocation().getBlockY() == -60 && PrisonGame.active.getName().equals("Train") && PrisonGame.isInside(p, PrisonGame.nl("world", 27D, -61D, 920D, 0f, 0f), PrisonGame.nl("world", 129D, 8D, 1041D, 0f, 0f))) {
+            if (p.getLocation().getBlockY() == -60 && p.getLocation().clone().subtract(0.0, 1.0, 0.0).getBlock().getType() == Material.SAND && PrisonGame.active.getName().equals("Train") && PrisonGame.isInside(p, PrisonGame.nl("world", 27D, -61D, 920D, 0f, 0f), PrisonGame.nl("world", 129D, 8D, 1041D, 0f, 0f))) {
                 p.damage(999);
             }
             if (p.getLocation().getBlockY() == -61 && PrisonGame.active.getName().equals("Island") && p.isInWater()) {
