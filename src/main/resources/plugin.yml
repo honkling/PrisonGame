@@ -25,7 +25,7 @@ commands:
     aliases: gang
     usage: /gangs help
   balance:
-    description: View balance and leaderboard.
+    description: View balance of players and leaderboard.
     usage: /balance (leaderboard/view) [player]
   debug:
     description: Debug command
@@ -36,12 +36,12 @@ commands:
     usage: /season
     permission: pbb.season
   vanish:
-    description: Hide from players.
+    description: Removes you from tab visually to all players.
     usage: /vanish
     permission: pbb.vanish
     aliases: /v
   enderchest:
-    description: Inspect/clear ender chests.
+    description: inspects/veiws a player's ender chest.
     usage: /enderchest <inspect/view> (player)
     permission: pbb.enderchest
     aliases: /ec
@@ -56,7 +56,7 @@ commands:
     description: Warden-Based commands.
     usage: /<command>
   resign:
-    description: Resign from your current position/Rejoin from prisoner.
+    description: Resign from your current position.
     usage: /<command>
   pbsettings:
     description: setting
@@ -80,26 +80,26 @@ commands:
     usage: /<command>
   rstmoney:
     permission: pbb.cheats
-    description: gives 0 dollahs
+    description: Resets the player balance to 0.
     usage: /<command> <player>
   pay:
-    description: gib de monah
+    description: pays another player.
     usage: /<command> <player> <money>
   setmoney:
     permission: pbb.cheat
-    description: unmute de playah
+    description: Set a players balance.
     usage: /<command> <player>
   tc:
     aliases: teamchat
-    description: Resign from your current position/Rejoin from prisoner.
+    description: Speak in whatever team your on.
     usage: /<command>
   disc:
     aliases: discord
-    description: Resign from your current position/Rejoin from prisoner.
+    description: Join the Discord server.
     usage: /<command>
   accept:
-    description: Accept a job.
+    description: Accepts the last requested role from current warden.
     usage: /<command>
   hello:
-    description: Hi!
+    description: Gets server,map,credits, and says hello.
     usage: /<command>
