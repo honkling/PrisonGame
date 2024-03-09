@@ -41,7 +41,7 @@ commands:
     permission: pbb.vanish
     aliases: /v
   enderchest:
-    description: Inspect/clear ender chests.
+    description: Inspect/veiw ender chest of provided player.
     usage: /enderchest <inspect/view> (player)
     permission: pbb.enderchest
     aliases: /ec
@@ -56,7 +56,7 @@ commands:
     description: Warden-Based commands.
     usage: /<command>
   resign:
-    description: Resign from your current position/Rejoin from prisoner.
+    description: Clears inv and set your rank to prisoner.
     usage: /<command>
   pbsettings:
     description: setting
@@ -72,34 +72,34 @@ commands:
     usage: /<command>
   builder:
     permission: pbb.builder
-    description: build menu
+    description: Opens a gui of all prison maps and builder tools.
     usage: /<command>
   nerdcheatcommand:
     permission: pbb.cheats
-    description: gives 1000 dollahs
+    description: Gives the player 1000.
     usage: /<command>
   rstmoney:
     permission: pbb.cheats
-    description: gives 0 dollahs
+    description: Resets the player provided
     usage: /<command> <player>
   pay:
-    description: gib de monah
+    description: Pays the given player the amount provided.
     usage: /<command> <player> <money>
   setmoney:
     permission: pbb.cheat
-    description: unmute de playah
+    description: Sets the money of given player.
     usage: /<command> <player>
   tc:
     aliases: teamchat
-    description: Resign from your current position/Rejoin from prisoner.
+    description: Resign from any role your currently in and puts you as prisoner.
     usage: /<command>
   disc:
     aliases: discord
-    description: Resign from your current position/Rejoin from prisoner.
+    description: Join the offical PrisonButBad discord server.
     usage: /<command>
   accept:
-    description: Accept a job.
+    description: Accept last role requested by current warden.
     usage: /<command>
   hello:
-    description: Hi!
+    description: Say hello and server/credit stats!
     usage: /<command>
