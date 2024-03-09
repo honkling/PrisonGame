@@ -942,7 +942,7 @@ public class MyTask extends BukkitRunnable {
                     p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(9999);
                 }
             }
-
+            if(!p.hasPotionEffect(PotionEffectType.WEAKNESS && p.isInsideVehicle)) p.getVehicle.removePassenger(p);
             if (PrisonGame.prisonerlevel.getOrDefault(p, 0) == 1) {
                 if (p.isSprinting() && !PrisonGame.escaped.get(p) && PrisonGame.roles.get(p) == Role.PRISONER) {
                     p.setFoodLevel(p.getFoodLevel() - 1);
